@@ -1,0 +1,21 @@
+/*
+ * jsGrid v1.5.3 (http://js-grid.com)
+ * (c) 2016 Artem Tabalin
+ * Licensed under MIT (https://github.com/tabalinas/jsgrid/blob/master/LICENSE)
+ */
+
+@-webkit-keyframes indicator
+{
+    from { -webkit-transform: rotate(0deg); }
+    50%  { -webkit-transform: rotate(180deg); }
+    to   { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes indicator
+{
+    from { transform: rotate(0deg); }
+    50%  { transform: rotate(180deg); }
+    to   { transform: rotate(360deg); }
+}
+
+/* old IE */

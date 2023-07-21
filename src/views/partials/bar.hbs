@@ -1,0 +1,199 @@
+<div class="wrapper" style="background-color: #E3E3E3; background-color: #ebecf1;">
+  <div class="sidebar">
+    {{#if name}}
+    <div class="logo">
+      <a href="" class="simple-text" style="color:white;">
+        <i class="fa-solid fa-circle-user fa-2xl" style="width: 45px;"></i>{{name}}
+      </a>
+    </div>
+    {{/if}}
+
+    <div class="sidebar-wrapper collapse show">
+      <ul class="nav">
+        <li>
+          <a href="dashboard">
+            <i class="fa fa-house" style="color: white;"></i>
+            <p style="color: white;">Dashboard</p>
+          </a>
+        </li>
+
+
+        <li>
+          <a href="roles">
+            <i class="fa fa-gear" style="color:white;"></i>
+            <p style="color:white;">Roles</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="usuarios">
+            <i class="fa fa-users" style="color:white;"></i>
+            <p style="color:white;">Usuarios</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="compras">
+            <i class="fa fa-shop" style="color:white;"></i>
+            <p style="color:white;">Compras</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="insumos">
+            <i class="fa fa-box" style="color:white;"></i>
+            <p style="color:white;">Insumos</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="produccion">
+            <i class="fa fa-scissors" style="color:white;"></i>
+            <p style="color:white;">Producción</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="productos">
+            <i class="fa fa-boxes-packing" style="color:white;"></i>
+            <p style="color:white;">Productos</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="clientes">
+            <i class="fa fa-user" style="color:white;"></i>
+            <p style="color:white;">Clientes</p>
+          </a>
+        </li>
+
+        <li>
+          <a href="ventas">
+            <i class="fa fa-truck-fast" style="color:white;"></i>
+            <p style="color:white;">Ventas</p>
+          </a>
+        </li>
+
+
+        <li class="limit-scroll last-item">
+          <a href="reparaciones">
+            <i class="fa fa-screwdriver-wrench" style="color:white;"></i>
+            <p style="color:white;">Reparaciones</p>
+          </a>
+        </li>
+
+        <input hidden class="Permisos" id="permisosInput" type="text" value="{{asignacion}}">
+
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="main-panel" id="main-panel">
+    <nav class="navbar navbar-expand navbar-absolute">
+      <div class="container-fluid">
+        <div class="navbar-wrapper">
+          <div class="navbar-toggle">
+            <button id="navbar-toggle" type="button" class="navbar-toggler">
+              <span class="navbar-toggler-bar bar1"></span>
+              <span class="navbar-toggler-bar bar2"></span>
+              <span class="navbar-toggler-bar bar3"></span>
+            </button>
+          </div>
+          <a class="navbar-brand" href="#" style="margin-left: 10px;">Dashboard</a>
+        </div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+          aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-bar navbar-kebab"></span>
+          <span class="navbar-toggler-bar navbar-kebab"></span>
+          <span class="navbar-toggler-bar navbar-kebab"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="navigation">
+          <a class="nav-link" href="/logout">
+            <i class="fa fa-right-from-bracket" style="margin-right:20px;"></i>
+            <p>
+              <span class="d-lg-none d-md-block">Salir</span>
+            </p>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+
+    <style>
+      #sidebar-wrapper {
+        display: block;
+      }
+
+      #sidebar-wrapper.collapsed {
+        display: none;
+      }
+
+      @media only screen and (max-width: 600px) {
+        #sidebar-wrapper {
+          display: none;
+        }
+
+        #sidebar-wrapper.collapsed {
+          display: block;
+        }
+      }
+
+      /* Estilos para la etiqueta <i> cuando está activa */
+      .nav li.active i {
+        color: black;
+      }
+
+      /* Estilos para la etiqueta <p> cuando está activa */
+      .nav li.active p {
+        color: black;
+      }
+    </style>
+    {{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+        if (items === 'inicio') {
+          item.style.display = 'block'; // Si el elemento es 'inicio', lo mostramos
+        } else if (palabras.includes(items)) {
+          item.style.display = 'block'; // Si el permiso está presente, también lo mostramos
+        } else {
+          item.style.display = 'none'; // En otros casos, ocultamos el elemento del menú
+        }
+      });
+      {{/if}}
+
+          // Obtiene la URL actual
+          var currentURL = window.location.pathname;
+
+          // Obtén todos los elementos de la lista de la barra de navegación
+          var navItems = document.querySelectorAll('.nav li');
+
+          // Itera sobre cada elemento y cambia el color si coincide con la URL actual
+          navItems.forEach(function (item) {
+            var link = item.querySelector('a');
+            var href = link.getAttribute('href');
+            var icon = item.querySelector('i');
+            var text = item.querySelector('p');
+            if (currentURL.includes(href)) {
+              item.classList.add('active');// Agrega la clase 'active' para resaltar el enlace activo
+              // Quitar el estilo de color blanco del ícono
+              icon.style.color = ''; // Establece el color del ícono en su valor predeterminado (puede ser el color original definido por CSS)
+
+              // Quitar el estilo de color blanco del texto
+              text.style.color = ''; // Establece el color del texto en su valor predeterminado (puede ser el color original definido por CSS)
+              
+            } else {
+              item.classList.remove('active'); // Elimina la clase 'active' si no coincide con la URL actual
+              
+            }
+          });
+
+    </script>

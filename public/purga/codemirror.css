@@ -1,0 +1,50 @@
+/* BASICS */
+
+/* PADDING */
+
+/* GUTTER */
+
+/* CURSOR */
+/* Shown when moving in bi-directional text */
+@-moz-keyframes blink {
+  0% {}
+  50% { background-color: transparent; }
+  100% {}
+}
+@-webkit-keyframes blink {
+  0% {}
+  50% { background-color: transparent; }
+  100% {}
+}
+@keyframes blink {
+  0% {}
+  50% { background-color: transparent; }
+  100% {}
+}
+
+/* Can style cursor different in overwrite (non-insert) mode */
+
+/* DEFAULT THEME */
+
+/* Default styles for common addons */
+
+/* STOP */
+
+/* The rest of this file contains styles related to the mechanics of
+   the editor. You probably shouldn't touch them. */
+
+/* The fake, visible scrollbars. Used to force redraw during scrolling
+   before actual scrolling happens, thus preventing shaking and
+   flickering artifacts. */
+
+/* Force content-box sizing for the elements where we expect it */
+
+/* Used to force a border model for a node */
+
+@media print {
+  /* Hide the cursor when printing */
+}
+
+/* See issue #2901 */
+
+/* Help users use markselection to safely style text background */

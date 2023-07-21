@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{>headerD}}
+
+<body>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: repeat(3, 5fr);
+            /* Crea 2 columnas de igual tamaño */
+
+
+        }
+
+        .card {
+            background-color: #f2f2f2;
+
+        }
+
+
+        .button-container {
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 15px;
+        }
+    </style>
+    <!--Barra de navegación-->
+    {{> bar}}
+            <!--Barra de navegación-->
+            <br><br><br><br>
+            <center>
+                <div class="contenedor container">
+                    <h4 style="width: 40px;height: 40px;">Productos</h4>
+                    <div id="tarjetas-seleccionadas" style="width:25%;"></div>
+                    <div id="precio-total" style="width:10%;"></div>
+                    <div><a href="AgregarVenta" class="btn btn-danger">Cancelar</a>
+                        <button class="btn btn-success" onclick="enviarProductosSeleccionados()">Enviar</button>
+                    </div>
+                </div>
+                <br><br>
+                <div class="container">
+                    {{#each productos}}
+                    <div class="row productos">
+                        <div class="col-md-6" style="width: 75%;">
+                            <div class="card" style="width: 78%;">
+                                <h6>{{nombre}}</h6>
+                                <img src="" alt="">
+                                <p>Descripción: {{descripcion}}</p>
+                                <p>Precio: {{precioUnd}}</p>
+                                <p>Cantidades disponibles: {{cantidadDis}}</p>
+                                <div class="button-container mb-1 mt-1">
+                                    <button class="btn btn-success" 
+                                        onclick="agregarTarjeta('{{idProductos}}', '{{nombre}}', {{precioUnd}})"><i style="margin-left: ;" class="fa fa-plus fa-xs"></i></button>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+                </div>
+
+                <script>
+                    var productosSeleccionados = [];
+                    var tarjetasSeleccionadasContainer = document.getElementById('tarjetas-seleccionadas');
+                    var precioTotal = 0;
+                    var precioTotalElement = document.getElementById('precio-total');
+
+                    function agregarTarjeta(idProductos, nombre, precio) {
+                        var productoExistente = productosSeleccionados.find(function (producto) {
+                            return producto.idProductos === idProductos;
+                        });
+
+                        if (productoExistente) {
+                            productoExistente.cantidad++;
+                        } else {
+                            productosSeleccionados.push({ idProductos: idProductos, nombre: nombre, cantidad: 1, precio: precio });
+                        }
+
+                        precioTotal += precio;
+                        actualizarTarjetasSeleccionadas();
+                        actualizarPrecioTotal();
+                    }
+
+                    function actualizarTarjetasSeleccionadas() {
+                        tarjetasSeleccionadasContainer.innerHTML = '';
+                        productosSeleccionados.forEach(function (producto) {
+                            var tarjeta = document.createElement('div');
+                            tarjeta.classList.add('card');
+                            tarjeta.style.width = '145px';
+                            tarjeta.style.height = '100px';
+                            tarjeta.innerHTML = `<div class="row">
+                    <div class="col-6" style="width:110px;">
+                        <b>${producto.nombre}</b>
+                        <p style="margin-bottom: 0;" class="precio">Precio: ${producto.precio}</p>
+                        <p class="cantidad">Cantidad: ${producto.cantidad}</p>
+                    </div>
+                    <div class="col-6" style="width:50px; padding-top:35px;">
+                        <button style="margin-bottom: 0;background-color: transparent;border: none; width:30%; color:red;" class="eliminar" onclick="eliminarTarjeta(event)">x</button>
+                    </div>
+                </div>`;
+                            tarjetasSeleccionadasContainer.appendChild(tarjeta);
+                        });
+                    }
+
+                    function eliminarTarjeta(event) {
+                        var botonEliminar = event.target;
+                        var tarjeta = botonEliminar.closest('.card');
+                        var indice = Array.prototype.indexOf.call(tarjetasSeleccionadasContainer.children, tarjeta);
+                        var productoSeleccionado = productosSeleccionados[indice];
+
+                        productoSeleccionado.cantidad--;
+
+                        if (productoSeleccionado.cantidad === 0) {
+                            productosSeleccionados.splice(indice, 1);
+                            tarjetasSeleccionadasContainer.removeChild(tarjeta);
+                        }
+
+                        precioTotal -= productoSeleccionado.precio;
+                        actualizarPrecioTotal();
+                    }
+
+                    function actualizarPrecioTotal() {
+                        precioTotalElement.textContent = `Total: ${precioTotal}`;
+                    }
+
+                    function enviarProductosSeleccionados() {
+                        // Obtener solo los idProductos de los productos seleccionados
+                        var idsProductosSeleccionados = productosSeleccionados.map(function (producto) {
+                            return producto.idProductos;
+
+                        });
+                        var cantidadPr = productosSeleccionados.map(function (producto) {
+                            return producto.cantidad;
+
+                        });
+                        //alert(idsProductosSeleccionados)
+                        //alert(cantidadPr)
+                        // Aquí puedes realizar las acciones necesarias para enviar los productos seleccionados a una vista diferente
+                        // Por ejemplo, redireccionar a la vista deseada con los productos seleccionados y el total como parámetros de URL
+                        var url = 'AgregarVenta?productos=' + JSON.stringify(idsProductosSeleccionados) + '&total=' + precioTotal + '&UND=' + JSON.stringify(cantidadPr);
+                        //alert(url);
+                        window.location.href = url;
+
+                        // Almacenar los productos seleccionados y las cantidades en variables JavaScript
+                        localStorage.setItem('productosSeleccionados', JSON.stringify(productosSeleccionados));
+                        localStorage.setItem('cantidades', JSON.stringify(cantidadPr));
+
+                    }
+                    // Verificar si hay productos seleccionados almacenados en el almacenamiento local
+                    if (localStorage.getItem('productosSeleccionados') && localStorage.getItem('cantidades')) {
+                        // Obtener los productos seleccionados y las cantidades almacenados en el almacenamiento local
+                        const productosSeleccionadosStorage = JSON.parse(localStorage.getItem('productosSeleccionados'));
+                        const cantidadesStorage = JSON.parse(localStorage.getItem('cantidades'));
+
+                        // Mostrar las tarjetas seleccionadas
+                        for (let i = 0; i < productosSeleccionadosStorage.length; i++) {
+                            const producto = productosSeleccionadosStorage[i];
+                            const cantidad = cantidadesStorage[i];
+
+                            agregarTarjeta(producto.idProductos, producto.nombre, producto.precio, producto.cantidad);
+                            alert(cantidad)
+                            // Actualizar la cantidad en la tarjeta
+                            const tarjeta = tarjetasSeleccionadasContainer.children[i];
+                            const cantidadElement = tarjeta.querySelector('.cantidad');
+                            cantidadElement.textContent = `Cantidad: ${cantidad}`;
+                        }
+
+                        // Limpiar los datos almacenados en el almacenamiento local
+                        localStorage.removeItem('productosSeleccionados');
+                        localStorage.removeItem('cantidades');
+                    }
+
+
+                </script>
+            </center>
+
+            <br>
+</body>
+
+{{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+        if (palabras.includes(items)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    </script>
+    {{/if}}
+
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="assets/js/agregarproduc.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+<!--   Core JS Files   -->
+<script src="assets/js/core/jquery.min.js"></script>
+<script src="assets/js/core/popper.min.js"></script>
+<script src="assets/js/core/bootstrap.min.js"></script>
+<script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<!--  Google Maps Plugin    -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!-- Chart JS -->
+<script src="assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+<!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+<script src="assets/demo/demo.js"></script>
+<script>
+    $(document).ready(function () {
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+    });
+</script>
+
+</html>

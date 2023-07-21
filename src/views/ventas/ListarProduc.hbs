@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{>headerId}}
+
+<body>
+    <style>
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin: 10px;
+            width: 300px;
+            height: 250px;
+        }
+
+        .card img {
+            width: 200px;
+            height: 200px;
+            object-fit: contain;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+    <!--Barra de navegación-->
+    <div class="wrapper " style="background-color: #E3E3E3;
+  background-color: #ebecf1;">
+        <div class="sidebar" data-color="black">
+            <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+           {{!--  <div class="logo">
+                <a href="dashboard" class="simple-text" style="color:white;">
+                    Levitisoft
+                </a>
+            </div> --}}
+            {{#if name}}
+            <div class="logo">
+                <a href="" class="simple-text" style="color:white;">
+                    <i class="fa-solid fa-circle-user fa-2xl" style="width: 45px;"> </i>{{name}}
+                </a>
+            </div>
+            {{/if}}
+            <div class="sidebar-wrapper" id="sidebar-wrapper">
+                <ul class="nav">
+                    <li>
+                        <a href="/dashboard">
+                            <i class="fa fa-house" style="color:white;"></i>
+                            <p style="color:white;">Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/roles">
+                            <i class="fa fa-gear" style="color: white;"></i>
+                            <p style="color: white;">Roles</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/usuarios">
+                            <i class="fa fa-users" style="color:white;"></i>
+                            <p style="color:white;">Usuarios</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/compras">
+                            <i class="fa fa-shop" style="color:white;"></i>
+                            <p style="color:white;">Compras</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/insumos">
+                            <i class="fa fa-box" style="color:white;"></i>
+                            <p style="color:white;">Insumos</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/produccion">
+                            <i class="fa fa-scissors" style="color:white;"></i>
+                            <p style="color:white;">Producción</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/productos">
+                            <i class="fa fa-boxes-packing" style="color:white;"></i>
+                            <p style="color:white;">Productos</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/clientes">
+                            <i class="fa fa-user" style="color:white;"></i>
+                            <p style="color:white;">Clientes</p>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="/ventas" style="background-color: white">
+                            <i class="fa fa-truck-fast" style="color: black;"></i>
+                            <p style="color:black;">Ventas</p>
+                        </a>
+                    </li>
+                    <input hidden class="Permisos" id="permisosInput" type="text" value="{{asignacion}}">
+
+                    <li>
+                        <a href="/reparaciones">
+                            <i class="fa fa-screwdriver-wrench" style="color:white;"></i>
+                            <p style="color:white;">Reparaciones</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel" id="main-panel">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand navbar-absolute">
+                <div class="container-fluid">
+                    <div class="navbar-wrapper">
+                        <div class="navbar-toggle">
+                            <button type="button" class="navbar-toggler">
+                                <span class="navbar-toggler-bar bar1"></span>
+                                <span class="navbar-toggler-bar bar2"></span>
+                                <span class="navbar-toggler-bar bar3"></span>
+                            </button>
+                        </div>
+                        <a class="navbar-brand" href="#" style="margin-left: 10px;">Ventas</a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+                        aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        <a class="nav-link" href="/logout">
+                            <i class="fa fa-right-from-bracket" style="margin-right:20px;"></i>
+                            <p>
+                                <span class="d-lg-none d-md-block">Salir</span>
+                            </p>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            <!--Barra de navegación-->
+            <br><br><br>
+            <div class="container">
+                <a href="/ventas" style="color:black; text-decoration:none;"><i class="fa fa-arrow-left fa-2x"></i></a>
+            </div>
+            <center>
+                <div class="row" style="width:800px;">
+                    {{#each productos}}
+                    <div class="card">
+                        <h3>{{nombre}}</h3>
+                        <img src="" alt="">
+                        <p>Precio: {{precioUnd}}</p>
+                        <p>Unidades: {{Unidad}}</p>
+                    </div>
+                    {{/each}}
+                </div>
+            </center>
+            <br>
+</body>
+{{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+        if (palabras.includes(items)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    </script>
+    {{/if}}
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+<!--   Core JS Files   -->
+<script src="/assets/js/core/jquery.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap.min.js"></script>
+<script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<!--  Google Maps Plugin    -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!-- Chart JS -->
+<script src="/assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="/assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+<!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+<script src="/assets/demo/demo.js"></script>
+<script>
+    $(document).ready(function () {
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+    });
+</script>
+
+</html>

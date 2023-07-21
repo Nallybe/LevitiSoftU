@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="es">
+
+{{>headerId}}
+
+<style>
+    .fa-eye:hover {
+        color: aqua;
+    }
+
+    .fa-ban:hover {
+        color: red;
+    }
+
+    .ban-2:hover {
+        color: white;
+    }
+
+    .boton-compra {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+
+    .btn-info {
+        border-radius: 0;
+    }
+
+    .badge {
+        border-radius: 0;
+    }
+</style>
+
+<!--Barra de navegación-->
+<div class="wrapper " style="background-color: #E3E3E3;
+  background-color: #ebecf1;">
+    <div class="sidebar" data-color="black">
+        <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+        
+        {{#if name}}
+        <div class="logo">
+            <a href="" class="simple-text" style="color:white;">
+                <i class="fa-solid fa-circle-user fa-2xl" style="width: 45px;"> </i>{{name}}
+            </a>
+        </div>
+        {{/if}}
+        <div class="sidebar-wrapper" id="sidebar-wrapper">
+            <ul class="nav">
+                <li>
+                    <a href="/dashboard">
+                        <i class="fa fa-house" style="color:white;"></i>
+                        <p style="color:white;">Dashboard</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/roles">
+                        <i class="fa fa-gear" style="color:white;"></i>
+                        <p style="color: white;">Roles</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/usuarios">
+                        <i class="fa fa-users" style="color:white;"></i>
+                        <p style="color:white;">Usuarios</p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="/compras" style="background-color: white">
+                        <i class="fa fa-shop" style="color: black;"></i>
+                        <p style="color:black;">Compras</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/insumos">
+                        <i class="fa fa-box" style="color:white;"></i>
+                        <p style="color:white;">Insumos</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/producciones">
+                        <i class="fa fa-scissors" style="color:white;"></i>
+                        <p style="color:white;">Producción</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/productos">
+                        <i class="fa fa-boxes-packing" style="color:white;"></i>
+                        <p style="color:white;">Productos</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/clientes">
+                        <i class="fa fa-user" style="color:white;"></i>
+                        <p style="color:white;">Clientes</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/ventas">
+                        <i class="fa fa-truck-fast" style="color:white;"></i>
+                        <p style="color:white;">Ventas</p>
+                    </a>
+                </li>
+                <li>
+                    <a href="/reparaciones">
+                        <i class="fa fa-screwdriver-wrench" style="color:white;"></i>
+                        <p style="color:white;">Reparaciones</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main-panel" id="main-panel">
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand navbar-absolute">
+            <div class="container-fluid">
+                <div class="navbar-wrapper">
+                    <div class="navbar-toggle">
+                        <button type="button" class="navbar-toggler">
+                            <span class="navbar-toggler-bar bar1"></span>
+                            <span class="navbar-toggler-bar bar2"></span>
+                            <span class="navbar-toggler-bar bar3"></span>
+                        </button>
+                    </div>
+                    <a class="navbar-brand" href="#" style="margin-left:10px;">Compra {{#each
+                        compra}}{{idCompra}}{{/each}}</a>
+                </div>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+                    aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                    <span class="navbar-toggler-bar navbar-kebab"></span>
+                </button>
+                <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                    <a class="nav-link" href="/logout">
+                        <i class="fa fa-right-from-bracket" style="margin-right:20px;"></i>
+                        <p>
+                            <span class="d-lg-none d-md-block">Salir</span>
+                        </p>
+                    </a>
+                </div>
+            </div>
+        </nav>
+        <!--Barra de navegación-->
+        <br><br><br>
+        <center>
+            <div class="container mb-5">
+                <table class="table table-hover" style="text-align:center;" id="tabla-compras-detalles">
+                    <thead style="background-color: #282d32; color:white;">
+                        <tr>
+                            <th colspan="3" style="background-color: #30363d; color:white;"><b>Registro</b></th>
+                        </tr>
+                        <tr>
+                            <th class="w-1/4 ...">#</th>
+                            <!--<th class="w-1/4 ...">Registrador</th>-->
+                            <th class="w-1/4 ...">Proveedor</th>
+                            <th class="w-1/4 ...">Recibo</th>
+                            <th class="w-1/4 ...">FechaRecibo</th>
+                            <th class="w-1/4 ...">FechaRegistro</th>
+                            <th class="w-1/4 ...">Monto</th>
+                            <th class="w-1/4 ...">Iva</th>
+                            <th class="w-1/4 ...">Total</th>
+                            <!-- <th class="w-1/4 ...">Funciones</th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each compra}}
+                        <tr class="table-active">
+                            <td class="py-3 px-6 text-center">{{idCompra}}</td>
+                            <!--<td class="p-3 text-center">
+                                <a class="btn btn-info" href="/usuarios/{{idInfoUser}}" href="#"
+                                    data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
+                                    title="<b>Usuario {{idInfoUser}}</b>" data-bs-content="
+                                    <div class='row'>
+                                        <div class='col-md-4'>
+                                            <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
+                                        </div>
+                                        <div class='col-md-8'>
+                                            <b>Nombre:</b> {{userName}}<br>
+                                            <b>Teléfono:</b> {{userTell}}<br>
+                                            <b>Correo:</b> {{userEmail}}<br>
+                                            {{!--<b>#Compras:</b> {{userNumC}}--}}
+                                        </div>
+                                    </div>
+                                ">{{userName}} <span class="badge text-bg-secondary"><i class="fas fa-user"
+                                            style="color:black"></i></span>
+                                </a>
+                            </td>-->
+                            <td class="p-3 text-center">{{proveedor}}</td>
+                            <td class="p-3 text-center">{{recibo}}</td>
+                            <td class="p-3 text-center">{{fechaRecibo}}</td>
+                            <td class="p-3 text-center">{{fechaRegistro}}</td>
+                            <td class="p-3 text-center">{{monto}}</td>
+                            <td class="p-3 text-center">{{iva}}</td>
+                            <td class="p-3 text-center">{{total}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+
+                <table class="table table-hover mt-5" style="text-align:center;" id="tabla-compras">
+                    <thead style="background-color: #282d32; color:white;">
+                        <tr>
+                            <th colspan="3" style="background-color: #30363d; color:white;"><b>Detalles</b></th>
+                        </tr>
+                        <tr>
+                            <th class="w-1/4 ...">#</th>
+                            <!--<th class="w-1/4 ...">Registrador</th>-->
+                            <th class="w-1/4 ...">Insumo</th>
+                            <th class="w-1/4 ...">Precio</th>
+                            <th class="w-1/4 ...">Cantidad</th>
+                            <th class="w-1/4 ...">Monto</th>
+                            <th class="w-1/4 ...">%Iva</th>
+                            <th class="w-1/4 ...">Iva</th>
+                            <th class="w-1/4 ...">SubTotal</th>
+                            <!-- <th class="w-1/4 ...">Funciones</th>-->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each detallescompra}}
+                        <tr class="table-active">
+                            <td class="py-2 px-6 text-center">{{cont}}</td>
+                            <td class="p-2 text-center">
+                                <a class="btn btn-info" href="/insumos/{{idInsumo}}" data-bs-toggle="popover"
+                                    data-bs-trigger="hover" data-bs-title="<b>Insumo {{idInsumo}}</b>"
+                                    data-bs-html="true" data-bs-content="
+                                    <div class='row'>
+                                        <div class='col-md-4'>
+                                            <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Box-Open-icon.png' width='100' />
+                                        </div>
+                                        <div class='col-md-8'>
+                                            <b>Nombre:</b> {{nombreI}}<br>
+                                            <b>Medida:</b> {{medidaI}}<br>
+                                            <b>Stock:</b> {{cantidadI}}<br>
+                                        </div>
+                                    </div>
+                                ">{{nombreI}} <span class="badge text-bg-secondary"><i class="fas fa-box-open"
+                                            style="color: black"></i></span></a>
+                            </td>
+                            <td class="p-3 text-center">{{precio}}</td>
+                            <td class="p-3 text-center">{{cantidad}}</td>
+                            <td class="p-3 text-center">{{monto}}</td>
+                            <td class="p-3 text-center">{{porcentajeIva}}</td>
+                            <td class="p-3 text-center">{{iva}}</td>
+                            <td class="py-2 px-6 text-center">{{total}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+    </div>
+</div>
+</center>
+
+
+
+<div aria-live="polite" aria-atomic="true" class="position-relative">
+    <!-- Position it: -->
+    <!-- - `.toast-container` for spacing between toasts -->
+    <!-- - `top-0` & `end-0` to position the toasts in the upper right corner -->
+    <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
+    <div class="toast-container position-fixed bottom-0 end-0 right-0 p-3">
+        <div id="myToast" class="toast align-items-center border-0" role="alert" aria-live="assertive"
+            aria-atomic="true" data-delay="1000">
+            <!--Tiempo de espera--><!--data-bs-autohide="false" Dejar el toast estatico-->
+            <div class="d-flex">
+                <div class="toast-body">
+                    <strong class="me-auto"> Compra {{#each compra}}{{idCompra}}{{/each}}<br></strong>
+                    La compra cuenta con un total de <b>({{numDC}}) detalles </b>
+                    <!--<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
+
+                    <!--<div class="col-md-2">
+              <button type="button" class="btn btn-secondary mr-0" data-bs-dismiss="toast" aria-label="Close"
+                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
+                <i class="fa-solid fa-x"></i></button>
+            </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+        <div class="toast-body">
+            Hello, world! This is a toast message.
+        </div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
+            aria-label="Close"></button>
+    </div>
+</div>
+
+</body>
+
+<!--Bootstrap-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+<!--Validacion nav bar-->
+{{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+        if (palabras.includes(items)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    </script>
+    {{/if}}
+
+<script>
+    // Inicializar los popovers
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl);
+    });
+
+    // Mostrar el toast
+    var toastEl = document.getElementById('myToast');
+    var toast = new bootstrap.Toast(toastEl);
+    toast.show();
+</script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+<!--   Core JS Files   -->
+<script src="/assets/js/core/jquery.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap.min.js"></script>
+<script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<!-- Chart JS -->
+<script src="/assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="/assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+<!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+<script src="/assets/demo/demo.js"></script>
+<script>
+    $(document).ready(function () {
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+    });
+</script>
+
+
+
+{{!--
+<script src="assets/js/ValidacionEliminarInsumo.js"></script>
+<!--  Google Maps Plugin-->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+--}}

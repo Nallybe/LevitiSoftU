@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{>headerD}}
+
+<body>
+  <!--Navbar-->
+  {{> bar}}
+  <!-- End Navbar -->
+  <!-- End Navbar -->
+  <!--Inicio cuerpo-->
+  <br><br><br><br>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <div class="row container-fluid col-md-12">
+          <div class="card card-success">
+            <div class="card-header">
+              <h5 class="card-title">Informe compras vs ventas</h5>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="barChart1"
+                  style="min-height: 330px; height: 330px; max-height: 550px; max-width: 100%;"></canvas>
+              </div>
+            </div>
+            <div class="row mb-2">
+              <div class="col-sm-12">
+                <div class="d-grid gap-2 d-md-block" style="margin-left: 10px;">
+                  <input type="date" id="start" name="trip-start">
+                  <button class="btn btn-primary" type="button" onclick="downloadReport()">Descargar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+        
+      
+        <div class="col-6">
+          <div class="row container-fluid col-md-12">
+            <div class="card card-success">
+              <div class="card-header">
+                <h5 class="card-title">Informe Productos</h5>
+              </div>
+              <div class="card-body">
+                <div class="chart">
+                  <canvas id="pieChart"
+                    style="min-height: 330px; height: 330px; max-height: 550px; max-width: 100%;"></canvas>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-sm-12">
+                  <div class="d-grid gap-2 d-md-block" style="margin-left: 10px;">
+                    <input type="date" id="start" name="trip-start">
+                    <button class="btn btn-primary" type="button">Descargar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Fin cuerpo-->
+
+
+</body>
+<!--   Core JS Files   -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="./plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="./plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- ChartJS -->
+<script src="./plugins/chart.js/Chart.min.js"></script>
+<!-- AdminLTE App -->
+<script src="./dist/js/adminlte.min.js"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="./dist/js/demo.js"></script>
+<script src="assets/js/core/jquery.min.js"></script>
+<script src="assets/js/core/popper.min.js"></script>
+<script src="assets/js/core/bootstrap.min.js"></script>
+<script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<!--  Google Maps Plugin    -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!-- Chart JS -->
+<script src="assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+<!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+<script src="assets/demo/demo.js"></script>
+<script>
+  $(document).ready(function () {
+    // Javascript method's body can be found in assets/js/demos.js
+    demo.initDashboardPageCharts();
+
+  });
+</script>
+
+<script>
+  //ESTADISTICA DE PRODUCTOS
+  // Obtén una referencia al elemento canvas
+  const pieChart = document.getElementById('pieChart').getContext('2d');
+
+  // Datos del gráfico de torta
+  const data = {
+    labels: ['Bolsos', 'Zapatos', 'Correas', 'Accesorios', 'Chaquetas'], // Etiquetas de las secciones
+    datasets: [{
+      data: [10, 20, 50, 25, 35], // Valores de las secciones
+      backgroundColor: ['#ff6384', '#36a2eb', '#F52E2E', '#EEEE2F', '#EE7B01'] // Colores de las secciones
+    }]
+  };
+
+  // Opciones del gráfico de torta
+  const options = {
+    responsive: true
+  };
+
+  // Crea el gráfico de torta
+  const chart = new Chart(pieChart, {
+    type: 'pie',
+    data: data,
+    options: options
+  });
+</script>
+
+
+<script>
+  $(function () {
+    var areaChartData = {
+      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
+      datasets: [
+        {
+          label: 'Ventas',
+          backgroundColor: '#3C95FF',
+          borderColor: '#3C95FF',
+          pointRadius: false,
+          pointColor: '#black',
+          pointStrokeColor: 'black',
+          pointHighlightFill: '#fff',
+          pointHighlightStroke: 'black',
+          data: [28, 48, 40, 19, 86, 27, 90]
+        },
+        {
+          label: 'Compras',
+          backgroundColor: '#FF3C3C',
+          borderColor: '#FF3C3C',
+          pointRadius: false,
+          pointColor: 'rgba(210, 214, 222, 1)',
+          pointStrokeColor: '#c1c7d1',
+          pointHighlightFill: '#fff',
+          pointHighlightStroke: 'rgba(220,220,220,1)',
+          data: [65, 59, 80, 81, 56, 55, 40]
+        },
+      ]
+    }
+
+    var barChartCanvas = $('#barChart1').get(0).getContext('2d');
+    var barChartData = $.extend(true, {}, areaChartData);
+    var temp0 = areaChartData.datasets[0];
+    var temp1 = areaChartData.datasets[1];
+    barChartData.datasets[0] = temp1;
+    barChartData.datasets[1] = temp0;
+
+    var barChartOptions = {
+      responsive: true,
+      maintainAspectRatio: false,
+      datasetFill: false
+    }
+
+    new Chart(barChartCanvas, {
+      type: 'bar',
+      data: barChartData,
+      options: barChartOptions
+    });
+
+    function downloadReport() {
+      var canvas = document.getElementById('barChart1');
+      var dataURL = canvas.toDataURL('image/png');
+      var date = document.getElementById('start').value;
+      var fileName = 'informe_compras_ventas_' + date + '.png';
+
+      var link = document.createElement('a');
+      link.href = dataURL;
+      link.download = fileName;
+      link.click();
+    }
+  });
+</script>
+<script>
+  $(document).ready(function () {
+    // Javascript method's body can be found in assets/js/demos.js
+    demo.initDashboardPageCharts();
+
+  });
+</script>
+<script src="https://kit.fontawesome.com/f669cfd668.js" crossorigin="anonymous"></script>
+
+</html>

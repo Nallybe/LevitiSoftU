@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{>headerId}}
+
+<body>
+  <style>
+    .fa-trash:hover {
+      color: red;
+    }
+
+    #mensajeErrorCliente {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorCliente .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorTotal {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorTotal .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorFechaEntrega {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorFechaEntrega .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorArticulo {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorArticulo .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorDescripcion {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorDescripcion .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorObservacion {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorObservacion .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+
+    .fa-pen:hover {
+      color: #0275d8;
+    }
+
+    .fa-trash:hover {
+      color: red;
+    }
+
+    .boton-reparacion {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+  </style>
+
+  <!--Barra de navegación-->
+  <div class="wrapper " style="background-color: #E3E3E3;
+  background-color: #ebecf1;">
+    <div class="sidebar" data-color="black">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+      
+      {{#if name}}
+      <div class="logo">
+        <a href="" class="simple-text" style="color:white;">
+          <i class="fa-solid fa-circle-user fa-2xl" style="width: 45px;"> </i>{{name}}
+        </a>
+      </div>
+      {{/if}}
+      <div class="sidebar-wrapper" id="sidebar-wrapper">
+        <ul class="nav">
+          <li>
+            <a href="/dashboard">
+              <i class="fa fa-house" style="color:white;"></i>
+              <p style="color:white;">Dashboard</p>
+            </a>
+          </li>
+          <li>
+            <a href="/roles">
+              <i class="fa fa-gear" style="color:white;"></i>
+              <p style="color: white;">Roles</p>
+            </a>
+          </li>
+          <li>
+            <a href="/usuarios">
+              <i class="fa fa-users" style="color:white;"></i>
+              <p style="color:white;">Usuarios</p>
+            </a>
+          </li>
+          <li>
+            <a href="/compras">
+              <i class="fa fa-shop" style="color:white;"></i>
+              <p style="color:white;">Compras</p>
+            </a>
+          </li>
+          <li>
+            <a href="/insumos">
+              <i class="fa fa-box" style="color: white;"></i>
+              <p style="color:white;">Insumos</p>
+            </a>
+          </li>
+          <li>
+            <a href="/produccion">
+              <i class="fa fa-scissors" style="color:white;"></i>
+              <p style="color:white;">Producción</p>
+            </a>
+          </li>
+          <li>
+            <a href="/productos">
+              <i class="fa fa-boxes-packing" style="color:white;"></i>
+              <p style="color:white;">Productos</p>
+            </a>
+          </li>
+          <li>
+            <a href="/clientes">
+              <i class="fa fa-user" style="color:white;"></i>
+              <p style="color:white;">Clientes</p>
+            </a>
+          </li>
+          <li>
+            <a href="/ventas">
+              <i class="fa fa-truck-fast" style="color:white;"></i>
+              <p style="color:white;">Ventas</p>
+            </a>
+          </li>
+          <input hidden class="Permisos" id="permisosInput" type="text" value="{{asignacion}}">
+          <li class="active">
+            <a href="/reparaciones" style="background-color: white">
+              <i class="fa fa-screwdriver-wrench" style="color:black;"></i>
+              <p style="color:black;">Reparaciones</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel" id="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand navbar-absolute">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="#" style="margin-left: 10px;">Reparación {{#each
+              reparacion}}{{idReparacion}}{{/each}}</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+            aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navigation">
+            <a class="nav-link" href="/logout">
+              <i class="fa fa-right-from-bracket" style="margin-right:20px;"></i>
+              <p>
+                <span class="d-lg-none d-md-block">Salir</span>
+              </p>
+            </a>
+          </div>
+        </div>
+      </nav>
+      <!--Barra de navegación-->
+      <center>
+        {{#each reparacion}}
+        <form action="/reparaciones_editar/{{idReparacion}}" method="post" onsubmit="return validarEnvio()"
+          id="FormEditarReparacion">
+          <div class="container" style="margin-top: 80px; margin-bottom: 50px">
+            <!--Start Card&Form-->
+            <div class="card" style="width: 95%; border-radius: 0;">
+              <div class="card-body">
+                <h4 class="card-title" style="margin-bottom: 2%;">Editar Reparación</h4>
+                {{#if estado1}}
+                <div class="row">
+                  <div class="col-md-1"></div>
+                  <!--Start Card #1-->
+                  <div class="col-md-4">
+                    <div class="card mt-4" style="border-radius: 0;">
+                      <div class="card-body">
+
+                        <!--Input Cliente-->
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" placeholder="Cliente X" list="lis_clientes"
+                            style="border-radius: 0;" id="idCliente" name="idCliente" value="{{idInfoUser2}}"
+                            autocomplete="off" oninput="val_cliente()" disabled>
+                          <label for="idCliente">
+                            <h5>Cliente</h5>
+                          </label>
+                          <datalist id="lis_clientes">
+                            {{#each clientes}}
+                            <option value="{{correo}}">IdCliente({{idAccess}}) Correo({{correo}})</option>
+                            {{/each}}
+                          </datalist>
+                          <div id="mensajeErrorCliente"></div>
+                        </div>
+                        <!--End Input Cliente-->
+
+                        <!--Input Fecha Entrega-->
+                        <div class="form-floating mb-3">
+                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
+                            id="fechaEntrega" name="fechaEntrega" oninput="val_f_entrega()" value="{{fechaEntrega}}"
+                            autocomplete="off">
+                          <label for="fechaEntrega">
+                            <h5>Fecha Entrega</h5>
+                          </label>
+                          <div id="mensajeErrorFechaEntrega"></div>
+                        </div>
+                        <!--End Input Fecha Entrega-->
+
+                        <!--Input Fecha Registro-->
+                        <div class="form-floating mb-3" hidden>
+                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
+                            id="fechaR" name="fechaR" autocomplete="off" value="{{fechaRegistro}}" readonly>
+                          <label for="fechaR">
+                            <h5>Fecha Registro</h5>
+                          </label>
+                        </div>
+                        <!--End Input Fecha Registro-->
+
+                        <!--Input Total-->
+                        <div class="form-floating mb-3">
+                          <input type="number" class="form-control" placeholder="Total X" style="border-radius: 0;"
+                            id="total" name="total" oninput="val_total()" value="{{total}}" autocomplete="off" min="50">
+                          <label for="total">
+                            <h5>Total</h5><br>
+                          </label>
+                          <div id="mensajeErrorTotal"></div>
+                        </div>
+                        <!--End Input Total-->
+
+                        
+
+                      </div>
+                    </div>
+                  </div>
+                  <!--End Card #1-->
+
+                  <!--Start Card #2-->
+                  <div class="col-md-6 w-4/4">
+                    <div class="card w-4/4" style="border-radius: 0;">
+                      <div class="card-body">
+                        <h5 class="card-title" style="margin-bottom: 4%;">Agregar artículo a la reparación
+                        </h5>
+                        <!--Input Insumo-->
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" placeholder="Artículo X" style="border-radius: 0;"
+                            id="productoReparar_R" name="productoReparar_R" autocomplete="off" oninput="val_articulo()">
+                          <label for="productoReparar_R">
+                            <h5>Artículo</h5>
+                          </label>
+                          <div id="mensajeErrorArticulo"></div>
+                        </div>
+                        <!--End Input Insumo-->
+
+                        <!--Input Descripción-->
+                        <div class="form-floating mb-3">
+                          <textarea class="form-control pb-5" placeholder="Descripcion X" style="border-radius: 0;"
+                            id="descripcion_R" name="descripcion_R" autocomplete="off"
+                            oninput="val_descripcion()"></textarea>
+                          <label for="descripcion_R">
+                            <h5>Descripción</h5><br>
+                          </label>
+                          <div id="mensajeErrorDescripcion"></div>
+                        </div>
+                        <!--End Input Descripción-->
+
+                        <!--Input Observación-->
+                        <div class="form-floating mb-3">
+                          <textarea class="form-control pb-5" placeholder="Observación X" style="border-radius: 0;"
+                            id="observacion_R" name="observacion_R" autocomplete="off"
+                            oninput="val_observacion()"></textarea>
+                          <label for="observacion_R">
+                            <h5>Observaciones</h5><br>
+                          </label>
+                          <div id="mensajeErrorObservacion"></div>
+                        </div>
+                        <!--End Input Observación-->
+
+                        <!--Start Btn Agregar-->
+                        <div class="d-grid gap-2">
+                          <button class="btn btn-warning" style="border-radius: 0;" type="button"
+                            id="btnAgregarArticulo" onclick="agregarArticulo();"><i class="fa-solid fa-circle-plus"></i>
+                            Agregar</button>
+                        </div>
+                        <!--End Btn Agregar-->
+                      </div>
+                    </div>
+                  </div>
+                  <!--End Card #2-->
+                  
+
+                  <div class="col-md-1"></div>
+                </div>
+                {{/if}}
+
+                {{#if estado2}}
+                <div class="row">
+                  <div class="col-md-3"></div>
+                  <!--Start Card #1-->
+                  <div class="col-md-6">
+                    <div class="card" style="border-radius: 0;">
+                      <div class="card-body">
+
+                        <!--Input Cliente-->
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" placeholder="Cliente X" list="lis_clientes"
+                            style="border-radius: 0;" id="idCliente" name="idCliente" value="{{idInfoUser2}}"
+                            autocomplete="off" oninput="val_cliente()" disabled>
+                          <label for="idCliente">
+                            <h5>Cliente</h5>
+                          </label>
+                          <datalist id="lis_clientes">
+                            {{#each clientes}}
+                            <option value="{{correo}}">IdCliente({{idAccess}}) Correo({{correo}})</option>
+                            {{/each}}
+                          </datalist>
+                          <div id="mensajeErrorCliente"></div>
+                        </div>
+                        <!--End Input Cliente-->
+
+                        <!--Input Fecha Entrega-->
+                        <div class="form-floating mb-3">
+                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
+                            id="fechaEntrega" name="fechaEntrega" oninput="val_f_entrega()" value="{{fechaEntrega}}"
+                            autocomplete="off">
+                          <label for="fechaEntrega">
+                            <h5>Fecha Entrega</h5>
+                          </label>
+                          <div id="mensajeErrorFechaEntrega"></div>
+                        </div>
+                        <!--End Input Fecha Entrega-->
+
+                        <!--Input Fecha Registro-->
+                        <div class="form-floating mb-3" hidden>
+                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
+                            id="fechaR" name="fechaR" autocomplete="off" value="{{fechaRegistro}}" readonly>
+                          <label for="fechaR">
+                            <h5>Fecha Registro</h5>
+                          </label>
+                        </div>
+                        <!--End Input Fecha Registro-->
+
+                        <!--Input Total-->
+                        <div class="form-floating mb-3">
+                          <input type="number" class="form-control" placeholder="Total X" style="border-radius: 0;"
+                            id="total" name="total" oninput="val_total()" value="{{total}}" autocomplete="off" min="50">
+                          <label for="total">
+                            <h5>Total</h5><br>
+                          </label>
+                          <div id="mensajeErrorTotal"></div>
+                        </div>
+                        <!--End Input Total-->
+
+                        
+
+                      </div>
+                    </div>
+                  </div>
+                  <!--End Card #1-->
+
+                  <div class="col-md-3"></div>
+                </div>
+                {{/if}}
+
+                {{/each}}
+
+
+                <!--Start Card #3-->
+                <div class="card mt-2" style="width: 100%; border-radius: 0;">
+                  <div class="card-body">
+                    <h5 class="card-title" style="margin-bottom: 2%;">Artículos de la reparación</h5>
+                    <!--Start Table-->
+                    <table class="table table-hover">
+                      <thead class="table" style="background-color: #282d32; color:white;">
+                        <tr style="text-align: center;">
+                          <th>#</th>
+                          <th> Artículo</th>
+                          <th> Descripción</th>
+                          <th> Observaciones</th>
+                          <th> Estado</th>
+                          <th> Funciones </th>
+                        </tr>
+                      </thead>
+                      <tbody id="ListaArticulos">
+                        {{#each detallesreparacion}}
+                        <tr id="{{idDetalleReparacion}}" style="text-align: center">
+                          <td class="text-center"></td>
+
+                          <td class="text-center">
+                            <input type="hidden" name="idDetalleReparacion_1" value="{{idDetalleReparacion}}">
+                            <input name="productoReparar_1" id="productoReparar_1_{{idDetalleReparacion}}"
+                              value="{{productoReparar}}" style="text-align: center; width: 200px;  border: none;"
+                              readonly>
+                          </td>
+                          <td class="text-center w-4/4">
+                            <textarea name="descripcion_1" id="descripcion_1_{{idDetalleReparacion}}"
+                              style="text-align: center; width: 220px;  border: none;"
+                              readonly>{{descripcion}}</textarea>
+                          </td>
+                          <td class="text-center w-4/4">
+                            <textarea name="observacion_1" id="observacion_1_{{idDetalleReparacion}}"
+                              style="text-align: center; width: 220px;  border: none;"
+                              readonly>{{observacion}}</textarea>
+                          </td>
+                          {{#if estado1}}
+                          <td class="p-3 text-center">
+                            <select name="estado_1" class="w-4/5" style="text-align: center;">
+                              <option value="{{estado}}" selected>{{estado}}</option>
+                              <option value="Proceso">En Proceso</option>
+                              <option value="Terminado">Terminado</option>
+                            </select>
+                          </td>
+                          <td class="text-center">
+                            <a class="boton-reparacion" href="#" style="color: #292b2c;" data-bs-toggle="modal"
+                              data-bs-target="#editar{{idDetalleReparacion}}">
+                              <i class="fa-sharp fa-solid fa-pen" style="margin-left: 10px;"></i>
+                            </a>
+
+                            <a class="boton-reparacion" href="#" onclick="eliminarArticulo({{idDetalleReparacion}})"
+                              style="color: #292b2c;">
+                              <i class="fas fa-trash"></i>
+                            </a>
+                          </td>
+                          {{/if}}
+                          {{#if estado2}}
+                          <td class="p-3 text-center">
+                            <select name="estado_1" class="w-4/5" style="text-align: center;">
+                              <option value="{{estado}}" selected>En {{estado}}</option>
+                              <option value="Terminado">Terminado</option>
+                            </select>
+                          </td>
+                          <td class="text-center">
+                            <a class="boton-reparacion" href="#" style="color: #292b2c;" data-bs-toggle="modal"
+                              data-bs-target="#editar{{idDetalleReparacion}}">
+                              <i class="fa-sharp fa-solid fa-pen" style="margin-left: 10px;"></i>
+                            </a>
+
+                            <a class="boton-reparacion" href="#" onclick="eliminarArticulo({{idDetalleReparacion}})"
+                              style="color: #292b2c;">
+                              <i class="fas fa-trash"></i>
+                            </a>
+                          </td>
+
+                          {{/if}}
+                          {{#if estado3}}
+                          <td class="p-3 text-center">
+                            <select name="estado_1" class="w-4/5" style="text-align: center;">
+                              <option value="{{estado}}" selected>{{estado}}</option>
+                              <option value="Proceso">En Proceso</option>
+                            </select>
+                          </td>
+                          {{/if}}
+                        </tr>
+
+
+                        <!-- Modal editar-->
+                        <div class="modal fade" id="editar{{idDetalleReparacion}}" tabindex="-1"
+                          aria-labelledby="exampleModalLabel" aria-hidden="true">
+                          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                            <div class="modal-content" style="border-radius: 0;">
+                              <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Artículo</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                  aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <div class="form-floating mb-3">
+                                  <textarea class="form-control" id="productoReparar_R2_{{idDetalleReparacion}}"
+                                    style="border-radius: 0; text-align: left;"
+                                    placeholder="0000" {{#if estado2}}readonly{{/if}}>{{productoReparar}}</textarea>
+                                  <label for="productoReparar_R2_{{idDetalleReparacion}}">Articulo</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                  <textarea class="form-control pb-5" id="descripcion_R2_{{idDetalleReparacion}}"
+                                    style="border-radius: 0; text-align: left;"
+                                    placeholder="0000" {{#if estado2}}readonly{{/if}}>{{descripcion}}</textarea>
+                                  <label for="descripcion_R2_{{idDetalleReparacion}}">Descripción</label>
+                                </div>
+
+                                <div class="form-floating mb-3">
+                                  <textarea class="form-control pb-5" id="observacion_R2_{{idDetalleReparacion}}"
+                                    style="border-radius: 0; text-align: left;"
+                                    placeholder="0000">{{observacion}}</textarea>
+                                  <label for="observacion_R2_{{idDetalleReparacion}}">Observaciones</label>
+                                </div>
+                              </div>
+                              <div class="modal-footer">
+                                <button class="btn btn-secondary boton-reparacion mr-1" data-bs-dismiss="modal"
+                                  style="border-radius: 0;">Cancelar</button>
+                                <button type="button" class="btn btn-primary boton-reparacion ml-3"
+                                  style="border-radius: 0;" onclick="editarArticulo1({{idDetalleReparacion}})">Guardar
+                                  Cambios</button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!--End Modal editar-->
+                        {{/each}}
+                      </tbody>
+                    </table>
+                    <!--End Table-->
+                  </div>
+                </div>
+                <!--End Card #3-->
+
+
+                <div style="margin-top: 3%;">
+                  <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6" style="margin-top: 1%;">
+                      <!--Start Btn R&C-->
+                      <div class="d-grid gap-2">
+                        <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+                        <button type="submit" id="btnRegistrar" class="btn btn-success"
+                          style="border-radius: 0; margin-bottom: 1px;">
+                          Guardar Cambios</button>
+                        <!--End Btn Regiastrar-->
+                        <!--Start Btn Cancelar-->
+                        <a class="btn btn-danger" href="/reparaciones" style="border-radius: 0; margin-top: 1px;"
+                          type="button">Cancelar</a>
+                        <!--End Btn Cancelar-->
+                      </div>
+                      <!--End Btn R&C-->
+                    </div>
+                    <div class="col-md-3"></div>
+
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+            <!--End Card&Form-->
+
+          </div>
+        </form>
+      </center>
+
+      <br>
+    </div>
+  </div>
+
+  <!--End Form&Card-->
+<!--Validacion nav bar-->
+{{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+        if (palabras.includes(items)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    </script>
+    {{/if}}
+
+
+  <script>
+    function tablaIndice() {
+      // Obtener la referencia de la tabla
+      const tabla = document.getElementById("ListaArticulos");
+
+      // Enumerar las filas
+      let filas = tabla.getElementsByTagName("tr");
+      for (let i = 0; i < filas.length; i++) {
+        let celdaNumero = filas[i].getElementsByTagName("td")[0];
+        celdaNumero.textContent = i + 1;
+      }
+    }
+    tablaIndice()
+  </script>
+
+
+  <script>
+    var lastValueI = ""; // Variable para almacenar el último valor válido
+
+    function val_articulo() {
+      var articulo = document.getElementById("productoReparar_R");
+
+      if (articulo.value != "") {
+        mensajeErrorArticulo.innerHTML = '';
+        mensajeErrorArticulo.style.display = 'none';
+      }
+    }
+
+    function val_descripcion() {
+      var descripcion = document.getElementById("descripcion_R");
+
+      if (descripcion.value != "") {
+        mensajeErrorDescripcion.innerHTML = '';
+        mensajeErrorDescripcion.style.display = 'none';
+      }
+    }
+
+    function val_observacion() {
+      var observacion = document.getElementById("observacion_R");
+
+      if (observacion.value != "") {
+        mensajeErrorObservacion.innerHTML = '';
+        mensajeErrorObservacion.style.display = 'none';
+      }
+    }
+
+    function val_f_entrega() {
+      var fechaEntrega = document.getElementById("fechaEntrega");
+
+      if (fechaEntrega.value != "") {
+        mensajeErrorFechaEntrega.innerHTML = '';
+        mensajeErrorFechaEntrega.style.display = 'none';
+      }
+    }
+
+    function val_total() {
+      var total = document.getElementById("total");
+
+      if (total.value != "") {
+        mensajeErrorTotal.innerHTML = '';
+        mensajeErrorTotal.style.display = 'none';
+      }
+    }
+
+    function val_cliente() {
+      var cliente = document.getElementById("idCliente");
+      var total = document.getElementById("total");
+      var fechaEntrega = document.getElementById("fechaEntrega");
+      var btn = document.getElementById("btnRegistrar");
+
+
+      var selectedOptionI = document.querySelector('#lis_clientes option[value="' + cliente.value + '"]');
+
+      if (selectedOptionI) {
+        var clienteValue = selectedOptionI.getAttribute('correo');
+        cliente.value = selectedOptionI.value; // Establecer el valor del campo "idRegistrador" como el valor de la opción del datalist
+        lastValueI = clienteValue; // Actualizar lastValue con el valor del usuario
+        //var medidaValue = selectedOptionI.getAttribute('medida');
+        //medida.value = medidaValue;
+        total.disabled = false;
+        fechaEntrega.disabled = false;
+        btn.disabled = false;
+
+        mensajeErrorCliente.innerHTML = '';
+        mensajeErrorCliente.style.display = 'none';
+      } else {
+        total.disabled = true;
+        fechaEntrega.disabled = true;
+        btn.disabled = true;
+
+        mensajeErrorCliente.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El cliente no es válido';
+        mensajeErrorCliente.style.display = 'block';
+      }
+    }
+  </script>
+
+
+
+  <!--Agregar y eliminar insumo-->
+  <script>
+    var cont = 0;
+    function agregarArticulo() {
+      const articulo = {
+        productoReparar: document.getElementById('productoReparar_R').value,
+        descripcion: document.getElementById('descripcion_R').value,
+        observacion: document.getElementById('observacion_R').value,
+      };
+
+      if (articulo.productoReparar != "" && articulo.descripcion != "" && articulo.observacion != "") {
+        cont= cont -1;
+        document.getElementById('ListaArticulos').innerHTML += `
+          <tr id="${cont}"style="text-align: center; background-color: whitesmoke;">
+              <td class="text-center">${cont}</td>
+              <td class="text-center">
+                  <input name="productoReparar_2" id="productoReparar_2_${cont}" value="${articulo.productoReparar}" style="text-align: center; width: 200px;  border: none; background-color: whitesmoke;" readonly>
+              </td>
+              <td class="text-center w-4/4">
+                  <textarea name="descripcion_2" id="descripcion_2_${cont}" style="text-align: center; width: 220px;  border: none; background-color: whitesmoke;" readonly>${articulo.descripcion}</textarea>
+              </td>
+              <td class="text-center w-4/4">
+                  <textarea name="observacion_2" id="observacion_2_${cont}" style="text-align: center; width: 220px;  border: none; background-color: whitesmoke;" readonly>${articulo.observacion}</textarea>
+              </td>
+              <td class="text-center">
+              <select name="estado_2" style="text-align: center;">
+                <option value="Iniciado" selected>Iniciado</option>
+              </select>
+              </td>
+              <td class="text-center">
+                <a class="boton-reparacion" href="#" style="color: #292b2c;" data-bs-toggle="modal" data-bs-target="#editar${cont}">
+                  <i class="fa-sharp fa-solid fa-pen" style="margin-left: 10px;"></i>
+                </a>
+
+                <a class="boton-reparacion" href="#" onclick="eliminarArticulo(${cont})" style="color: #292b2c;">
+                  <i class="fas fa-trash"></i>
+                </a>
+              </td>
+          </tr>
+
+
+          <!-- Modal editar-->
+          <div class="modal fade" id="editar${cont}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+              <div class="modal-content" style="border-radius: 0;">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Artículo</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-floating mb-3">
+                      <textarea class="form-control" id="productoReparar_R2_${cont}" style="border-radius: 0; text-align: left;" placeholder="0000">${articulo.productoReparar}</textarea>
+                      <label for="productoReparar_R2_${cont}">Articulo</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                      <textarea class="form-control pb-5" id="descripcion_R2_${cont}" style="border-radius: 0; text-align: left;" placeholder="0000">${articulo.descripcion}</textarea>
+                      <label for="descripcion_R2_${cont}">Descripción</label>
+                    </div>
+
+                    <div class="form-floating mb-3">
+                      <textarea class="form-control pb-5" id="observacion_R2_${cont}" style="border-radius: 0; text-align: left;" placeholder="0000">${articulo.observacion}</textarea>
+                      <label for="observacion_R2_${cont}">Observaciones</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-secondary boton-reparacion mr-1" data-bs-dismiss="modal"
+                    style="border-radius: 0;">Cancelar</button>
+                  <button type="button" class="btn btn-primary boton-reparacion ml-3" style="border-radius: 0;"
+                    onclick="editarArticulo2(${cont})">Guardar Cambios</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--End Modal editar-->
+        `;
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Artículo Agregado',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
+        tablaIndice();
+
+        document.getElementById('productoReparar_R').value = null;
+        document.getElementById('descripcion_R').value = null;
+        document.getElementById('observacion_R').value = null;
+
+        //alert("Insumo Agregado");
+      } else {
+        //alert("Campos obligatorios");
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Campos Obligatorios',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
+        if (articulo.productoReparar == "") {
+          mensajeErrorArticulo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El artículo es un campo requerido';
+          mensajeErrorArticulo.style.display = 'block';
+        }
+
+        if (articulo.descripcion == "") {
+          mensajeErrorDescripcion.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La descripción es un campo requerido';
+          mensajeErrorDescripcion.style.display = 'block';
+        }
+
+        if (articulo.observacion == "") {
+          mensajeErrorObservacion.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La observación es un campo requerido';
+          mensajeErrorObservacion.style.display = 'block';
+        }
+
+      }
+      //} else {
+      // alert('El insumo seleccionado no es válido')
+      //}
+    }
+
+    function eliminarArticulo(id) {
+      articulo = document.getElementById(id);
+      if (!articulo) {
+        alert("Error");
+      } else {
+        padre = articulo.parentNode;
+        padre.removeChild(articulo);
+        //alert("articulo Eliminado");
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Articulo Eliminado',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
+        tablaIndice();
+      }
+    }
+
+
+
+    function editarArticulo1(id) {
+      const idProR = 'productoReparar_1_' + id;
+      const idDes = 'descripcion_1_' + id;
+      const idObs = 'observacion_1_' + id;
+
+      const idProR_R = 'productoReparar_R2_' + id;
+      const idDes_R = 'descripcion_R2_' + id;
+      const idObs_R = 'observacion_R2_' + id;
+
+      document.getElementById(idProR).value = document.getElementById(idProR_R).value;
+      document.getElementById(idDes).value = document.getElementById(idDes_R).value;
+      document.getElementById(idObs).value = document.getElementById(idObs_R).value;
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Articulo Actualizado',
+        showConfirmButton: false,
+        timer: 1000
+      });
+    }
+
+    function editarArticulo2(id) {
+      const idProR = 'productoReparar_2_' + id;
+      const idDes = 'descripcion_2_' + id;
+      const idObs = 'observacion_2_' + id;
+
+      const idProR_R = 'productoReparar_R2_' + id;
+      const idDes_R = 'descripcion_R2_' + id;
+      const idObs_R = 'observacion_R2_' + id;
+
+      document.getElementById(idProR).value = document.getElementById(idProR_R).value;
+      document.getElementById(idDes).value = document.getElementById(idDes_R).value;
+      document.getElementById(idObs).value = document.getElementById(idObs_R).value;
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Articulo Actualizado',
+        showConfirmButton: false,
+        timer: 1000
+      });
+    }
+
+  </script>
+  <!--End Agregar y eliminar insumo-->
+
+  <!--Rango de fecha-->
+  <script>
+    function capturarFechaActualR() {
+      var fechaEntrega = document.getElementById("fechaEntrega");
+      var fechaRegistro = document.getElementById("fechaR").value;
+      var fechaR = new Date(fechaRegistro);
+      var fechaN = new Date();
+      //alert(fechaR)
+
+      var fechaMinima = new Date(fechaR.getTime() + (1 * 24 * 60 * 60 * 1000)); // 1 día en milisegundos
+      var fechaMaxima = new Date(fechaMinima.getTime() + (3 * 30 * 24 * 60 * 60 * 1000)); // 3 meses en milisegundos
+
+      var fechaMinimaString = fechaMinima.toISOString().split("T")[0];
+      var fechaMaximaString = fechaMaxima.toISOString().split("T")[0];
+
+      var fechaNString = fechaN.toISOString().split("T")[0];
+
+      fechaEntrega.min = fechaMinimaString;
+      fechaEntrega.max = fechaMaximaString;
+
+      //alert("Fecha mínima establecida: " + fechaMinimaString);
+      //alert("Fecha máxima establecida: " + fechaMaximaString);
+    }
+    capturarFechaActualR();
+  </script>
+  <!--End Rango de fecha-->
+
+  <!--Validar Envio-->
+  <script>
+
+    function validarCampos() {
+      var cliente = document.getElementById("idCliente");
+      var total = document.getElementById("total");
+      var fechaEntrega = document.getElementById("fechaEntrega");
+
+      if (cliente.value == "") {
+        mensajeErrorCliente.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El cliente es un campo obligatorio';
+        mensajeErrorCliente.style.display = 'block';
+      }
+
+      if (total.value == "") {
+        mensajeErrorTotal.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El total es un campo obligatorio';
+        mensajeErrorTotal.style.display = 'block';
+      }
+
+      if (fechaEntrega.value == "") {
+        mensajeErrorFechaEntrega.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La fecha de entrega es un campo obligatorio';
+        mensajeErrorFechaEntrega.style.display = 'block';
+      }
+
+    }
+
+
+    function validarEnvio() {
+      var list = document.getElementById('ListaArticulos');
+      var cliente = document.getElementById("idCliente");
+      var total = document.getElementById("total");
+      var fechaEntrega = document.getElementById("fechaEntrega");
+
+      if (cliente.value == "" || total.value == "" || fechaEntrega.value == "") {
+        //alert('campos obligatorios');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Campos Obligatorios',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        validarCampos();
+        return false; // Detener el envío del formulario
+      }
+
+      // Verificar si la lista tiene al menos un elemento
+      if (list.childElementCount === 0) {
+        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún insumo");
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'No se puede enviar el formulario porque aún no se ha agregado nungún artículo a reparar',
+          showConfirmButton: false,
+          timer: 6000
+        });
+        return false; // Detener el envío del formulario
+      }
+      // Permite el envío del formulario
+      return true;
+    }
+  </script>
+  <!--End Validar Envio-->
+
+
+  <!--Inicio footer-->
+
+  <!--Fin footer-->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/assets/js/ValidacionInsumo.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+  <!--   Core JS Files   -->
+  <script src="/assets/js/core/jquery.min.js"></script>
+  <script src="/assets/js/core/popper.min.js"></script>
+  <script src="/assets/js/core/bootstrap.min.js"></script>
+  <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+  <!-- Chart JS -->
+  <script src="/assets/js/plugins/chartjs.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+  <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+  <script src="/assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Javascript method's body can be found in assets/js/demos.js
+      demo.initDashboardPageCharts();
+
+    });
+  </script>
+
+  <script>
+    //SOLO NUMEROS
+    $(function () {
+      $(".validar").keydown(function (event) {
+        //alert(event.keyCode);
+        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
+          return false;
+        }
+      });
+    });
+  </script>

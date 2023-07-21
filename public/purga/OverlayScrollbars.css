@@ -1,0 +1,44 @@
+/*!
+ * OverlayScrollbars
+ * https://github.com/KingSora/OverlayScrollbars
+ *
+ * Version: 1.13.0
+ *
+ * Copyright KingSora | Rene Haas.
+ * https://github.com/KingSora
+ *
+ * Released under the MIT license.
+ * Date: 02.08.2020
+ */
+
+/*
+OVERLAY SCROLLBARS CORE:
+*/
+/* fix restricted measuring */
+@-webkit-keyframes os-resize-observer-dummy-animation {
+    from {
+        z-index: 0;
+    }
+    to {
+        z-index: -1;
+    }
+}
+@keyframes os-resize-observer-dummy-animation {
+    from {
+        z-index: 0;
+    }
+    to {
+        z-index: -1;
+    }
+}
+
+/*
+CUSTOM SCROLLBARS AND CORNER CORE:
+*/ 
+
+/*
+THEMES:
+*/
+
+/* NONE THEME: */
+/* DARK & LIGHT THEME: */

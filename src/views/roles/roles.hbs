@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="es" class="perfect-scrollbar-on">
+
+{{>headerD}}
+<style>
+    .fa-eye:hover {
+        color: gray;
+    }
+
+    .fa-pen:hover {
+        color: #0275d8;
+    }
+
+    .p2:hover {
+        color: rgb(255, 255, 255);
+    }
+
+    .fa-trash:hover {
+        color: red;
+    }
+
+    .boton-enviar {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 10px;
+    }
+</style>
+
+<!--Barra de navegación-->
+{{>bar}}
+        <!--Barra de navegación-->
+        <br><br><br>
+        <center>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="row" style="margin-left: 8px;">
+                            <div class="col-md-8 col-9">
+                                <input id="buscar-input"
+                                    style="height: 100%; border-radius: 0; margin-top: 4px; width: 100%; margin-right: 0;"
+                                    class="form-control me-2" type="search" placeholder="Buscar Rol" aria-label="Search"
+                                    oninput="filtrarTabla()">
+                            </div>
+                            <div class="col-md-2 col-3 pt-2">
+                                <button class="btn btn-outline-success" type="submit"
+                                    style="height: 100%; border-radius: 0; width: 100%; padding: 0;"
+                                    onclick="filtrarTabla()">
+                                    <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-5"></div>
+                    <div class="col-md-3">
+                        <a href="AgregarRol" class="btn btn-success" style="border-radius: 0;"><i
+                                class="fa-solid fa-circle-plus"></i>
+                            Agregar Rol</a>
+                    </div>
+                </div>
+                <br>
+                <table id="tabla-roles" class="table" style="text-align:center;">
+                    <thead style="background-color: #282d32; color:white;">
+                        <tr>
+                            <th>Id</th>
+                            <th>Rol</th>
+                            <th>Permisos</th>
+                            <th>Estado</th>
+                            <th>Funciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {{#each roles}}
+                        <tr>
+                            <td class="py-3 px-6 text-center">{{idRoles}}</td>
+                            <td class="p-3 text-center">{{nombreRoles}}</td>
+                            <td>
+                                <a href="Permisos/{{idRoles}}" style="color: #292b2c;"><i type="button"
+                                        class="fa-sharp fa-solid fa-eye"></i></a>
+
+                            </td>
+                            <td class="p-3 text-center">{{estado}}</td>
+                            <td>
+                                <a href="EditarRol/{{idRoles}}" style="color: #292b2c;" class="boton-enviar"><i
+                                        type="button" class="fa-sharp fa-solid fa-pen"></i></a>
+
+
+                            </td>
+                        </tr>
+                        {{/each}}
+
+                    </tbody>
+                </table>
+            </div>
+        </center>
+
+        <br><br><br><br>
+        
+{{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+        if (palabras.includes(items)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    </script>
+    {{/if}}
+
+        <script>
+            function filtrarTabla() {
+                var input = document.getElementById("buscar-input");
+                var filtro = input.value.toUpperCase();
+                var tabla = document.getElementById("tabla-roles");
+                var filas = tabla.getElementsByTagName("tr");
+
+                for (var i = 0; i < filas.length; i++) {
+                    var celdaRol = filas[i].getElementsByTagName("td")[1];
+
+                    if (celdaRol) {
+                        var textoRol = celdaRol.textContent || celdaRol.innerText;
+                        if (textoRol.toUpperCase().indexOf(filtro) > -1) {
+                            filas[i].style.display = "";
+                        } else {
+                            filas[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        </script>
+        <script>
+            // Obtiene todos los botones de alternancia en la página
+            var navbarTogglers = document.querySelectorAll('[data-bs-toggle="collapse"]');
+
+            // Itera sobre cada botón de alternancia y agrega el evento de clic
+            navbarTogglers.forEach(function (navbarToggler) {
+                navbarToggler.addEventListener('click', function () {
+                    var target = document.querySelector(navbarToggler.getAttribute('data-bs-target'));
+                    target.classList.toggle('show'); // Agrega o remueve la clase 'show' para colapsar/desplegar el menú
+                });
+            });
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        <script src="assets/js/ValidacionEliminarRol.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+            crossorigin="anonymous"></script>
+        <!--   Core JS Files   -->
+        <script src="assets/js/core/jquery.min.js"></script>
+        <script src="assets/js/core/popper.min.js"></script>
+        <script src="assets/js/core/bootstrap.min.js"></script>
+        <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+        <!--  Google Maps Plugin    -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+        <!-- Chart JS -->
+        <script src="assets/js/plugins/chartjs.min.js"></script>
+        <!--  Notifications Plugin    -->
+        <script src="assets/js/plugins/bootstrap-notify.js"></script>
+        <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+        <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+        <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+        <script src="assets/demo/demo.js"></script>
+        <script>
+            $(document).ready(function () {
+                // Javascript method's body can be found in assets/js/demos.js
+                demo.initDashboardPageCharts();
+
+            });
+        </script>

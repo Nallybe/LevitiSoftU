@@ -1,0 +1,87 @@
+* {
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	background: #E5E5E5;
+}
+
+.formulario {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 20px;
+}
+
+.formulario__btn {
+	line-height: 45px;
+	width: 100%;
+	background: #000;
+	color: #fff;
+	font-weight: bold;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+	transition: .1s ease all;
+}
+
+.formulario__btn:hover {
+	box-shadow: 3px 0px 30px rgba(163,163,163, 1);
+}
+
+/* ----- -----  Estilos para Validacion ----- ----- */
+
+
+/* ----- -----  Mediaqueries ----- ----- */
+@media screen and (max-width: 800px) {
+	.formulario {
+		grid-template-columns: 1fr;
+	}
+
+	.formulario__btn {
+		width: 100%;
+	}
+}
+
+/* Estilos para pantallas grandes */
+@media screen and (min-width: 992px) {
+	/* Estilos para el contenedor del carrusel */
+	#carousel {
+	  height: 500px;
+	}
+  
+	/* Estilos para las cartas */
+	.carta {
+	  width: 20rem;
+	  height: 280px;
+	}
+  }
+  
+  /* Estilos para pantallas medianas */
+  @media screen and (max-width: 991px) {
+	/* Estilos para el contenedor del carrusel */
+	#carousel {
+	  height: 400px;
+	}
+  
+	/* Estilos para las cartas */
+	.carta {
+	  width: 17rem;
+	  height: 250px;
+	}
+  }
+  
+  /* Estilos para pantallas pequeñas */
+  @media screen and (max-width: 767px) {
+	/* Estilos para el contenedor del carrusel */
+	#carousel {
+	  height: 300px;
+	}
+  
+	/* Estilos para las cartas */
+	.carta {
+	  width: 14rem;
+	  height: 200px;
+	}
+  }
+  

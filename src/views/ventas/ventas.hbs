@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="es">
+
+{{>headerD}}
+<style>
+  .fa-eye:hover {
+    color: gray;
+  }
+
+  .p2:hover {
+    color: rgb(255, 255, 255);
+  }
+</style>
+
+<body>
+  <!--Barra de navegación-->
+  {{> bar}}
+      <!--Barra de navegación-->
+      <br><br><br>
+      <center>
+        <div class="container">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="row" style="margin-left: 8px;">
+                <div class="col-md-8 col-9">
+                  <input id="buscar-input"
+                    style="height: 100%; border-radius: 0; margin-top: 4px; width: 100%; margin-right: 0;"
+                    class="form-control me-2" type="search" placeholder="Buscar venta" aria-label="Search"
+                    oninput="filtrarTabla()">
+                </div>
+                <div class="col-md-2 col-3 pt-2">
+                  <button class="btn btn-outline-success" type="submit"
+                    style="height: 100%; border-radius: 0; width: 100%; padding: 0;" onclick="filtrarTabla()">
+                    <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5"></div>
+            <div class="col-md-3">
+              <a href="AgregarVenta" class="btn btn-success" style="border-radius: 0;"><i
+                  class="fa-solid fa-circle-plus"></i>
+                Agregar Venta</a>
+            </div>
+          </div>
+          <br>
+          <table class="table" style="text-align:center;" id="tabla-ventas">
+            <thead style="background-color: #282d32; color:white;">
+              <tr>
+                <th>Id</th>
+                <th>Nombre Cliente</th>
+                <th>Producto</th>
+                <th>Total</th>
+                <th>Fecha</th>
+                <th>Estado</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              {{#each ventas}}
+              <tr>
+                <td class="py-3 px-6 text-center">{{idVentas}}</td>
+                <td class="p-3 text-center">{{nombre}}</td>
+                <td> <a href="ListarProduc/{{idVentas}}" style="color: #292b2c;"><i type="button"
+                      class="fa-sharp fa-solid fa-eye"></i></a></td>
+                <td class="p-3 text-center">{{total}}</td>
+                <td class="p-3 text-center">{{fecha}}</td>
+                <td class="p-3 text-center">{{estado}}</td>
+              </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      </center>
+      <br><br><br><br><br><br><br><br><br>
+</body>
+{{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+        if (palabras.includes(items)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    </script>
+    {{/if}}
+
+<script>
+  function filtrarTabla() {
+    var input = document.getElementById("buscar-input");
+    var filtro = input.value.toUpperCase();
+    var tabla = document.getElementById("tabla-ventas");
+    var filas = tabla.getElementsByTagName("tr");
+
+    for (var i = 0; i < filas.length; i++) {
+      var celdaNombre = filas[i].getElementsByTagName("td")[1];
+
+      if (celdaNombre) {
+        var textoNombre = celdaNombre.textContent || celdaNombre.innerText;
+        if (textoNombre.toUpperCase().indexOf(filtro) > -1) {
+          filas[i].style.display = "";
+        } else {
+          filas[i].style.display = "none";
+        }
+      }
+    }
+  }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<!--   Core JS Files   -->
+<script src="assets/js/core/jquery.min.js"></script>
+<script src="assets/js/core/popper.min.js"></script>
+<script src="assets/js/core/bootstrap.min.js"></script>
+<script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<!--  Google Maps Plugin    -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!-- Chart JS -->
+<script src="assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+<!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+<script src="assets/demo/demo.js"></script>
+<script>
+  $(document).ready(function () {
+    // Javascript method's body can be found in assets/js/demos.js
+    demo.initDashboardPageCharts();
+
+  });
+</script>

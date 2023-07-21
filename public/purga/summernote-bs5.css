@@ -1,0 +1,45 @@
+/*!
+ * 
+ * Super simple WYSIWYG editor v0.8.20
+ * https://summernote.org
+ *
+ *
+ * Copyright 2013- Alan Hong and contributors
+ * Summernote may be freely distributed under the MIT license.
+ *
+ * Date: 2021-10-14T21:15Z
+ *
+ */
+@font-face {
+    font-family: "summernote";
+    font-style: normal;
+    font-weight: 400;
+    font-display: auto;
+    src: url("./font/summernote.eot?#iefix") format("embedded-opentype"), url("./font/summernote.woff2") format("woff2"), url("./font/summernote.woff") format("woff"), url("./font/summernote.ttf") format("truetype");
+}
+
+/* Theme Variables
+ ------------------------------------------ */
+/* Layout
+ ------------------------------------------ */
+
+/* Frame mode layout
+ ------------------------------------------ */
+
+/* Popover
+ ------------------------------------------ */
+
+/* Popover and Toolbar (Button container)
+ ------------------------------------------ */
+
+/* Dialog
+ ------------------------------------------ */
+
+/* Placeholder
+ ------------------------------------------ */
+
+/* Handle
+ ------------------------------------------ */
+
+/* Handle
+ ------------------------------------------ */

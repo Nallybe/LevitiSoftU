@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{>headerId}}
+
+<body style="background-color: #E3E3E3;">
+    <!--Barra de navegación-->
+    <style>
+        #mensajeErrorNombre {
+            display: none;
+            color: red;
+            margin-top: 5px;
+        }
+
+        #mensajeErrorNombre .icono {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5px;
+            width: 15px;
+            height: 15px;
+        }
+
+        #mensajeErrorStock {
+            display: none;
+            color: red;
+            margin-top: 5px;
+        }
+
+        #mensajeErrorStock .icono {
+            display: inline-block;
+            vertical-align: middle;
+            margin-right: 5px;
+            width: 15px;
+            height: 15px;
+        }
+    </style>
+    <div class="wrapper " style="background-color: #E3E3E3;
+  background-color: #ebecf1;">
+        <div class="sidebar" data-color="black">
+            <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+            {{!-- <div class="logo">
+                <a href="/dashboard" class="simple-text" style="color:white;">
+                    Levitisoft
+                </a>
+            </div> --}}
+            {{#if name}}
+            <div class="logo">
+                <a href="" class="simple-text" style="color:white;">
+                    <i class="fa-solid fa-circle-user fa-2xl" style="width: 45px;"> </i>{{name}}
+                </a>
+            </div>
+            {{/if}}
+            <div class="sidebar-wrapper" id="sidebar-wrapper">
+                <ul class="nav">
+                    <li>
+                        <a href="/dashboard">
+                            <i class="fa fa-house" style="color:white;"></i>
+                            <p style="color:white;">Dashboard</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/roles">
+                            <i class="fa fa-gear" style="color:white;"></i>
+                            <p style="color: white;">Roles</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/usuarios">
+                            <i class="fa fa-users" style="color:white;"></i>
+                            <p style="color:white;">Usuarios</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/compras">
+                            <i class="fa fa-shop" style="color:white;"></i>
+                            <p style="color:white;">Compras</p>
+                        </a>
+                    </li>
+                    <li class="active">
+                        <a href="/insumos" style="background-color: white">
+                            <i class="fa fa-box" style="color: black;"></i>
+                            <p style="color:black;">Insumos</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/produccion">
+                            <i class="fa fa-scissors" style="color:white;"></i>
+                            <p style="color:white;">Producción</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/productos">
+                            <i class="fa fa-boxes-packing" style="color:white;"></i>
+                            <p style="color:white;">Productos</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/clientes">
+                            <i class="fa fa-user" style="color:white;"></i>
+                            <p style="color:white;">Clientes</p>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/ventas">
+                            <i class="fa fa-truck-fast" style="color:white;"></i>
+                            <p style="color:white;">Ventas</p>
+                        </a>
+                    </li>
+                    <input hidden class="Permisos" id="permisosInput" type="text" value="{{asignacion}}">
+
+                    <li>
+                        <a href="/reparaciones">
+                            <i class="fa fa-screwdriver-wrench" style="color:white;"></i>
+                            <p style="color:white;">Reparaciones</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="main-panel" id="main-panel">
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand navbar-absolute">
+                <div class="container-fluid">
+                    <div class="navbar-wrapper">
+                        <div class="navbar-toggle">
+                            <button type="button" class="navbar-toggler">
+                                <span class="navbar-toggler-bar bar1"></span>
+                                <span class="navbar-toggler-bar bar2"></span>
+                                <span class="navbar-toggler-bar bar3"></span>
+                            </button>
+                        </div>
+                        <a class="navbar-brand" href="#" style="margin-left: 10px;">Insumos</a>
+                    </div>
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+                        aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                        <span class="navbar-toggler-bar navbar-kebab"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-end" id="navigation">
+                        <a class="nav-link" href="/logout">
+                            <i class="fa fa-right-from-bracket" style="margin-right:20px;"></i>
+                            <p>
+                                <span class="d-lg-none d-md-block">Salir</span>
+                            </p>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+            <!--Barra de navegación-->
+            <center>
+                <div class="container" style="margin-top: 80px;">
+
+                    <!--Start Form&Card-->
+                    <div class="card" style="width: 95%; border-radius: 0;">
+                        <div class="card-body">
+                            <h4 class="card-title" style="margin-bottom: 2%;">Editar insumo</h4>
+                            <!--Start Card 1-->
+                            {{#each insumos}}
+                            <form action="" method="post" id="formulario">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id=" nombreInsumo"
+                                                style="border-radius: 0;" name="nombreInsumo" value="{{nombreInsumo}}">
+                                            <div id="mensajeErrorNombre"></div>
+                                            <label for="floatingInput">Nombre</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-floating mb-3">
+                                            <input type="number" class="form-control" id="stockInsumo"
+                                                style="border-radius: 0;" name="stockInsumo" value="{{stockInsumo}}"
+                                                min="1">
+                                            <div id="mensajeErrorStock"></div>
+                                            <label for="floatingInput">Stock</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="form-floating mb-3">
+                                            <select class="form-control" id="floatingInput" style="border-radius: 0;"
+                                                name="medida" value="{{medida}}">
+
+                                                <option value="Pliego">Pliego</option>
+                                                <option value="Medio pliego">Medio pliego</option>
+                                                <option value="Octavo">Octavo</option>
+                                                <option value="Unidad">Unidad</option>
+                                            </select>
+                                            <label for="floatingInput">Medida</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-floating mb-3">
+
+                                            <select class="form-control" id="floatingInput" style="border-radius: 0;"
+                                                name="estado" value="{{estado}}">
+
+                                                <option value="Disponible">Disponible</option>
+                                                <option value="No disponible">No disponible</option>
+                                            </select>
+                                            <label for="floatingInput">Estado</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                        </div>
+
+                        <div style="margin-top: 1%; margin-left:20px;">
+                            <div style="margin-top: 1%; width: 35%;">
+                                <div class="d-grid gap-2">
+
+                                    <button type="submit" class=" btn btn-success"
+                                        style="border-radius: 0; margin-bottom: 1px;" id="boton" onclick="editar()">
+                                        Editar insumo</a>
+                                </div>
+                                <a class="btn btn-danger" href="/insumos"
+                                    style="border-radius: 0; margin-top: 1px; width:100%;" type="button">Cancelar</a>
+                            </div>
+                        </div>
+                        <br>
+                    </div>
+                </div>
+
+
+                </form>
+                {{/each}}
+                <br>
+        </div>
+    </div>
+
+    </div>
+
+    </div>
+
+    </div>
+    </div>
+    <!--End Form&Card-->
+
+
+    </div>
+    </center>
+
+
+</body>
+{{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+        if (palabras.includes(items)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    </script>
+    {{/if}}
+<script>
+    let formulario = document.querySelector('#formulario');
+    let nombreInputs = document.querySelectorAll('input[name="nombreInsumo"]');
+    let stockInputs = document.querySelectorAll('input[name="stockInsumo"]');
+    let mensajeErrorNombre = document.querySelector('#mensajeErrorNombre');
+    let mensajeErrorStock = document.querySelector('#mensajeErrorStock');
+
+    nombreInputs.forEach(function (nombreInput) {
+        nombreInput.addEventListener('blur', function () {
+            validarNombre(nombreInput.value);
+        });
+    });
+
+    stockInputs.forEach(function (stockInput) {
+        stockInput.addEventListener('blur', function () {
+            validarStock(stockInput.value);
+        });
+    });
+
+    formulario.addEventListener('submit', function (event) {
+        let nombreValido = validarNombre(nombreInputs[0].value);
+        let stockValido = validarStock(stockInputs[0].value);
+
+        if (!nombreValido || !stockValido) {
+            event.preventDefault();
+        }
+    });
+
+    function validarNombre(nombre) {
+        if (nombre === "") {
+            mostrarError(mensajeErrorNombre, 'Campo Obligatorio');
+            return false;
+        } else {
+            ocultarError(mensajeErrorNombre);
+            return true;
+        }
+    }
+
+    function validarStock(stock) {
+        if (stock === "") {
+            mostrarError(mensajeErrorStock, 'Campo Obligatorio');
+            return false;
+        } else {
+            ocultarError(mensajeErrorStock);
+            return true;
+        }
+    }
+
+    function mostrarError(elemento, mensaje) {
+        elemento.innerHTML = '<span class="icono fa fa-circle-xmark"></span>' + mensaje;
+        elemento.style.display = 'block';
+    }
+
+    function ocultarError(elemento) {
+        elemento.innerHTML = '';
+        elemento.style.display = 'none';
+    }
+
+</script>
+{{!--
+<script>
+    function editar() {
+        let timerInterval
+        Swal.fire({
+            icon: 'success',
+            title: 'Insumo actualizado con éxtito',
+            html: '',
+            timer: 1500,
+            timerProgressBar: false,
+            didOpen: () => {
+
+            },
+            willClose: () => {
+                clearInterval(timerInterval);
+                location.replace('/insumos');
+            }
+        }).then((result) => {
+            /* Read more about handling dismissals below */
+            if (result.dismiss === Swal.DismissReason.timer) {
+                console.log('I was closed by the timer');
+            }
+        })
+    }
+</script> --}}
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/assets/js/ValidacionEditarInsumo.js"></script>
+<!--Fin footer-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+<!--   Core JS Files   -->
+<script src="/assets/js/core/jquery.min.js"></script>
+<script src="/assets/js/core/popper.min.js"></script>
+<script src="/assets/js/core/bootstrap.min.js"></script>
+<script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+<!--  Google Maps Plugin    -->
+<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!-- Chart JS -->
+<script src="/assets/js/plugins/chartjs.min.js"></script>
+<!--  Notifications Plugin    -->
+<script src="/assets/js/plugins/bootstrap-notify.js"></script>
+<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+<script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+<!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+<script src="/assets/demo/demo.js"></script>
+<script>
+    $(document).ready(function () {
+        // Javascript method's body can be found in assets/js/demos.js
+        demo.initDashboardPageCharts();
+
+    });
+</script>
+
+<script>
+    //SOLO NUMEROS
+    $(function () {
+        $(".validar").keydown(function (event) {
+            //alert(event.keyCode);
+            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
+                return false;
+            }
+        });
+    });
+</script>

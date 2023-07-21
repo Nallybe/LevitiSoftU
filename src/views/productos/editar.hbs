@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{>headerId}}
+
+<body>
+  <style>
+    .fa-trash:hover {
+      color: red;
+    }
+
+    /*#mensajeErrorImagen {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorImagen .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }*/
+
+    #mensajeErrorNombre {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorNombre .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorDescripcion {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorDescripcion .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorPrecio {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorPrecio .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorStock {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorStock .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+
+    #mensajeErrorInsumo {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorInsumo .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorCantidad {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorCantidad .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+  </style>
+
+  <!--Barra de navegación-->
+  <div class="wrapper " style="background-color: #E3E3E3;
+  background-color: #ebecf1;">
+    <div class="sidebar" data-color="black">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+      
+      {{#if name}}
+      <div class="logo">
+        <a href="" class="simple-text" style="color:white;">
+          <i class="fa-solid fa-circle-user fa-2xl" style="width: 45px;"> </i>{{name}}
+        </a>
+      </div>
+      {{/if}}
+      <div class="sidebar-wrapper" id="sidebar-wrapper">
+        <ul class="nav">
+          <li>
+            <a href="/dashboard">
+              <i class="fa fa-house" style="color:white;"></i>
+              <p style="color:white;">Dashboard</p>
+            </a>
+          </li>
+          <li>
+            <a href="/roles">
+              <i class="fa fa-gear" style="color:white;"></i>
+              <p style="color: white;">Roles</p>
+            </a>
+          </li>
+          <li>
+            <a href="/usuarios">
+              <i class="fa fa-users" style="color:white;"></i>
+              <p style="color:white;">Usuarios</p>
+            </a>
+          </li>
+          <li>
+            <a href="/compras">
+              <i class="fa fa-shop" style="color:white;"></i>
+              <p style="color:white;">Compras</p>
+            </a>
+          </li>
+          <li>
+            <a href="/insumos">
+              <i class="fa fa-box" style="color: white;"></i>
+              <p style="color:white;">Insumos</p>
+            </a>
+          </li>
+          <li>
+            <a href="/produccion">
+              <i class="fa fa-scissors" style="color:white;"></i>
+              <p style="color:white;">Producción</p>
+            </a>
+          </li>
+          <li class="active">
+            <a href="/productos" style="background-color: white">
+              <i class="fa fa-boxes-packing" style="color:black;"></i>
+              <p style="color:black;">Productos</p>
+            </a>
+          </li>
+          <li>
+            <a href="/clientes">
+              <i class="fa fa-user" style="color:white;"></i>
+              <p style="color:white;">Clientes</p>
+            </a>
+          </li>
+          <li>
+            <a href="/ventas">
+              <i class="fa fa-truck-fast" style="color:white;"></i>
+              <p style="color:white;">Ventas</p>
+            </a>
+          </li>
+          <input hidden class="Permisos" id="permisosInput" type="text" value="{{asignacion}}">
+          <li>
+            <a href="/reparaciones">
+              <i class="fa fa-screwdriver-wrench" style="color:white;"></i>
+              <p style="color:white;">Reparaciones</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel" id="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand navbar-absolute">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="#" style="margin-left: 10px;">Producto {{#each
+              producto}}{{idProducto}}{{/each}}</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+            aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navigation">
+            <a class="nav-link" href="/logout">
+              <i class="fa fa-right-from-bracket" style="margin-right:20px;"></i>
+              <p>
+                <span class="d-lg-none d-md-block">Salir</span>
+              </p>
+            </a>
+          </div>
+        </div>
+      </nav>
+      <!--Barra de navegación-->
+      <center>
+        {{#each producto}}
+        <form action="/productos_editar/{{idProducto}}" method="post" onsubmit="return validarEnvio()"
+          id="FormRegistrarCompra">
+          <div class="container" style="margin-top: 80px; margin-bottom: 50px">
+            <!--Start Card&Form-->
+            <div class="card" style="width: 95%; border-radius: 0;">
+              <div class="card-body">
+                <h4 class="card-title" style="margin-bottom: 4%;">Registrar Producto</h4>
+                <div class="row">
+                  <div class="col-md-1"></div>
+                  <!--Start Card #1-->
+                  <div class="col-md-5">
+                    <div class="card" style="border-radius: 0; width: 90%;">
+                      <div class="card-body">
+
+
+
+                        <!--Input Imagen
+                        <div class="form-floating mb-3">
+                          <input type="file" class="form-control pt-4" placeholder="Imagen X" style="border-radius: 0;"
+                            id="imagen" name="imagen" autocomplete="off" oninput="val_imagen()">
+                          <label for="imagen">
+                            <h5>Imagen</h5>
+                          </label>
+                          <div id="mensajeErrorImagen"></div>
+                        </div>-->
+                        <!--End Input Imagen-->
+
+                        <!--Input Nombre-->
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" placeholder="Nombre X" style="border-radius: 0;"
+                            id="nombre" name="nombre" oninput="val_nombre()" value="{{nombre}}" autocomplete="off">
+                          <label for="nombre">
+                            <h5>Nombre</h5><br>
+                          </label>
+                          <div id="mensajeErrorNombre"></div>
+                        </div>
+                        <!--End Input Nombre-->
+
+                        <!--Input Descripción-->
+                        <div class="form-floating mb-3">
+                          <textarea class="form-control pb-5" placeholder="Descripcion X" style="border-radius: 0;"
+                            id="descripcion" name="descripcion" autocomplete="off"
+                            oninput="val_descripcion()">{{descripcion}}</textarea>
+                          <label for="descripcion_R">
+                            <h5>Descripción</h5><br>
+                          </label>
+                          <div id="mensajeErrorDescripcion"></div>
+                        </div>
+                        <!--End Input Descripción-->
+
+                        <!--Input Precio-->
+                        <div class="form-floating mb-3">
+                          <input type="number" class="form-control" placeholder="Precio X" style="border-radius: 0;"
+                            id="precio" name="precio" min="50" oninput="val_precio()" value="{{precio}}" autocomplete="off">
+                          <label for="precio">
+                            <h5>Precio</h5><br>
+                          </label>
+                          <div id="mensajeErrorPrecio"></div>
+                        </div>
+                        <!--End Input Precio-->
+
+                        <!--Input Stock-->
+                        <div class="form-floating mb-3">
+                          <input type="number" class="form-control" placeholder="Stock X" style="border-radius: 0;"
+                            id="stock" name="stock" oninput="val_stock()" value="{{stock}}" autocomplete="off">
+                          <label for="stock">
+                            <h5>Stock</h5><br>
+                          </label>
+                          <div id="mensajeErrorStock"></div>
+                        </div>
+                        <!--End Input Stock-->
+
+                        {{/each}}
+
+                      </div>
+                    </div>
+                  </div>
+                  <!--End Card #1-->
+
+                  <!--Start Card #2-->
+                  <div class="col-md-5">
+                    <div class="card mt-2" style="border-radius: 0; width: 90%;">
+                      <div class="card-body">
+                        <h5 class="card-title" style="margin-bottom: 4%;">Agregar insumo requirido por el producto
+                        </h5>
+
+                        <!--Input Insumo-->
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" placeholder="Insumo X" list="list_insumos"
+                            style="border-radius: 0;" id="idInsumo_R" name="idInsumo_R" autocomplete="off"
+                            oninput="val_ins()">
+                          <label for="idInsumo_R">
+                            <h5>Insumo</h5>
+                          </label>
+                          <datalist id="list_insumos">
+                            {{#each insumos}}
+                            <option value="{{nombre}}">nombre({{nombre}})
+                              medida({{medida}})
+                              stock({{cantidad}})</option>
+                            {{/each}}
+                          </datalist>
+                          <div id="mensajeErrorInsumo"></div>
+                        </div>
+                        <!--End Input Insumo-->
+
+
+
+                        <!--Input Cantidad-->
+                        <div class="form-floating mb-3">
+                          <input type="number" class="form-control" placeholder="Cantidad X" style="border-radius: 0;"
+                            id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()">
+                          <label for="cantidad_R">
+                            <h5>Cantidad Requerida(1)</h5><br>
+                          </label>
+                          <div id="mensajeErrorCantidad"></div>
+                        </div>
+                        <!--End Input Cantidad-->
+
+
+                        <!--Start Btn Agregar-->
+                        <div class="d-grid gap-2">
+                          <button class="btn btn-warning" style="border-radius: 0;" type="button" id="btnAgregarInsumo"
+                            onclick="agregarInsumo()"><i class="fa-solid fa-circle-plus"></i> Agregar</button>
+                        </div>
+                        <!--End Btn Agregar-->
+                      </div>
+                    </div>
+                  </div>
+                  <!--End Card #2-->
+                  <div class="col-md-1"></div>
+                </div>
+
+
+                <!--Start Card #3-->
+                <div class="card mt-2" style="width: 70%; border-radius: 0;">
+                  <div class="card-body">
+                    <h5 class="card-title" style="margin-bottom: 2%;">Insumos Requeridos</h5>
+                    <!--Start Table-->
+                    <table class="table table-hover">
+                      <thead class="table" style="background-color: #282d32; color:white;">
+                        <tr style="text-align: center;">
+                          <th>#</th>
+                          <th> Insumo</th>
+                          <th> Cantidad Requerida</th>
+                          <th> Funciones </th>
+                        </tr>
+                      </thead>
+                      <tbody id="ReqReq">
+                        {{#each detallesproducto}}
+                        <tr id="{{idDetalleProducto}}" style="text-align: center">
+                          <td class="text-center"></td>
+                          <td class="text-center">
+                            <input type="hidden" name="idDetalleProducto_1" value="{{idDetalleProducto}}">
+                            <input id="I{{idDetalleProducto}}" name="idInsumo_1" value="{{idInsumo}}"
+                              style="text-align: center; width: 100px;  border: none;" readonly>
+                          </td>
+
+                          <td class="text-center">
+                            <input class="w-4/5" style="text-align: center; width: 100px;  border: 1 black;"
+                              name="cantidad_n_1" value="{{cantidad_n}}" >
+                          </td>
+                          <td class="text-center">
+                            <a href="#" onclick="eliminarInsumo({{idDetalleProducto}})" style="color: #292b2c;">
+                              <i class="fas fa-trash"></i>
+                            </a>
+                          </td>
+                        </tr>
+                        {{/each}}
+                      </tbody>
+                    </table>
+                    <!--End Table-->
+                  </div>
+                </div>
+                <!--End Card #3-->
+
+
+                <div style="margin-top: 1%;">
+                  <div class="row">
+                    <div class="col-md-3"></div>
+                    <div class="col-md-6">
+                      <!--Start Btn R&C-->
+                      <div class="d-grid gap-2">
+                        <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+                        <button type="submit" class="btn btn-success" style="border-radius: 0; margin-bottom: 1px;"
+                          id="btnRegistrar">
+                          Guardar Cambios</button>
+                        <!--End Btn Regiastrar-->
+                        <!--Start Btn Cancelar-->
+                        <a class="btn btn-danger" href="/productos" style="border-radius: 0; margin-top: 1px;"
+                          type="button">Cancelar</a>
+                        <!--End Btn Cancelar-->
+                      </div>
+                      <!--End Btn R&C-->
+                    </div>
+                    <div class="col-md-3"></div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+            <!--End Card&Form-->
+
+          </div>
+        </form>
+
+      </center>
+
+      <br>
+    </div>
+  </div>
+
+  <!--End Form&Card-->
+
+
+  <datalist id="data_lis_pros">
+    {{#each productos}}
+    <option value="{{nombre}}">
+      {{/each}}
+  </datalist>
+<!--Validacion nav bar-->
+{{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+        if (palabras.includes(items)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    </script>
+    {{/if}}
+
+  <script>
+    function tablaIndex() {
+        // Obtener la referencia de la tabla
+        const tabla = document.getElementById("ReqReq");
+
+        // Enumerar las filas
+        let filas = tabla.getElementsByTagName("tr");
+        for (let i = 0; i < filas.length; i++) {
+            let celdaNumero = filas[i].getElementsByTagName("td")[0];
+            celdaNumero.textContent = i + 1;
+        }
+    }
+    tablaIndex()
+</script>
+
+
+  <script>
+    var lastValueI = ""; // Variable para almacenar el último valor válido
+
+    function val_cant() {
+      var cantidad = document.getElementById("cantidad_R");
+
+      if (cantidad.value != "") {
+        mensajeErrorCantidad.innerHTML = '';
+        mensajeErrorCantidad.style.display = 'none';
+      }
+    }
+
+    function val_ins() {
+      var ins = document.getElementById("idInsumo_R");
+      var cantidad = document.getElementById("cantidad_R");
+      var btn = document.getElementById("btnAgregarInsumo");
+
+      var selectedOptionI = document.querySelector('#list_insumos option[value="' + ins.value + '"]');
+
+      if (selectedOptionI) {
+        var insValue = selectedOptionI.getAttribute('nombre');
+        ins.value = selectedOptionI.value; // Establecer el valor del campo "idRegistrador" como el valor de la opción del datalist
+        lastValueI = insValue; // Actualizar lastValue con el valor del usuario
+        //var medidaValue = selectedOptionI.getAttribute('medida');
+        //medida.value = medidaValue;
+        cantidad.disabled = false;
+        btn.disabled = false;
+
+        mensajeErrorInsumo.innerHTML = '';
+        mensajeErrorInsumo.style.display = 'none';
+      } else {
+        cantidad.disabled = true;
+        btn.disabled = true;
+
+        mensajeErrorInsumo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El insumo no es válido';
+        mensajeErrorInsumo.style.display = 'block';
+      }
+    }
+
+    /*function val_imagen() {
+      var imagen = document.getElementById("imagen");
+
+      if (imagen.value != "") {
+        mensajeErrorImagen.innerHTML = '';
+        mensajeErrorImagen.style.display = 'none';
+      }
+    }*/
+    lastValueP = "";
+    function val_nombre() {
+      var pro = document.getElementById("nombre");
+      var descripcion = document.getElementById("descripcion");
+      var precio = document.getElementById("precio");
+      var stock = document.getElementById("stock");
+
+      //var btn = document.getElementById("btnRegistrar");
+
+      var selectedOptionP = document.querySelector('#data_lis_pros option[value="' + pro.value + '"]');
+      if (selectedOptionP) {
+        var proValue = selectedOptionP.getAttribute('nombre');
+        pro.value = selectedOptionP.value; // Establecer el valor del campo "nombre" como el valor de la opción del datalist
+        lastValueP = proValue; // Actualizar lastValue con el valor del usuario
+
+        //dtn.disabled = true;
+
+        descripcion.disabled = true;
+        precio.disabled = true;
+        stock.disabled = true;
+
+        mensajeErrorNombre.innerHTML = '<span class="icono fa fa-circle-xmark"></span>Ya existe un producto registrado con este nombre';
+        mensajeErrorNombre.style.display = 'block';
+
+      } else {
+        //btn.disabled = false;
+        descripcion.disabled = false;
+        precio.disabled = false;
+        stock.disabled = false;
+
+        mensajeErrorNombre.innerHTML = '';
+        mensajeErrorNombre.style.display = 'none';
+      }
+    }
+
+    function val_descripcion() {
+      var descripcion = document.getElementById("descripcion");
+
+      if (descripcion.value != "") {
+        mensajeErrorDescripcion.innerHTML = '';
+        mensajeErrorDescripcion.style.display = 'none';
+      }
+    }
+
+    function val_precio(input) {
+      var precio = document.getElementById("precio");
+      if (precio.value != "") {
+        mensajeErrorPrecio.innerHTML = '';
+        mensajeErrorPrecio.style.display = 'none';
+      }
+    }
+
+    function val_stock() {
+      var stock = document.getElementById("stock");
+
+      if (stock.value != "") {
+        mensajeErrorStock.innerHTML = '';
+        mensajeErrorStock.style.display = 'none';
+      }
+    }
+
+  </script>
+
+  <!--Agregar y eliminar insumo-->
+  <script>
+    var cont = 0;
+    function agregarInsumo() {
+      const insumo = {
+        idInsumo: document.getElementById('idInsumo_R').value,
+        cantidad: document.getElementById('cantidad_R').value
+      };
+
+      if (insumo.idInsumo != "" && insumo.cantidad != "") {
+        cont= cont-1;
+        document.getElementById('ReqReq').innerHTML += `
+        <tr id="${cont}"style="text-align: center; background-color: whitesmoke;">
+            <td class="text-center"></td>
+            <td class="text-center">
+                <input id="I${cont}" name="idInsumo_2" value="${insumo.idInsumo}" style="text-align: center; width: 100px;  border: none; background-color: whitesmoke;" readonly>
+            </td>
+            <td class="text-center">
+                <input class="w-4/5" style="text-align: center; width: 100px;  border: 1 black; background-color: whitesmoke;" name="cantidad_n_2" value="${insumo.cantidad}" readonly>
+            </td>
+            <td class="text-center">
+                <a href="#" onclick="eliminarInsumo(${cont})" style="color: #292b2c;">
+                    <i class="fas fa-trash"></i>
+                </a>
+            </td>
+        </tr>`;
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Insumo Agregado',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
+        tablaIndex();
+
+        document.getElementById('idInsumo_R').value = null;
+        document.getElementById('cantidad_R').value = null;
+
+        //alert("Insumo Agregado");
+      } else {
+        //alert("Campos obligatorios");
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Campos Obligatorios',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
+        if (insumo.idInsumo == "") {
+          mensajeErrorInsumo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El insumo es un campo requerido';
+          mensajeErrorInsumo.style.display = 'block';
+        }
+
+        if (insumo.cantidad == "") {
+          mensajeErrorCantidad.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La cantidad es un campo requerido';
+          mensajeErrorCantidad.style.display = 'block';
+        }
+
+      }
+    }
+
+    function eliminarInsumo(id) {
+      insumo = document.getElementById(id);
+      if (!insumo) {
+        alert("Error");
+      } else {
+        padre = insumo.parentNode;
+        padre.removeChild(insumo);
+        //alert("Insumo Eliminado");
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Insumo Eliminado',
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }
+    }
+  </script>
+  <!--End Agregar y eliminar insumo-->
+
+
+  <!--Validar Envio-->
+  <script>
+    function validarCampos() {
+      /*var imagen = document.getElementById("imagen");*/
+      var nombre = document.getElementById("nombre");
+      var descripcion = document.getElementById("descripcion");
+      var precio = document.getElementById("precio");
+      var stock = document.getElementById("stock");
+
+      /*if (imagen.value == "") {
+        mensajeErrorImagen.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La imagen es un campo obligatorio';
+        mensajeErrorImagen.style.display = 'block';
+      }*/
+
+      if (nombre.value == "") {
+        mensajeErrorNombre.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El nombre es un campo obligatorio';
+        mensajeErrorNombre.style.display = 'block';
+      }
+
+      if (descripcion.value == "") {
+        mensajeErrorDescripcion.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La descripcion es un campo obligatorio';
+        mensajeErrorDescripcion.style.display = 'block';
+      }
+
+      if (precio.value == "") {
+        mensajeErrorPrecio.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El precio es un campo obligatorio';
+        mensajeErrorPrecio.style.display = 'block';
+      }
+
+      if (stock.value == "") {
+        mensajeErrorStock.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El stock es un campo obligatorio';
+        mensajeErrorStock.style.display = 'block';
+      }
+
+    }
+
+    function validarEnvio() {
+      var list = document.getElementById('ReqReq');
+      /*var imagen = document.getElementById("imagen");*/
+      var nombre = document.getElementById("nombre");
+      var descripcion = document.getElementById("descripcion");
+      var precio = document.getElementById("precio");
+      var stock = document.getElementById("stock");
+
+      if (descripcion.disabled == true) {
+
+        //alert('campos obligatorios');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'El nombre del producto no es válido',
+          showConfirmButton: false,
+          timer: 2000
+        });
+        validarCampos();
+        return false; // Detener el envío del formulario
+      }
+
+
+      if (/*imagen.value == "" || */nombre.value == "" || descripcion.value == "" || precio.value == "" || stock.value == "") {
+
+        //alert('campos obligatorios');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Campos Obligatorios',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        validarCampos();
+        return false; // Detener el envío del formulario
+      }
+
+      // Verificar si la lista tiene al menos un elemento
+      if (list.childElementCount === 0) {
+        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún insumo");
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'No se puede enviar el formulario porque aún no se ha agregado nungún insumo',
+          showConfirmButton: false,
+          timer: 6000
+        });
+        return false; // Detener el envío del formulario
+      }
+      // Permite el envío del formulario
+      return true;
+    }
+  </script>
+  <!--End Validar Envio-->
+
+
+  <!--Inicio footer-->
+
+  <!--Fin footer-->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/assets/js/ValidacionInsumo.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+  <!--   Core JS Files   -->
+  <script src="/assets/js/core/jquery.min.js"></script>
+  <script src="/assets/js/core/popper.min.js"></script>
+  <script src="/assets/js/core/bootstrap.min.js"></script>
+  <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+  <!-- Chart JS -->
+  <script src="/assets/js/plugins/chartjs.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+  <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+  <script src="/assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Javascript method's body can be found in assets/js/demos.js
+      demo.initDashboardPageCharts();
+
+    });
+  </script>
+
+  <script>
+    //SOLO NUMEROS
+    $(function () {
+      $(".validar").keydown(function (event) {
+        //alert(event.keyCode);
+        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
+          return false;
+        }
+      });
+    });
+  </script>

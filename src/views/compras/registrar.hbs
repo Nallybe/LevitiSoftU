@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{>headerD}}
+
+<body>
+  <style>
+    .fa-trash:hover {
+      color: red;
+    }
+
+    #mensajeErrorProveedor {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorProveedor .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorRecibo {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorRecibo .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorFechaRecibo {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorFechaRecibo .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorInsumo {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorInsumo .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorPrecio {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorPrecio .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorCantidad {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorCantidad .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorPorcentajeIva {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorPorcentajeIva .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+  </style>
+
+  <!--Barra de navegación-->
+  {{> bar}}
+      <!--Barra de navegación-->
+      <center>
+        <form action="/compras_registrar" method="post" onsubmit="return validarEnvio()" id="FormRegistrarCompra">
+          <div class="container" style="margin-top: 80px; margin-bottom: 50px">
+            <!--Start Card&Form-->
+            <div class="card" style="width: 95%; border-radius: 0;">
+              <div class="card-body">
+                <h4 class="card-title" style="margin-bottom: 4%;">Registrar Compra</h4>
+                <div class="row">
+                  <div class="col-md-1"></div>
+                  <!--Start Card #1-->
+                  <div class="col-md-4">
+                    <div class="card" style="border-radius: 0;">
+                      <div class="card-body">
+
+                        <!--Input Proveedor-->
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" placeholder="Proveedor X"
+                            list="Proveedores_Registrados" style="border-radius: 0;" id="proveedor" name="proveedor"
+                            autocomplete="off" oninput="val_proveedor()">
+                          <label for="proveedor">
+                            <h5>Proveedor</h5>
+                          </label>
+                          <datalist id="Proveedores_Registrados">
+                            {{#each compras}}
+                            <option value="{{proveedor}}">
+                              {{/each}}
+                          </datalist>
+                          <div id="mensajeErrorProveedor"></div>
+                        </div>
+                        <!--End Input Proveedor-->
+
+
+                        <!--Input Recibo-->
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" placeholder="Recibo X" style="border-radius: 0;"
+                            id="recibo" name="recibo" oninput="val_recibo()" autocomplete="off">
+                          <label for="recibo">
+                            <h5>Recibo</h5><br>
+                          </label>
+                          <div id="mensajeErrorRecibo"></div>
+                        </div>
+                        <!--End Input Recibo-->
+
+                        <!--Input Fecha Recibo-->
+                        <div class="form-floating mb-3">
+                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
+                            id="fechaRecibo" name="fechaRecibo" oninput="val_f_recibo()" autocomplete="off">
+                          <label for="fechaRecibo">
+                            <h5>Fecha Recibo</h5>
+                          </label>
+                          <div id="mensajeErrorFechaRecibo"></div>
+                        </div>
+                        <!--End Input Fecha Recibo-->
+
+                      </div>
+                    </div>
+                  </div>
+                  <!--End Card #1-->
+
+                  <!--Start Card #2-->
+                  <div class="col-md-6 w-4/4">
+                    <div class="card w-4/4" style="border-radius: 0;">
+                      <div class="card-body">
+                        <h5 class="card-title" style="margin-bottom: 4%;">Agregar Insumo a la compra
+                        </h5>
+                        <div class="row">
+                          <div class="col-md-6">
+
+                            <!--Input Insumo-->
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" placeholder="Insumo X" list="list_insumos"
+                                style="border-radius: 0;" id="idInsumo_R" name="idInsumo_R" autocomplete="off"
+                                oninput="val_ins()">
+                              <label for="idInsumo_R">
+                                <h5>Insumo</h5>
+                              </label>
+                              <datalist id="list_insumos">
+                                {{#each insumos}}
+                                <option value="{{nombre}}" medida="{{medida}}" id="{{idInsumo}}">nombre({{nombre}})
+                                  medida({{medida}})
+                                  stock({{cantidad}})</option>
+                                {{/each}}
+                              </datalist>
+                              <div id="mensajeErrorInsumo"></div>
+                            </div>
+                            <!--End Input Insumo-->
+
+
+                          </div>
+                          <div class="col-md-6">
+
+                            <!--Input Cantidad-->
+                            <div class="form-floating mb-3">
+                              <input type="number" class="form-control" placeholder="Cantidad X"
+                                style="border-radius: 0;" id="cantidad_R" name="cantidad_R" autocomplete="off"
+                                oninput="val_cant()">
+                              <label for="cantidad_R">
+                                <h5>Cantidad</h5><br>
+                              </label>
+                              <div id="mensajeErrorCantidad"></div>
+                            </div>
+                            <!--End Input Cantidad-->
+
+
+                          </div>
+                        </div>
+                        <div class="row">
+                          <div class="col-md-6">
+
+
+                            <!--Input Precio-->
+                            <div class="form-floating mb-3">
+                              <input type="number" class="form-control" placeholder="Precio X" style="border-radius: 0;"
+                                id="precio_R" name="precio_R" autocomplete="off" oninput="val_precio()">
+                              <label for="precio_R">
+                                <h5>Precio (1)</h5><br>
+                              </label>
+                              <div id="mensajeErrorPrecio"></div>
+                            </div>
+                            <!--End Input Precio-->
+
+
+                          </div>
+                          <div class="col-md-6">
+
+                            <!-- Input Porcentaje Iva -->
+                            <div class="form-floating mb-3">
+                              <input type="text" class="form-control" placeholder="Procentaje X"
+                                style="border-radius: 0;" id="porcentajeIva_R" name="porcentajeIva_R" autocomplete="off"
+                                oninput="formatPorcentaje(this)" value="19%">
+                              <label for="porcentajeIva_R">
+                                <h5>Porcentaje IVA</h5><br>
+                              </label>
+                              <div id="mensajeErrorPorcentajeIva"></div>
+                            </div>
+                            <!-- End Input Porcentaje Iva -->
+
+                          </div>
+
+                          <!--Start Btn Agregar-->
+                          <div class="d-grid gap-2">
+                            <button class="btn btn-warning" style="border-radius: 0;" type="button"
+                              id="btnAgregarInsumo" onclick="agregarInsumo();"><i class="fa-solid fa-circle-plus"></i>
+                              Agregar</button>
+                          </div>
+                          <!--End Btn Agregar-->
+
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                  <!--End Card #2-->
+                  <div class="col-md-1"></div>
+                </div>
+
+
+                <!--Start Card #3-->
+                <div class="card mt-2" style="width: 100%; border-radius: 0;">
+                  <div class="card-body">
+                    <h5 class="card-title" style="margin-bottom: 2%;">Insumos de la compra</h5>
+                    <!--Start Table-->
+                    <table class="table table-hover">
+                      <thead class="table" style="background-color: #282d32; color:white;">
+                        <tr style="text-align: center;">
+                          <th>#</th>
+                          <th> Insumo</th>
+                          <th> Precio</th>
+                          <th> Cantidad</th>
+                          <th> Monto </th>
+                          <th> Porcentaje Iva</th>
+                          <th> Iva</th>
+                          <th> Subtotal </th>
+                          <th> Funciones </th>
+                        </tr>
+                      </thead>
+                      <tbody id="ListaInsumos">
+                      </tbody>
+                    </table>
+                    <!--End Table-->
+                  </div>
+                </div>
+                <!--End Card #3-->
+
+
+                <div style="margin-top: 3%;">
+                  <div class="row">
+                    <div class="col-md-5">
+                      <!--Start Card #4-->
+                      <div class="card" style="width: 60%; border-radius: 0;">
+                        <div class="card-body">
+
+                          <!-- Input Total -->
+                          <div class="form-floating mb-3">
+                            <input type="text" class="form-control" placeholder="Total X" style="border-radius: 0;"
+                              id="totalC1" name="totalC1" value="0" readonly>
+                            <label for="totalC1">
+                              <h5><b>Total Compra</b></h5><br>
+                            </label>
+                          </div>
+                          <!-- End Input Total -->
+
+                        </div>
+                      </div>
+                      <!--End Card #4-->
+                    </div>
+                    <div class="col-md-6" style="margin-top: 1%;">
+                      <!--Start Btn R&C-->
+                      <div class="d-grid gap-2">
+                        <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+                        <button type="submit" class="btn btn-success" style="border-radius: 0; margin-bottom: 1px;">
+                          Registrar Compra</button>
+                        <!--End Btn Regiastrar-->
+                        <!--Start Btn Cancelar-->
+                        <a class="btn btn-danger" href="/compras" style="border-radius: 0; margin-top: 1px;"
+                          type="button">Cancelar</a>
+                        <!--End Btn Cancelar-->
+                      </div>
+                      <!--End Btn R&C-->
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+            </div>
+            <!--End Card&Form-->
+
+          </div>
+        </form>
+      </center>
+
+
+
+
+      <br>
+    </div>
+  </div>
+
+  <!--End Form&Card-->
+<!--Validacion nav bar-->
+{{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+        if (palabras.includes(items)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    </script>
+    {{/if}}
+  <script>
+    var lastValueI = ""; // Variable para almacenar el último valor válido
+
+    function val_cant() {
+      var cantidad = document.getElementById("cantidad_R");
+
+      if (cantidad.value != "") {
+        mensajeErrorCantidad.innerHTML = '';
+        mensajeErrorCantidad.style.display = 'none';
+      }
+    }
+
+    function val_precio() {
+      var precio = document.getElementById("precio_R");
+
+      if (precio.value != "") {
+        mensajeErrorPrecio.innerHTML = '';
+        mensajeErrorPrecio.style.display = 'none';
+      }
+    }
+
+    function val_proveedor() {
+      var proveedor = document.getElementById("proveedor");
+
+      if (proveedor.value != "") {
+        mensajeErrorProveedor.innerHTML = '';
+        mensajeErrorProveedor.style.display = 'none';
+      }
+    }
+
+    function val_recibo() {
+      var recibo = document.getElementById("recibo");
+
+      if (recibo.value != "") {
+        mensajeErrorRecibo.innerHTML = '';
+        mensajeErrorRecibo.style.display = 'none';
+      }
+    }
+
+    function val_f_recibo() {
+      var fechaRecibo = document.getElementById("fechaRecibo");
+
+      if (fechaRecibo.value != "") {
+        mensajeErrorFechaRecibo.innerHTML = '';
+        mensajeErrorFechaRecibo.style.display = 'none';
+      }
+    }
+
+    function val_ins() {
+      var ins = document.getElementById("idInsumo_R");
+      var pI = document.getElementById("porcentajeIva_R");
+      var precio = document.getElementById("precio_R");
+      var cantidad = document.getElementById("cantidad_R");
+      var btn = document.getElementById("btnAgregarInsumo");
+
+
+      var selectedOptionI = document.querySelector('#list_insumos option[value="' + ins.value + '"]');
+
+      if (selectedOptionI) {
+        var insValue = selectedOptionI.getAttribute('nombre');
+        ins.value = selectedOptionI.value; // Establecer el valor del campo "idRegistrador" como el valor de la opción del datalist
+        lastValueI = insValue; // Actualizar lastValue con el valor del usuario
+        //var medidaValue = selectedOptionI.getAttribute('medida');
+        //medida.value = medidaValue;
+        cantidad.disabled = false;
+        precio.disabled = false;
+        pI.disabled = false;
+        btn.disabled = false;
+
+        mensajeErrorInsumo.innerHTML = '';
+        mensajeErrorInsumo.style.display = 'none';
+      } else {
+        cantidad.disabled = true;
+        precio.disabled = true;
+        pI.disabled = true;
+        btn.disabled = true;
+
+        mensajeErrorInsumo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El insumo no es válido';
+        mensajeErrorInsumo.style.display = 'block';
+
+      }
+    }
+  </script>
+
+
+
+  <!--Agregar y eliminar insumo-->
+  <script>
+    var cont = 0;
+    function agregarInsumo() {
+      let pI = document.getElementById("porcentajeIva_R");
+      //if (pI.disabled == false) {
+      var m = 0;
+      var t = 0;
+      const insumo = {
+        idInsumo: document.getElementById('idInsumo_R').value,
+        precio: document.getElementById('precio_R').value,
+        cantidad: document.getElementById('cantidad_R').value,
+        monto: m = document.getElementById('cantidad_R').value * document.getElementById('precio_R').value,
+        porcentajeIva: pI.value.replace(/\D/g, ''),
+        iva: (m * pI.value.replace(/\D/g, '')) / 100,
+        total: t = ((m * pI.value.replace(/\D/g, '')) / 100) + m
+
+      };
+      //Acumular total
+
+      var inputNumber = document.getElementById("totalC1");
+      var valorActual = parseInt(inputNumber.value);
+      if (valorActual) {
+        inputNumber.value = valorActual + insumo.total;
+      } else {
+        inputNumber.value = insumo.total;
+      }
+      //Acumular total 
+
+
+      if (insumo.idInsumo != "" && m != 0 && t != 0 && insumo.porcentajeIva != "") {
+        cont++;
+        document.getElementById('ListaInsumos').innerHTML += `
+                <tr id="${cont}"style="text-align: center">
+                    <td class="text-center">${cont}</td>
+                    <td class="text-center">
+                        <input id="I${cont}" name="idInsumo" value="${insumo.idInsumo}" style="text-align: center; width: 100px;  border: none;" readonly>
+                    </td>
+                    <td class="text-center">
+                        <input name="precio" value="${insumo.precio}" style="text-align: center; width: 100px;  border: none;" readonly>
+                    </td>
+                    <td class="text-center">
+                        <input class="w-4/5" style="text-align: center; width: 100px;  border: none;" name="cantidad" value="${insumo.cantidad}" readonly>
+                    </td>
+                    <td class="text-center">${insumo.monto}</td>
+                    <td class="text-center">
+                        <input name="porcentajeIva" value="${insumo.porcentajeIva}" style="text-align: center; width: 100px;  border: none;" readonly>
+                    </td>
+                    <td class="text-center">${insumo.iva}</td>
+                    <td class="text-center">
+                        <input id="t${cont}" value="${insumo.total}" style="text-align: center; width: 100px; border: none;" readonly>
+                    </td>
+                    <td class="text-center">
+                        <a href="#" onclick="eliminarInsumo(${cont})" style="color: #292b2c;">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                    </td>
+                </tr>`;
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Insumo Agregado',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
+        document.getElementById('idInsumo_R').value = null;
+        document.getElementById('precio_R').value = null;
+        document.getElementById('cantidad_R').value = null;
+        document.getElementById('medida_R').value = null;
+
+        //let IoS = "I" + cont;
+        //eliminarElemento(IoS);
+
+        //alert("Insumo Agregado");
+      } else {
+        //alert("Campos obligatorios");
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Campos Obligatorios',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
+        if (insumo.idInsumo == "") {
+          mensajeErrorInsumo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El insumo es un campo requerido';
+          mensajeErrorInsumo.style.display = 'block';
+        }
+
+        if (insumo.precio == "") {
+          mensajeErrorPrecio.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El precio es un campo requerido';
+          mensajeErrorPrecio.style.display = 'block';
+        }
+
+        if (insumo.cantidad == "") {
+          mensajeErrorCantidad.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La cantidad es un campo requerido';
+          mensajeErrorCantidad.style.display = 'block';
+        }
+
+        if (insumo.porcentajeIva == "") {
+          mensajeErrorPorcentajeIva.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El porcentaje de iva es un campo requerido';
+          mensajeErrorPorcentajeIva.style.display = 'block';
+        }
+
+
+      }
+      //} else {
+      // alert('El insumo seleccionado no es válido')
+      //}
+    }
+
+    function eliminarInsumo(id) {
+      insumo = document.getElementById(id);
+      if (!insumo) {
+        alert("Error");
+      } else {
+        let toT = "t" + id;
+
+        //decrementar total
+        var inputNumber = document.getElementById("totalC1");
+        var valorActual = parseInt(inputNumber.value);
+        //alert("Valor actual " + valorActual)
+
+        var inputNumber2 = document.getElementById(toT);
+        var valorRestar = parseInt(inputNumber2.value);
+
+        //alert("Valor restar " + valorRestar);
+
+        inputNumber.value = valorActual - valorRestar;
+        //decrementar total
+
+        padre = insumo.parentNode;
+        padre.removeChild(insumo);
+        //alert("Insumo Eliminado");
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Insumo Eliminado',
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }
+    }
+  </script>
+  <!--End Agregar y eliminar insumo-->
+
+  <!--Rango de fecha-->
+  <script>
+    function capturarFechaActual() {
+      var fechaRecibo = document.getElementById("fechaRecibo");
+
+      var fechaActual = new Date();
+      var fechaMinima = new Date(fechaActual.getTime() - (7 * 24 * 60 * 60 * 1000)); // 7 días en milisegundos
+      var fechaMaxima = new Date(fechaActual.getTime() + (7 * 24 * 60 * 60 * 1000)); // 7 días en milisegundos
+
+      var fechaMinimaString = fechaMinima.toISOString().split("T")[0];
+      var fechaMaximaString = fechaMaxima.toISOString().split("T")[0];
+
+      fechaRecibo.min = fechaMinimaString;
+      fechaRecibo.max = fechaMaximaString;
+
+      console.log("Fecha mínima establecida: " + fechaMinimaString);
+      console.log("Fecha máxima establecida: " + fechaMaximaString);
+    }
+    capturarFechaActual();
+  </script>
+  <!--End Rango de fecha-->
+
+  <!--% Iva-->
+  <script>
+    function formatPorcentaje(input) {
+      // Obtener el valor ingresado por el usuario
+      let valor = input.value.trim();
+
+      // Remover cualquier caracter que no sea un número
+      let numeros = valor.replace(/\D/g, '');
+
+      // Limitar la cantidad de caracteres a un máximo de 2 números
+      let numeroLimitado = numeros.slice(0, 2);
+
+      // Agregar el símbolo "%" al final del número
+      let porcentaje = numeroLimitado + "%";
+
+      // Actualizar el valor del input
+      input.value = porcentaje;
+
+
+      var pI = document.getElementById("porcentajeIva_R");
+      if (pI.value != "%") {
+        mensajeErrorPorcentajeIva.innerHTML = '';
+        mensajeErrorPorcentajeIva.style.display = 'none';
+      }
+    }
+  </script>
+  <!--End % Iva-->
+
+  <!--Total
+  <script>
+    // Obtener el elemento del input
+    const inputTotal = document.getElementById('totalC1');
+
+    // Obtener el valor del input
+    const valorTotal = 200000; // Aquí debes asignar el valor dinámico correspondiente
+
+    // Formatear el valor con puntos decimales
+    const valorFormateado = valorTotal.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+    // Asignar el valor formateado al input
+    inputTotal.value = valorFormateado;
+  </script>
+  End Total-->
+
+  <!--Validar Envio-->
+  <script>
+
+    function validarCampos() {
+      var proveedor = document.getElementById("proveedor");
+      var recibo = document.getElementById("recibo");
+      var fechaRecibo = document.getElementById("fechaRecibo");
+
+      if (proveedor.value == "") {
+        mensajeErrorProveedor.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El proveedor es un campo obligatorio';
+        mensajeErrorProveedor.style.display = 'block';
+      }
+
+      if (recibo.value == "") {
+        mensajeErrorRecibo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El recibo es un campo obligatorio';
+        mensajeErrorRecibo.style.display = 'block';
+      }
+
+      if (fechaRecibo.value == "") {
+        mensajeErrorFechaRecibo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La fecha del recibo es un campo obligatorio';
+        mensajeErrorFechaRecibo.style.display = 'block';
+      }
+
+    }
+
+
+    function validarEnvio() {
+      var list = document.getElementById('ListaInsumos');
+      var proveedor = document.getElementById("proveedor");
+      var recibo = document.getElementById("recibo");
+      var fechaRecibo = document.getElementById("fechaRecibo");
+
+      if (proveedor.value == "" || recibo.value == "" || fechaRecibo.value == "") {
+
+        //alert('campos obligatorios');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Campos Obligatorios',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        validarCampos();
+        return false; // Detener el envío del formulario
+      }
+
+      // Verificar si la lista tiene al menos un elemento
+      if (list.childElementCount === 0) {
+        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún insumo");
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'No se puede enviar el formulario porque aún no se ha agregado nungún insumo',
+          showConfirmButton: false,
+          timer: 6000
+        });
+        return false; // Detener el envío del formulario
+      }
+      // Permite el envío del formulario
+      return true;
+    }
+  </script>
+  <!--End Validar Envio-->
+
+
+  <!--Inicio footer-->
+
+  <!--Fin footer-->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="assets/js/ValidacionInsumo.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+  <!--   Core JS Files   -->
+  <script src="assets/js/core/jquery.min.js"></script>
+  <script src="assets/js/core/popper.min.js"></script>
+  <script src="assets/js/core/bootstrap.min.js"></script>
+  <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+  <!-- Chart JS -->
+  <script src="assets/js/plugins/chartjs.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+  <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+  <script src="assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Javascript method's body can be found in assets/js/demos.js
+      demo.initDashboardPageCharts();
+
+    });
+  </script>
+
+  <script>
+    //SOLO NUMEROS
+    $(function () {
+      $(".validar").keydown(function (event) {
+        //alert(event.keyCode);
+        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
+          return false;
+        }
+      });
+    });
+  </script>

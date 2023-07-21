@@ -1,0 +1,276 @@
+{{> header }}
+
+<div class="page-holder">
+  <!-- navbar-->
+  <header class="header bg-white">
+    <div class="container px-lg-3">
+      {{> navbar}}
+    </div>
+  </header>
+  <!-- HERO SECTION-->
+  <section class="hero pb-3 bg-cover w-100" style="background: url(assets/img/carrusel2.jpeg) ">
+
+  </section>
+  {{!-- {{#each productos}}
+  <p>{{nombre}}</p>
+  <p>{{descripcion}}</p>
+  <p>{{imagen}}</p>
+  <p>{{precio}}</p>
+  <p>{{stock}}</p>
+  {{/each}} --}}
+  <div class="container">
+
+    <!-- CATEGORIES SECTION-->
+    <section class="pt-5">
+      <header class="text-center">
+        <h2 class="h5 text-uppercase mb-4">Categorias</h2>
+      </header>
+      <div class="row  categorias">
+        <div class="col-md-4 ">
+          <a class="category-item mb-4" href="ProductosH"><img class="img-fluid"
+              src="assets/img//productosChaquetas/Chaquetas5.jpg" alt="" /><strong
+              class="category-item-title">Chaquetas</strong></a>
+          <a class="category-item " href="ProductosH"><img class="img-fluid"
+              src="assets/img/productosBilletera/Billeteras1.jpg" alt="" /><strong
+              class="category-item-title">Billeteras</strong></a>
+        </div>
+        <div class="col-md-4">
+          <a class="category-item mb-4" href="ProductosH">
+            <img class="img-fluid" src="assets/img/productosZapat/Zapatos2.jpg" alt="" /><strong
+              class="category-item-title">Zapatos</strong></a>
+          <a class="category-item" href="ProductosH"><img class="img-fluid" src="assets/img/productosBolsos/Bolsos2.jpg"
+              alt="" /><strong class="category-item-title">Bolsos</strong></a>
+        </div>
+        <div class="col-md-4"><a class="category-item mb-4" href="ProductosH"><img class="img-fluid"
+              src="assets/img/productosCorrea/Correas1.jpg" alt="" /><strong
+              class="category-item-title">Accesorios</strong></a>
+          <a class="category-item " href="ProductosH"><img class="img-fluid"
+              src="assets/img/productosMorral/Morral1.jpg" alt="" /><strong
+              class="category-item-title">Morrales</strong></a>
+        </div>
+
+      </div>
+    </section>
+    <!-- PRODUCTS-->
+    <section class="py-5">
+      <header>
+        <h2 class="h5 text-uppercase mb-4">Algunos de nuestros productos</h2>
+      </header>
+      
+      <div class="row">
+        {{#each productos}}
+        <!-- PRODUCT-->
+
+        <div class="col-xl-3 col-lg-4 col-sm-6 flip-card">
+          <div class="flip-card-inner">
+            <div class="front">
+              <!-- Contenido del frente de la tarjeta -->
+              <div class="position-relative mb-3 front">
+                <div class="badge text-white bg-"></div>
+                <a class="d-block"><img class="img-fluid w-100" src="assets/img/Productos/{{imagen}}"
+                    alt="..."></a>
+                <h6 class="text-center pt-1">{{nombre}}</h6>
+                <p class="text-center">{{precio}}</p>
+              </div>
+            </div>
+            <div class="back">
+              <p>{{descripcion}}</p>
+              <p>Stock disponible: {{stock}}</p>
+            </div>
+
+          </div>
+
+        </div>
+        {{/each}}
+{{!-- 
+        <!-- PRODUCT-->
+        <div class="col-xl-3 col-lg-4 col-sm-6 flip-card">
+          <div class="flip-card-inner">
+            <div class="front">
+              <!-- Contenido del frente de la tarjeta -->
+              <div class="position-relative mb-3 front">
+                <div class="badge text-white bg-"></div>
+                <a class="d-block"><img class="img-fluid w-100" src="assets/img/productosZapat/Zapatos7.jpg"
+                    alt="..."></a>
+                <h6 class="text-center pt-1">Zapatos</h6>
+                <p class="text-center">$$</p>
+              </div>
+            </div>
+            <div class="back">
+              <p>Zapatos etc</p>
+            </div>
+
+          </div>
+        </div>
+        <!-- PRODUCT-->
+        <div class="col-xl-3 col-lg-4 col-sm-6 flip-card">
+          <div class="flip-card-inner">
+            <div class="front">
+              <!-- Contenido del frente de la tarjeta -->
+              <div class="position-relative mb-3 front">
+                <div class="badge text-white bg-"></div>
+                <a class="d-block"><img class="img-fluid w-100" src="assets/img/productosChaquetas/Chaquetas6.jpg"
+                    alt="..."></a>
+                <h6 class="text-center pt-1">Chaqueta</h6>
+                <p class="text-center">$$</p>
+              </div>
+            </div>
+            <div class="back">
+              <p>Chaqueta para hombre etc</p>
+            </div>
+
+          </div>
+        </div>
+        <!-- PRODUCT-->
+        <div class="col-xl-3 col-lg-4 col-sm-6">
+          <div class="product text-center">
+            <div class="position-relative mb-3">
+              <div class="badge text-white bg-info"></div><a class="d-block"><img class="img-fluid w-100"
+                  src="assets/img/productosRiñoneras/Riñoneras1.jpg" alt="..."></a>
+
+            </div>
+            <h6> <a class="reset-anchor">Riñonera</a></h6>
+            <p class="small text-muted">$$</p>
+          </div>
+        </div>
+        <!-- PRODUCT-->
+        <div class="col-xl-3 col-lg-4 col-sm-6">
+          <div class="product text-center">
+            <div class="position-relative mb-3">
+              <div class="badge text-white bg-danger"></div><a class="d-block"><img class="img-fluid w-100"
+                  src="assets/img/productosChaquetas/Chaquetas1.jpg" alt="..."></a>
+
+            </div>
+            <h6> <a class="reset-anchor">Chaqueta</a></h6>
+            <p class="small text-muted">$$</p>
+          </div>
+        </div>
+        <!-- PRODUCT-->
+        <div class="col-xl-3 col-lg-4 col-sm-6">
+          <div class="product text-center">
+            <div class="position-relative mb-3">
+              <div class="badge text-white bg-"></div><a class="d-block"><img class="img-fluid w-100"
+                  src="assets/img/productosBolsos/Bolsos4.jpg" alt="..."></a>
+
+            </div>
+            <h6> <a class="reset-anchor">Bolso</a></h6>
+            <p class="small text-muted">$$</p>
+          </div>
+        </div>
+        <!-- PRODUCT-->
+        <div class="col-xl-3 col-lg-4 col-sm-6">
+          <div class="product text-center">
+            <div class="position-relative mb-3">
+              <div class="badge text-white bg-"></div><a class="d-block"><img class="img-fluid w-100"
+                  src="assets/img/productosZapat/Zapatos1.jpg" alt="..."></a>
+
+            </div>
+            <h6> <a class="reset-anchor">Zapato</a></h6>
+            <p class="small text-muted">$$</p>
+          </div>
+        </div>
+        <!-- PRODUCT-->
+        <div class="col-xl-3 col-lg-4 col-sm-6">
+          <div class="product text-center">
+            <div class="position-relative mb-3">
+              <div class="badge text-white bg-"></div><a class="d-block"><img class="img-fluid w-100"
+                  src="assets/img/productosBilletera/Billeteras1.jpg" alt="..."></a>
+
+            </div>
+            <h6> <a class="reset-anchor">Billetera</a></h6>
+            <p class="small text-muted">$$</p>
+          </div>
+        </div> --}}
+      </div>
+    </section>
+
+
+  </div>
+  {{> footer}}
+  <!-- JavaScript files-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="vendor/nouislider/nouislider.min.js"></script>
+  <script src="vendor/swiper/swiper-bundle.min.js"></script>
+  <script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script>
+  <script src="js/front.js"></script>
+  <script>
+    var products = {
+      1: {
+        title: 'Producto 1',
+        image: 'img/product-1.jpg',
+        price: '$100',
+        description: 'Lorem ipsum dolor sit amet...'
+      },
+      2: {
+        title: 'Producto 2',
+        image: 'img/product-2.jpg',
+        price: '$200',
+        description: 'Lorem ipsum dolor sit amet...'
+      },
+      3: {
+        title: 'Producto 3',
+        image: 'img/product-3.jpg',
+        price: '$300',
+        description: 'Lorem ipsum dolor sit amet...'
+      }
+    };
+    document.addEventListener('DOMContentLoaded', function () {
+      var productLinks = document.querySelectorAll('.product-link');
+      var modalTitle = document.querySelector('.modal-title');
+      var modalImage = document.querySelector('.modal-image');
+      var modalPrice = document.querySelector('.modal-price');
+      var modalDescription = document.querySelector('.modal-description');
+
+      productLinks.forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          var productId = this.getAttribute('data-product-id');
+          var product = products[productId];
+
+          modalTitle.textContent = product.title;
+          modalImage.setAttribute('src', product.image);
+          modalPrice.textContent = product.price;
+          modalDescription.textContent = product.description;
+
+          // Abre la modal
+          myModal.show();
+        });
+      });
+    });
+
+  </script>
+  <script>
+    // ------------------------------------------------------- //
+    //   Inject SVG Sprite - 
+    //   see more here 
+    //   https://css-tricks.com/ajaxing-svg-sprite/
+    // ------------------------------------------------------ //
+    function injectSvgSprite(path) {
+
+      var ajax = new XMLHttpRequest();
+      ajax.open("GET", path, true);
+      ajax.send();
+      ajax.onload = function (e) {
+        var div = document.createElement("div");
+        div.className = 'd-none';
+        div.innerHTML = ajax.responseText;
+        document.body.insertBefore(div, document.body.childNodes[0]);
+      }
+    }
+    // this is set to BootstrapTemple website as you cannot 
+    // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
+    // while using file:// protocol
+    // pls don't forget to change to your domain :)
+    injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
+
+  </script>
+  <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+</div>
+</body>
+
+</html>

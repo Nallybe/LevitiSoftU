@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es">
+
+{{>headerId}}
+
+<body>
+  <style>
+    .fa-trash:hover {
+      color: red;
+    }
+
+    #mensajeErrorRol {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorRol .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorCorreo {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorCorreo .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+
+    #mensajeErrorPassword {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorPassword .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
+  </style>
+
+  <!--Barra de navegación-->
+  <div class="wrapper " style="background-color: #E3E3E3;
+  background-color: #ebecf1;">
+    <div class="sidebar" data-color="black">
+      <!--
+        Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
+    -->
+     
+      {{#if name}}
+      <div class="logo">
+        <a href="" class="simple-text" style="color:white;">
+          <i class="fa-solid fa-circle-user fa-2xl" style="width: 45px;"> </i>{{name}}
+        </a>
+      </div>
+      {{/if}}
+      <div class="sidebar-wrapper" id="sidebar-wrapper">
+        <ul class="nav">
+          <li>
+            <a href="/dashboard">
+              <i class="fa fa-house" style="color:white;"></i>
+              <p style="color:white;">Dashboard</p>
+            </a>
+          </li>
+          <li>
+            <a href="/roles">
+              <i class="fa fa-gear" style="color:white;"></i>
+              <p style="color: white;">Roles</p>
+            </a>
+          </li>
+          <li style="active">
+            <a href="/usuarios" style="background-color: white">
+              <i class="fa fa-users" style="color:black;"></i>
+              <p style="color:black;">Usuarios</p>
+            </a>
+          </li>
+          <li>
+            <a href="/compras">
+              <i class="fa fa-shop" style="color:white;"></i>
+              <p style="color:white;">Compras</p>
+            </a>
+          </li>
+          <li>
+            <a href="/insumos">
+              <i class="fa fa-box" style="color: white;"></i>
+              <p style="color:white;">Insumos</p>
+            </a>
+          </li>
+          <li>
+            <a href="/produccion">
+              <i class="fa fa-scissors" style="color:white;"></i>
+              <p style="color:white;">Producción</p>
+            </a>
+          </li>
+          <li>
+            <a href="/productos">
+              <i class="fa fa-boxes-packing" style="color:white;"></i>
+              <p style="color:white;">Productos</p>
+            </a>
+          </li>
+          <li>
+            <a href="/clientes">
+              <i class="fa fa-user" style="color:white;"></i>
+              <p style="color:white;">Clientes</p>
+            </a>
+          </li>
+          <li>
+            <a href="/ventas">
+              <i class="fa fa-truck-fast" style="color:white;"></i>
+              <p style="color:white;">Ventas</p>
+            </a>
+          </li>
+          <input hidden class="Permisos" id="permisosInput" type="text" value="{{asignacion}}">
+          <li>
+            <a href="/reparaciones">
+              <i class="fa fa-screwdriver-wrench" style="color:white;"></i>
+              <p style="color:white;">Reparaciones</p>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="main-panel" id="main-panel">
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand navbar-absolute">
+        <div class="container-fluid">
+          <div class="navbar-wrapper">
+            <div class="navbar-toggle">
+              <button type="button" class="navbar-toggler">
+                <span class="navbar-toggler-bar bar1"></span>
+                <span class="navbar-toggler-bar bar2"></span>
+                <span class="navbar-toggler-bar bar3"></span>
+              </button>
+            </div>
+            <a class="navbar-brand" href="#" style="margin-left: 10px;">Usuario {{#each usuario}}{{idAccess}}{{/each}}</a>
+          </div>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
+            aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+            <span class="navbar-toggler-bar navbar-kebab"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navigation">
+            <a class="nav-link" href="/logout">
+              <i class="fa fa-right-from-bracket" style="margin-right:20px;"></i>
+              <p>
+                <span class="d-lg-none d-md-block">Salir</span>
+              </p>
+            </a>
+          </div>
+        </div>
+      </nav>
+      <!--Barra de navegación-->
+      <center>
+        {{#each usuario}}
+        <form action="/usuarios_editar/{{idAccess}}" method="post" onsubmit="return validarEnvio()" id="FormRegistrarCompra">
+          <div class="container" style="margin-top: 80px; margin-bottom: 50px; margin-top: 10%; ">
+            <!--Start Card&Form-->
+            <div class="card" style="width: 50%; border-radius: 0; ">
+              <div class="card-body">
+                
+                <div class="row">
+                  <div class="col-md-1"></div>
+                  <!--Start Card #1-->
+                  <div class="col-md-10">
+                    
+                    <h4 class="card-title" style="margin-bottom: 4%;">Editar Usuario(Acceso)</h4>
+
+                    
+                    <!--Input Rol-->
+                        <div class="form-floating mb-3">
+                          <input type="text" class="form-control" placeholder="Rol X" list="lis_roles"
+                            style="border-radius: 0;" id="idRol" name="idRol" autocomplete="off" value="{{idRol}}"
+                            oninput="val_rol()">
+                          <label for="idRol">
+                            <h5>Rol</h5>
+                          </label>
+                          <datalist id="lis_roles">
+                            {{#each ../roles}}
+                            <option value="{{this.nombreRoles}}">IdRol({{this.idRoles}}) Nombre({{this.nombreRoles}})</option>
+                            {{/each}}
+                          </datalist>
+                          <div id="mensajeErrorRol"></div>
+                        </div>
+                        <!--End Input Rol-->
+
+                        <!--Input Correo-->
+                        <div class="form-floating mb-3">
+                          <input type="email" class="form-control" placeholder="Correo X" style="border-radius: 0;"
+                            id="correo" name="correo" oninput="val_correo()" autocomplete="off" value="{{correo}}">
+                          <label for="correo">
+                            <h5>Correo</h5><br>
+                          </label>
+                          <div id="mensajeErrorCorreo"></div>
+                        </div>
+                        <!--End Input Correo-->
+
+                        <!--Input Password-->
+                        <div class="form-floating mb-3">
+                          <input type="password" class="form-control" placeholder="Password X" style="border-radius: 0;"
+                            id="password" name="password" oninput="val_password()" autocomplete="off" value="{{passsword}}">
+                          <label for="password">
+                            <h5>Password</h5><br>
+                          </label>
+                          <div id="mensajeErrorPassword"></div>
+                        </div>
+                        <!--End Input Password-->
+
+                    <!--Start Btn R&C-->
+                    <div class="d-grid gap-2 mb-3">
+                      <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+                      <button type="submit" class="btn btn-success" style="border-radius: 0; margin-bottom: 1px;"
+                        id="btnRegistrar">
+                        Registrar Usuario</button>
+                      <!--End Btn Regiastrar-->
+                      <!--Start Btn Cancelar-->
+                      <a class="btn btn-danger" href="/usuarios" style="border-radius: 0; margin-top: 1px;"
+                        type="button">Cancelar</a>
+                      <!--End Btn Cancelar-->
+                    </div>
+                    <!--End Btn R&C-->
+                  </div>
+                  <!--End Card #1-->
+                  <div class="col-md-1"></div>
+                </div>
+
+              </div>
+            </div>
+            <!--End Card&Form-->
+
+          </div>
+        </form>
+        {{/each}}
+      </center>
+      <br>
+    </div>
+  </div>
+
+  <!--End Form&Card-->
+
+
+  <datalist id="data_lis_correos">
+    {{#each usuarios}}
+    <option value="{{correo}}">
+      {{/each}}
+  </datalist>
+
+<!--Validacion nav bar-->
+{{#if asignacion}}
+    <script>
+      var permisosInput = document.querySelector('#permisosInput');
+      var permisosValue = permisosInput.value;
+
+      var palabras = permisosValue.split(',');
+
+      var menuItems = document.querySelectorAll('.nav li');
+
+      menuItems.forEach(function (item) {
+        var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+        if (palabras.includes(items)) {
+          item.style.display = 'block';
+        } else {
+          item.style.display = 'none';
+        }
+      });
+    </script>
+    {{/if}}
+
+  <script>
+
+    lastValueI="";
+    function val_rol() {
+      var rol = document.getElementById("idRol");
+      var correo = document.getElementById("correo");
+      var password = document.getElementById("password");
+      var btn = document.getElementById("btnRegistrar");
+
+
+      var selectedOptionI = document.querySelector('#lis_roles option[value="' + rol.value + '"]');
+
+      if (selectedOptionI) {
+        var rolValue = selectedOptionI.getAttribute('correo');
+        rol.value = selectedOptionI.value; // Establecer el valor del campo "idRegistrador" como el valor de la opción del datalist
+        lastValueI = rolValue; // Actualizar lastValue con el valor del usuario
+        //var medidaValue = selectedOptionI.getAttribute('medida');
+        //medida.value = medidaValue;
+        correo.disabled = false;
+        password.disabled = false;
+        btn.disabled = false;
+
+        mensajeErrorRol.innerHTML = '';
+        mensajeErrorRol.style.display = 'none';
+      } else {
+        correo.disabled = true;
+        password.disabled = true;
+        btn.disabled = true;
+
+        mensajeErrorRol.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El Rol no es válido';
+        mensajeErrorRol.style.display = 'block';
+
+      }
+    }
+
+
+
+
+    lastValueC = "";
+    function val_correo() {
+      var correo = document.getElementById("correo");
+      var btn = document.getElementById("password");
+
+      var selectedOptionP = document.querySelector('#data_lis_correos option[value="' + correo.value + '"]');
+      if (selectedOptionP) {
+        var correoValue = selectedOptionP.getAttribute('correo');
+        correo.value = selectedOptionP.value; // Establecer el valor del campo "nombre" como el valor de la opción del datalist
+        lastValueC = correoValue; // Actualizar lastValue con el valor del usuario
+
+        password.disabled = true;
+        mensajeErrorCorreo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>Ya existe un usuario registrado con este correo';
+        mensajeErrorCorreo.style.display = 'block';
+
+      } else {
+        password.disabled = false;
+        mensajeErrorCorreo.innerHTML = '';
+        mensajeErrorCorreo.style.display = 'none';
+      }
+    }
+
+    function val_password() {
+      var password = document.getElementById("password");
+
+      if (password.value != "") {
+        mensajeErrorPassword.innerHTML = '';
+        mensajeErrorPassword.style.display = 'none';
+      }
+    }
+  </script>
+
+  <!--Validar Envio-->
+  <script>
+    function validarCampos() {
+      var correo = document.getElementById("correo");
+      var password = document.getElementById("password");
+      var rol = document.getElementById("idRol");
+
+      if (rol.value == "") {
+        mensajeErrorRol.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El rol es un campo obligatorio';
+        mensajeErrorRol.style.display = 'block';
+      }
+
+      if (correo.value == "") {
+        mensajeErrorCorreo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El correo es un campo obligatorio';
+        mensajeErrorCorreo.style.display = 'block';
+      }
+
+      if (password.value == "") {
+        mensajeErrorPassword.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El password es un campo obligatorio';
+        mensajeErrorPassword.style.display = 'block';
+      }
+    }
+
+    function validarEnvio() {
+      var correo = document.getElementById("correo");
+      var password = document.getElementById("password");
+      var rol = document.getElementById("idRol");
+
+      if (correo.value == "" || password.value == "" || rol.value == "") {
+
+        //alert('campos obligatorios');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Campos Obligatorios',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        validarCampos();
+        return false; // Detener el envío del formulario
+      }
+
+      if (password.disabled == true) {
+        //alert('campos obligatorios');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'El correo no es válido',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        return false; // Detener el envío del formulario
+      }
+
+      // Permite el envío del formulario
+      return true;
+    }
+  </script>
+  <!--End Validar Envio-->
+
+
+  <!--Inicio footer-->
+
+  <!--Fin footer-->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="/assets/js/ValidacionInsumo.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+    crossorigin="anonymous"></script>
+  <!--   Core JS Files   -->
+  <script src="/assets/js/core/jquery.min.js"></script>
+  <script src="/assets/js/core/popper.min.js"></script>
+  <script src="/assets/js/core/bootstrap.min.js"></script>
+  <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+  <!--  Google Maps Plugin    -->
+  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+  <!-- Chart JS -->
+  <script src="/assets/js/plugins/chartjs.min.js"></script>
+  <!--  Notifications Plugin    -->
+  <script src="/assets/js/plugins/bootstrap-notify.js"></script>
+  <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+  <script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+  <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+  <script src="/assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Javascript method's body can be found in assets/js/demos.js
+      demo.initDashboardPageCharts();
+
+    });
+  </script>
+
+  <script>
+    //SOLO NUMEROS
+    $(function () {
+      $(".validar").keydown(function (event) {
+        //alert(event.keyCode);
+        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
+          return false;
+        }
+      });
+    });
+  </script>
