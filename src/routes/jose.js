@@ -1,1 +1,0 @@
-let valor = 0
