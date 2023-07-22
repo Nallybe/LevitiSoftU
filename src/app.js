@@ -14,7 +14,7 @@ const ventasRoutes = require('./routes/ventas');
 const loginRoutes = require('./routes/login');
 const comprasRoutes = require('./routes/compras');
 const reparacionesRoutes = require('./routes/reparaciones');
-//const produccionesRoutes = require('./routes/producciones');
+const produccionesRoutes = require('./routes/producciones');
 const productosRoutes = require('./routes/productos');
 const usuariosRoutes = require('./routes/usuarios');
 const port = process.env.PORT
@@ -57,7 +57,7 @@ app.use('/', ventasRoutes);
 app.use('/', loginRoutes);
 app.use('/', usuariosRoutes);
 app.use('/', productosRoutes);
-//app.use('/', produccionesRoutes);
+app.use('/', produccionesRoutes);
 app.use('/', reparacionesRoutes);
 app.use('/', comprasRoutes);
 
