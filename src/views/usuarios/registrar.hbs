@@ -56,57 +56,59 @@
   {{> bar}}
       <!--Barra de navegación-->
       <center>
-        <form action="/usuarios_registrar" method="post" onsubmit="return validarEnvio()" id="FormRegistrarCompra">
+         <form action="/usuarios_registrar" method="post" onsubmit="return validarEnvio()" id="FormRegistrarCompra">
           <div class="container" style="margin-top: 80px; margin-bottom: 50px; margin-top: 10%; ">
             <!--Start Card&Form-->
             <div class="card" style="width: 50%; border-radius: 0; ">
               <div class="card-body">
-                
+
                 <div class="row">
                   <div class="col-md-1"></div>
                   <!--Start Card #1-->
                   <div class="col-md-10">
-                    
+
                     <h4 class="card-title" style="margin-bottom: 4%;">Registrar Usuario(Acceso)</h4>
 
                     <!--Input Rol-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Rol X" list="lis_roles"
-                            style="border-radius: 0;" id="idRol" name="idRol" autocomplete="off"
-                            oninput="val_rol()">
-                          <label for="idRol">
-                            <h5>Rol</h5>
-                          </label>
-                          <datalist id="lis_roles">
-                            {{#each roles}}
-                            <option value="{{nombreRoles}}">IdRol({{idRoles}}) Nombre({{nombreRoles}})</option>
-                            {{/each}}
-                          </datalist>
-                          <div id="mensajeErrorRol"></div>
-                        </div>
-                        <!--End Input Rol-->
+                    <div class="form-floating mb-3">
+                      <select class="form-control" placeholder="Rol X" style="border-radius: 0;" id="idRol"
+                        name="idRol">
+                        {{#each roles}}
+                        {{#if seleccionado}}
+                        <option value="{{nombreRoles}}" selected>{{nombreRoles}}</option>
+                        {{else}}
+                        <option value="{{nombreRoles}}">{{nombreRoles}}</option>
+                        {{/if}}
+                        {{/each}}
+                      </select>
+                      <label for="idRol">
+                        <h5>Rol</h5>
+                      </label>
+                      <div id="mensajeErrorRol"></div>
+                    </div>
+                    <!--End Input Rol-->
 
-                        <!--Input Correo-->
-                        <div class="form-floating mb-3">
-                          <input type="email" class="form-control" placeholder="Correo X" style="border-radius: 0;"
-                            id="correo" name="correo" oninput="val_correo()" autocomplete="off">
-                          <label for="correo">
-                            <h5>Correo</h5><br>
-                          </label>
-                          <div id="mensajeErrorCorreo"></div>
-                        </div>
-                        <!--End Input Correo-->
+                    <!--Input Correo-->
+                    <div class="form-floating mb-3">
+                      <input type="email" class="form-control" placeholder="Correo X" style="border-radius: 0;"
+                        id="correo" name="correo" oninput="val_correo()" autocomplete="off">
+                      <label for="correo">
+                        <h5>Correo</h5><br>
+                      </label>
+                      <div id="mensajeErrorCorreo"></div>
+                    </div>
+                    <!--End Input Correo-->
 
-                        <!--Input Password-->
-                        <div class="form-floating mb-3">
-                          <input type="password" class="form-control" placeholder="Password X" style="border-radius: 0;"
-                            id="password" name="password" oninput="val_password()" autocomplete="off">
-                          <label for="password">
-                            <h5>Password</h5><br>
-                          </label>
-                          <div id="mensajeErrorPassword"></div>
-                        </div>
-                        <!--End Input Password-->
+                    <!--Input Password-->
+                    <div class="form-floating mb-3">
+                      <input type="password" class="form-control" placeholder="Password X" style="border-radius: 0;"
+                        id="password" name="password" oninput="val_password()" autocomplete="off">
+                      <label for="password">
+                        <h5>Password</h5><br>
+                      </label>
+                      <div id="mensajeErrorPassword"></div>
+                    </div>
+                    <!--End Input Password-->
 
 
                     <!--Start Btn R&C-->
@@ -140,73 +142,14 @@
 
   <!--End Form&Card-->
 
-
   <datalist id="data_lis_correos">
     {{#each usuarios}}
     <option value="{{correo}}">
       {{/each}}
   </datalist>
 
-<!--Validacion nav bar-->
-{{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
-
-      var palabras = permisosValue.split(',');
-
-      var menuItems = document.querySelectorAll('.nav li');
-
-      menuItems.forEach(function (item) {
-        var items = item.querySelector('p').textContent.trim().toLowerCase();
-
-        if (palabras.includes(items)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    </script>
-    {{/if}}
 
   <script>
-
-    lastValueI="";
-    function val_rol() {
-      var rol = document.getElementById("idRol");
-      var correo = document.getElementById("correo");
-      var password = document.getElementById("password");
-      var btn = document.getElementById("btnRegistrar");
-
-
-      var selectedOptionI = document.querySelector('#lis_roles option[value="' + rol.value + '"]');
-
-      if (selectedOptionI) {
-        var rolValue = selectedOptionI.getAttribute('correo');
-        rol.value = selectedOptionI.value; // Establecer el valor del campo "idRegistrador" como el valor de la opción del datalist
-        lastValueI = rolValue; // Actualizar lastValue con el valor del usuario
-        //var medidaValue = selectedOptionI.getAttribute('medida');
-        //medida.value = medidaValue;
-        correo.disabled = false;
-        password.disabled = false;
-        btn.disabled = false;
-
-        mensajeErrorRol.innerHTML = '';
-        mensajeErrorRol.style.display = 'none';
-      } else {
-        correo.disabled = true;
-        password.disabled = true;
-        btn.disabled = true;
-
-        mensajeErrorRol.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El Rol no es válido';
-        mensajeErrorRol.style.display = 'block';
-
-      }
-    }
-
-
-
-
     lastValueC = "";
     function val_correo() {
       var correo = document.getElementById("correo");
@@ -244,12 +187,6 @@
     function validarCampos() {
       var correo = document.getElementById("correo");
       var password = document.getElementById("password");
-      var rol = document.getElementById("idRol");
-
-      if (rol.value == "") {
-        mensajeErrorRol.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El rol es un campo obligatorio';
-        mensajeErrorRol.style.display = 'block';
-      }
 
       if (correo.value == "") {
         mensajeErrorCorreo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El correo es un campo obligatorio';
@@ -298,8 +235,7 @@
     }
   </script>
   <!--End Validar Envio-->
-
-
+  
   <!--Inicio footer-->
 
   <!--Fin footer-->

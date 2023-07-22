@@ -47,6 +47,13 @@ function usuarios_crear(req, res) {
           if (err) {
             return res.status(500).json(err);
           } else {
+            //Seleccionar cliente
+            for (i in roles) {
+              if (roles[i].nombreRoles == 'Cliente') {
+                roles[i].seleccionado = true
+              }
+            }
+            //End seleccionar cliente
             res.render('usuarios/registrar', { usuarios, roles });
           }
         });
