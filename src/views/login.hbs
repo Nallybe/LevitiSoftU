@@ -41,9 +41,6 @@
             <div class="group">
               <input type="submit" class="button" value="Iniciar sesión">
             </div>
-            <div class="group">
-              <a href="home" class="buttonC text-center" value="Cancelar" style="text-decoration: none;">CANCELAR</a>
-            </div>
           </form>
 
           <div class="foot-lnk pt-2">
@@ -55,19 +52,20 @@
           <form action="/register" method="post">
             <div class="group">
               <label for="nombre" class="label">Nombre</label>
-              <input id="nombre" type="text" class="input" name="nombre" required>
+              <input id="nombre" type="text" class="input" name="nombre" disabled>
             </div>
             <div class="group">
               <label for="pass" class="label">Correo</label>
               <input id="correo" type="email" class="input" name="correo" required>
             </div>
             <div class="group">
-              <label for="pass" class="label">contraseña</label>
+              <label for="pass" class="label">Contraseña</label>
               <div class="password-input">
                 <input id="password" type="password" class="input" data-type="password" name="password" required>
                 <span class="toggle-password">
                   <i class="fas fa-eye"></i>
                 </span>
+                <input type="text" hidden name="idRoles" value="2">
               </div>
             </div>
 
@@ -78,9 +76,6 @@
             {{/if}}
             <div class="group">
               <input type="submit" class="button" value="Registrarse">
-            </div>
-            <div class="group">
-              <a href="home" class="buttonC text-center" value="Cancelar" style="text-decoration: none;">CANCELAR</a>
             </div>
           </form>
         </div>
