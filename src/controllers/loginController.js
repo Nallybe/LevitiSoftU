@@ -192,7 +192,7 @@ function registrar(req, res) {
             }
 
             const registroUsuario = {
-              idRoles: data.rol,
+              idRoles: 2,
               correo: data.correo,
               passsword: hash,
               estado: 'A'

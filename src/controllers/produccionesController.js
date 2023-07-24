@@ -35,11 +35,11 @@ function producciones_listar(req, res) {
             }
 
             // Consultar los usuarios
-            conn.query("SELECT * FROM tbl_users_access", (err, usersA) => {
+            conn.query("SELECT * FROM users_access", (err, usersA) => {
                 if (err) {
                     return res.status(500).json(err);
                 } else {
-                    conn.query("SELECT * FROM tbl_users_info", (err, usersI) => {
+                    conn.query("SELECT * FROM users_info", (err, usersI) => {
                         if (err) {
                             return res.status(500).json(err);
                         } else {
@@ -286,7 +286,7 @@ async function producciones_detallar(req, res) {
         });
 
         const users = await new Promise((resolve, reject) => {
-            conn.query("SELECT * FROM tbl_users_info", (err, users) => {
+            conn.query("SELECT * FROM users_info", (err, users) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -543,7 +543,7 @@ async function producciones_detallar(req, res) {
 //Crear (Función para redireccionar al hbs donde se encuentra el formulario)
 function producciones_crear(req, res) {
     req.getConnection((err, conn) => {
-        conn.query("SELECT * FROM tbl_users_access WHERE estado ='A' AND idRol != 4", (err, usuarios) => {
+        conn.query("SELECT * FROM users_access WHERE estado ='A' AND idRoles != 4", (err, usuarios) => {
             if (err) {
                 return res.status(500).json(err);
             } else {
@@ -567,11 +567,11 @@ function producciones_registrar(req, res) {
 
     //Capturar Encargado
     req.getConnection((err, conn) => {
-        conn.query("SELECT * FROM tbl_users_access", (err, usersA) => {
+        conn.query("SELECT * FROM users_access", (err, usersA) => {
             if (err) {
                 return res.status(500).json(err);
             } else {
-                conn.query("SELECT * FROM tbl_users_info", (err, usersI) => {
+                conn.query("SELECT * FROM users_info", (err, usersI) => {
                     if (err) {
                         return res.status(500).json(err);
                     } else {
