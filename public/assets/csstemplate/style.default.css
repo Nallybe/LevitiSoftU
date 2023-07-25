@@ -1724,6 +1724,7 @@ button:active {
   transform: translate(-50%, -50%);
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.07);
   font-size: 0.8rem;
+  border-radius: 10px;
 }
 
 .category-item:hover img {
@@ -1874,6 +1875,48 @@ button:active {
 * ==========================================
 *
 */
+.whatsapp-container {
+  position: relative;
+}
+
+.whatsapp {
+  position: fixed;
+  width: 55px;
+  height: 55px;
+  bottom: 20px;
+  right: 18px;
+  background-color: #25d366;
+  color: #FFF;
+  border-radius: 50px;
+  text-align: center;
+  font-size: 30px;
+  z-index: 100;
+}
+
+.whatsapp-icon {
+  margin-top: 13px;
+  color: white;
+}
+
+.whatsapp-tooltip {
+  position: relative;
+  display: none;
+  background-color: #333;
+  color: #FFF;
+  font-size: small;
+  right:  150px;
+  bottom: 35px;
+  width: 150px;
+  height: 25px;
+  border-radius: 5px;
+}
+
+.whatsapp-container:hover .whatsapp-tooltip {
+  display: block;
+}
+
+
+
 .iconos {
   color: #fff;
   padding-bottom: 10px;
