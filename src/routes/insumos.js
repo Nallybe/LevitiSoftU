@@ -30,8 +30,8 @@ const tienePermisos = (session) => {
 router.get('/insumos', checkSession, insumosController.listar);
 router.get('/AgregarInsumo', checkSession, insumosController.crear);
 router.post('/AgregarInsumo', checkSession, insumosController.registrar);
-router.get('/EditarInsumo/:idInsumos', checkSession, insumosController.editar);
-router.post('/EditarInsumo/:idInsumos', checkSession, insumosController.actualizar);
+router.get('/EditarInsumo/:idInsumo', checkSession, insumosController.editar);
+router.post('/EditarInsumo/:idInsumo', checkSession, insumosController.actualizar);
 router.post('/EliminarInsumo', checkSession, insumosController.eliminar);
 
 module.exports = router;

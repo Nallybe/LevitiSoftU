@@ -28,7 +28,7 @@ function registrar(req, res) {
   const RegistroInsumo = {
     nombre: data.nombreInsumo,
     medida: data.medidaInsumo,
-    cantidad: data.stockInsumo,
+    stock: data.stockInsumo,
     estado: 'A',
   };
   req.getConnection((err, conn) => {

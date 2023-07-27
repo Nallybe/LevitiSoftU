@@ -23,29 +23,29 @@
     <!-- CATEGORIES SECTION-->
     <section class="pt-5">
       <header class="text-center">
-        <h2 class="h5 text-uppercase mb-4">Categorias</h2>
+        <h2 class="h5 text-uppercase mb-4" style="color: #dcb14a;">Categorias</h2>
       </header>
       <div class="row  categorias">
         <div class="col-md-4 ">
-          <a class="category-item mb-4" href="ProductosH"><img class="img-fluid"
-              src="assets/img//productosChaquetas/Chaquetas5.jpg" alt="" /><strong
+          <a class="category-item mb-4" href="ProductosH"><img class=""
+              src="assets/img//productosChaquetas/Chaquetas5.jpg" alt=""width="240" height="240" /><strong
               class="category-item-title">Chaquetas</strong></a>
-          <a class="category-item " href="ProductosH"><img class="img-fluid"
-              src="assets/img/productosBilletera/Billeteras1.jpg" alt="" /><strong
+          <a class="category-item " href="ProductosH"><img class=""
+              src="assets/img/productosBilletera/Billeteras1.jpg" alt=""width="240" height="240" /><strong
               class="category-item-title">Billeteras</strong></a>
         </div>
         <div class="col-md-4">
           <a class="category-item mb-4" href="ProductosH">
-            <img class="img-fluid" src="assets/img/productosZapat/Zapatos2.jpg" alt="" /><strong
+            <img class="" src="assets/img/productosZapat/Zapatos2.jpg" alt=""width="240" height="240" /><strong
               class="category-item-title">Zapatos</strong></a>
-          <a class="category-item" href="ProductosH"><img class="img-fluid" src="assets/img/productosBolsos/Bolsos2.jpg"
-              alt="" /><strong class="category-item-title">Bolsos</strong></a>
+          <a class="category-item" href="ProductosH"><img src="assets/img/productosBolsos/Bolsos2.jpg"
+              alt="" width="240" height="240"/><strong class="category-item-title">Bolsos</strong></a>
         </div>
-        <div class="col-md-4"><a class="category-item mb-4" href="ProductosH"><img class="img-fluid"
-              src="assets/img/productosCorrea/Correas1.jpg" alt="" /><strong
+        <div class="col-md-4"><a class="category-item mb-4" href="ProductosH"><img class=""
+              src="assets/img/productosCorrea/Correas1.jpg" alt="" width="240" height="240" /><strong
               class="category-item-title">Accesorios</strong></a>
-          <a class="category-item " href="ProductosH"><img class="img-fluid"
-              src="assets/img/productosMorral/Morral1.jpg" alt="" /><strong
+          <a class="category-item " href="ProductosH"><img class=""
+              src="assets/img/productosMorral/Morral1.jpg" alt="" width="240" height="240"/><strong
               class="category-item-title">Morrales</strong></a>
         </div>
 
@@ -54,9 +54,9 @@
     <!-- PRODUCTS-->
     <section class="py-5">
       <header>
-        <h2 class="h5 text-uppercase mb-4">Algunos de nuestros productos</h2>
+        <h2 class="h4 text-uppercase mb-3" style="color: #dcb14a;">Algunos de nuestros productos</h2>
       </header>
-      
+
       <div class="row">
         {{#each productos}}
         <!-- PRODUCT-->
@@ -67,8 +67,7 @@
               <!-- Contenido del frente de la tarjeta -->
               <div class="position-relative mb-3 front">
                 <div class="badge text-white bg-"></div>
-                <a class="d-block"><img class="img-fluid w-100" src="assets/img/Productos/{{imagen}}"
-                    alt="..."></a>
+                <a class="d-block"><img class="" width="240" height="240" src="assets/img/Productos/{{imagen}}" alt="..."></a>
                 <h6 class="text-center pt-1">{{nombre}}</h6>
                 <p class="text-center">{{precio}}</p>
               </div>
@@ -82,110 +81,18 @@
 
         </div>
         {{/each}}
-{{!-- 
-        <!-- PRODUCT-->
-        <div class="col-xl-3 col-lg-4 col-sm-6 flip-card">
-          <div class="flip-card-inner">
-            <div class="front">
-              <!-- Contenido del frente de la tarjeta -->
-              <div class="position-relative mb-3 front">
-                <div class="badge text-white bg-"></div>
-                <a class="d-block"><img class="img-fluid w-100" src="assets/img/productosZapat/Zapatos7.jpg"
-                    alt="..."></a>
-                <h6 class="text-center pt-1">Zapatos</h6>
-                <p class="text-center">$$</p>
-              </div>
-            </div>
-            <div class="back">
-              <p>Zapatos etc</p>
-            </div>
-
-          </div>
-        </div>
-        <!-- PRODUCT-->
-        <div class="col-xl-3 col-lg-4 col-sm-6 flip-card">
-          <div class="flip-card-inner">
-            <div class="front">
-              <!-- Contenido del frente de la tarjeta -->
-              <div class="position-relative mb-3 front">
-                <div class="badge text-white bg-"></div>
-                <a class="d-block"><img class="img-fluid w-100" src="assets/img/productosChaquetas/Chaquetas6.jpg"
-                    alt="..."></a>
-                <h6 class="text-center pt-1">Chaqueta</h6>
-                <p class="text-center">$$</p>
-              </div>
-            </div>
-            <div class="back">
-              <p>Chaqueta para hombre etc</p>
-            </div>
-
-          </div>
-        </div>
-        <!-- PRODUCT-->
-        <div class="col-xl-3 col-lg-4 col-sm-6">
-          <div class="product text-center">
-            <div class="position-relative mb-3">
-              <div class="badge text-white bg-info"></div><a class="d-block"><img class="img-fluid w-100"
-                  src="assets/img/productosRiñoneras/Riñoneras1.jpg" alt="..."></a>
-
-            </div>
-            <h6> <a class="reset-anchor">Riñonera</a></h6>
-            <p class="small text-muted">$$</p>
-          </div>
-        </div>
-        <!-- PRODUCT-->
-        <div class="col-xl-3 col-lg-4 col-sm-6">
-          <div class="product text-center">
-            <div class="position-relative mb-3">
-              <div class="badge text-white bg-danger"></div><a class="d-block"><img class="img-fluid w-100"
-                  src="assets/img/productosChaquetas/Chaquetas1.jpg" alt="..."></a>
-
-            </div>
-            <h6> <a class="reset-anchor">Chaqueta</a></h6>
-            <p class="small text-muted">$$</p>
-          </div>
-        </div>
-        <!-- PRODUCT-->
-        <div class="col-xl-3 col-lg-4 col-sm-6">
-          <div class="product text-center">
-            <div class="position-relative mb-3">
-              <div class="badge text-white bg-"></div><a class="d-block"><img class="img-fluid w-100"
-                  src="assets/img/productosBolsos/Bolsos4.jpg" alt="..."></a>
-
-            </div>
-            <h6> <a class="reset-anchor">Bolso</a></h6>
-            <p class="small text-muted">$$</p>
-          </div>
-        </div>
-        <!-- PRODUCT-->
-        <div class="col-xl-3 col-lg-4 col-sm-6">
-          <div class="product text-center">
-            <div class="position-relative mb-3">
-              <div class="badge text-white bg-"></div><a class="d-block"><img class="img-fluid w-100"
-                  src="assets/img/productosZapat/Zapatos1.jpg" alt="..."></a>
-
-            </div>
-            <h6> <a class="reset-anchor">Zapato</a></h6>
-            <p class="small text-muted">$$</p>
-          </div>
-        </div>
-        <!-- PRODUCT-->
-        <div class="col-xl-3 col-lg-4 col-sm-6">
-          <div class="product text-center">
-            <div class="position-relative mb-3">
-              <div class="badge text-white bg-"></div><a class="d-block"><img class="img-fluid w-100"
-                  src="assets/img/productosBilletera/Billeteras1.jpg" alt="..."></a>
-
-            </div>
-            <h6> <a class="reset-anchor">Billetera</a></h6>
-            <p class="small text-muted">$$</p>
-          </div>
-        </div> --}}
       </div>
     </section>
-
-
+    <div class="whatsapp-container">
+      <a href="https://wa.me/5211234567890?text=Me%20gustaría%20saber%20el%20precio%20del%20coche" class="whatsapp"
+        target="_blank">
+        <i class="fab fa-whatsapp whatsapp-icon"></i>
+        <div class="whatsapp-tooltip p-1">Chatea con nosotros</div>
+      </a>
+      
+    </div>
   </div>
+  
   {{> footer}}
   <!-- JavaScript files-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>

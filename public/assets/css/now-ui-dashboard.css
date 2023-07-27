@@ -505,7 +505,7 @@ body {
   width: 100%;
   padding-top: 10px;
   z-index: 1029;
-  background-color:  #588100;
+  background-color:  #214d7a;
 }
 
 .navbar .navbar-toggler {
@@ -730,8 +730,9 @@ Created using IcoMoon - icomoon.io
 }
 
 .sidebar .sidebar-wrapper li {
-  font-size: 17px;
+  font-size: 15px;
   padding: 0px 0px;
+
 }
 
 
@@ -766,14 +767,13 @@ Created using IcoMoon - icomoon.io
   position: relative;
   text-transform: uppercase;
   cursor: pointer;
-  font-size: 0.7142em;
-  padding: 10px 8px;
+  font-size: 12px;
+  padding: 7px;
   line-height: 1.625rem;
+  height: 44px;
 }
 
-.sidebar .nav li:first-child>a {
-  margin: 0 15px;
-}
+
 
 .sidebar .nav li:hover:not(.active)>a,
 .sidebar .nav li:focus:not(.active)>a {
@@ -861,7 +861,7 @@ Created using IcoMoon - icomoon.io
 }
 
 .sidebar:after {
-  background: #588100;
+  background:  #214d7a;
 
   z-index: 3;
 }

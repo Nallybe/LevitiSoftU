@@ -24,7 +24,8 @@
           <form action="/login" method="post">
             <div class="group">
               <label for="correo" class="label">Correo</label>
-              <input id="correo" type="email" class="input" name="correol" required>
+              <input id="correo" type="email" class="input" name="correol" onblur="validateEmail()" required>
+              <span id="emailError" style="color: red; display: none;">Correo electrónico inválido. Por favor, ingresa un correo válido.</span>
             </div>
             <div class="group">
               <label for="pass" class="label">Password</label>
@@ -36,7 +37,7 @@
               </div>
             </div>
             {{#if errorl}}
-            <p class="errorl"><i class="fa fa-xmark"></i>* {{errorl}}</p>
+            <p class="errorl" style="color: rgb(255, 0, 0);"><i class="fa fa-xmark"></i>* {{errorl}}</p>
             {{/if}}
             <div class="group">
               <input type="submit" class="button" value="Iniciar sesión">
@@ -51,12 +52,21 @@
         <div class="sign-up-htm">
           <form action="/register" method="post">
             <div class="group">
+              <label for="documento" class="label">Documento</label>
+              <input id="documento" type="number" class="input" name="documento" oninput="validarNumeros(event); autocompletarContrasena();">
+            </div>
+            <div class="group">
               <label for="nombre" class="label">Nombre</label>
-              <input id="nombre" type="text" class="input" name="nombre" disabled>
+              <input id="nombre" type="text" class="input" name="nombre">
+            </div>
+            <div class="group">
+              <label for="telefono" class="label">Telefono</label>
+              <input id="telefono" type="number" class="input" name="telefono" oninput="validarNumeros(event)">
             </div>
             <div class="group">
               <label for="pass" class="label">Correo</label>
-              <input id="correo" type="email" class="input" name="correo" required>
+              <input id="correo" type="email" class="input" name="correo" onblur="validateEmail()" required>
+              <span id="emailError" style="color: red; display: none;">Correo electrónico inválido. Por favor, ingresa un correo válido.</span>
             </div>
             <div class="group">
               <label for="pass" class="label">Contraseña</label>
@@ -65,8 +75,10 @@
                 <span class="toggle-password">
                   <i class="fas fa-eye"></i>
                 </span>
-                <input type="text" hidden name="idRoles" value="2">
               </div>
+              <div id="mensaje-contrasena" style="display: none; color: rgb(112, 255, 112);">
+                  Tu contraseña es tu número de documento.
+                </div>
             </div>
 
             <div class="group">
@@ -89,6 +101,71 @@
 </body>
 
 <!--   Core JS Files   -->
+<!--Funcion para no dejar ingresa numeros-->
+<script>
+  function validarNumeros(event) {
+    const input = event.target;
+    let valor = input.value;
+
+    // Expresión regular para comprobar que solo hay números
+    const regexNumeros = /^[0-9]+$/;
+
+    // Eliminar caracteres no numéricos
+    valor = valor.replace(/[^\d]/g, '');
+
+    // Limitar la cantidad de dígitos a diez
+    if (valor.length > 10) {
+      valor = valor.slice(0, 10);
+    }
+
+    input.value = valor;
+  }
+  function validateEmail() {
+            const emailInput = document.getElementById('correo');
+            const email = emailInput.value.trim();
+            const emailError = document.getElementById('emailError');
+
+            // Expresión regular para validar el correo electrónico
+            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+            if (!emailPattern.test(email)) {
+                emailError.style.display = 'inline'; // Mostrar el mensaje de error
+                emailInput.classList.add('error'); // Opcional: Agregar una clase para resaltar el error visualmente
+            } else {
+                emailError.style.display = 'none'; // Ocultar el mensaje de error si el correo es válido
+                emailInput.classList.remove('error'); // Opcional: Remover la clase de error si existía
+            }
+        }
+</script>
+<!--Función de autocompletar la contraseña-->
+<script>
+function autocompletarContrasena() {
+  var documentoInput = document.getElementById('documento');
+  var contrasenaInput = document.getElementById('password');
+  var mensajeContrasena = document.getElementById('mensaje-contrasena');
+
+  // Obtener el valor del documento y asignarlo a la contraseña
+ var documento = documentoInput.value;
+  contrasenaInput.value = documento;
+
+  // Mostrar el mensaje de contraseña
+  mensajeContrasena.style.display = 'block';
+}
+</script>
+
+<!-- JavaScript files-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/glightbox/js/glightbox.min.js"></script>
+<script src="vendor/nouislider/nouislider.min.js"></script>
+<script src="vendor/swiper/swiper-bundle.min.js"></script>
+<script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="js/front.js"></script>
+<!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+  integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>

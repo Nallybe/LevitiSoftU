@@ -50,7 +50,7 @@
                                     <div class="col-6">
                                         <div class="form-floating mb-3">
                                             <input type="text" class="form-control" id=" nombreInsumo"
-                                                style="border-radius: 0;" name="nombreInsumo" value="{{nombreInsumo}}">
+                                                style="border-radius: 0;" name="nombre" value="{{nombre}}">
                                             <div id="mensajeErrorNombre"></div>
                                             <label for="floatingInput">Nombre</label>
                                         </div>
@@ -58,7 +58,7 @@
                                     <div class="col-6">
                                         <div class="form-floating mb-3">
                                             <input type="number" class="form-control" id="stockInsumo"
-                                                style="border-radius: 0;" name="stockInsumo" value="{{stockInsumo}}"
+                                                style="border-radius: 0;" name="stock" value="{{stock}}"
                                                 min="1">
                                             <div id="mensajeErrorStock"></div>
                                             <label for="floatingInput">Stock</label>
@@ -71,9 +71,7 @@
                                             <select class="form-control" id="floatingInput" style="border-radius: 0;"
                                                 name="medida" value="{{medida}}">
 
-                                                <option value="Pliego">Pliego</option>
-                                                <option value="Medio pliego">Medio pliego</option>
-                                                <option value="Octavo">Octavo</option>
+                                                <option value="Metro">Metro</option>
                                                 <option value="Unidad">Unidad</option>
                                             </select>
                                             <label for="floatingInput">Medida</label>
@@ -100,11 +98,11 @@
                                 <div class="d-grid gap-2">
 
                                     <button type="submit" class=" btn btn-success"
-                                        style="border-radius: 0; margin-bottom: 1px;" id="boton" onclick="editar()">
-                                        Editar insumo</a>
+                                        style="border-radius: 2; margin-bottom: 1px;" id="boton" onclick="editar()">
+                                        Editar</a>
                                 </div>
                                 <a class="btn btn-danger" href="/insumos"
-                                    style="border-radius: 0; margin-top: 1px; width:100%;" type="button">Cancelar</a>
+                                    style="border-radius: 2; margin-top: 1px; width:100%;" type="button">Cancelar</a>
                             </div>
                         </div>
                         <br>

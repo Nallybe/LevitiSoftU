@@ -126,48 +126,38 @@
                             </td>-->
                     <td class="p-3 text-center">{{nombreRol}}</td>
 
-                    <td class="p-3 text-center">{{nombre}}</td>
-                    <td class="p-3 text-center">{{telefono}}</td>
-                    <td class="p-3 text-center">{{correo}}</td>
-                    <td class="p-3 text-center">{{documento}}</td>
-
-                    {{#if estado1}}
-                    <td class="p-3 text-center">
-
-                        <button class="btn btn-primary" style="border-radius:20px;" disabled>Activo</button>
-
-
-                        <!--<input class="check" type="checkbox" role="switch" checked
-                                    onchange="location.href='usuarios_estado/{{idAccess}}'">-->
-                    </td>
-                    <!--Activo-->
-                    {{/if}}
-                    {{#if estado2}}
-                    <td class="p-3 text-center">
-
-                        <button class="btn btn-secondary" style="border-radius:20px;" disabled>Inactivo</button>
-
-                        <!--<input class="check" type="checkbox" role="switch"
-                                    onchange="location.href='usuarios_estado/{{idAccess}}'">-->
-                    </td>
-                    <!--Inactivo-->
-                    {{/if}}
-                    <td class="p-3 px-1 ">
-                        <a href="/usuarios_editar/{{idAccess}}" style="color: #292b2c; " class="boton-producto">
-                            <i type="button" class="fa-sharp fa-solid fa-pen"></i>
-                        </a>
-                        {{!-- <form action="/usuarios_eliminar" method="POST" class="boton-producto"
-                            id="FormEliminarUsario{{idAccess}}">
-                            <input type="hidden" value="{{idAccess}}" name="idAccess">
-                            <a type="button" onclick="Eliminar({{idAccess}})"><i class="fa fa-trash"></i></a>
-                        </form> --}}
-                    </td>
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
-    </div>
+                            {{#if estado1}}
+                            <td class="p-3 text-center">
+                                {{!-- <input class="check" type="checkbox" role="switch" checked
+                                    onchange="location.href='usuarios_estado/{{idAccess}}'"> --}}
+                                    Activo
+                            </td>
+                            <!--Activo-->
+                            {{/if}}
+                            {{#if estado2}}
+                            <td class="p-3 text-center">
+                                {{!-- <input class="check" type="checkbox" role="switch"
+                                    onchange="location.href='usuarios_estado/{{idAccess}}'"> --}}
+                                    Inactivo
+                            </td>
+                            <!--Inactivo-->
+                            {{/if}}
+                            <td class="p-3 px-1 ">
+                                <a href="/usuarios_editar/{{idAccess}}" style="color: #292b2c; "
+                                    class="boton-producto">
+                                    <i type="button" class="fa-sharp fa-solid fa-pen"></i>
+                                </a>
+                                {{!-- <form action="/usuarios_eliminar" method="POST" class="boton-producto"
+                                    id="FormEliminarUsario{{idAccess}}">
+                                    <input type="hidden" value="{{idAccess}}" name="idAccess">
+                                    <a type="button" onclick="Eliminar({{idAccess}})"><i class="fa fa-trash"></i></a>
+                                </form> --}}
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
     </div>
 </center>
 

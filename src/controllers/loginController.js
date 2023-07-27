@@ -65,7 +65,7 @@ function auth(req, res) {
                           return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
                         }
                         req.session.roles = roleResults;
-                        console.log(req.session.roles)
+                        //console.log(req.session.roles)
                         //res.redirect('/dashboard');
                         conn.query(
                           'SELECT r.nombreRoles, p.nombrePermisos ' +
@@ -80,9 +80,8 @@ function auth(req, res) {
                               console.log(error);
                               return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
                             }
-
                             const permisos = permissionResults.map((row) => row.nombrePermisos);
-
+                            //console.log('Permisos: ',permisos)
                             req.session.asignacion = permisos;
                             //console.log(req.session.asignacion)
                             // Redireccionar al primer permiso que coincida
@@ -132,28 +131,30 @@ function crear(req, res) {
           return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
         }
 
-        conn.query("SELECT * FROM tbl_roles", (err, roles) => {
+        conn.query("SELECT * FROM tbl_roles", (err, p) => {
           if (err) {
             console.log(err);
             return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
           }
 
-          res.render("login", { users, roles });
+          res.render("login", { users, p });
         });
       });
     });
 
-  } else {
-   // Redireccionar al primer permiso que coincida
-   var firstMatchingPermission = permisos.find((permiso) => req.session.roles.includes(permiso));
-   if (firstMatchingPermission) {
-     res.redirect('/' + firstMatchingPermission);
-   } else {
-     // Si no hay permisos coincidentes, redireccionar a una página predeterminada
-     res.redirect('/dashboard');
-   }
   }
+  else {
 
+    // Redireccionar al primer permiso que coincida
+    const permisos = req.session.asignacion
+    var firstMatchingPermission = permisos.find((permiso) => req.session.roles.includes(permiso));
+    if (firstMatchingPermission) {
+      res.redirect('/' + firstMatchingPermission);
+    } else {
+      // Si no hay permisos coincidentes, redireccionar a una página predeterminada
+      res.redirect('/dashboard');
+    }
+  }
 }
 
 function registrar(req, res) {
@@ -206,13 +207,28 @@ function registrar(req, res) {
                   console.log(error);
                   return res.status(500).json({ error: 'Error en la inserción en la base de datos' });
                 }
-
-                console.log('Información del usuario guardada');
-                req.session.loggedin = true; // Establece la sesión como iniciada
-                req
                 const idAccess = result.insertId; // Obtiene el idAccess generado
-
-                return res.redirect('/registro/' + idAccess);
+                const registroUsuarioInfo = {
+                  idAccess: idAccess,
+                  documento: data.documento,
+                  nombre: data.nombre,
+                  telefono: data.telefono,
+                  estado: 'A'
+                };
+                conn.query(
+                  'INSERT INTO users_info SET ?',
+                  registroUsuarioInfo, (error, result) => {
+                    if (error) {
+                      console.log(error);
+                      return res.status(500).json({ error: 'Error en la inserción en la base de datos' });
+                    }
+                    console.log('Información del usuario guardada');
+                    req.session.loggedin = true; // Establece la sesión como iniciada
+                    req
+                    return res.redirect('/dashboard')
+                  }
+                )
+                //return res.redirect('/registro/' + idAccess);
 
               }
             );
@@ -224,52 +240,9 @@ function registrar(req, res) {
   });
 }
 
-function registro(req, res) {
-  const idAccess = req.params.idAccess;
-  res.render('registro', { idAccess: idAccess });
-}
 
-function registroinfo(req, res) {
-  const idAccess = req.params.idAccess;
-  const data = req.body;
 
-  const RegistroInfoUser = {
-    idAccess: idAccess,
-    documento: data.documento,
-    nombre: data.nombre,
-    telefono: data.telefono,
-    estado: 'A',
-  };
-  //console.log(RegistroInfoUser)
-  req.getConnection((err, conn) => {
-    conn.query(
-      "INSERT INTO users_info SET ?",
-      [RegistroInfoUser],
-      (error, result) => {
-        if (error) {
-          console.log(error);
-          return;
-        } else {
-          console.log("Información del usuario guardado");
-          req.session.loggedin = true;
-          req.session.name = data.nombre;
-          //console.log(req.session.name)
-          const nameQueryParam = encodeURIComponent(req.session.name);
-          //console.log(nameQueryParam)
-          // Redireccionar al primer permiso que coincida
-          var firstMatchingPermission = permisos.find((permiso) => req.session.roles.includes(permiso));
-          if (firstMatchingPermission) {
-            res.redirect('/' + firstMatchingPermission);
-          } else {
-            // Si no hay permisos coincidentes, redireccionar a una página predeterminada
-            res.redirect('/dashboard?name='+ nameQueryParam);
-          }
-        }
 
-      }
-    );
-  });
-}
 
 function logout(req, res) {
   if (req.session.loggedin == true) {
@@ -366,8 +339,6 @@ module.exports = {
   crear,
   registrar,
   auth,
-  registro,
-  registroinfo,
   logout,
   olvido,
   recuperar,
