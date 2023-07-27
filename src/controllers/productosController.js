@@ -22,7 +22,7 @@ function productos_listar(req, res) {
 
                         // Parsear precio
                         productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
-                       
+
                     }
                     // Renderizar la plantilla 'productos/listar' y enviar los datos a la vista
                     const numP = productos.length;
@@ -92,7 +92,7 @@ function productos_detallar(req, res) {
 //Crear (Función para redireccionar al hbs donde se encuentra el formulario)
 function productos_crear(req, res) {
     req.getConnection((err, conn) => {
-        conn.query("SELECT * FROM tbl_insumos WHERE estado ='Disponible'", (err, insumos) => {
+        conn.query("SELECT * FROM tbl_insumos WHERE estado ='A'", (err, insumos) => {
             if (err) {
                 return res.status(500).json(err);
             } else {
@@ -110,19 +110,29 @@ function productos_crear(req, res) {
 //End Crear
 
 
-
+const fs = require('fs');
+const path = require('path');
 //Registrar Producto
 function productos_registrar(req, res) {
     var data = req.body;
-    var imagen = req.file; // Aquí obtienes el archivo de imagen
-    console.log(imagen)
+    var imagen = req.file// Aquí obtienes el archivo de imagen
+
+    img = 'img_' + data.nombre + '.jpg';
+    console.log(img);
+
+    // Mueve el archivo a la nueva ubicación con el nuevo nombre y extensión
+    fs.rename(imagen.path, path.join('./public/assets/img/Productos/', img), function (err) {
+        if (err) {
+            console.log('Error al guardar la imagen con otro nombre y extensión: ', err);
+        }
+    });
 
     const RegistroProducto = {
         nombre: data.nombre,
         descripcion: data.descripcion,
         precio: data.precio,
         stock: data.stock,
-        imagen: imagen.filename // Guarda el nombre de la imagen en el objeto de registro
+        imagen: img // Guarda el nombre de la imagen en el objeto de registro
         //imagen: req.file
         //imagen: imagen.filename
     };
@@ -277,24 +287,30 @@ function productos_editar(req, res) {
 }
 //End Editar
 
-
+const path1 = require('path');
 //Modificar
 function productos_modificar(req, res) {
     const idProducto = req.params.idProducto;
     const data = req.body;
+    const imagen = req.file; // Aquí obtienes el archivo de imagen
 
-    console.log(data)
+    // Construye el nuevo nombre de la imagen utilizando 'img_ + idProducto + .jpg'
+    const img = `img_${idProducto}.jpg`;
+
+    // Mueve el archivo a la nueva ubicación con el nuevo nombre y extensión
+    fs.rename(imagen.path, path1.join('./public/assets/img/Productos/', img), function (err) {
+        if (err) {
+            console.log('Error al guardar la imagen con el nuevo nombre: ', err);
+        }
+    });
 
     const RegistroProducto = {
         nombre: data.nombre,
         descripcion: data.descripcion,
         precio: data.precio,
-        stock: data.stock
+        stock: data.stock,
+        imagen: img// Guarda el nuevo nombre de la imagen en el objeto de registro
     };
-    console.log(RegistroProducto)
-
-
-
 
     req.getConnection((err, conn) => {
         //Actualizar Producto

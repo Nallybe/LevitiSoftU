@@ -28,16 +28,16 @@ const tienePermisos = (session) => {
 
 const router = express.Router();
 
-router.get('/usuarios', checkSession, UsuariosController.usuarios_listar);
+router.get('/usuarios', /*checkSession,*/ UsuariosController.usuarios_listar);
 
-router.get('/usuarios_registrar', checkSession, UsuariosController.usuarios_crear);
-router.post('/usuarios_registrar', checkSession, UsuariosController.usuarios_registrar);
+router.get('/usuarios_registrar', /*checkSession,*/ UsuariosController.usuarios_crear);
+router.post('/usuarios_registrar', /*checkSession,*/ UsuariosController.usuarios_registrar);
 
 /*router.post('/usuarios_eliminar', checkSession, UsuariosController.usuarios_eliminar);*/
 
-router.get('/usuarios_editar/:idAccess', checkSession, UsuariosController.usuarios_editar);
-router.post('/usuarios_editar/:idAccess', checkSession, UsuariosController.usuarios_modificar);
+router.get('/usuarios_editar/:idAccess', /*checkSession,*/ UsuariosController.usuarios_editar);
+router.post('/usuarios_editar/:idAccess', /*checkSession,*/ UsuariosController.usuarios_modificar);
 
-router.get('/usuarios_estado/:idAccess', checkSession, UsuariosController.usuarios_estado);
+/*router.get('/usuarios_estado/:idAccess', checkSession, UsuariosController.usuarios_estado);*/
 
 module.exports = router;
