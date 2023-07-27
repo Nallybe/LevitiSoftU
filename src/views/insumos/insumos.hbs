@@ -20,6 +20,7 @@
 
     .fila-roja {
         background-color: red;
+        color: white;
     }
 </style>
 
@@ -102,10 +103,10 @@
                         var stock = parseInt(stockCell.textContent);
                         if (stock <= 5) {
                             // Agregar la clase "fila-roja" a la fila actual (excluyendo la columna "Funciones")
-                            rows[i].classList.add('fila-roja');
+                            //rows[i].classList.add('fila-roja');
                             // Agregar el estilo al elemento con la clase "fa-trash" dentro de la fila
-                            var trashIcon = rows[i].querySelector('.fa-trash');
-                            trashIcon.style.color = 'black';
+                            //var trashIcon = rows[i].querySelector('.fa-trash');
+                            //trashIcon.style.color = 'black';
                         }
                     }
                 </script>

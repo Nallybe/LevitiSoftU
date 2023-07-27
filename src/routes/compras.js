@@ -2,7 +2,7 @@ const express = require('express');
 const ComprasController = require('../controllers/comprasController');
 
 const router = express.Router();
-/*
+
 // Middleware de verificación de sesión
 const checkSession = (req, res, next) => {
     if (req.session.loggedin && tienePermisos(req.session)) {
@@ -26,14 +26,14 @@ const tienePermisos = (session) => {
 
     return false;
 };
-*/
-router.get('/compras', /*checkSession,*/ComprasController.compras_listar);
-router.get('/compras/:idCompra', /*checkSession,*/ComprasController.compras_detallar);
-router.get('/compras_anulaciones', /*checkSession,*/ComprasController.compras_listar_anulaciones);
 
-router.get('/compras_registrar', /*checkSession,*/ComprasController.compras_crear);
-router.post('/compras_registrar', /*checkSession,*/ComprasController.compras_registrar);
+router.get('/compras', checkSession,ComprasController.compras_listar);
+router.get('/compras/:idCompra', checkSession,ComprasController.compras_detallar);
+router.get('/compras_anulaciones', checkSession,ComprasController.compras_listar_anulaciones);
 
-router.post('/compras_anular', /*checkSession,*/ComprasController.compras_anular);
+router.get('/compras_registrar', checkSession,ComprasController.compras_crear);
+router.post('/compras_registrar', checkSession,ComprasController.compras_registrar);
+
+router.post('/compras_anular', checkSession,ComprasController.compras_anular);
 
 module.exports = router;
