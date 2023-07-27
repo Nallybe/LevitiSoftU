@@ -9,98 +9,25 @@
       color: red;
     }
 
-    /*#mensajeErrorImagen {
+    #mensajeErrorNombre,
+    #mensajeErrorDescripcion,
+    #mensajeErrorPrecio,
+    #mensajeErrorStock,
+    #mensajeErrorInsumo,
+    #mensajeErrorCantidad,
+    #mensajeErrorCategoria {
       display: none;
       color: red;
       margin-top: 5px;
     }
 
-    #mensajeErrorImagen .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }*/
-
-    #mensajeErrorNombre {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorNombre .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorDescripcion {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorDescripcion .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorPrecio {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorPrecio .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorStock {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorStock .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-
-    #mensajeErrorInsumo {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorInsumo .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorCantidad {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorCantidad .icono {
+    #mensajeErrorNombre .icono,
+    #mensajeErrorDescripcion .icono,
+    #mensajeErrorPrecio .icono,
+    #mensajeErrorStock .icono,
+    #mensajeErrorInsumo .icono,
+    #mensajeErrorCantidad .icono,
+    #mensajeErrorCategoria .icono {
       display: inline-block;
       vertical-align: middle;
       margin-right: 5px;
@@ -111,144 +38,166 @@
 
   <!--Barra de navegación-->
   {{>barId}}
-      <!--Barra de navegación-->
-      <center>
-        {{#each producto}}
-        <form action="/productos_editar/{{idProducto}}" method="post" onsubmit="return validarEnvio()"
-          id="FormRegistrarCompra">
-          <div class="container" style="margin-top: 80px; margin-bottom: 50px">
-            <!--Start Card&Form-->
-            <div class="card" style="width: 95%; border-radius: 0;">
-              <div class="card-body">
-                <h4 class="card-title" style="margin-bottom: 4%;">Registrar Producto</h4>
-                <div class="row">
-                  <div class="col-md-1"></div>
-                  <!--Start Card #1-->
-                  <div class="col-md-5">
-                    <div class="card" style="border-radius: 0; width: 90%;">
-                      <div class="card-body">
+  <!--Barra de navegación-->
+  <center>
+    {{#each producto}}
+    <form action="/productos_editar/{{idProducto}}" method="post" onsubmit="return validarEnvio()"
+      id="FormRegistrarCompra" enctype="multipart/form-data">
+      <div class="container" style="margin-top: 80px; margin-bottom: 50px">
+        <!--Start Card&Form-->
+        <div class="card" style="width: 95%; border-radius: 0;">
+          <div class="card-body">
+            <h4 class="card-title" style="margin-bottom: 4%;">Editar Producto</h4>
+            <div class="row">
+              <div class="col-md-1"></div>
+              <!--Start Card #1-->
+              <div class="col-md-5">
+                <div class="card" style="border-radius: 0; width: 90%;">
+                  <div class="card-body">
 
+                    <!--Input Imagen
+                    <div class="form-floating mb-3">
+                      <input type="file" class="form-control pt-4" placeholder="Imagen X" style="border-radius: 0;"
+                        id="imagen" name="imagen" autocomplete="off" oninput="val_imagen()">
+                      <label for="imagen">
+                        <h5>Imagen</h5>
+                      </label>
+                      <div id="mensajeErrorImagen"></div>
+                    </div>-->
+                    <!--End Input Imagen-->
 
+                    <!-- Mostrar la imagen seleccionada -->
+                    <img id="imagenMostrada" src="/assets/img/Productos/{{imagen}}" alt="Imagen"
+                      style="max-width: 100%; display: block; margin-bottom: 10px;">
 
-                        <!--Input Imagen
-                        <div class="form-floating mb-3">
-                          <input type="file" class="form-control pt-4" placeholder="Imagen X" style="border-radius: 0;"
-                            id="imagen" name="imagen" autocomplete="off" oninput="val_imagen()">
-                          <label for="imagen">
-                            <h5>Imagen</h5>
-                          </label>
-                          <div id="mensajeErrorImagen"></div>
-                        </div>-->
-                        <!--End Input Imagen-->
+                    <!-- Agregar un botón para permitir seleccionar una nueva imagen -->
+                    <button type="button" onclick="seleccionarNuevaImagen()">Seleccionar Nueva Imagen</button>
 
-                        <!--Input Nombre-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Nombre X" style="border-radius: 0;"
-                            id="nombre" name="nombre" oninput="val_nombre()" value="{{nombre}}" autocomplete="off">
-                          <label for="nombre">
-                            <h5>Nombre</h5><br>
-                          </label>
-                          <div id="mensajeErrorNombre"></div>
-                        </div>
-                        <!--End Input Nombre-->
+                    <!-- Ocultar el input de tipo "file" -->
+                    <input type="file" style="display: none;" id="imagen" name="imagen" autocomplete="off"
+                      oninput="val_imagen()">
 
-                        <!--Input Descripción-->
-                        <div class="form-floating mb-3">
-                          <textarea class="form-control pb-5" placeholder="Descripcion X" style="border-radius: 0;"
-                            id="descripcion" name="descripcion" autocomplete="off"
-                            oninput="val_descripcion()">{{descripcion}}</textarea>
-                          <label for="descripcion_R">
-                            <h5>Descripción</h5><br>
-                          </label>
-                          <div id="mensajeErrorDescripcion"></div>
-                        </div>
-                        <!--End Input Descripción-->
-
-                        <!--Input Precio-->
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" placeholder="Precio X" style="border-radius: 0;"
-                            id="precio" name="precio" min="50" oninput="val_precio()" value="{{precio}}" autocomplete="off">
-                          <label for="precio">
-                            <h5>Precio</h5><br>
-                          </label>
-                          <div id="mensajeErrorPrecio"></div>
-                        </div>
-                        <!--End Input Precio-->
-
-                        <!--Input Stock-->
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" placeholder="Stock X" style="border-radius: 0;"
-                            id="stock" name="stock" oninput="val_stock()" value="{{stock}}" autocomplete="off">
-                          <label for="stock">
-                            <h5>Stock</h5><br>
-                          </label>
-                          <div id="mensajeErrorStock"></div>
-                        </div>
-                        <!--End Input Stock-->
-
-                        {{/each}}
-
-                      </div>
+                    <!--Input Nombre-->
+                    <div class="form-floating mb-3 mt-3">
+                      <input type="text" class="form-control" placeholder="Nombre X" style="border-radius: 0;"
+                        id="nombre" name="nombre" oninput="val_nombre()" value="{{nombre}}" autocomplete="off">
+                      <label for="nombre">
+                        <h5>Nombre</h5><br>
+                      </label>
+                      <div id="mensajeErrorNombre"></div>
                     </div>
-                  </div>
-                  <!--End Card #1-->
+                    <!--End Input Nombre-->
 
-                  <!--Start Card #2-->
-                  <div class="col-md-5">
-                    <div class="card mt-2" style="border-radius: 0; width: 90%;">
-                      <div class="card-body">
-                        <h5 class="card-title" style="margin-bottom: 4%;">Agregar insumo requirido por el producto
-                        </h5>
-
-                        <!--Input Insumo-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Insumo X" list="list_insumos"
-                            style="border-radius: 0;" id="idInsumo_R" name="idInsumo_R" autocomplete="off"
-                            oninput="val_ins()">
-                          <label for="idInsumo_R">
-                            <h5>Insumo</h5>
-                          </label>
-                          <datalist id="list_insumos">
-                            {{#each insumos}}
-                            <option value="{{nombre}}">nombre({{nombre}})
-                              medida({{medida}})
-                              stock({{cantidad}})</option>
-                            {{/each}}
-                          </datalist>
-                          <div id="mensajeErrorInsumo"></div>
-                        </div>
-                        <!--End Input Insumo-->
-
-
-
-                        <!--Input Cantidad-->
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" placeholder="Cantidad X" style="border-radius: 0;"
-                            id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()">
-                          <label for="cantidad_R">
-                            <h5>Cantidad Requerida(1)</h5><br>
-                          </label>
-                          <div id="mensajeErrorCantidad"></div>
-                        </div>
-                        <!--End Input Cantidad-->
-
-
-                        <!--Start Btn Agregar-->
-                        <div class="d-grid gap-2">
-                          <button class="btn btn-warning" style="border-radius: 0;" type="button" id="btnAgregarInsumo"
-                            onclick="agregarInsumo()"><i class="fa-solid fa-circle-plus"></i> Agregar</button>
-                        </div>
-                        <!--End Btn Agregar-->
-                      </div>
+                    <!--Input Descripción-->
+                    <div class="form-floating mb-3">
+                      <textarea class="form-control pb-5" placeholder="Descripcion X" style="border-radius: 0;"
+                        id="descripcion" name="descripcion" autocomplete="off"
+                        oninput="val_descripcion()">{{descripcion}}</textarea>
+                      <label for="descripcion_R">
+                        <h5>Descripción</h5><br>
+                      </label>
+                      <div id="mensajeErrorDescripcion"></div>
                     </div>
+                    <!--End Input Descripción-->
+
+                    <!--Input Precio-->
+                    <div class="form-floating mb-3">
+                      <input type="number" class="form-control" placeholder="Precio X" style="border-radius: 0;"
+                        id="precio" name="precio" min="50" oninput="val_precio()" value="{{precio}}" autocomplete="off">
+                      <label for="precio">
+                        <h5>Precio</h5><br>
+                      </label>
+                      <div id="mensajeErrorPrecio"></div>
+                    </div>
+                    <!--End Input Precio-->
+
+                    <!--Input Stock-->
+                    <div class="form-floating mb-3">
+                      <input type="number" class="form-control" placeholder="Stock X" style="border-radius: 0;"
+                        id="stock" name="stock" oninput="val_stock()" value="{{stock}}" autocomplete="off">
+                      <label for="stock">
+                        <h5>Stock</h5><br>
+                      </label>
+                      <div id="mensajeErrorStock"></div>
+                    </div>
+                    <!--End Input Stock-->
+
+                    <!--Input Categoria-->
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" placeholder="Categoria X" style="border-radius: 0;"
+                        id="categoria" name="categoria" oninput="val_categoria()" value="{{categoria}}"
+                        autocomplete="off">
+                      <label for="categoria">
+                        <h5>Categoria</h5><br>
+                      </label>
+                      <div id="mensajeErrorCategoria"></div>
+                    </div>
+                    <!--End Input Categoria-->
+
+                    {{/each}}
+
                   </div>
-                  <!--End Card #2-->
-                  <div class="col-md-1"></div>
                 </div>
+              </div>
+              <!--End Card #1-->
+
+
+              <div class="col-md-5">
+
+                <!--Start Card #2-->
+                <div class="card mt-2" style="border-radius: 0; width: 90%;">
+                  <div class="card-body">
+                    <h5 class="card-title" style="margin-bottom: 4%;">Agregar insumo requirido por el producto
+                    </h5>
+
+                    <!--Input Insumo-->
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" placeholder="Insumo X" list="list_insumos"
+                        style="border-radius: 0;" id="idInsumo_R" name="idInsumo_R" autocomplete="off"
+                        oninput="val_ins()">
+                      <label for="idInsumo_R">
+                        <h5>Insumo</h5>
+                      </label>
+                      <datalist id="list_insumos">
+                        {{#each insumos}}
+                        <option value="{{nombre}}">nombre({{nombre}})
+                          medida({{medida}})
+                          stock({{cantidad}})</option>
+                        {{/each}}
+                      </datalist>
+                      <div id="mensajeErrorInsumo"></div>
+                    </div>
+                    <!--End Input Insumo-->
+
+
+
+                    <!--Input Cantidad-->
+                    <div class="form-floating mb-3">
+                      <input type="number" class="form-control" placeholder="Cantidad X" style="border-radius: 0;"
+                        id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()">
+                      <label for="cantidad_R">
+                        <h5>Cantidad Requerida(1)</h5><br>
+                      </label>
+                      <div id="mensajeErrorCantidad"></div>
+                    </div>
+                    <!--End Input Cantidad-->
+
+
+                    <!--Start Btn Agregar-->
+                    <div class="d-grid gap-2">
+                      <button class="btn btn-warning" style="border-radius: 0;" type="button" id="btnAgregarInsumo"
+                        onclick="agregarInsumo()"><i class="fa-solid fa-circle-plus"></i> Agregar</button>
+                    </div>
+                    <!--End Btn Agregar-->
+                  </div>
+                </div>
+
+                <!--End Card #2-->
+
 
 
                 <!--Start Card #3-->
-                <div class="card mt-2" style="width: 70%; border-radius: 0;">
+                <div class="card mt-5" style="width: 100%; border-radius: 0;">
                   <div class="card-body">
                     <h5 class="card-title" style="margin-bottom: 2%;">Insumos Requeridos</h5>
                     <!--Start Table-->
@@ -273,7 +222,7 @@
 
                           <td class="text-center">
                             <input class="w-4/5" style="text-align: center; width: 100px;  border: 1 black;"
-                              name="cantidad_n_1" value="{{cantidad_n}}" >
+                              name="cantidad_n_1" value="{{cantidad_n}}">
                           </td>
                           <td class="text-center">
                             <a href="#" onclick="eliminarInsumo({{idDetalleProducto}})" style="color: #292b2c;">
@@ -290,39 +239,46 @@
                 <!--End Card #3-->
 
 
-                <div style="margin-top: 1%;">
-                  <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6">
-                      <!--Start Btn R&C-->
-                      <div class="d-grid gap-2">
-                        <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-                        <button type="submit" class="btn btn-success" style="border-radius: 0; margin-bottom: 1px;"
-                          id="btnRegistrar">
-                          Guardar Cambios</button>
-                        <!--End Btn Regiastrar-->
-                        <!--Start Btn Cancelar-->
-                        <a class="btn btn-danger" href="/productos" style="border-radius: 0; margin-top: 1px;"
-                          type="button">Cancelar</a>
-                        <!--End Btn Cancelar-->
-                      </div>
-                      <!--End Btn R&C-->
-                    </div>
-                    <div class="col-md-3"></div>
-                  </div>
-                  <br>
-                </div>
+
+
               </div>
+
+              <div class="col-md-1"></div>
             </div>
-            <!--End Card&Form-->
 
+            <div style="margin-top: 1%;">
+              <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6">
+                  <!--Start Btn R&C-->
+                  <div class="d-grid gap-2">
+                    <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+                    <button type="submit" class="btn btn-success" style="border-radius: 0; margin-bottom: 1px;"
+                      id="btnRegistrar">
+                      Guardar Cambios</button>
+                    <!--End Btn Regiastrar-->
+                    <!--Start Btn Cancelar-->
+                    <a class="btn btn-danger" href="/productos" style="border-radius: 0; margin-top: 1px;"
+                      type="button">Cancelar</a>
+                    <!--End Btn Cancelar-->
+                  </div>
+                  <!--End Btn R&C-->
+                </div>
+                <div class="col-md-3"></div>
+              </div>
+              <br>
+            </div>
           </div>
-        </form>
+        </div>
+        <!--End Card&Form-->
 
-      </center>
+      </div>
+    </form>
 
-      <br>
-    </div>
+  </center>
+
+  <br>
+  </div>
   </div>
 
   <!--End Form&Card-->
@@ -333,42 +289,42 @@
     <option value="{{nombre}}">
       {{/each}}
   </datalist>
-<!--Validacion nav bar-->
-{{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
+  <!--Validacion nav bar-->
+  {{#if asignacion}}
+  <script>
+    var permisosInput = document.querySelector('#permisosInput');
+    var permisosValue = permisosInput.value;
 
-      var palabras = permisosValue.split(',');
+    var palabras = permisosValue.split(',');
 
-      var menuItems = document.querySelectorAll('.nav li');
+    var menuItems = document.querySelectorAll('.nav li');
 
-      menuItems.forEach(function (item) {
-        var items = item.querySelector('p').textContent.trim().toLowerCase();
+    menuItems.forEach(function (item) {
+      var items = item.querySelector('p').textContent.trim().toLowerCase();
 
-        if (palabras.includes(items)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    </script>
-    {{/if}}
+      if (palabras.includes(items)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  </script>
+  {{/if}}
 
   <script>
     function tablaIndex() {
-        // Obtener la referencia de la tabla
-        const tabla = document.getElementById("ReqReq");
+      // Obtener la referencia de la tabla
+      const tabla = document.getElementById("ReqReq");
 
-        // Enumerar las filas
-        let filas = tabla.getElementsByTagName("tr");
-        for (let i = 0; i < filas.length; i++) {
-            let celdaNumero = filas[i].getElementsByTagName("td")[0];
-            celdaNumero.textContent = i + 1;
-        }
+      // Enumerar las filas
+      let filas = tabla.getElementsByTagName("tr");
+      for (let i = 0; i < filas.length; i++) {
+        let celdaNumero = filas[i].getElementsByTagName("td")[0];
+        celdaNumero.textContent = i + 1;
+      }
     }
     tablaIndex()
-</script>
+  </script>
 
 
   <script>
@@ -491,7 +447,7 @@
       };
 
       if (insumo.idInsumo != "" && insumo.cantidad != "") {
-        cont= cont-1;
+        cont = cont - 1;
         document.getElementById('ReqReq').innerHTML += `
         <tr id="${cont}"style="text-align: center; background-color: whitesmoke;">
             <td class="text-center"></td>
@@ -656,6 +612,35 @@
     }
   </script>
   <!--End Validar Envio-->
+
+  <script>
+    // Función para abrir el diálogo de selección de archivos
+    function seleccionarNuevaImagen() {
+      const imagenInput = document.getElementById('imagen');
+      imagenInput.click();
+    }
+
+    // Función para mostrar la nueva imagen seleccionada
+    function mostrarNuevaImagen() {
+      const imagenMostrada = document.getElementById('imagenMostrada');
+      const imagenInput = document.getElementById('imagen');
+      const selectedFile = imagenInput.files[0];
+
+      if (selectedFile) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          imagenMostrada.src = e.target.result;
+        };
+
+        reader.readAsDataURL(selectedFile);
+      }
+    }
+
+    // Escuchar cambios en el input de tipo "file" para mostrar la nueva imagen seleccionada
+    document.getElementById('imagen').addEventListener('change', mostrarNuevaImagen);
+  </script>
+
 
 
   <!--Inicio footer-->

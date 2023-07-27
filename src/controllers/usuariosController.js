@@ -8,14 +8,13 @@ function usuarios_listar(req, res) {
           if (err) {
             return res.status(500).json(err);
           } else {
-
+            var cont = 1;
             for (index in usuarios) {
+              usuarios[index].cont = cont;
               usuarios[index].nombreRol;
-              usuarios[index].estadoRol;
               for (i in roles) {
                 if (usuarios[index].idRoles == roles[i].idRoles) {
                   usuarios[index].nombreRol = roles[i].nombreRoles;
-                  usuarios[index].estadoRol = roles[i].estado;
                 }
               }
 
@@ -24,11 +23,32 @@ function usuarios_listar(req, res) {
               } else {
                 usuarios[index].estado2 = true;
               }
+
+              cont += 1;
             }
 
-            let numU = usuarios.length;
+            conn.query('SELECT * FROM users_info', (err, info) => {
+              if (err) {
+                return res.status(500).json(err);
+              } else {
+                for (index in usuarios) {
+                  usuarios[index].documento;
+                  usuarios[index].nombre;
+                  usuarios[index].telefono;
 
-            res.render('usuarios/listar', { usuarios, numU });
+                  for (i in info) {
+                    if (usuarios[index].idAccess == info[i].idAccess) {
+                      usuarios[index].documento = info[i].documento;
+                      usuarios[index].nombre = info[i].nombre;
+                      usuarios[index].telefono = info[i].telefono;
+
+                    }
+
+                  }
+                }
+                res.render('usuarios/listar', { usuarios });
+              }
+            });
           }
         });
       }
@@ -43,18 +63,25 @@ function usuarios_crear(req, res) {
       if (err) {
         return res.status(500).json(err);
       } else {
-        conn.query(`SELECT * FROM tbl_roles WHERE estado = 'A'`, (err, roles) => {
+        conn.query(`SELECT * FROM tbl_roles WHERE estado = 'Activo'`, (err, roles) => {
           if (err) {
             return res.status(500).json(err);
           } else {
-            //Seleccionar cliente
-            for (i in roles) {
-              if (roles[i].nombreRoles == 'Cliente') {
-                roles[i].seleccionado = true
+            conn.query(`SELECT * FROM users_info`, (err, info) => {
+              if (err) {
+                return res.status(500).json(err);
+              } else {
+                //Seleccionar cliente
+                for (i in roles) {
+                  if (roles[i].nombreRoles == 'Usuario') {
+                    roles[i].seleccionado = true
+                  }
+                }
+                //End seleccionar cliente
+                res.render('usuarios/registrar', { usuarios, roles, info });
+
               }
-            }
-            //End seleccionar cliente
-            res.render('usuarios/registrar', { usuarios, roles });
+            });
           }
         });
       }
@@ -72,25 +99,30 @@ function usuarios_registrar(req, res) {
     passsword: data.password
   };
 
-  //Registrar Usuario (Acceso)
+  //Registrar Usuario 
   req.getConnection((err, conn) => {
-    conn.query("SELECT * FROM tbl_roles", (err, roles) => {
+    conn.query("INSERT INTO users_access SET ?", [RegistroAccess], (err, result) => {
       if (err) {
         return res.status(500).json(err);
       } else {
-        for (index in roles) {
-          if (roles[index].nombreRoles == RegistroAccess.idRoles) {
-            RegistroAccess.idRoles = roles[index].idRoles;
-          }
+        //console.log("Usuario Registrado");
+
+        //Captura idAccess
+        const idAccess = result.insertId;
+
+        let RegistroInfo = {
+          idAccess: idAccess,
+          documento: data.documento,
+          nombre: data.nombre,
+          telefono: data.telefono,
         }
 
-        conn.query("INSERT INTO users_access SET ?", [RegistroAccess], (err, resultA) => {
+        conn.query("INSERT INTO users_info SET ?", [RegistroInfo], (err, result2) => {
           if (err) {
             return res.status(500).json(err);
           } else {
-            console.log("Usuario(Acceso) Registrado");
-            //End Usuario (Acceso) 
-
+            console.log("Usuario Registrado");
+            //End Usuario 
             res.redirect('/usuarios');
           }
         });
@@ -112,24 +144,39 @@ function usuarios_editar(req, res) {
           if (err) {
             return res.status(500).json(err);
           } else {
-            conn.query('SELECT * FROM tbl_roles', [idAccess], (err, roles) => {
+            conn.query('SELECT * FROM users_info WHERE idAccess != ?', [idAccess], (err, infos) => {
               if (err) {
                 return res.status(500).json(err);
               } else {
+                conn.query('SELECT * FROM users_info WHERE idAccess = ?', [idAccess], (err, info) => {
+                  if (err) {
+                    return res.status(500).json(err);
+                  } else {
+                    conn.query('SELECT * FROM tbl_roles WHERE estado = "Activo"', (err, roles) => {
+                      if (err) {
+                        return res.status(500).json(err);
+                      } else {
 
-                for (index in usuario) {
-                  for (i in roles) {
-                    if(usuario[index].idRoles == roles[i].idRoles){
-                      usuario[index].idRoles = roles[i].nombreRoles;
-                    }
+                        for (index in usuario) {
+                          for (i in roles) {
+                            if (usuario[index].idRoles == roles[i].idRoles) {
+                              usuario[index].idRoles = roles[i].nombreRoles;
+                              roles[i].seleccionado = true;
+                            }
+                          }
 
+                          if (usuario[index].estado == 'A') {
+                            usuario[index].estado1 = true;
+                          } else {
+                            usuario[index].estado2 = true;
+                          }
+                        }
+
+                        res.render('usuarios/editar', { usuarios, usuario, infos, info, roles });
+                      }
+                    });
                   }
-                }
-
-
-
-
-                res.render('usuarios/editar', { usuarios, usuario, roles });
+                });
               }
             });
           }
@@ -147,7 +194,14 @@ function usuarios_modificar(req, res) {
   let RegistroAccess = {
     idRoles: data.idRol,
     correo: data.correo,
-    passsword: data.password
+    passsword: data.password,
+    estado: data.estado
+  };
+
+  let RegistroInfo = {
+    nombre: data.nombre,
+    documento: data.documento,
+    telefono: data.telefono
   };
 
   req.getConnection((err, conn) => {
@@ -155,48 +209,30 @@ function usuarios_modificar(req, res) {
       if (err) {
         return res.status(500).json(err);
       } else {
-        for (index in roles) {
-          if (roles[index].nombreRoles == RegistroAccess.idRoles) {
-            RegistroAccess.idRoles = roles[index].idRoles;
-          }
-        }
-
         conn.query('UPDATE users_access SET ? WHERE idAccess = ?', [RegistroAccess, idAccess], (err, Access) => {
           if (err) {
             return res.status(500).json(err);
           } else {
-            console.log('Usuario(Acceso) Actualizado');
-            res.redirect('/usuarios');
+            conn.query('UPDATE users_info SET ? WHERE idAccess = ?', [RegistroInfo, idAccess], (err, Info) => {
+              if (err) {
+                return res.status(500).json(err);
+              } else {
+                console.log('Usuario Actualizado');
+                res.redirect('/usuarios');
+              }
+            })
           }
         });
       }
     });
-
   });
 }
-
-
-/*function usuarios_eliminar(req, res) {
-  const idAccess = req.body.idAccess;
-  req.getConnection((err, conn) => {
-    conn.query('DELETE FROM tbl_users_access WHERE idAccess = ?', [idAccess], (err, access) => {
-      if (err) {
-        return res.status(500).json(err);
-      } else {
-        console.log('Usuario(Acceso) Eliminado');
-        res.redirect('/usuarios');
-      }
-    });
-  })
-}*/
-
-
-
+/*
 //Cambiar Estado Usuario
 function usuarios_estado(req, res) {
   const idAccess = req.params.idAccess;
   req.getConnection((err, conn) => {
-    conn.query(`SELECT * FROM users_access WHERE idAccess= ?`, [idAccess], (err, usuario) => {
+    conn.query(`SELECT * FROM tbl_users_access WHERE idAccess= ?`, [idAccess], (err, usuario) => {
       if (err) {
         return res.status(500).json(err);
       } else {
@@ -205,7 +241,7 @@ function usuarios_estado(req, res) {
             var estado = {
               estado: 'I'
             }
-            conn.query(`Update users_access SET ?  WHERE idAccess= ?`, [estado, idAccess],
+            conn.query(`Update tbl_users_access SET ?  WHERE idAccess= ?`, [estado, idAccess],
               (err) => {
                 if (err) {
                   return res.status(500).json(err);
@@ -217,7 +253,7 @@ function usuarios_estado(req, res) {
             var estado = {
               estado: 'A'
             }
-            conn.query(`Update users_access SET ?  WHERE idAccess= ?`, [estado, idAccess],
+            conn.query(`Update tbl_users_access SET ?  WHERE idAccess= ?`, [estado, idAccess],
               (err) => {
                 if (err) {
                   return res.status(500).json(err);
@@ -232,7 +268,7 @@ function usuarios_estado(req, res) {
     });
   });
 }
-
+*/
 
 module.exports = {
   usuarios_listar: usuarios_listar,
@@ -240,6 +276,5 @@ module.exports = {
   usuarios_registrar: usuarios_registrar,
   usuarios_editar: usuarios_editar,
   usuarios_modificar: usuarios_modificar,
-  /*usuarios_eliminar: usuarios_eliminar,*/
-  usuarios_estado: usuarios_estado
+  /*usuarios_estado: usuarios_estado*/
 }
