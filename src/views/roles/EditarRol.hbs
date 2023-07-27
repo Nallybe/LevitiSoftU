@@ -20,12 +20,14 @@
     }
   </style>
   <!--Barra de navegación-->
-{{> barId}}
-      <!--Barra de navegación-->
-      <center>
-        <div class="container" style="margin-top: 80px;">
+  {{> barId}}
+  <!--Barra de navegación-->
+  <center>
+    <div class="container" style="margin-top: 80px;">
 
-          <!--Start Form&Card-->
+      <!--Start Form&Card-->
+      <div class="row">
+        <div class="col-6">
           <div class="card" style="width: 85%; border-radius: 0;">
             <div class="card-body">
               <h4 class="card-title" style="margin-bottom: 2%;">Editar Rol</h4>
@@ -57,30 +59,24 @@
                 </div>
 
             </div>
-
-            <div style="margin-top: 1%; margin-left:20px;">
-              <div style="margin-top: 1%; width: 35%;">
-                <div class="d-grid gap-2">
-                  <button class="btn btn-success" style="border-radius: 0; margin-bottom: 1px;" type="submit">
-                    Editar rol</button>
-                  <a class="btn btn-danger" href="/roles" style="border-radius: 0; margin-top: 1px;"
+            <div class="row">
+              <div class="col-6">
+                <a class="btn btn-danger" href="/roles" style="border-radius: 2; "
                     type="button">Cancelar</a>
-                </div>
               </div>
-              <br>
+              <div class="col-6">
+                <button class="btn btn-success" style="border-radius: 2; " type="submit">
+                    Editar rol</button>
+              </div>
             </div>
+            <br>
 
           </div>
 
 
           {{/each}}
-
         </div>
-
-        <div class="container">
-          <div class="row" style="text-align:rigth;">
-          </div>
-          <br>
+        <div class="col-6">
           <table class="table" style="text-align:center; width:85%;">
             <thead style="background-color: #282d32; color:white;">
               <tr>
@@ -124,13 +120,16 @@
 
             </tbody>
           </table>
-
         </div>
+      </div>
 
 
-      </center>
     </div>
-  </div>
+
+
+    <br>
+
+
 </body>
 
 

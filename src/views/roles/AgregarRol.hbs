@@ -23,98 +23,100 @@
 
     .custom-table {
       border-collapse: collapse;
-      text-align:center; 
-      width:65%;
+      text-align: center;
+      width: 45%;
+
     }
-    .custom-td{
-      font-size:15px;
+
+    .custom-td {
+      font-size: 13px;
+    }
+
+    .permisos {
+      width: 45%;
+      padding: 0;
     }
   </style>
   <!--Barra de navegación-->
   {{> bar}}
-      <!--Barra de navegación-->
-      <center>
-        <div class="container" style="margin-top: 80px;">
+  <!--Barra de navegación-->
+  <center>
+    <div class="" style="margin-top: 80px;">
 
-          <!--Start Form&Card-->
+      <!--Start Form&Card-->
+      <div class="row">
+        <div class="col-6">
           <div class="card" style="width: 85%; border-radius: 0;">
 
             <h5 class="card-title mt-3" style="margin-bottom: 2%;">Registrar rol</h5>
             <!--Start Card 1-->
             <div class="card-body">
               <form action="" method="post" id="formulario">
-                <div class="row">
-                  <div class="col-6 mx-auto ">
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="nombreRol" style="border-radius: 0;" name="nombreRol"
-                        onclick="validar()">
-                      <div id="mensajeError"></div>
-                      <label for="floatingInput">Nombre</label>
 
-                    </div>
-                  </div>
+                <div class="form-floating mb-3">
+                  <input type="text" class="form-control" id="nombreRol" style="border-radius: 0;" name="nombreRol"
+                    onclick="validar()">
+                  <div id="mensajeError"></div>
+                  <label for="floatingInput">Nombre</label>
+
+
                 </div>
             </div>
 
 
-            <div style="margin-left:20px; ">
-              <div style="width: 35%;"> 
-                <div class="d-grid gap-2">
-                  <button type="submit" class="formulario__btn btn btn-success"
-                    style="border-radius: 0; margin-bottom: 1px; width:100%; font-size:15px;">
-                    Agregar rol</a>
-                </div>
+            <div class="row">
+              <div class="col-6">
                 <a class="btn btn-danger" href="roles"
-                  style="border-radius: 0; margin-top: 1px; width:100%; font-size:15px;" type="button">Cancelar</a>
+                  style="border-radius: 2; margin-top: 1px; width:45%; font-size:13px;" type="button">Cancelar</a>
+
+              </div>
+              <div class="col-6">
+                <button type="submit" class="formulario__btn btn btn-success"
+                  style="border-radius: 2; margin-bottom: 5px; width:45%; font-size:13px;">
+                  Agregar</a>
               </div>
             </div>
-            <br>
           </div>
-          <center>
-            <div class="container">
-              <div class="row" style="text-align:rigth;">
-                <form action="" method="post">
-              </div>
-              <br>
-              <table class="table custom-table" style="width: 85%;">
-                <thead style="background-color: #282d32; color:white;">
-                  <tr>
-                    <th>Permisos</th>
-                    <th>Agregar</th>
-                  </tr>
-                </thead>
-                <tbody>
-
-                  {{#each permisos}}
-                  <tr>
-                    <td class="p-3 text-center" name="nombrePermisos">{{nombrePermisos}}</td>
-                    <td>
-                      <input onchange="obtener(this, {{idPermisos}})" type="checkbox" id="Permiso">
-                    </td>
-                    {{!-- <button onclick="Datos()">check</button> --}}
-                    {{/each}}
-
-                  </tr>
-                </tbody>
-              </table>
-              <input type="hidden" name="idSeleccionado" id="idSeleccionado" value="">
-
-              </form>
-            </div>
-            </form>
-          </center>
+          <br>
         </div>
+        <div class="col-6 permisos">
+          <form action="" method="post">
+            
+            <table class="table custom-table" style="width: 75%;">
+              <thead style="background-color: #282d32; color:white;">
+                <tr>
+                  <th>Permisos</th>
+                  <th>Agregar</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {{#each permisos}}
+                <tr>
+                  <td class="p-3 text-center" name="nombrePermisos">{{nombrePermisos}}</td>
+                  <td>
+                    <input onchange="obtener(this, {{idPermisos}})" type="checkbox" id="Permiso">
+                  </td>
+                  {{!-- <button onclick="Datos()">check</button> --}}
+                  {{/each}}
+
+                </tr>
+              </tbody>
+            </table>
+            <input type="hidden" name="idSeleccionado" id="idSeleccionado" value="">
+
+          </form>
+        </div>
+
+      </div>
+      </form>
     </div>
 
-  </div>
-
-  </div>
-
-  </div>
-  <!--End Form&Card-->
 
 
-  </div>
+    <!--End Form&Card-->
+
+
   </center>
 
 
@@ -122,25 +124,25 @@
 </body>
 
 {{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
+<script>
+  var permisosInput = document.querySelector('#permisosInput');
+  var permisosValue = permisosInput.value;
 
-      var palabras = permisosValue.split(',');
+  var palabras = permisosValue.split(',');
 
-      var menuItems = document.querySelectorAll('.nav li');
+  var menuItems = document.querySelectorAll('.nav li');
 
-      menuItems.forEach(function (item) {
-        var items = item.querySelector('p').textContent.trim().toLowerCase();
+  menuItems.forEach(function (item) {
+    var items = item.querySelector('p').textContent.trim().toLowerCase();
 
-        if (palabras.includes(items)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    </script>
-    {{/if}}
+    if (palabras.includes(items)) {
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+</script>
+{{/if}}
 
 <script>
   let formulario = document.querySelector('#formulario');
