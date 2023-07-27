@@ -134,8 +134,8 @@
                             <h5>Proveedor</h5>
                           </label>
                           <datalist id="Proveedores_Registrados">
-                            {{#each compras}}
-                            <option value="{{proveedor}}">
+                            {{#each proveedores}}
+                            <option value="{{this}}">
                               {{/each}}
                           </datalist>
                           <div id="mensajeErrorProveedor"></div>

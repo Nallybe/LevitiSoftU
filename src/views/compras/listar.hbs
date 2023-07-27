@@ -5,7 +5,7 @@
 
 <style>
     .fa-eye:hover {
-        color: aqua;
+        color: #fae603;
     }
 
     .fa-ban:hover {
@@ -244,7 +244,7 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <div class="mb-3 row">
+                                            <div class="mb-3 row" hidden>
                                                 <label for="idCompra" class="col-sm-2 col-form-label">IdCompra</label>
                                                 <div class="col-sm-10">
                                                     <input type="number" class="form-control" id="idCompra"
@@ -259,20 +259,7 @@
                                                         id="motivoAnulacion" required></textarea>
                                                 </div>
                                             </div>
-                                            <input type="text" class="hidden" name="tipoAnulacion" id="tipoAnulacion" value="General">
-
-                                            <!--<div class="mb-3 row">
-                                                <label for="tipoAnulacion"
-                                                    class="col-sm-3 col-form-label">Tipo_Anulación</label>
-                                                <div class="col-sm-9">
-                                                    <select class="form-control" name="tipoAnulacion" id="tipoAnulacion"
-                                                        required>
-                                                        <option value="General" selected>General</option>
-                                                        <option value="Parcial" disabled>Parcial (sólo cierta
-                                                            cantidad de los insumos)</option>
-                                                    </select>
-                                                </div>
-                                            </div>-->
+                                            <input type="hidden" name="tipoAnulacion" id="tipoAnulacion" value="General">
                                         </div>
 
                                         <div class="modal-footer">

@@ -5,7 +5,7 @@
 
 <style>
     .fa-eye:hover {
-        color: aqua;
+        color: #fae603;
     }
 
     .fa-pen:hover {
@@ -73,10 +73,10 @@
                     <th class="w-1/4 ...">#</th>
                     <th class="w-1/4 ...">Imagen</th>
                     <th class="w-1/4 ...">Nombre</th>
-                    <th class="w-2/4 ...">Descripción</th>
-                    <th class="w-1/4 ...">Precio</th>
-                    <th class="w-1/4 ...">Stock</th>
+                    <th class="w-1/4 ...">Descripción</th>
                     <th class="w-1/4 ...">Categoría</th>
+                    <th class="w-1/4 ...">Stock</th>
+                    <th class="w-1/4 ...">Precio</th>
                     <th class="w-1/4 ...">Estado</th>
                     <th class="w-1/4 ...">Funciones</th>
                 </tr>
@@ -89,9 +89,8 @@
                         <center>
                             <!--<img src="/assets/img/Productos/{{imagen}}" alt="Imagen del producto" width="120px" height="80px"> -->
                             <a href="" type="button" data-bs-toggle="modal" data-bs-target="#m{{idProducto}}"> <img
-                                    src="https://w7.pngwing.com/pngs/388/487/png-transparent-computer-icons-graphy-img-landscape-graphy-icon-miscellaneous-angle-text.png"
-                                    alt="Imagen del producto" width="40px" height="30px"> </a>
-
+                                    src="/assets/img/Productos/{{imagen}}" alt="Imagen del producto" width="40px"
+                                    height="40px"> </a>
 
                             <!-- Modal -->
                             <div class="modal fade" id="m{{idProducto}}" tabindex="-1"
@@ -104,39 +103,38 @@
                                                 aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <img src="https://w7.pngwing.com/pngs/388/487/png-transparent-computer-icons-graphy-img-landscape-graphy-icon-miscellaneous-angle-text.png"
-                                                alt="Imagen del producto" width="100%" height="100%">
+                                            <img src="/assets/img/Productos/{{imagen}}" alt="Imagen del producto"
+                                                width="100%" height="100%">
 
-                                        </div>
-                                        <div class="modal-footer">
-                                            <!--<button type="button" class="btn btn-secondary"
-                                                data-bs-dismiss="modal">Close</button>
-                                            <button type="button" class="btn btn-primary">Save changes</button>
-                                        -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-
                         </center>
                     </td>
                     <td class="p-3 text-center">{{nombre}}</td>
                     <td class="p-3 text-center">{{descripcion}}</td>
-                    <td class="p-3 text-center">{{precio}}</td>
+                    <td class="p-3 text-center">{{categoria}}</td>
                     <td class="p-3 text-center">{{stock}}</td>
-                    <td class="p-3 text-center">...</td>
+                    <td class="p-3 text-center">{{precio}}</td>
                     {{#if estado1}}
                     <td class="p-3 text-center">
-                        <input class="check" type="checkbox" role="switch" checked
-                            onchange="location.href='productos_estado/{{idProducto}}'">
+
+                        <button class="btn btn-primary" style="border-radius:20px;" disabled>Activo</button>
+
+                       <!-- <input class="check" type="checkbox" role="switch" checked
+                            onchange="location.href='productos_estado/{{idProducto}}'">-->
                     </td>
                     <!--Activo-->
                     {{/if}}
                     {{#if estado2}}
                     <td class="p-3 text-center">
-                        <input class="check" type="checkbox" role="switch"
-                            onchange="location.href='productos_estado/{{idProducto}}'">
+                        <button class="btn btn-secondary" style="border-radius:20px;" disabled>Inactivo</button>
+
+
+
+                       <!-- <input class="check" type="checkbox" role="switch"
+                            onchange="location.href='productos_estado/{{idProducto}}'">-->
                     </td>
                     <!--Inactivo-->
                     {{/if}}
@@ -158,36 +156,7 @@
             </tbody>
         </table>
     </div>
-    </div>
-    </div>
 </center>
-
-
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-    <!-- Position it: -->
-    <!-- - `.toast-container` for spacing between toasts -->
-    <!-- - `top-0` & `end-0` to position the toasts in the upper right corner -->
-    <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
-    <div class="toast-container position-fixed bottom-0 end-0 right-0 p-3">
-        <div id="myToast" class="toast align-items-center border-0" role="alert" aria-live="assertive"
-            aria-atomic="true" data-delay="1000">
-            <!--Tiempo de espera--><!--data-bs-autohide="false" Dejar el toast estatico-->
-            <div class="d-flex">
-                <div class="toast-body">
-                    <strong class="me-auto"> Productos<br></strong>
-                    Hay un total de <b>{{numP}} productos registrados </b>
-                    <!--<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
-
-                    <!--<div class="col-md-2">
-              <button type="button" class="btn btn-secondary mr-0" data-bs-dismiss="toast" aria-label="Close"
-                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                <i class="fa-solid fa-x"></i></button>
-            </div>-->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 </body>
 <!--Validacion nav bar-->
@@ -345,9 +314,10 @@
                     sortDescending: ": active para ordenar la columna en orden descendente"
                 }
             },
-            lengthMenu: [[5], [5]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
+            lengthMenu: [[4], [4]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
             searching: false, //Ocultar buscador
-            lengthChange: false//Ocultar filtro de cantidad de filas
+            lengthChange: false,//Ocultar filtro de cantidad de filas
+            ordering: false //Ocultar filtro de ordenación por columnas
         });
     });
 </script>
