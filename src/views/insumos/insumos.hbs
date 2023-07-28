@@ -18,9 +18,18 @@
         margin-right: 10px;
     }
 
-    .fila-roja {
+     .low-stock {
         background-color: red;
+    }
+    
+    .stock-btn {
+        border: none;
+        padding: 5px 10px;
         color: white;
+        border-radius: 5px;
+        cursor: pointer;
+        font-weight: bold;
+        background-color: red;
     }
 </style>
 
@@ -76,7 +85,7 @@
                     <td class="py-3 px-6 text-center">{{idInsumo}}</td>
                     <td class="p-3 text-center">{{nombre}}</td>
                     <td class="p-3 text-center">{{medida}}</td>
-                    <td class="p-3 text-center">{{stock}}</td>
+                    <td class="p-3 text-center stock-cell" data-stock="{{stock}}">{{stock}}</td>
                     <td class="p-3 text-center">{{estado}}</td>
                     <td>
                         <a href="EditarInsumo/{{idInsumo}}" style="color: #292b2c; " class="boton-insumo">
@@ -92,24 +101,18 @@
                 {{/each}}
 
                 <script>
-                    // Obtener todas las filas de la tabla
-                    var rows = document.querySelectorAll('tr');
-
-                    // Iterar sobre cada fila (excluyendo la primera fila de encabezados)
-                    for (var i = 1; i < rows.length; i++) {
-                        var stockCell = rows[i].querySelector('.p-3.text-center:nth-child(4)'); // Columna de stock (índice 4)
-
-                        // Verificar si el stock es igual o menor a 5
-                        var stock = parseInt(stockCell.textContent);
-                        if (stock <= 5) {
-                            // Agregar la clase "fila-roja" a la fila actual (excluyendo la columna "Funciones")
-                            //rows[i].classList.add('fila-roja');
-                            // Agregar el estilo al elemento con la clase "fa-trash" dentro de la fila
-                            //var trashIcon = rows[i].querySelector('.fa-trash');
-                            //trashIcon.style.color = 'black';
-                        }
-                    }
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const stockCells = document.querySelectorAll(".stock-cell");
+                        stockCells.forEach(function (cell) {
+                            const stockValue = parseInt(cell.dataset.stock);
+                            if (stockValue <= 5) {
+                                cell.classList.add("low-stock");
+                                cell.innerHTML = `<button class="stock-btn">${stockValue}</button>`;
+                            }
+                        });
+                    });
                 </script>
+
             </tbody>
         </table>
     </div>
