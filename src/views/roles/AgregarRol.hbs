@@ -36,6 +36,8 @@
       width: 45%;
       padding: 0;
     }
+
+    
   </style>
   <!--Barra de navegación-->
   {{> bar}}
@@ -48,19 +50,17 @@
         <div class="col-6">
           <div class="card" style="width: 85%; border-radius: 0;">
 
-            <h5 class="card-title mt-3" style="margin-bottom: 2%;">Registrar rol</h5>
+            <h5 class="card-title mt-1" style="margin-bottom: 2%;">Registrar rol</h5>
             <!--Start Card 1-->
             <div class="card-body">
               <form action="" method="post" id="formulario">
-
-                <div class="form-floating mb-3">
+                <div class="form-group">
+                  <label for="nombreRol" style="float: left; padding-right: 10px;">Nombre</label>
                   <input type="text" class="form-control" id="nombreRol" style="border-radius: 0;" name="nombreRol"
-                    onclick="validar()">
+                    onclick="validar()" placeholder="Nombre">
                   <div id="mensajeError"></div>
-                  <label for="floatingInput">Nombre</label>
-
-
                 </div>
+
             </div>
 
 
@@ -81,7 +81,7 @@
         </div>
         <div class="col-6 permisos">
           <form action="" method="post">
-            
+
             <table class="table custom-table" style="width: 75%;">
               <thead style="background-color: #282d32; color:white;">
                 <tr>

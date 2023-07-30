@@ -1,6 +1,7 @@
 function listar(req, res) {
     req.getConnection((err, conn) => {
-        conn.query('SELECT ui.idInfo, ui.idAccess, ui.documento, ui.nombre, ui.telefono, COUNT(v.idVentas) AS numero_ventas, COUNT(r.idReparacion) AS numero_reparaciones, ui.estado FROM users_info ui LEFT JOIN tbl_ventas v ON ui.idInfo = v.idInfo LEFT JOIN tbl_reparaciones r ON ui.idInfo = r.idInfo GROUP BY ui.idInfo, ui.idAccess, ui.nombre, ui.telefono, ui.estado;', (err, clientes) => {
+        conn.query(`SELECT ui.idInfo, ua.correo, ui.documento, ui.nombre, ui.telefono, ui.estado, COUNT(DISTINCT uv.idVentas) AS numero_ventas, COUNT(DISTINCT ur.idReparacion) AS numero_reparaciones FROM users_access ua JOIN users_info ui ON ua.idAccess = ui.idAccess LEFT JOIN tbl_ventas uv ON ui.idVentas = uv.idVentas LEFT JOIN tbl_reparaciones ur ON ui.idReparaciones = ur.idReparacion JOIN tbl_roles r ON ua.idRoles = r.idRoles WHERE r.nombreRoles = 'Cliente' GROUP BY ui.idInfo, ua.correo, ui.documento, ui.nombre, ui.telefono;
+    `, (err, clientes) => {
             if (err) {
                 res.json(err);
             }
