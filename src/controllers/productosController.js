@@ -139,7 +139,7 @@ function productos_detallar(req, res) {
 //Crear (Función para redireccionar al hbs donde se encuentra el formulario)
 function productos_crear(req, res) {
     req.getConnection((err, conn) => {
-        conn.query("SELECT * FROM tbl_insumos WHERE estado ='Disponible'", (err, insumos) => {
+        conn.query("SELECT * FROM tbl_insumos WHERE estado ='A'", (err, insumos) => {
             if (err) {
                 return res.status(500).json(err);
             } else {

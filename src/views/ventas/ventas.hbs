@@ -48,7 +48,7 @@
           <table class="table" style="text-align:center;" id="tabla-ventas">
             <thead style="background-color: #282d32; color:white;">
               <tr>
-                <th>Id</th>
+                <th>#</th>
                 <th>Nombre Cliente</th>
                 <th>Producto</th>
                 <th>Total</th>
@@ -60,7 +60,7 @@
             <tbody>
               {{#each ventas}}
               <tr>
-                <td class="py-3 px-6 text-center">{{idVentas}}</td>
+                <td class="py-3 px-6 text-center">{{cont}}</td>
                 <td class="p-3 text-center">{{nombre}}</td>
                 <td> <a href="ListarProduc/{{idVentas}}" style="color: #292b2c;"><i type="button"
                       class="fa-sharp fa-solid fa-eye"></i></a></td>
