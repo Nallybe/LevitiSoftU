@@ -27,51 +27,52 @@
             flex-wrap: wrap;
             justify-content: center;
         }
+
         .fa-arrow-left:hover {
-        color: #fae603;
-    }
+            color: #fae603;
+        }
     </style>
     <!--Barra de navegación-->
-{{>barId}}
-            <!--Barra de navegación-->
-            <br><br><br>
-            <div class="container">
-                <a href="/ventas" style="color:black; text-decoration:none;"><i class="fa fa-arrow-left fa-2x"></i></a>
-            </div>
-            <center>
-                <div class="row" style="width:800px;">
-                    {{#each productos}}
-                    <div class="card">
-                        <h3>{{nombre}}</h3>
-                        <img src="" alt="">
-                        <p>Precio: {{precioUnd}}</p>
-                        <p>Unidades: {{Unidad}}</p>
-                    </div>
-                    {{/each}}
+    {{>barId}}
+    <!--Barra de navegación-->
+    <br><br><br>
+    <div class="container">
+        <a href="/ventas" style="color:black; text-decoration:none;"><i class="fa fa-arrow-left fa-2x"></i></a>
+
+        <center>
+            <div class="row" >
+                {{#each productos}}
+                <div class="card" style="height: 50%;">
+                    <h3>{{nombre}}</h3>
+                    <img src="/assets/img/Productos/{{imagen}}" alt="">
+                    <p>Precio: {{precio}}</p>
+                    <p>Unidades: {{Unidad}}</p>
                 </div>
-            </center>
-            <br>
+                {{/each}}
+            </div>
+    </div>
+    </center>
 </body>
 {{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
+<script>
+    var permisosInput = document.querySelector('#permisosInput');
+    var permisosValue = permisosInput.value;
 
-      var palabras = permisosValue.split(',');
+    var palabras = permisosValue.split(',');
 
-      var menuItems = document.querySelectorAll('.nav li');
+    var menuItems = document.querySelectorAll('.nav li');
 
-      menuItems.forEach(function (item) {
+    menuItems.forEach(function (item) {
         var items = item.querySelector('p').textContent.trim().toLowerCase();
 
         if (palabras.includes(items)) {
-          item.style.display = 'block';
+            item.style.display = 'block';
         } else {
-          item.style.display = 'none';
+            item.style.display = 'none';
         }
-      });
-    </script>
-    {{/if}}
+    });
+</script>
+{{/if}}
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!--   Core JS Files   -->

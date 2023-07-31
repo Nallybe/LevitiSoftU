@@ -1,6 +1,9 @@
 function listar(req, res) {
     req.getConnection((err, conn) => {
-        conn.query('SELECT tbl_ventas.*, users_info.nombre FROM tbl_ventas JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo;', (err, ventas) => {
+        conn.query(`SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont
+        FROM tbl_ventas
+        JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo;
+        `, (err, ventas) => {
             if (err) {
                 res.json(err);
             }
@@ -15,7 +18,8 @@ function listar(req, res) {
                     nombre: venta.nombre,
                     total: venta.total,
                     fecha: fechaFormateada,
-                    estado: venta.estado
+                    estado: venta.estado,
+                    cont: venta.cont
                 };
             });
             res.render('ventas/ventas', { ventas: ventasFormateadas });
@@ -34,24 +38,46 @@ function crear(req, res) {
             `, (err, nombre) => {
                 if (err) {
                     res.json(err);
-                } conn.query(`SELECT idProducto, imagen, nombre, precio, stock FROM tbl_productos`, (err, productos) =>{
-                    if (err){
+                } conn.query(`SELECT idProducto, imagen, nombre, precio, stock FROM tbl_productos`, (err, productos) => {
+                    if (err) {
                         res.json(err);
-                    }res.render("ventas/AgregarVenta", { ventas, nombre, productos });
+                    } res.render("ventas/AgregarVenta", { ventas, nombre, productos });
                 })
-                
+
             })
         })
     });
 }
 
+
 function registrar(req, res) {
     const data = req.body;
-    console.log(data) 
-    
-    /*req.getConnection((err, conn) => {
+    console.log(data);
+    let idProducto = data.idProducto;
+    let unidadesArray = data.cantidadProducto;
+
+    // Verificar si idProducto es una cadena y convertirlo en un array si es necesario
+    if (typeof idProducto === 'string') {
+        idProducto = idProducto.split(',');
+    } else if (!Array.isArray(idProducto)) {
+        idProducto = [idProducto];
+    }
+
+    // Verificar si unidadesArray es una cadena y convertirlo en un array si es necesario
+    if (typeof unidadesArray === 'string') {
+        unidadesArray = unidadesArray.split(',');
+    } else if (!Array.isArray(unidadesArray)) {
+        unidadesArray = [unidadesArray];
+    }
+
+    req.getConnection((err, conn) => {
+        if (err) {
+            console.error('Error al obtener la conexión:', err);
+            res.status(500).json({ error: 'Error al obtener la conexión' });
+            return;
+        }
+
         conn.query('SELECT idInfo FROM users_info WHERE nombre = ?', [data.nombre], (error, results) => {
-            console.log(data.nombre)
             if (error) {
                 console.error('Error al obtener el idInfo:', error);
                 res.status(500).json({ error: 'Error al obtener el idInfo' });
@@ -60,55 +86,51 @@ function registrar(req, res) {
                 res.status(404).json({ error: 'No se encontró el nombre en la tabla users_info' });
             } else {
                 const idInfo = results[0].idInfo;
-                //console.log(results)
+
                 const RegistroVenta = {
                     idInfo: idInfo,
                     total: data.total,
                     fecha: data.fecha,
                     estado: data.estado,
                 };
-                //console.log(RegistroVenta)
-                // Insertar los datos en la tabla tbl_ventas
+
                 conn.query('INSERT INTO tbl_ventas SET ?', [RegistroVenta], (error, result) => {
                     if (error) {
                         console.error('Error al insertar los datos en tbl_ventas:', error);
                         res.status(500).json({ error: 'Error al insertar los datos en tbl_ventas' });
                     } else {
                         const idVentas = result.insertId;
-                        const idProductos = data.IdProductos.split(','); // Convierte la cadena de entrada en un array de valores
-                        const Unidad = data.cantidadProductos;
-                        const unidadesArray = Unidad.split(',');
-                        for (let i = 0; i < idProductos.length; i++) {
+
+                        for (let i = 0; i < idProducto.length; i++) {
                             const RegistroDetVent = {
                                 idVentas: idVentas,
-                                idProductos: idProductos[i],
+                                idProducto: idProducto[i],
                                 Unidad: unidadesArray[i]
                             };
-                            //console.log(RegistroDetVent)
-                            req.getConnection((err, conn) => {
-
-                                conn.query(
-                                    "INSERT INTO tbl_detalleventas SET ?",
-                                    [RegistroDetVent],
-                                    (error, result) => {
-                                        if (error) {
-                                            console.log(error);
-                                            return;
-                                        } else {
-                                            console.log("Detalle venta guardada");
-                                        }
-
+                            console.log("Registro de venta: ", RegistroDetVent)
+                            conn.query(
+                                "INSERT INTO tbl_detalleventas SET ?",
+                                [RegistroDetVent],
+                                (error, result) => {
+                                    if (error) {
+                                        console.error('Error al insertar los datos en tbl_detalleventas:', error);
+                                    } else {
+                                        console.log("Detalle venta guardada");
                                     }
-                                );
-                            });
+                                }
+                            );
                         }
+
                         res.redirect('/ventas');
                     }
                 });
             }
         });
-    });*/
+    });
 }
+
+
+
 
 function agregarProducto(req, res) {
     req.getConnection((err, conn) => {
@@ -124,13 +146,14 @@ function agregarProducto(req, res) {
 }
 function listarProducto(req, res) {
     const idVentas = req.params.idVentas;
+    console.log("IdVentas: ",idVentas)
     const baseUrl = 'http://localhost:8181'
     req.getConnection((err, conn) => {
-        conn.query('SELECT p.nombre, p.precioUnd, dv.Unidad FROM tbl_productos p INNER JOIN tbl_detalleventas dv ON p.idProductos = dv.idProductos WHERE dv.idVentas = ?', [idVentas], (err, productos) => {
+        conn.query('SELECT p.imagen, p.nombre, p.precio, dv.Unidad FROM tbl_productos p INNER JOIN tbl_detalleventas dv ON p.idProducto = dv.idProducto WHERE dv.idVentas = ?', [idVentas], (err, productos) => {
             if (err) {
                 res.json(err);
             }
-            //console.log(productos)
+            console.log(productos)
             res.render('ventas/ListarProduc', { productos, baseUrl });
         })
     })

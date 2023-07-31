@@ -1,12 +1,12 @@
 <div class="wrapper" style="background-color: #E3E3E3; background-color: #ebecf1;">
   <div class="sidebar">
-    
+
     <div class="logo">
-      <a href="" class="simple-text" style="color:white;">
-        <i class="fa-solid fa-circle-user fa-2xl" style="width: 45px;"></i>Levitico
+      <a href="" class="simple-text pl-2" style="color:white;">
+        Levitico
       </a>
     </div>
-    
+
 
     <div class="sidebar-wrapper collapse show">
       <ul class="nav">
@@ -90,8 +90,8 @@
   </div>
 
   <div class="main-panel" id="main-panel">
-        <nav class="navbar navbar-expand navbar-absolute">
-      <div class="container-fluid pr-5">
+    <nav class="navbar navbar-expand navbar-absolute">
+      <div class="container-fluid">
         <div class="navbar-wrapper">
           <div class="navbar-toggle">
             <button id="navbar-toggle" type="button" class="navbar-toggler">
@@ -100,7 +100,7 @@
               <span class="navbar-toggler-bar bar3"></span>
             </button>
           </div>
-          <a class="navbar-brand" href="#" style="margin-left: 10px;"></a>
+          <a class="navbar-brand" href="#"></a>
         </div>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation"
           aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,25 +109,18 @@
           <span class="navbar-toggler-bar navbar-kebab"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end pr-5" id="navigation">
-          {{!-- <a data-toggle="dropdown" aria-expanded="false" class="nav-link" href="/logout">
-            Juan Fernando Patiño Hernandez
-            <i class="fa fa-right-from-bracket" style="margin-right:20px;"></i>
-            <p>
-              <span class="d-lg-none d-md-block">Salir</span>
-            </p>
-          </a> --}}
 
-          <div class="btn-group " style="margin-right: 25px;">
-            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+          <div class="btn-group">
+            <a class="dropdown-toggle pr-5" data-toggle="dropdown" aria-expanded="false">
               {{name}}
               </button>
             </a>
             <div class="dropdown-menu">
               <div class="row pl-2">
-                <div class="col-md-3 d-flex justify-content-center aling-items-center">
-                  <img src="assets/img/profile.png" class="img-fluid" alt="...">
+                <div class="col-md-4 ">
+                  <img src="/assets/img/usuario.png" class="img-fluid" alt="...">
                 </div>
-                <div class="col-md-9">
+                <div class="col-md-8">
                   <small><strong>{{name}}</strong></small>
                 </div>
               </div>
@@ -136,10 +129,11 @@
             </div>
           </div>
 
+
+
         </div>
       </div>
     </nav>
-
 
     <style>
       #sidebar-wrapper {
@@ -210,10 +204,10 @@
 
               // Quitar el estilo de color blanco del texto
               text.style.color = ''; // Establece el color del texto en su valor predeterminado (puede ser el color original definido por CSS)
-              
+
             } else {
               item.classList.remove('active'); // Elimina la clase 'active' si no coincide con la URL actual
-              
+
             }
           });
 
