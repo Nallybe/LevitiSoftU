@@ -47,37 +47,37 @@
               <!--Start Card 1-->
               <form action="" method="post" id="formulario">
                 <div class="row">
-                  <div class="col-6">
-                    <div class="mb-3">
-                      <div class="form-floating mb-3">
+                  <div class="col-3">
+                      <div class="form-group">
+                        <label for="floatingInput" style="float: left; padding-right: 10px;">Nombre</label>
                         <input type="text" class="form-control" id="nombreInsumo" style="border-radius: 0;"
                           name="nombreInsumo">
                         <div id="mensajeErrorNombre"></div>
-                        <label for="floatingInput">Nombre</label>
+                        
                       </div>
-                    </div>
                   </div>
-                  <div class="col-6">
-                    <div class="form-floating mb-3">
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="floatingInput" style="float: left; padding-right: 10px;">Stock</label>
                       <input type="number" class="form-control" id="stockInsumo" style="border-radius: 0;"
                         name="stockInsumo">
                       <div id="mensajeErrorStock"></div>
-                      <label for="floatingInput">Stock</label>
+                      
                     </div>
                   </div>
                 </div>
                 <div class="row">
-                  <div class="col-6">
-                    <div class="form-floating mb-3">
+                  <div class="col-3">
+                    <div class="form-group">
+                      <label for="floatingInput" style="float: left; padding-right: 10px;">Medida</label>
                       <select class="form-control" id="medidaInsumo" style="border-radius: 0;" required
                         name="medidaInsumo">
                         <option value="Metro">Metro</option>
                         <option value="Unidad">Unidad</option>
                       </select>
-                      <label for="floatingInput">Medida</label>
+                      
                     </div>
                   </div>
-
                 </div>
             </div>
             <div style="margin-top: 1%; margin-left:20px">
@@ -96,19 +96,9 @@
 
         </form>
         <br>
-    </div>
-  </div>
-
-  </div>
-
-  </div>
-
-  </div>
-  </div>
   <!--End Form&Card-->
 
 
-  </div>
   </center>
 
   {{#if asignacion}}
@@ -179,9 +169,6 @@
   <!--Fin footer-->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="assets/js/ValidacionInsumo.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
-    crossorigin="anonymous"></script>
   <!--   Core JS Files   -->
   <script src="assets/js/core/jquery.min.js"></script>
   <script src="assets/js/core/popper.min.js"></script>

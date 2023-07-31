@@ -1,6 +1,6 @@
 function listar(req, res) {
   req.getConnection((err, conn) => {
-    conn.query('SELECT * FROM tbl_insumos', (err, insumos) => {
+    conn.query('SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont,tbl_insumos. * FROM tbl_insumos;', (err, insumos) => {
       if (err) {
         res.json(err);
       }
@@ -90,7 +90,7 @@ function actualizar(req, res) {
 
 function eliminar(req, res) {
   const idInsumo = req.body.idInsumo;
-
+  console.log("Eliminar: ",idInsumo)
   req.getConnection((err, conn) => {
     conn.query('DELETE FROM tbl_insumos WHERE idInsumo = ?', [idInsumo], (err, rows) => {
       if (err) {

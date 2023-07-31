@@ -22,16 +22,16 @@
         <div class="container">
           <div class="row">
             <div class="col-md-4">
-              <div class="row" style="margin-left: 8px;">
-                <div class="col-md-8 col-9">
+              <div class="row" >
+                <div class="col-9">
                   <input id="buscar-input"
-                    style="height: 100%; border-radius: 0; margin-top: 4px; width: 100%; margin-right: 0;"
-                    class="form-control me-2" type="search" placeholder="Buscar venta" aria-label="Search"
+                    style=" border-radius: 0;"
+                    class="form-control " type="search" placeholder="Buscar venta" aria-label="Search"
                     oninput="filtrarTabla()">
                 </div>
-                <div class="col-md-2 col-3 pt-2">
+                <div class="col-3 ">
                   <button class="btn btn-outline-success" type="submit"
-                    style="height: 100%; border-radius: 0; width: 100%; padding: 0;" onclick="filtrarTabla()">
+                    style=" border-radius: 0;" onclick="filtrarTabla()">
                     <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
                   </button>
                 </div>
@@ -117,8 +117,6 @@
     }
   }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-  integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <!--   Core JS Files   -->
 <script src="assets/js/core/jquery.min.js"></script>
 <script src="assets/js/core/popper.min.js"></script>
@@ -140,4 +138,47 @@
     demo.initDashboardPageCharts();
 
   });
+</script>
+<!--Paginacion-->
+<!-- JQUERY -->
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+    crossorigin="anonymous">
+    </script>
+<!-- DATATABLES -->
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+</script>
+<!-- BOOTSTRAP -->
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
+</script>
+<script>
+    $(document).ready(function () {
+        $('#tabla-ventas').DataTable({ //se debe seleccionar el id de la tabla $('#id..
+            language: { //Como el original esta en inglés, aqui se traducen los textos
+                processing: "Tratamiento en curso...",
+                search: "Buscar&nbsp;:",
+                lengthMenu: "Agrupar de _MENU_",
+                info: "_START_ al _END_ de _TOTAL_",
+                infoEmpty: "No existen datos.",
+                infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                infoPostFix: "",
+                loadingRecords: "Cargando...",
+                zeroRecords: "No se encontraron datos con tu busqueda",
+                emptyTable: "No hay datos disponibles en la tabla.",
+                paginate: {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                aria: {
+                    sortAscending: ": active para ordenar la columna en orden ascendente",
+                    sortDescending: ": active para ordenar la columna en orden descendente"
+                }
+            },
+            lengthMenu: [[5], [5]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
+            searching: false, //Ocultar buscador
+            lengthChange: false,//Ocultar filtro de cantidad de filas
+            ordering: false //Ocultar filtro de ordenación por columnas
+        });
+    });
 </script>

@@ -30,10 +30,16 @@ function crear(req, res) {
         conn.query("SELECT * FROM tbl_ventas", (err, ventas) => {
             if (err) {
                 res.json(err);
-            } conn.query("SELECT nombre FROM users_info", (err, nombre) => {
+            } conn.query(`SELECT ui.nombre FROM users_info ui JOIN users_access ua ON ui.idAccess = ua.idAccess JOIN tbl_roles tr ON ua.idRoles = tr.idRoles WHERE tr.nombreRoles = 'cliente' AND tr.estado = 'activo';
+            `, (err, nombre) => {
                 if (err) {
                     res.json(err);
-                } res.render("ventas/AgregarVenta", { ventas, nombre });
+                } conn.query(`SELECT idProducto, imagen, nombre, precio, stock FROM tbl_productos`, (err, productos) =>{
+                    if (err){
+                        res.json(err);
+                    }res.render("ventas/AgregarVenta", { ventas, nombre, productos });
+                })
+                
             })
         })
     });
@@ -42,8 +48,8 @@ function crear(req, res) {
 function registrar(req, res) {
     const data = req.body;
     console.log(data) 
-
-    req.getConnection((err, conn) => {
+    
+    /*req.getConnection((err, conn) => {
         conn.query('SELECT idInfo FROM users_info WHERE nombre = ?', [data.nombre], (error, results) => {
             console.log(data.nombre)
             if (error) {
@@ -101,9 +107,7 @@ function registrar(req, res) {
                 });
             }
         });
-    });
-    // Obtener el idInfo correspondiente al nombre en la tabla users_info
-
+    });*/
 }
 
 function agregarProducto(req, res) {

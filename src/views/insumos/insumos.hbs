@@ -18,10 +18,6 @@
         margin-right: 10px;
     }
 
-     .low-stock {
-        background-color: red;
-    }
-    
     .stock-btn {
         border: none;
         padding: 5px 10px;
@@ -31,6 +27,45 @@
         font-weight: bold;
         background-color: red;
     }
+
+    #mensajeErrorNombre {
+        display: none;
+        color: red;
+        margin-top: 5px;
+    }
+
+    #mensajeErrorNombre .icono {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+        width: 15px;
+        height: 15px;
+    }
+
+    #mensajeErrorStock {
+        display: none;
+        color: red;
+        margin-top: 5px;
+    }
+
+    #mensajeErrorStock .icono {
+        display: inline-block;
+        vertical-align: middle;
+        margin-right: 5px;
+        width: 15px;
+        height: 15px;
+    }
+
+    .boton-eliminar {
+    border: none;
+    background: none;
+    /* Establecer el cursor como un puntero */
+    cursor: pointer;
+    /* Ajustar el relleno y los márgenes según sea necesario */
+    padding: 0;
+    margin: 0;
+}
+
 </style>
 
 <!--Barra de navegación-->
@@ -43,16 +78,14 @@
 
         <div class="row">
             <div class="col-md-4">
-                <div class="row" style="margin-left: 8px;">
-                    <div class="col-md-8 col-9">
-                        <input id="buscar-input"
-                            style="height: 100%; border-radius: 0; margin-top: 4px; width: 100%; margin-right: 0;"
-                            class="form-control me-2" type="search" placeholder="Buscar Insumo" aria-label="Search"
-                            oninput="filtrarTabla()">
+                <div class="row">
+                    <div class="col-9">
+                        <input id="buscar-input" style="border-radius: 0; " class="form-control " type="search"
+                            placeholder="Buscar Insumo" aria-label="Search" oninput="filtrarTabla()">
                     </div>
-                    <div class="col-md-2 col-3 pt-2">
-                        <button class="btn btn-outline-success" type="submit"
-                            style="height: 100%; border-radius: 0; width: 100%; padding: 0;" onclick="filtrarTabla()">
+                    <div class="col-3 ">
+                        <button class="btn btn-outline-success" type="submit" style=" border-radius: 0; "
+                            onclick="filtrarTabla()">
                             <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
                         </button>
                     </div>
@@ -60,9 +93,78 @@
             </div>
             <div class="col-md-5"></div>
             <div class="col-md-3">
-                <a href="AgregarInsumo" class="btn btn-success" style="border-radius: 2;"><i
+                {{!-- <a href="AgregarInsumo" class="btn btn-success" style="border-radius: 2;"><i
                         class="fa-solid fa-circle-plus"></i>
-                    Agregar Insumo</a>
+                    Agregar Insumo</a> --}}
+
+                {{!-- Modal --}}
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal"><i
+                        class="fa-solid fa-circle-plus"></i>
+                    Agregar insumo
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Agregar insumo</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="" method="post">
+                                    <div class="row">
+                                        <div class="col-7">
+                                            <div class="form-group">
+                                                <label for="floatingInput"
+                                                    style="float: left; padding-right: 10px;">Nombre</label>
+                                                <input type="text" class="form-control" id="nombreInsumo"
+                                                    style="border-radius: 0;" name="nombreInsumo" placeholder="Nombre">
+                                                <div id="mensajeErrorNombre"></div>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="form-group">
+                                                <label for="floatingInput"
+                                                    style="float: left; padding-right: 10px;">Stock</label>
+                                                <input type="number" class="form-control" id="stockInsumo"
+                                                    style="border-radius: 0;" name="stockInsumo" placeholder="Stock">
+                                                <div id="mensajeErrorStock"></div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-5">
+                                            <div class="form-group">
+                                                <label for="floatingInput"
+                                                    style="float: left; padding-right: 10px;">Medida</label>
+                                                <select class="form-control" id="medidaInsumo" style="border-radius: 0;"
+                                                    required name="medidaInsumo">
+                                                    <option value="Metro">Metro</option>
+                                                    <option value="Unidad">Unidad</option>
+                                                </select>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="btn btn-danger" data-dismiss="modal" style="border-radius: 2;"
+                                    type="button">Cancelar</button>
+                                <button type="submit" class="btn btn-success" style="border-radius: 2;"
+                                    onclick="validarFormularioModal()">Agregar</button>
+                            </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {{!-- Modal --}}
             </div>
         </div>
 
@@ -70,7 +172,7 @@
         <table class="table" style="text-align:center;" id="tabla-insumos">
             <thead style="background-color: #282d32; color:white;">
                 <tr>
-                    <th>Id</th>
+                    <th>#</th>
                     <th>Insumo</th>
                     <th>Medida</th>
                     <th>Stock</th>
@@ -82,7 +184,7 @@
 
                 {{#each insumos}}
                 <tr>
-                    <td class="py-3 px-6 text-center">{{idInsumo}}</td>
+                    <td class="py-3 px-6 text-center">{{cont}}</td>
                     <td class="p-3 text-center">{{nombre}}</td>
                     <td class="p-3 text-center">{{medida}}</td>
                     <td class="p-3 text-center stock-cell" data-stock="{{stock}}">{{stock}}</td>
@@ -91,9 +193,9 @@
                         <a href="EditarInsumo/{{idInsumo}}" style="color: #292b2c; " class="boton-insumo">
                             <i type="button" class="fa-sharp fa-solid fa-pen"></i>
                         </a>
-                        <form action="/EliminarInsumo" method="POST" class="boton-insumo" id="eliminarInsumoForm">
-                            <input type="hidden" value="{{idInsumo}}" name="idInsumos">
-                            <a type="button" onclick="alerta()"><i class="fa fa-trash" style=""></i></a>
+                        <form action="/EliminarInsumo" method="POST" class="boton-insumo" id="eliminarInsumoForm" onsubmit="alerta(event, '{{idInsumo}}')">
+                            <input type="hidden" value="{{idInsumo}}" name="idInsumo">
+                            <button type="submit" class="boton-eliminar"><i class="fa fa-trash" style=""></i></button>
                         </form>
                     </td>
                 </tr>
@@ -106,7 +208,6 @@
                         stockCells.forEach(function (cell) {
                             const stockValue = parseInt(cell.dataset.stock);
                             if (stockValue <= 5) {
-                                cell.classList.add("low-stock");
                                 cell.innerHTML = `<button class="stock-btn">${stockValue}</button>`;
                             }
                         });
@@ -115,9 +216,6 @@
 
             </tbody>
         </table>
-    </div>
-    <br><br><br><br><br><br><br>
-    </div>
     </div>
 </center>
 
@@ -145,21 +243,33 @@
 {{/if}}
 
 <script>
-    function alerta() {
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "¡No podrás revertir esto!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminar insumo!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById("eliminarInsumoForm").submit();
-            }
-        });
-    }
+    function alerta(event, idInsumo) {
+    event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+
+    Swal.fire({
+        title: '¿Estás seguro?',
+        text: "¡No podrás revertir esto!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sí, eliminar insumo!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/EliminarInsumo';
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'idInsumo';
+            input.value = idInsumo;
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+}
+
 
     function filtrarTabla() {
         var input = document.getElementById("buscar-input");
@@ -181,13 +291,53 @@
         }
     }
 </script>
+{{!-- Validacion Agregar Insumo --}}
+<script>
+    function validarFormularioModal() {
+        let nombreInput = document.querySelector('#nombreInsumo');
+        let stockInput = document.querySelector('#stockInsumo');
+        let mensajeErrorNombre = document.querySelector('#mensajeErrorNombre');
+        let mensajeErrorStock = document.querySelector('#mensajeErrorStock');
+        let nombre = nombreInput.value;
+        let stock = stockInput.value;
+
+        if (nombre.trim() === "") {
+            mostrarError(mensajeErrorNombre, 'Campo Obligatorio');
+            Swal.fire({
+                icon: 'error',
+                title: 'Todos los campos son obligatorios',
+            })
+            event.preventDefault();
+        } else {
+            ocultarError(mensajeErrorNombre);
+        }
+
+        if (stock.trim() === "") {
+            mostrarError(mensajeErrorStock, 'Campo Obligatorio');
+            Swal.fire({
+                icon: 'error',
+                title: 'Todos los campos son obligatorios',
+            })
+            event.preventDefault();
+        } else {
+            ocultarError(mensajeErrorStock);
+        }
+    }
+
+    function mostrarError(elemento, mensaje) {
+        elemento.innerHTML = '<span class="icono fa fa-circle-xmark"></span>' + mensaje;
+        elemento.style.display = 'block';
+    }
+
+    function ocultarError(elemento) {
+        elemento.innerHTML = '';
+        elemento.style.display = 'none';
+    }
+</script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="assets/js/ValidacionEliminarInsumo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
     crossorigin="anonymous"></script>
 <!--   Core JS Files   -->
 <script src="assets/js/core/jquery.min.js"></script>
@@ -209,5 +359,48 @@
         // Javascript method's body can be found in assets/js/demos.js
         demo.initDashboardPageCharts();
 
+    });
+</script>
+<!--Paginacion-->
+<!-- JQUERY -->
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+    crossorigin="anonymous">
+    </script>
+<!-- DATATABLES -->
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+</script>
+<!-- BOOTSTRAP -->
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
+</script>
+<script>
+    $(document).ready(function () {
+        $('#tabla-insumos').DataTable({ //se debe seleccionar el id de la tabla $('#id..
+            language: { //Como el original esta en inglés, aqui se traducen los textos
+                processing: "Tratamiento en curso...",
+                search: "Buscar&nbsp;:",
+                lengthMenu: "Agrupar de _MENU_",
+                info: "_START_ al _END_ de _TOTAL_",
+                infoEmpty: "No existen datos.",
+                infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                infoPostFix: "",
+                loadingRecords: "Cargando...",
+                zeroRecords: "No se encontraron datos con tu busqueda",
+                emptyTable: "No hay datos disponibles en la tabla.",
+                paginate: {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                aria: {
+                    sortAscending: ": active para ordenar la columna en orden ascendente",
+                    sortDescending: ": active para ordenar la columna en orden descendente"
+                }
+            },
+            lengthMenu: [[5], [5]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
+            searching: false, //Ocultar buscador
+            lengthChange: false,//Ocultar filtro de cantidad de filas
+            ordering: false //Ocultar filtro de ordenación por columnas
+        });
     });
 </script>
