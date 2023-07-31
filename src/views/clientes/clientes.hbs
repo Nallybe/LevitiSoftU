@@ -70,7 +70,7 @@
           <table class="table" id="tabla-clientes">
             <thead class="table" style="background-color: #282d32; color:white;">
               <tr style="text-align: center;">
-                <th>IdCliente</th>
+                <th>#</th>
                 <th>Documento</th>
                 <th>Nombre</th>
                 <th>Telefono</th>
@@ -85,7 +85,7 @@
             <tbody>
               {{#each clientes}}
               <tr>
-                <td class="py-3 px-6 text-center">{{idInfo}}</td>
+                <td class="py-3 px-6 text-center">{{cont}}</td>
                 <td class="py-3 px-6 text-center">{{documento}}</td>
                 <td class="p-3 text-center">{{nombre}}</td>
                 <td class="p-3 text-center">{{telefono}}</td>

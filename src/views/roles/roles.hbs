@@ -62,7 +62,7 @@
         <table id="tabla-roles" class="table" style="text-align:center;">
             <thead style="background-color: #282d32; color:white;">
                 <tr>
-                    <th>Id</th>
+                    <th>#</th>
                     <th>Rol</th>
                     <th>Permisos</th>
                     <th>Estado</th>
@@ -73,7 +73,7 @@
 
                 {{#each roles}}
                 <tr>
-                    <td class="py-3 px-6 text-center">{{idRoles}}</td>
+                    <td class="py-3 px-6 text-center">{{cont}}</td>
                     <td class="p-3 text-center">{{nombreRoles}}</td>
                     <td>
                         <a href="Permisos/{{idRoles}}" style="color: #292b2c;"><i type="button"
