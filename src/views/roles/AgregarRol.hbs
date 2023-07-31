@@ -36,8 +36,6 @@
       width: 45%;
       padding: 0;
     }
-
-    
   </style>
   <!--Barra de navegación-->
   {{> bar}}
@@ -54,13 +52,16 @@
             <!--Start Card 1-->
             <div class="card-body">
               <form action="" method="post" id="formulario">
-                <div class="form-group">
-                  <label for="nombreRol" style="float: left; padding-right: 10px;">Nombre</label>
-                  <input type="text" class="form-control" id="nombreRol" style="border-radius: 0;" name="nombreRol"
-                    onclick="validar()" placeholder="Nombre">
-                  <div id="mensajeError"></div>
+                <div class="row justify-content-center">
+                  <div class="col-8">
+                  <div class="form-group">
+                    <label for="nombreRol" style="float: left; padding-right: 10px;">Nombre</label>
+                    <input type="text" class="form-control" id="nombreRol" style="border-radius: 0;" name="nombreRol"
+                      onclick="validar()" placeholder="Nombre">
+                    <div id="mensajeError"></div>
+                  </div>
                 </div>
-
+                </div>
             </div>
 
 
@@ -76,8 +77,9 @@
                   Agregar</a>
               </div>
             </div>
+            <br>
           </div>
-          <br>
+          
         </div>
         <div class="col-6 permisos">
           <form action="" method="post">

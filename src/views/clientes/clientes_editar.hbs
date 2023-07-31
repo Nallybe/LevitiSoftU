@@ -70,87 +70,82 @@
   <!--Start Navbar-->
   <!--////////////////////-->
 
-{{> barId}}
-      <!--////////////////////-->
-      <!-- End Navbar -->
-      <!--////////////////////-->
+  {{> barId}}
+  <!--////////////////////-->
+  <!-- End Navbar -->
+  <!--////////////////////-->
 
 
 
-      <!--INICIO CUERPO-->
-      <center>
-        <div class="container" style="margin-top: 80px;">
+  <!--INICIO CUERPO-->
+  <center>
+    <div class="container" style="margin-top: 80px;">
 
-          <!--Start Form&Card-->
-          <div class="card" style="width: 95%; border-radius: 0;">
-            <div class="card-body">
-              <h4 class="card-title" style="margin-bottom: 2%;">Actualizar información del usuario</h4>
-              <!--Start Card 1-->
-              {{#each info}}
-              <form method="post" action="" id="formulario">
-                <div class="row">
-                  <div class="col-6">
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="nombre" style="border-radius: 0;" value="{{nombre}}"
-                        name="nombre">
-                      <div id="mensajeErrorNombre"></div>
-                      <label for="floatingInput">Nombre</label>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="documento" style="border-radius: 0;"
-                        value="{{documento}}" name="documento">
-                      <div id="mensajeErrorDocumento"></div>
-                      <label for="floatingInput">Documento</label>
-                    </div>
-                  </div>
+      <!--Start Form&Card-->
+      <div class="card" style="width: 95%; border-radius: 0;">
+        <div class="card-body">
+          <h4 class="card-title" style="margin-bottom: 2%;">Actualizar información del usuario</h4>
+          <!--Start Card 1-->
+          {{#each info}}
+          <form method="post" action="" id="formulario">
+            <div class="row justify-content-center">
+              <div class="col-5">
+                <div class="form-group">
+                  <label for="floatingInput" style="float: left; padding-right: 10px;">Nombre</label>
+                  <input type="text" class="form-control" id="nombre" style="border-radius: 0;" value="{{nombre}}"
+                    name="nombre">
+                  <div id="mensajeErrorNombre"></div>
                 </div>
-                <div class="row">
-                  <div class="col-6">
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" id="telefono" style="border-radius: 0;"
-                        value="{{telefono}}" name="telefono">
-                      <div id="mensajeErrorTelefono"></div>
-                      <label for="floatingInput">Telefono</label>
-                    </div>
-                  </div>
-                  <div class="col-6">
-                    <div class="form-floating mb-3">
-                      <select class="form-control" id="estado" style="border-radius: 0;" name="estado">
-                        <option value="Activo">Activo</option>
-                        <option value="Inactivo">Inactivo</option>
-                      </select>
-                      <label for="floatingInput">Estado</label>
-                    </div>
-                  </div>
+              </div>
+              <div class="col-5">
+                <div class="form-group">
+                  <label for="floatingInput" style="float: left; padding-right: 10px;">Documento</label>
+                  <input type="text" class="form-control" id="documento" style="border-radius: 0;" value="{{documento}}"
+                    name="documento">
+                  <div id="mensajeErrorDocumento"></div>
 
                 </div>
-
-                <div style="margin-top: 1%; margin-left:20px;">
-                  <div style="margin-top: 1%; width: 35%;">
-                    <div class="d-grid gap-2">
-
-                      <button type="submit" class=" btn btn-success" style="border-radius: 2; margin-bottom: 1px;"
-                        id="boton">
-                        Editar</a>
-                    </div>
-                    <a class="btn btn-danger" href="/clientes" style="border-radius: 2; margin-top: 1px; width:100%;"
-                      type="button">Cancelar</a>
-                  </div>
-                </div>
-                <br>
+              </div>
             </div>
-          </div>
+            <div class="row justify-content-center">
+              <div class="col-5">
+                <div class="form-group">
+                  <label for="floatingInput" style="float: left; padding-right: 10px;">Telefono</label>
+                  <input type="text" class="form-control" id="telefono" style="border-radius: 0;" value="{{telefono}}"
+                    name="telefono">
+                  <div id="mensajeErrorTelefono"></div>
+                </div>
+              </div>
+              <div class="col-5">
+                <div class="form-group">
+                  <label for="floatingInput" style="float: left; padding-right: 10px;">Estado</label>
+                  <select class="form-control" id="estado" style="border-radius: 0;" name="estado">
+                    <option value="Activo">Activo</option>
+                    <option value="Inactivo">Inactivo</option>
+                  </select>
+                </div>
+              </div>
 
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <a class="btn btn-danger" href="/clientes" style="border-radius: 2; " type="button">Cancelar</a>
+              </div>
+              <div class="col-6">
+                <button type="submit" class=" btn btn-success" style="border-radius: 2; " id="boton">
+                  Editar</a>
+              </div>
+            </div>
 
-          </form>
-          {{/each}}
+            <br>
         </div>
-    </div>
-  </div>
-  </div>
-  <!--End Form&Card-->
+      </div>
+
+
+      </form>
+      {{/each}}
+
+    <!--End Form&Card-->
 
 
 
@@ -165,25 +160,25 @@
 <!--////////////////////-->
 
 {{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
+<script>
+  var permisosInput = document.querySelector('#permisosInput');
+  var permisosValue = permisosInput.value;
 
-      var palabras = permisosValue.split(',');
+  var palabras = permisosValue.split(',');
 
-      var menuItems = document.querySelectorAll('.nav li');
+  var menuItems = document.querySelectorAll('.nav li');
 
-      menuItems.forEach(function (item) {
-        var items = item.querySelector('p').textContent.trim().toLowerCase();
+  menuItems.forEach(function (item) {
+    var items = item.querySelector('p').textContent.trim().toLowerCase();
 
-        if (palabras.includes(items)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    </script>
-    {{/if}}
+    if (palabras.includes(items)) {
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+</script>
+{{/if}}
 
 <script>
   let formulario = document.querySelector('#formulario');

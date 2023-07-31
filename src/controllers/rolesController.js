@@ -1,7 +1,7 @@
 
 function listar(req, res) {
   req.getConnection((err, conn) => {
-    conn.query('SELECT * FROM tbl_roles', (err, roles) => {
+    conn.query('SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont,tbl_roles.*FROM tbl_roles;', (err, roles) => {
       if (err) {
         res.json(err);
       }
