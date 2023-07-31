@@ -5,101 +5,77 @@
 
 <body>
   <style>
+    #descripcion {
+      border-radius: 0;
+      border: 1px rgb(206, 212, 218) solid;
+      line-height: 1.5;
+      max-height: 200px;
+      padding-top: 0;
+      height: 70px;
+    }
+
+    img {
+      display: block;
+      margin-bottom: 10px;
+      margin-top: 3%;
+      max-height: 140px;
+      max-width: 100%;
+      border: 1px rgb(206, 212, 218) solid;
+      border-radius: 0;
+    }
+
+    .form-label {
+      text-align: left;
+    }
+
+
     .fa-trash:hover {
       color: red;
     }
 
-    #mensajeErrorImagen {
-      display: none;
-      color: red;
-      margin-top: 5px;
+    .fa-circle-plus:hover {
+      color: grey;
     }
 
-    #mensajeErrorImagen .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
+    /* Add this style to your existing CSS */
+    .table-container {
+      max-height: 250px;
+      height: 250px;
+      /* Adjust this value as per your requirement */
+      overflow-y: auto;
+      position: relative;
+      /* Add this to enable positioning of thead */
     }
 
-    #mensajeErrorNombre {
-      display: none;
-      color: red;
-      margin-top: 5px;
+    /* Add this style to fix thead */
+    .table-container table {
+      position: relative;
     }
 
-    #mensajeErrorNombre .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
+    .table-container thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
     }
 
-    #mensajeErrorDescripcion {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorDescripcion .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorPrecio {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorPrecio .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorStock {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorStock .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-
-    #mensajeErrorInsumo {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorInsumo .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
+    #mensajeErrorImagen,
+    #mensajeErrorNombre,
+    #mensajeErrorDescripcion,
+    #mensajeErrorPrecio,
+    #mensajeErrorStock,
+    #mensajeErrorInsumo,
     #mensajeErrorCantidad {
       display: none;
       color: red;
       margin-top: 5px;
     }
 
+    #mensajeErrorImagen .icono,
+    #mensajeErrorNombre .icono,
+    #mensajeErrorDescripcion .icono,
+    #mensajeErrorPrecio .icono,
+    #mensajeErrorStock .icono,
+    #mensajeErrorInsumo .icono,
     #mensajeErrorCantidad .icono {
       display: inline-block;
       vertical-align: middle;
@@ -112,162 +88,156 @@
   <!--Barra de navegación-->
   {{> bar}}
   <!--Barra de navegación-->
-  <center>
-    <form action="/productos_registrar" method="post" onsubmit="return validarEnvio()" id="FormRegistrarCompra"
-      enctype="multipart/form-data">
-      <div class="container" style="margin-top: 80px; margin-bottom: 50px">
-        <!--Start Card&Form-->
-        <div class="card" style="width: 95%; border-radius: 0;">
-          <div class="card-body">
-            <h4 class="card-title" style="margin-bottom: 4%;">Registrar Producto</h4>
+  <form action="/productos_registrar" method="post" onsubmit="return validarEnvio()" id="FormRegistrarProducto"
+    enctype="multipart/form-data">
+    <div class="container" style="margin-top: 50px;">
 
-            <!--Start Card #1-->
-            <div class="card" style="border-radius: 0; width: 90%;">
-              <div class="card-body">
+      <!--Start Card&Form-->
+      <div class="card" style="width: 100%; border-radius: 0;">
+        <div class="card-body">
+          <h6 class="card-title" style="margin-bottom: 1%;">Registrar Producto</h6>
 
-                <div class="row">
-                  <div class="col-md-6">
+          <div class="row">
+            <div class="col-5">
+              <!--Start Card #1-->
+              <div class="card" style="border-radius: 0; width: 100%; margin-bottom: 1%;">
+                <div class="card-body">
+                  <h6 class="card-title" style="margin-bottom: 2%;">Producto</h6>
+                  <!--Input Nombre-->
+                  <label class="form-label" for="nombre">Nombre</label>
+                  <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="nombre"
+                    name="nombre" oninput="val_nombre()" autocomplete="off" maxlength="100">
+                  <div id="mensajeErrorNombre"></div>
+                  <!--End Input Nombre-->
+
+                  <div class="row mt-1">
+                    <div class="col-md-6">
+
+                      <!--Input Precio-->
+                      <label class="form-label" for="precio">Precio</label>
+                      <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="precio"
+                        name="precio" oninput="val_precio()" autocomplete="off">
+                      <div id="mensajeErrorPrecio"></div>
+                      <!--End Input Precio-->
+
+                    </div>
+                    <div class="col-md-6">
+
+                      <!--Input Stock-->
+                      <label class="form-label" for="stock">Stock</label>
+                      <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="stock"
+                        name="stock" oninput="val_stock()" autocomplete="off">
+                      <div id="mensajeErrorStock"></div>
+                      <!--End Input Stock-->
+
+                    </div>
+                  </div>
+
+                  <!--Input Categoria-->
+                  <label class="form-label" for="categoria">Categoria</label>
+                  <select class="form-control form-control-sm" style="border-radius: 0;" id="categoria"
+                    name="categoria">
+                    <option value=""></option>
+                    <option value="1">Accesorios</option>
+                    <option value="2">Billeteras</option>
+                    <option value="3">Bolsos</option>
+                    <option value="4">Chaquetas</option>
+                    <option value="5">Morrales</option>
+                    <option value="6">Zapatos</option>
+                  </select>
+                  <div id="mensajeErrorCategoria"></div>
+                  <!--End Input Categoria-->
+
+                  <!--Input Descripción-->
+                  <label class="form-label mt-2" for="descripcion_R">Descripción</label>
+                  <textarea class="form-control form-control-sm" id="descripcion" name="descripcion" autocomplete="off"
+                    maxlength="250" oninput="val_descripcion()"></textarea>
+                  <!--End Input Descripción-->
+
+                  <center>
+
                     <!-- Mostrar la imagen seleccionada -->
-                    <img id="imagenMostrada" src="" alt="Imagen"
-                      style="max-width: 100%; display: block; margin-bottom: 10px; margin-top:3%" width="300">
+                    <img id="imagenMostrada" src="" alt="Imagen del producto">
 
                     <!-- Agregar un botón para permitir seleccionar una nueva imagen -->
-                    <button type="button" onclick="seleccionarNuevaImagen()">Seleccionar Imagen</button>
+                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning"
+                      style="border-radius: 0%;">Seleccionar
+                      Imagen</button>
 
-                    <!-- Ocultar el input de tipo "file" -->
-                    <input type="file" style="display: none;" id="imagen" name="imagen" autocomplete="off"
-                      oninput="val_imagen()">
+                  </center>
 
-                    <div id="mensajeErrorImagen"></div>
-                  </div>
-                  <div class="col-md-6">
-                    <!--Input Nombre-->
-                    <div class="form-floating mb-3 mt-3">
-                      <input type="text" class="form-control" placeholder="Nombre X" style="border-radius: 0;"
-                        id="nombre" name="nombre" oninput="val_nombre()" autocomplete="off">
-                      <label for="nombre">
-                        <h5>Nombre</h5><br>
-                      </label>
-                      <div id="mensajeErrorNombre"></div>
-                    </div>
-                    <!--End Input Nombre-->
 
-                    <!--Input Descripción-->
-                    <div class="form-floating mb-3">
-                      <textarea class="form-control pb-5" placeholder="Descripcion X" style="border-radius: 0;"
-                        id="descripcion" name="descripcion" autocomplete="off" oninput="val_descripcion()"></textarea>
-                      <label for="descripcion_R">
-                        <h5>Descripción</h5><br>
-                      </label>
-                      <div id="mensajeErrorDescripcion"></div>
-                    </div>
-                    <!--End Input Descripción-->
 
-                     <!--Input Categoria-->
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" placeholder="Categoria X" style="border-radius: 0;"
-                        id="categoria" name="categoria" oninput="val_categoria()" value="{{categoria}}"
-                        autocomplete="off">
-                      <label for="categoria">
-                        <h5>Categoria</h5><br>
-                      </label>
-                      <div id="mensajeErrorCategoria"></div>
-                    </div>
-                    <!--End Input Categoria-->
+                  <!-- Ocultar el input de tipo "file" -->
+                  <input type="file" style="display: none;" id="imagen" name="imagen" autocomplete="off"
+                    oninput="val_imagen()">
+                  <div id="mensajeErrorImagen"></div>
 
-                    <!--Input Precio-->
-                    <div class="form-floating mb-3">
-                      <input type="number" class="form-control" placeholder="Precio X" style="border-radius: 0;"
-                        id="precio" name="precio" oninput="val_precio()" autocomplete="off">
-                      <label for="precio">
-                        <h5>Precio</h5><br>
-                      </label>
-                      <div id="mensajeErrorPrecio"></div>
-                    </div>
-                    <!--End Input Precio-->
-
-                    <!--Input Stock-->
-                    <div class="form-floating mb-3">
-                      <input type="number" class="form-control" placeholder="Stock X" style="border-radius: 0;"
-                        id="stock" name="stock" oninput="val_stock()" autocomplete="off">
-                      <label for="stock">
-                        <h5>Stock</h5><br>
-                      </label>
-                      <div id="mensajeErrorStock"></div>
-                    </div>
-                    <!--End Input Stock-->
-                  </div>
                 </div>
-
-
-
-
-
               </div>
+              <!--End Card #1-->
+
             </div>
-            <!--End Card #1-->
+            <div class="col-7">
 
-            <div class="row">
               <!--Start Card #2-->
-              <div class="col-md-5 mr-0">
-                <div class="card mt-3" style="border-radius: 0; width: 90%;">
-                  <div class="card-body">
-                    <h5 class="card-title" style="margin-bottom: 4%;">Agregar insumo requirido por el producto
-                    </h5>
 
-                    <!--Input Insumo-->
-                    <div class="form-floating mb-3">
-                      <input type="text" class="form-control" placeholder="Insumo X" list="list_insumos"
-                        style="border-radius: 0;" id="idInsumo_R" name="idInsumo_R" autocomplete="off"
-                        oninput="val_ins()">
-                      <label for="idInsumo_R">
-                        <h5>Insumo</h5>
-                      </label>
-                      <datalist id="list_insumos">
-                        {{#each insumos}}
-                        <option value="{{nombre}}">nombre({{nombre}})
-                          medida({{medida}})
-                          stock({{cantidad}})</option>
-                        {{/each}}
-                      </datalist>
-                      <div id="mensajeErrorInsumo"></div>
+              <div class="card" style="border-radius: 0; width: 100%;">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-md-10">
+                      <h6 class="card-title">Agregar insumo</h6>
+
+                      <div class="row">
+                        <div class="col-md-7">
+
+                          <!--Input Insumo-->
+                          <label class="form-label" for="idInsumo_R">Insumo</label>
+                          <input type="text" class="form-control form-control-sm" list="list_insumos"
+                            style="border-radius: 0;" id="idInsumo_R" name="idInsumo_R" autocomplete="off"
+                            oninput="val_ins()">
+                          <datalist id="list_insumos">
+                            {{#each insumos}}
+                            <option value="{{nombre}}">nombre({{nombre}}) medida({{medida}}) stock({{stock}})</option>
+                            {{/each}}
+                          </datalist>
+                          <div id="mensajeErrorInsumo"></div>
+                          <!--End Input Insumo-->
+
+                        </div>
+                        <div class="col-md-5">
+
+                          <!--Input Cantidad-->
+                          <label for="cantidad_R">Cantidad</label>
+                          <input type="number" class="form-control form-control-sm" style="border-radius: 0;"
+                            id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()">
+                          <div id="mensajeErrorCantidad"></div>
+                          <!--End Input Cantidad-->
+
+                        </div>
+                      </div>
                     </div>
-                    <!--End Input Insumo-->
-
-
-
-                    <!--Input Cantidad-->
-                    <div class="form-floating mb-3">
-                      <input type="number" class="form-control" placeholder="Cantidad X" style="border-radius: 0;"
-                        id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()">
-                      <label for="cantidad_R">
-                        <h5>Cantidad Requerida(1)</h5><br>
-                      </label>
-                      <div id="mensajeErrorCantidad"></div>
+                    <div class="col-md-2">
+                      <!--Start Btn Agregar-->
+                      <i class="fa-solid fa-circle-plus fa-2x mt-4" style="margin-left: 18%;" type="button"
+                        onclick="agregarInsumo()"></i>
+                      <!--End Btn Agregar-->
                     </div>
-                    <!--End Input Cantidad-->
-
-
-                    <!--Start Btn Agregar-->
-                    <div class="d-grid gap-2">
-                      <button class="btn btn-warning" style="border-radius: 0;" type="button" id="btnAgregarInsumo"
-                        onclick="agregarInsumo()"><i class="fa-solid fa-circle-plus"></i> Agregar</button>
-                    </div>
-                    <!--End Btn Agregar-->
                   </div>
                 </div>
               </div>
+
               <!--End Card #2-->
 
 
 
               <!--Start Card #3-->
-              <div class="col-md-7 ml-0">
-                <div class="card mt-3" style="width: 100%; border-radius: 0;">
-                  <div class="card-body">
-                    <h5 class="card-title" style="margin-bottom: 2%;">Insumos Requeridos</h5>
-                    <!--Start Table-->
-                    <table class="table table-hover">
+              <div class="card mt-3" style="width: 100%; border-radius: 0;">
+                <div class="card-body">
+                  <h6 class="card-title">Insumos Requeridos</h6>
+                  <!--Start Table-->
+                  <div class="table-container">
+                    <table class="table table-sm">
                       <thead class="table" style="background-color: #282d32; color:white;">
                         <tr style="text-align: center;">
                           <th>#</th>
@@ -276,56 +246,51 @@
                           <th> Funciones </th>
                         </tr>
                       </thead>
-                      <tbody id="ListaInsumosReq">
+                      <tbody id="ListaInsumosReq" style="text-align: center;">
                       </tbody>
                     </table>
-                    <!--End Table-->
                   </div>
+                  <!--End Table-->
                 </div>
-
-
               </div>
+
+
               <!--End Card #3-->
-            </div>
 
-
-
-
-
-            <div style="margin-top: 1%;">
               <div class="row">
-                <div class="col-md-3"></div>
-                <div class="col-md-6">
+                <div class="col-7"></div>
+                <div class="col-5">
                   <!--Start Btn R&C-->
                   <div class="d-grid gap-2">
                     <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-                    <button type="submit" class="btn btn-success" style="border-radius: 0; margin-bottom: 1px;"
+                    <button type="submit" class="btn btn-success btn-sm" style="border-radius: 0; margin-bottom: 1px;"
                       id="btnRegistrar">
                       Registrar Producto</button>
                     <!--End Btn Regiastrar-->
                     <!--Start Btn Cancelar-->
-                    <a class="btn btn-danger" href="/productos" style="border-radius: 0; margin-top: 1px;"
+                    <a class="btn btn-danger btn-sm" href="/productos" style="border-radius: 0; margin-top: 1px;"
                       type="button">Cancelar</a>
                     <!--End Btn Cancelar-->
                   </div>
                   <!--End Btn R&C-->
                 </div>
-                <div class="col-md-3"></div>
               </div>
-              <br>
+
             </div>
           </div>
         </div>
-        <!--End Card&Form-->
-
       </div>
-    </form>
-  </center>
+      <!--End Card&Form-->
+
+    </div>
+  </form>
+  </div>
+  </div>
+  <br>
+
 
   <br>
-  </div>
-  </div>
-
+  <br>
   <!--End Form&Card-->
 
 
@@ -466,31 +431,45 @@
       };
 
       if (insumo.idInsumo != "" && insumo.cantidad != "") {
-        cont++;
-        document.getElementById('ListaInsumosReq').innerHTML += `
-        <tr id="${cont}"style="text-align: center">
-            <td class="text-center">${cont}</td>
-            <td class="text-center">
-                <input id="I${cont}" name="idInsumo" value="${insumo.idInsumo}" style="text-align: center; width: 100px;  border: none;" readonly>
-            </td>
-            <td class="text-center">
-                <input class="w-4/5" style="text-align: center; width: 100px;  border: none;" name="cantidad_n" value="${insumo.cantidad}" readonly>
-            </td>
-            <td class="text-center">
-                <a href="#" onclick="eliminarInsumo(${cont})" style="color: #292b2c;">
-                    <i class="fas fa-trash"></i>
-                </a>
-            </td>
-        </tr>`;
+        const repetido = document.getElementById('cant_' + insumo.idInsumo)
+        if (repetido != null) {
+          repetido.value = parseInt(repetido.value) + parseInt(insumo.cantidad);
 
-        Swal.fire({
-          position: 'top-end',
-          icon: 'success',
-          title: 'Insumo Agregado',
-          showConfirmButton: false,
-          timer: 1000
-        });
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Cantidad modificada',
+            showConfirmButton: false,
+            timer: 1000
+          });
+        } else {
+          cont++;
 
+          document.getElementById('ListaInsumosReq').innerHTML += `
+          <tr id="${cont}"style="text-align: center">
+              <td class="text-center">${cont}</td>
+              <td class="text-center">
+                  <input id="Id_${insumo.idInsumo}" name="idInsumo" value="${insumo.idInsumo}" style="text-align: center; width: 100px;  border: none;" readonly>
+              </td>
+              <td class="text-center">
+                  <input class="w-4/5" style="text-align: center; width: 100px;  border: none;" id="cant_${insumo.idInsumo}" name="cantidad_n" value="${insumo.cantidad}" readonly>
+              </td>
+              <td class="text-center">
+                  <a href="#" onclick="eliminarInsumo(${cont})" style="color: #292b2c;">
+                      <i class="fas fa-trash"></i>
+                  </a>
+              </td>
+          </tr>`;
+
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Insumo Agregado',
+            showConfirmButton: false,
+            timer: 1000
+          });
+
+        }
         document.getElementById('idInsumo_R').value = null;
         document.getElementById('cantidad_R').value = null;
 
@@ -691,4 +670,13 @@
         }
       });
     });
+  </script>
+
+  <script>
+    // Ejemplo de arreglo de objetos para probar
+    const arregloObjetos = [
+      { nombre: "Persona 1", edad: 25 },
+      { nombre: "Persona 2", edad: 30 },
+      { nombre: "Persona 3", edad: 22 }
+    ];
   </script>

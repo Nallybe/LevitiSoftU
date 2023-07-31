@@ -20,6 +20,29 @@ function productos_listar(req, res) {
                             productos[index].estado2 = true;
                         }
 
+                        switch (productos[index].idCategoria) {
+                            case 1:
+                                productos[index].categoria = "Accesorios";
+                                break;
+                            case 2:
+                                productos[index].categoria = "Billeteras";
+                                break;
+                            case 3:
+                                productos[index].categoria = "Bolsos";
+                                break;
+                            case 4:
+                                productos[index].categoria = "Chaquetas";
+                                break;
+                            case 5:
+                                productos[index].categoria = "Morrales";
+                                break;
+                            case 6:
+                                productos[index].categoria = "Zapatos";
+                                break;
+                        }
+
+
+
                         // Parsear precio
                         productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
 
@@ -49,6 +72,30 @@ function productos_detallar(req, res) {
                     } else {
                         producto[index].estado2 = true;
                     }
+
+
+                    switch (producto[index].idCategoria) {
+                        case 1:
+                            producto[index].categoria = "Accesorios";
+                            break;
+                        case 2:
+                            producto[index].categoria = "Billeteras";
+                            break;
+                        case 3:
+                            producto[index].categoria = "Bolsos";
+                            break;
+                        case 4:
+                            producto[index].categoria = "Chaquetas";
+                            break;
+                        case 5:
+                            producto[index].categoria = "Morrales";
+                            break;
+                        case 6:
+                            producto[index].categoria = "Zapatos";
+                            break;
+                    }
+
+
                 }
                 conn.query("SELECT * FROM tbl_productos_detalles WHERE idProducto = ?", [idProducto], (err, detallesproducto) => {
                     if (err) {
@@ -112,27 +159,21 @@ function productos_crear(req, res) {
 
 const fs = require('fs');
 const path = require('path');
+
 //Registrar Producto
 function productos_registrar(req, res) {
+
     var data = req.body;
     var imagen = req.file// Aquí obtienes el archivo de imagen
-
-    img = 'img_' + data.nombre + '.jpg';
-    console.log(img);
-
-    // Mueve el archivo a la nueva ubicación con el nuevo nombre y extensión
-    fs.rename(imagen.path, path.join('./public/assets/img/Productos/', img), function (err) {
-        if (err) {
-            console.log('Error al guardar la imagen con otro nombre y extensión: ', err);
-        }
-    });
+    console.log(data)
 
     const RegistroProducto = {
+        idCategoria: data.categoria,
         nombre: data.nombre,
         descripcion: data.descripcion,
         precio: data.precio,
         stock: data.stock,
-        imagen: img // Guarda el nombre de la imagen en el objeto de registro
+        imagen: 'img.jpg' // Guarda el nombre de la imagen en el objeto de registro
         //imagen: req.file
         //imagen: imagen.filename
     };
@@ -148,84 +189,105 @@ function productos_registrar(req, res) {
 
                 //Captura idProducto
                 const idProducto = result.insertId;
+                img = 'img_' + idProducto + '.jpg';
+                // Mueve el archivo a la nueva ubicación con el nuevo nombre y extensión
+                fs.rename(imagen.path, path.join('./public/assets/img/Productos/', img), function (err) {
+                    if (err) {
+                        console.log('Error al guardar la imagen con otro nombre y extensión: ', err);
+                    }
+                });
 
-                //Reconocer si se manda 1 o más detalles
-                if (data.idInsumo[0].length > 1) {
-                    //Más de un detalle
+                const ImgProducto = {
+                    imagen: img
+                };
 
-                    //Capturar idsInsumos
-                    conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
-                        if (err) {
-                            return res.status(500).json(err);
-                        } else {
-                            for (index in data.idInsumo) {
-                                for (i in insumos) {
-                                    if (data.idInsumo[index] == insumos[i].nombre) {
-                                        data.idInsumo[index] = insumos[i].idInsumo;
-                                        console.log("Insumo encontrado");
-                                    }
-                                }
-                            }
-                            //End Capturar idsInsumos
+                //Registrar Producto
+                conn.query("UPDATE tbl_productos SET ? WHERE idProducto = ?", [ImgProducto, idProducto], (err, rows) => {
+                    if (err) {
+                        return res.status(500).json(err);
+                    } else {
+                        console.log("Imagen guardada");
+                        //End Registrar Producto 
 
-                            //Registrar Detalles
-                            for (index in data.idInsumo) {
-                                conn.query(`INSERT INTO tbl_productos_detalles(idProducto,idInsumo,cantidad_n) VALUES (?,?,?)`,
-                                    [
-                                        idProducto,
-                                        data.idInsumo[index],
-                                        data.cantidad_n[index],
-                                    ],
-                                    (err) => {
-                                        if (err) {
-                                            return res.status(500).json(err);
-                                        } else {
-                                            console.log("Detalle Registrado");
+                        //Reconocer si se manda 1 o más detalles
+                        if (data.idInsumo[0].length > 1) {
+                            //Más de un detalle
+
+                            //Capturar idsInsumos
+                            conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
+                                if (err) {
+                                    return res.status(500).json(err);
+                                } else {
+                                    for (index in data.idInsumo) {
+                                        for (i in insumos) {
+                                            if (data.idInsumo[index] == insumos[i].nombre) {
+                                                data.idInsumo[index] = insumos[i].idInsumo;
+                                                //console.log("Insumo encontrado");
+                                            }
                                         }
                                     }
-                                );
-                            }
-                            //End Registrar Detalles
-                        }
-                    });
+                                    //End Capturar idsInsumos
 
-                } else {
-                    //Un detalle
-
-                    //Capturar idInsumo
-                    conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
-                        if (err) {
-                            return res.status(500).json(err);
-                        } else {
-                            for (i in insumos) {
-                                if (data.idInsumo == insumos[i].nombre) {
-                                    data.idInsumo = insumos[i].idInsumo;
-                                    console.log("Insumo encontrado")
-                                }
-                            }
-                            //End Capturar idInsumo
-
-                            //Registrar Detalle
-                            conn.query(`INSERT INTO tbl_productos_detalles(idProducto,idInsumo,cantidad_n) VALUES (?,?,?)`,
-                                [
-                                    idProducto,
-                                    data.idInsumo,
-                                    data.cantidad_n,
-                                ],
-                                (err) => {
-                                    if (err) {
-                                        return res.status(500).json(err);
-                                    } else {
-                                        console.log("Detalle Registrado");
+                                    //Registrar Detalles
+                                    for (index in data.idInsumo) {
+                                        conn.query(`INSERT INTO tbl_productos_detalles(idProducto,idInsumo,cantidad_n) VALUES (?,?,?)`,
+                                            [
+                                                idProducto,
+                                                data.idInsumo[index],
+                                                data.cantidad_n[index],
+                                            ],
+                                            (err) => {
+                                                if (err) {
+                                                    return res.status(500).json(err);
+                                                } else {
+                                                    console.log("Detalle Registrado");
+                                                }
+                                            }
+                                        );
                                     }
+                                    //End Registrar Detalles
                                 }
-                            );
-                            //End Registrar Detalle
+                            });
+
+                        } else {
+                            //Un detalle
+
+                            //Capturar idInsumo
+                            conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
+                                if (err) {
+                                    return res.status(500).json(err);
+                                } else {
+                                    for (i in insumos) {
+                                        if (data.idInsumo == insumos[i].nombre) {
+                                            data.idInsumo = insumos[i].idInsumo;
+                                            //console.log("Insumo encontrado")
+                                        }
+                                    }
+                                    //End Capturar idInsumo
+
+                                    //Registrar Detalle
+                                    conn.query(`INSERT INTO tbl_productos_detalles(idProducto,idInsumo,cantidad_n) VALUES (?,?,?)`,
+                                        [
+                                            idProducto,
+                                            data.idInsumo,
+                                            data.cantidad_n,
+                                        ],
+                                        (err) => {
+                                            if (err) {
+                                                return res.status(500).json(err);
+                                            } else {
+                                                console.log("Detalle Registrado");
+                                            }
+                                        }
+                                    );
+                                    //End Registrar Detalle
+                                }
+                            });
                         }
-                    });
-                }
-                //Redireccionar
-                res.redirect("/productos");
+                        //Redireccionar
+                        res.redirect("/productos");
+                    }
+                });
             }
         });
     });
@@ -253,6 +315,27 @@ function productos_editar(req, res) {
                                     break;
                                 case 'I':
                                     producto[i].estado2 = true;
+                                    break;
+                            }
+
+                            switch (producto[i].idCategoria) {
+                                case 1:
+                                    producto[i].c_1 = true;
+                                    break;
+                                case 2:
+                                    producto[i].c_2 = true;
+                                    break;
+                                case 3:
+                                    producto[i].c_3 = true;
+                                    break;
+                                case 4:
+                                    producto[i].c_4 = true;
+                                    break;
+                                case 5:
+                                    producto[i].c_5 = true;
+                                    break;
+                                case 6:
+                                    producto[i].c_6 = true;
                                     break;
                             }
                         }
@@ -294,23 +377,38 @@ function productos_modificar(req, res) {
     const data = req.body;
     const imagen = req.file; // Aquí obtienes el archivo de imagen
 
-    // Construye el nuevo nombre de la imagen utilizando 'img_ + idProducto + .jpg'
-    const img = `img_${idProducto}.jpg`;
+    let RegistroProducto = {};
 
-    // Mueve el archivo a la nueva ubicación con el nuevo nombre y extensión
-    fs.rename(imagen.path, path1.join('./public/assets/img/Productos/', img), function (err) {
-        if (err) {
-            console.log('Error al guardar la imagen con el nuevo nombre: ', err);
-        }
-    });
+    if (imagen) {
+        // Construye el nuevo nombre de la imagen utilizando 'img_ + idProducto + .jpg'
+        const img = `img_${idProducto}.jpg`;
 
-    const RegistroProducto = {
-        nombre: data.nombre,
-        descripcion: data.descripcion,
-        precio: data.precio,
-        stock: data.stock,
-        imagen: img// Guarda el nuevo nombre de la imagen en el objeto de registro
-    };
+        // Mueve el archivo a la nueva ubicación con el nuevo nombre y extensión
+        fs.rename(imagen.path, path1.join('./public/assets/img/Productos/', img), function (err) {
+            if (err) {
+                console.log('Error al guardar la imagen con el nuevo nombre: ', err);
+            }
+        });
+
+        RegistroProducto = {
+            idCategoria: data.categoria,
+            nombre: data.nombre,
+            descripcion: data.descripcion,
+            precio: data.precio,
+            stock: data.stock,
+            imagen: img,// Guarda el nuevo nombre de la imagen en el objeto de registro
+            estado: data.estado
+        };
+    } else {
+        RegistroProducto = {
+            idCategoria: data.categoria,
+            nombre: data.nombre,
+            descripcion: data.descripcion,
+            precio: data.precio,
+            stock: data.stock,
+            estado: data.estado
+        };
+    }
 
     req.getConnection((err, conn) => {
         //Actualizar Producto

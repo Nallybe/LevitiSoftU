@@ -174,34 +174,6 @@
 </div>
 </center>
 
-
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-    <!-- Position it: -->
-    <!-- - `.toast-container` for spacing between toasts -->
-    <!-- - `top-0` & `end-0` to position the toasts in the upper right corner -->
-    <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
-    <div class="toast-container position-fixed bottom-0 end-0 right-0 p-3">
-        <div id="myToast" class="toast align-items-center border-0" role="alert" aria-live="assertive"
-            aria-atomic="true" data-delay="1000">
-            <!--Tiempo de espera--><!--data-bs-autohide="false" Dejar el toast estatico-->
-            <div class="d-flex">
-                <div class="toast-body">
-                    <strong class="me-auto"> Compras<br></strong>
-                    Hay un total de <b>{{numC}} compras registradas </b>
-                    <!--<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
-
-                    <!--<div class="col-md-2">
-              <button type="button" class="btn btn-secondary mr-0" data-bs-dismiss="toast" aria-label="Close"
-                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                <i class="fa-solid fa-x"></i></button>
-            </div>-->
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <div class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
     <div class="d-flex">
         <div class="toast-body">
@@ -213,27 +185,6 @@
 </div>
 
 </body>
-<!--Validacion nav bar-->
-{{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
-
-      var palabras = permisosValue.split(',');
-
-      var menuItems = document.querySelectorAll('.nav li');
-
-      menuItems.forEach(function (item) {
-        var items = item.querySelector('p').textContent.trim().toLowerCase();
-
-        if (palabras.includes(items)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    </script>
-    {{/if}}
 
 <script>
     function Anular(id) {
