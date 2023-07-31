@@ -176,28 +176,9 @@
 
 
 
+
+
 </body>
-<!--Validacion nav bar-->
-{{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
-
-      var palabras = permisosValue.split(',');
-
-      var menuItems = document.querySelectorAll('.nav li');
-
-      menuItems.forEach(function (item) {
-        var items = item.querySelector('p').textContent.trim().toLowerCase();
-
-        if (palabras.includes(items)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    </script>
-    {{/if}}
 
 <script>
     function Anular(id) {
