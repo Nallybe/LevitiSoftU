@@ -101,9 +101,9 @@ function compras_detallar(req, res) {
                   detallescompra[index].estadoI;
                   for (i in insumos) {
                     if (insumos[i].idInsumo == detallescompra[index].idInsumo) {
-                      detallescompra[index].nombreI = insumos[i].nombreInsumo;
+                      detallescompra[index].nombreI = insumos[i].nombre;
                       detallescompra[index].medidaI = insumos[i].medida;
-                      detallescompra[index].cantidadI = insumos[i].stockInsumo;
+                      detallescompra[index].cantidadI = insumos[i].stock;
                       detallescompra[index].estadoI = insumos[i].estado;
                     }
                   }

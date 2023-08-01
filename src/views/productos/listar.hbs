@@ -78,7 +78,7 @@
                     <th class="w-1/4 ...">Stock</th>
                     <th class="w-1/4 ...">Precio</th>
                     <th class="w-1/4 ...">Estado</th>
-                    <th class="w-1/4 ...">Funciones</th>
+                    <th class="w-2/4 ...">Funciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -134,18 +134,18 @@
                     </td>
                     <!--Inactivo-->
                     {{/if}}
-                    <td class="p-3 px-1 ">
+                    <td class="p-1 text-center">
                         <a href="/productos/{{idProducto}}" style="color: #292b2c; " class="boton-producto">
                             <i type="button" class="fa-sharp fa-solid fa-eye"></i>
                         </a>
                         <a href="/productos_editar/{{idProducto}}" style="color: #292b2c; " class="boton-producto">
                             <i type="button" class="fa-sharp fa-solid fa-pen"></i>
                         </a>
-                        <form action="/productos_eliminar" method="POST" class="boton-producto"
+                        {{!--<form action="/productos_eliminar" method="POST" class="boton-producto"
                             id="FormEliminarProducto{{idProducto}}">
                             <input type="hidden" value="{{idProducto}}" name="idProducto">
                             <a type="button" onclick="Eliminar({{idProducto}})"><i class="fa fa-trash"></i></a>
-                        </form>
+                        </form>--}}
                     </td>
                 </tr>
                 {{/each}}
