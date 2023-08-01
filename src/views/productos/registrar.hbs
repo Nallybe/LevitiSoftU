@@ -90,7 +90,7 @@
   <!--Barra de navegación-->
   <form action="/productos_registrar" method="post" onsubmit="return validarEnvio()" id="FormRegistrarProducto"
     enctype="multipart/form-data">
-    <div class="container" style="margin-top: 50px;">
+    <div class="container" style="margin-top: 60px;">
 
       <!--Start Card&Form-->
       <div class="card" style="width: 100%; border-radius: 0;">
@@ -160,7 +160,7 @@
                     <img id="imagenMostrada" src="" alt="Imagen del producto">
 
                     <!-- Agregar un botón para permitir seleccionar una nueva imagen -->
-                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning"
+                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning btn-sm"
                       style="border-radius: 0%;">Seleccionar
                       Imagen</button>
 
@@ -260,22 +260,17 @@
               <div class="row">
                 <div class="col-7"></div>
                 <div class="col-5">
-                  <!--Start Btn R&C-->
-                  <div class="d-grid gap-2">
-                    <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-                    <button type="submit" class="btn btn-success btn-sm" style="border-radius: 0; margin-bottom: 1px;"
-                      id="btnRegistrar">
-                      Registrar Producto</button>
-                    <!--End Btn Regiastrar-->
-                    <!--Start Btn Cancelar-->
-                    <a class="btn btn-danger btn-sm" href="/productos" style="border-radius: 0; margin-top: 1px;"
-                      type="button">Cancelar</a>
-                    <!--End Btn Cancelar-->
-                  </div>
-                  <!--End Btn R&C-->
+                  <!--Start Btn Cancelar-->
+                  <a class="btn btn-danger btn-sm" href="/productos" style="border-radius: 0; margin-top: 1px;"
+                    type="button">Cancelar</a>
+                  <!--End Btn Cancelar-->
+                  <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+                  <button type="submit" class="btn btn-success btn-sm" style="border-radius: 0; margin-bottom: 1px;"
+                    id="btnRegistrar">
+                    Registrar Producto</button>
+                  <!--End Btn Regiastrar-->
                 </div>
               </div>
-
             </div>
           </div>
         </div>
@@ -284,7 +279,6 @@
 
     </div>
   </form>
-  </div>
   </div>
   <br>
 

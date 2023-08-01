@@ -90,10 +90,10 @@
   {{#each producto}}
   <form action="/productos_editar/{{idProducto}}" method="post" onsubmit="return validarEnvio()" id="FormEditarProducto">
 
-    <div class="container" style="margin-top: 50px;">
+    <div class="container" style="margin-top: 60px;  margin-bottom: 10px;">
 
       <!--Start Card&Form-->
-      <div class="card" style="width: 100%; border-radius: 0;">
+      <div class="card" style="width: 100%; border-radius: 0; margin-bottom: 5px;">
         <div class="card-body">
           <h6 class="card-title" style="margin-bottom: 1%;">Editar Producto</h6>
 
@@ -177,7 +177,7 @@
                     <img id="imagenMostrada" src="/assets/img/Productos/{{imagen}}" alt="Imagen del producto">
 
                     <!-- Agregar un botón para permitir seleccionar una nueva imagen -->
-                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning"
+                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning btn-sm"
                       style="border-radius: 0%;">Seleccionar nueva
                       Imagen</button>
 
@@ -298,19 +298,16 @@
               <div class="row">
                 <div class="col-7"></div>
                 <div class="col-5">
-                  <!--Start Btn R&C-->
-                  <div class="d-grid gap-2">
+                    <!--Start Btn Cancelar-->
+                    <a class="btn btn-danger btn-sm" href="/productos" style="border-radius: 0; margin-top: 1px;"
+                      type="button">Cancelar</a>
+                    <!--End Btn Cancelar-->
+
                     <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
                     <button type="submit" class="btn btn-success btn-sm" style="border-radius: 0; margin-bottom: 1px;"
                       id="btnEditar">
                       Guardar Cambios</button>
                     <!--End Btn Regiastrar-->
-                    <!--Start Btn Cancelar-->
-                    <a class="btn btn-danger btn-sm" href="/productos" style="border-radius: 0; margin-top: 1px;"
-                      type="button">Cancelar</a>
-                    <!--End Btn Cancelar-->
-                  </div>
-                  <!--End Btn R&C-->
                 </div>
               </div>
 
@@ -326,7 +323,6 @@
 
 
   <br>
-  </div>
   </div>
 
   <!--End Form&Card-->
