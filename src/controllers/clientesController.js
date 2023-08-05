@@ -1,44 +1,55 @@
 function listar(req, res) {
     req.getConnection((err, conn) => {
-        conn.query(`SELECT 
-        ROW_NUMBER() OVER () AS cont,
-        subconsulta.*
-      FROM (
-        SELECT 
-          ui.idInfo, 
-          ua.correo, 
-          ui.documento, 
-          ui.nombre, 
-          ui.telefono, 
-          ui.estado, 
-          COUNT(DISTINCT uv.idVentas) AS numero_ventas, 
-          COUNT(DISTINCT ur.idReparacion) AS numero_reparaciones 
-        FROM users_access ua 
-        JOIN users_info ui ON ua.idAccess = ui.idAccess 
-        LEFT JOIN tbl_ventas uv ON ui.idVentas = uv.idVentas 
-        LEFT JOIN tbl_reparaciones ur ON ui.idReparaciones = ur.idReparacion 
-        JOIN tbl_roles r ON ua.idRoles = r.idRoles 
-        WHERE r.nombreRoles = 'Cliente' 
-        GROUP BY ui.idInfo, ua.correo, ui.documento, ui.nombre, ui.telefono, ui.estado
-      ) AS subconsulta;
-      
-    `, (err, clientes) => {
+        conn.query(`
+            SELECT 
+                ROW_NUMBER() OVER () AS cont,
+                subconsulta.*
+            FROM (
+                SELECT 
+                    ui.idInfo, 
+                    ua.correo, 
+                    ui.documento, 
+                    ui.nombre, 
+                    ui.telefono, 
+                    ui.estado, 
+                    COUNT(DISTINCT uv.idVentas) AS numero_ventas, 
+                    COUNT(DISTINCT ur.idReparacion) AS numero_reparaciones 
+                FROM users_access ua 
+                JOIN users_info ui ON ua.idAccess = ui.idAccess 
+                LEFT JOIN tbl_ventas uv ON ui.idVentas = uv.idVentas 
+                LEFT JOIN tbl_reparaciones ur ON ui.idReparaciones = ur.idReparacion 
+                JOIN tbl_roles r ON ua.idRoles = r.idRoles 
+                WHERE r.nombreRoles = 'Cliente'
+                GROUP BY ui.idInfo, ua.correo, ui.documento, ui.nombre, ui.telefono, ui.estado
+            ) AS subconsulta;
+        `, (err, clientes) => {
             if (err) {
                 res.json(err);
             }
+
+            // Reemplazar los valores 'A' por 'Activo' y 'I' por 'Inactivo' en los resultados
+            clientes.forEach(cliente => {
+                cliente.estado = cliente.estado === 'A' ? 'Activo' : 'Inactivo';
+            });
+
+            
+
             res.render('clientes/clientes', { clientes });
         });
     });
-
 }
+
+
+
+
 
 function crear(req, res) {
     req.getConnection((err, conn) => {
-        conn.query("SELECT * FROM users_info", (err, clientes) => {
+        conn.query("SELECT * FROM users_info WHERE estado = 'A'", (err, clientes) => {
             if (err) {
                 res.json(err);
             }
-            conn.query("SELECT * FROM tbl_roles", (err, roles) => {
+            conn.query("SELECT * FROM tbl_roles WHERE estado = 'A'", (err, roles) => {
                 if (err) {
                     res.json(err);
                 }
@@ -82,11 +93,11 @@ function editar(req, res) {
     const idInfo = req.params.idInfo;
 
     req.getConnection((err, conn) => {
-        conn.query('SELECT * FROM users_info WHERE idInfo = ?', [idInfo], (err, info) => {
+        conn.query(`SELECT * FROM users_info WHERE idInfo = ?`, [idInfo], (err, info) => {
             if (err) {
                 res.json(err);
             }
-            conn.query('SELECT documento FROM users_info WHERE idInfo = ?', [idInfo], (err, documentos) => {
+            conn.query(`SELECT documento FROM users_info WHERE idInfo = ?`, [idInfo], (err, documentos) => {
                 if (err) {
                     res.json(err);
                 }
