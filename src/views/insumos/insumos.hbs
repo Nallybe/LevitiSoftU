@@ -57,15 +57,14 @@
     }
 
     .boton-eliminar {
-    border: none;
-    background: none;
-    /* Establecer el cursor como un puntero */
-    cursor: pointer;
-    /* Ajustar el relleno y los márgenes según sea necesario */
-    padding: 0;
-    margin: 0;
-}
-
+        border: none;
+        background: none;
+        /* Establecer el cursor como un puntero */
+        cursor: pointer;
+        /* Ajustar el relleno y los márgenes según sea necesario */
+        padding: 0;
+        margin: 0;
+    }
 </style>
 
 <!--Barra de navegación-->
@@ -188,18 +187,41 @@
                     <td class="p-3 text-center">{{nombre}}</td>
                     <td class="p-3 text-center">{{medida}}</td>
                     <td class="p-3 text-center stock-cell" data-stock="{{stock}}">{{stock}}</td>
-                    <td class="p-3 text-center">{{estado}}</td>
+                    <td class="p-3 text-center">
+                        <!-- Utilizamos una clase común para el botón 'estado' y asignamos el valor del estado actual del cliente como un atributo de datos -->
+                        <button class="btn estado-boton" style="border-radius:8px;" disabled
+                            data-estado="{{estado}}">{{estado}}</button>
+                    </td>
                     <td>
                         <a href="EditarInsumo/{{idInsumo}}" style="color: #292b2c; " class="boton-insumo">
                             <i type="button" class="fa-sharp fa-solid fa-pen"></i>
                         </a>
-                        <form action="/EliminarInsumo" method="POST" class="boton-insumo" id="eliminarInsumoForm" onsubmit="alerta(event, '{{idInsumo}}')">
+                        <form action="/EliminarInsumo" method="POST" class="boton-insumo" id="eliminarInsumoForm"
+                            onsubmit="alerta(event, '{{idInsumo}}')">
                             <input type="hidden" value="{{idInsumo}}" name="idInsumo">
                             <button type="submit" class="boton-eliminar"><i class="fa fa-trash" style=""></i></button>
                         </form>
                     </td>
                 </tr>
+                <script>
+                    // Seleccionamos todos los botones de clase 'estado-boton'
+                    var botonesEstado = document.querySelectorAll(".estado-boton");
 
+                    // Iteramos a través de cada botón y cambiamos la clase según el valor del atributo de datos 'data-estado'
+                    botonesEstado.forEach(function (boton) {
+                        var estado = boton.getAttribute("data-estado");
+
+                        if (estado === "Activo") {
+                            boton.classList.add("btn-primary");
+                            boton.classList.remove("btn-secondary");
+                        } else if (estado === "Inactivo") {
+                            boton.classList.add("btn-secondary");
+                            boton.classList.remove("btn-primary");
+                        } else {
+                            // Si el estado no coincide con 'Activo' ni 'Inactivo', podemos manejar otras situaciones o no hacer ningún cambio en la clase del botón.
+                        }
+                    });
+                </script>
                 {{/each}}
 
                 <script>
@@ -244,31 +266,31 @@
 
 <script>
     function alerta(event, idInsumo) {
-    event.preventDefault(); // Evitar que el formulario se envíe automáticamente
+        event.preventDefault(); // Evitar que el formulario se envíe automáticamente
 
-    Swal.fire({
-        title: '¿Estás seguro?',
-        text: "¡No podrás revertir esto!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar insumo!'
-    }).then((result) => {
-        if (result.isConfirmed) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = '/EliminarInsumo';
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'idInsumo';
-            input.value = idInsumo;
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
-        }
-    });
-}
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminar insumo!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = document.createElement('form');
+                form.method = 'POST';
+                form.action = '/EliminarInsumo';
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'idInsumo';
+                input.value = idInsumo;
+                form.appendChild(input);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
 
 
     function filtrarTabla() {

@@ -4,17 +4,22 @@ const jwt = require("jsonwebtoken")
 const salt = 10
 const bcrypt = require('bcrypt');
 
-// function login(req, res) {
-//   if (req.session.loggedin != true) {
-//     res.redirect('login');
-//   } else {
-//     res.redirect('homeDash');
-//   }
-// }
+function login(req, res) {
+  // Verificar si el usuario ha iniciado sesión
+  if (req.session.loggedin !== true) {
+    // Si no ha iniciado sesión, redirigir al formulario de inicio de sesión
+    res.render('login');
+  } else {
+
+  }
+}
+
+
+
 
 function auth(req, res) {
   const data = req.body;
-  console.log(data)
+  //console.log(data)
   req.getConnection((err, conn) => {
     if (err) {
       console.log(err);
@@ -32,7 +37,6 @@ function auth(req, res) {
 
         if (results.length > 0) {
           const user = results[0];
-
           bcrypt.compare(data.passswordl, user.passsword, (err, isMatch) => {
             if (err) {
               console.log(err);
@@ -64,11 +68,21 @@ function auth(req, res) {
                           console.log(error);
                           return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
                         }
-                        req.session.roles = roleResults;
-                        //console.log(req.session.roles)
-                        //res.redirect('/dashboard');
+                        // Extraemos la propiedad nombreRoles del primer elemento del array (en este caso solo hay un elemento)
+                        const nombreRoles = roleResults[0].nombreRoles;
+                        // Buscamos la posición del primer espacio en la cadena
+                        const posicionSeparador = nombreRoles.indexOf(' ');
+                        // Extraemos la parte de la cadena que se encuentra después del espacio
+                        const nombreroles = nombreRoles.substring(posicionSeparador + 1);
+                        req.session.roles = nombreroles;
                         conn.query(
-                          'SELECT DISTINCT p.nombrePermisos FROM tbl_roles AS r JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos;'
+                          `SELECT DISTINCT p.nombrePermisos 
+                          FROM tbl_roles AS r 
+                          JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles 
+                          JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos 
+                          WHERE r.nombreRoles = ?
+                          ORDER BY p.idPermisos ASC;
+                          `, [nombreroles]
                           ,
                           (error, permissionResults) => {
                             if (error) {
@@ -76,11 +90,13 @@ function auth(req, res) {
                               return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
                             }
                             const permisos = permissionResults.map((row) => row.nombrePermisos);
-                            //console.log('Permisos: ',permisos)
+                            console.log('Permisos: ', permissionResults)
                             req.session.asignacion = permisos;
-                            //console.log(req.session.asignacion)
+                            
                             // Redireccionar al primer permiso que coincida
-                            var firstMatchingPermission = permisos.find((permiso) => req.session.roles.includes(permiso));
+                            var firstMatchingPermission = permisos.find((permiso) => true);
+
+                            console.log("Primer " + firstMatchingPermission)
                             if (firstMatchingPermission) {
                               res.redirect('/' + firstMatchingPermission);
                             } else {
@@ -89,7 +105,6 @@ function auth(req, res) {
                             }
                           }
                         );
-
                       }
                     );
                   }
@@ -112,26 +127,24 @@ function auth(req, res) {
 
 
 
-function crear(req, res) {
-  if (req.session.loggedin !== true) {
-    req.getConnection((err, conn) => {
-      if (err) {
-        console.log(err);
-        return res.status(500).json({ error: 'Error en la conexión a la base de datos' });
-      }
+// function crear(req, res) {
+//   if (req.session.loggedin !== true) {
+//     req.getConnection((err, conn) => {
+//       if (err) {
+//         console.log(err);
+//         return res.status(500).json({ error: 'Error en la conexión a la base de datos' });
+//       }
 
-      conn.query("SELECT * FROM users_access", (err, users) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
-        }
-        res.render("login", { users });
-      });
-    });
-  } else {
-    console.log("Ni idea porque entra aqui")
-  }
-}
+//       conn.query("SELECT * FROM users_access", (err, users) => {
+//         if (err) {
+//           console.log(err);
+//           return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+//         }
+//         res.render("login", { users });
+//       });
+//     });
+//   }
+// }
 
 
 function registrar(req, res) {
@@ -153,14 +166,10 @@ function registrar(req, res) {
         }
 
         if (results.length > 0) {
-          conn.query("SELECT * FROM tbl_roles", (err, roles) => {
-            if (err) {
-              console.log(err);
-              return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
-            }
 
-            return res.render('login', { error: 'Error, el correo ya existe', roles });
-          });
+
+          return res.render('login', { error: 'Error, el correo ya existe' });
+
         } else {
           const salt = 10;
           bcrypt.hash(data.password, salt, (err, hash) => {
@@ -168,78 +177,84 @@ function registrar(req, res) {
               console.log(err);
               return res.status(500).json({ error: 'Error en la encriptación de la contraseña' });
             }
-
-            const registroUsuario = {
-              idRoles: 15,
-              correo: data.correo,
-              passsword: hash,
-              estado: 'A'
-            };
-
-            conn.query(
-              'INSERT INTO users_access SET ?',
-              registroUsuario,
-              (error, result) => {
-                if (error) {
-                  console.log(error);
-                  return res.status(500).json({ error: 'Error en la inserción en la base de datos' });
-                }
-                const idAccess = result.insertId; // Obtiene el idAccess generado
-                const registroUsuarioInfo = {
-                  idAccess: idAccess,
-                  documento: data.documento,
-                  nombre: data.nombre,
-                  telefono: data.telefono,
-                  estado: 'A'
-                };
-                conn.query(
-                  'INSERT INTO users_info SET ?',
-                  registroUsuarioInfo, (error, result) => {
-                    if (error) {
-                      console.log(error);
-                      return res.status(500).json({ error: 'Error en la inserción en la base de datos' });
-                    }
-                    console.log('Información del usuario guardada');
-                    req.session.loggedin = true; // Establece la sesión como iniciada
-
-                    conn.query(
-                      'SELECT r.nombreRoles FROM tbl_roles AS r JOIN users_access AS ua ON r.idRoles = ua.idRoles WHERE ua.idRoles = ?',
-                      [registroUsuario.idRoles],
-                      (error, roleResults) => {
-                        if (error) {
-                          console.log(error);
-                          return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
-                        }
-                        console.log(req.session.roles)
-                        req.session.roles = roleResults;
-
-                    conn.query(
-                      'SELECT DISTINCT p.nombrePermisos FROM tbl_roles AS r JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos;'
-                      ,
-                      (error, permissionResults) => {
-                        if (error) {
-                          console.log(error);
-                          return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
-                        }
-                        const permisos = permissionResults.map((row) => row.nombrePermisos);
-                        //console.log('Permisos: ', permisos)
-                        req.session.asignacion = permisos;
-                        //console.log(req.session.asignacion)
-                        // Redireccionar al primer permiso que coincida
-                        var firstMatchingPermission = permisos.find((permiso) => req.session.roles.includes(permiso));
-                        if (firstMatchingPermission) {
-                          res.redirect('/' + firstMatchingPermission);
-                        } else {
-                          // Si no hay permisos coincidentes, redireccionar a una página predeterminada
-                          res.redirect('/dashboard');
-                        }
-                      }
-                      );}
-                    );
-                  }
-                )
+            conn.query("SELECT idRoles FROM tbl_roles WHERE nombreRoles='Cliente'", (err, idRoles) => {
+              if (err) {
+                console.log(err);
+                return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
               }
-            );
+              const registroUsuario = {
+                idRoles: idRoles,
+                correo: data.correo,
+                passsword: hash,
+                estado: 'A'
+              };
+
+              conn.query(
+                'INSERT INTO users_access SET ?',
+                registroUsuario,
+                (error, result) => {
+                  if (error) {
+                    console.log(error);
+                    return res.status(500).json({ error: 'Error en la inserción en la base de datos' });
+                  }
+                  const idAccess = result.insertId; // Obtiene el idAccess generado
+                  const registroUsuarioInfo = {
+                    idAccess: idAccess,
+                    documento: data.documento,
+                    nombre: data.nombre,
+                    telefono: data.telefono,
+                    estado: 'A'
+                  };
+                  conn.query(
+                    'INSERT INTO users_info SET ?',
+                    registroUsuarioInfo, (error, result) => {
+                      if (error) {
+                        console.log(error);
+                        return res.status(500).json({ error: 'Error en la inserción en la base de datos' });
+                      }
+                      console.log('Información del usuario guardada');
+                      req.session.loggedin = true; // Establece la sesión como iniciada
+
+                      conn.query(
+                        'SELECT r.nombreRoles FROM tbl_roles AS r JOIN users_access AS ua ON r.idRoles = ua.idRoles WHERE ua.idRoles = ?',
+                        [registroUsuario.idRoles],
+                        (error, roleResults) => {
+                          if (error) {
+                            console.log(error);
+                            return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+                          }
+                          console.log(req.session.roles)
+                          req.session.roles = roleResults;
+
+                          conn.query(
+                            'SELECT DISTINCT p.nombrePermisos FROM tbl_roles AS r JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos;'
+                            ,
+                            (error, permissionResults) => {
+                              if (error) {
+                                console.log(error);
+                                return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+                              }
+                              const permisos = permissionResults.map((row) => row.nombrePermisos);
+                              //console.log('Permisos: ', permisos)
+                              req.session.asignacion = permisos;
+                              //console.log(req.session.asignacion)
+                              // Redireccionar al primer permiso que coincida
+                              var firstMatchingPermission = permisos.find((permiso) => req.session.roles.includes(permiso));
+                              if (firstMatchingPermission) {
+                                res.redirect('/' + firstMatchingPermission);
+                              } else {
+                                // Si no hay permisos coincidentes, redireccionar a una página predeterminada
+                                res.redirect('/dashboard');
+                              }
+                            }
+                          );
+                        }
+                      );
+                    }
+                  )
+                }
+              );
+            });
           });
 
         }
@@ -343,8 +358,8 @@ function dashboard(req, res) {
 }
 
 module.exports = {
-  // login,
-  crear,
+  login,
+  //crear,
   registrar,
   auth,
   logout,
