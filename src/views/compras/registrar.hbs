@@ -455,7 +455,7 @@
 
           cont++;
           document.getElementById('ListaInsumos').innerHTML += `
-                <tr id="${insumo.idInsumo}" style="text-align: center">
+                <tr id="I${insumo.idInsumo}" style="text-align: center">
                     <td class="text-center">${cont}</td>
                     <td class="text-center">
                         <input id="Id_${insumo.idInsumo}" name="idInsumo" value="${insumo.idInsumo}" style="text-align: center; width: 100px;  border: none;" readonly>
@@ -479,7 +479,7 @@
                         <input id="t${insumo.idInsumo}" value="${insumo.total}" style="text-align: center; width: 100px; border: none;" readonly>
                     </td>
                     <td class="text-center">
-                      <i class="fas fa-trash" onclick="eliminarInsumo(${insumo.idInsumo})" type="button"></i> 
+                      <i class="fas fa-trash" onclick="eliminarInsumo('${insumo.idInsumo}')" type="button"></i> 
                     </td>
                 </tr>`;
 
@@ -540,8 +540,10 @@
     }
 
     function eliminarInsumo(id) {
-      insumo = document.getElementById(id);
-      if (!insumo) {
+      const insumoE = document.getElementById('I' + id); // Agregar 'I' al ID
+      alert('ID a eliminar:', id);
+      alert('Elemento a eliminar:', insumoE);
+      if (!insumoE) {
         alert("Error");
       } else {
         alert("se encontró el insumo");
@@ -553,51 +555,51 @@
 
         //decrementar total
         var inputNumberT1 = document.getElementById("totalC1");
-        var valorActual = parseInt(inputNumberT1.value);
+        var valorActual1 = parseInt(inputNumberT1.value);
         //alert("Valor actual " + valorActual)
 
         var inputNumberT2 = document.getElementById(toT);
-        var valorRestar = parseInt(inputNumberT2.value);
+        var valorRestar1 = parseInt(inputNumberT2.value);
 
         //alert("Valor restar " + valorRestar);
 
-        inputNumberT1.value = valorActual - valorRestar;
+        inputNumberT1.value = valorActual1 - valorRestar1;
         //decrementar total
 
 
 
         //decrementar monto
         var inputNumberM1 = document.getElementById("montoC1");
-        var valorActual = parseInt(inputNumberM1.value);
+        var valorActual2 = parseInt(inputNumberM1.value);
         //alert("Valor actual " + valorActual)
 
         var inputNumberM2 = document.getElementById(toM);
-        var valorRestar = parseInt(inputNumberM2.value);
+        var valorRestar2 = parseInt(inputNumberM2.value);
 
         //alert("Valor restar " + valorRestar);
 
-        inputNumberM1.value = valorActual - valorRestar;
+        inputNumberM1.value = valorActual2 - valorRestar2;
         //decrementar monto
 
 
 
         //decrementar iva
         var inputNumberI1 = document.getElementById("ivaC1");
-        var valorActual = parseInt(inputNumberI1.value);
+        var valorActual3 = parseInt(inputNumberI1.value);
         //alert("Valor actual " + valorActual)
 
         var inputNumberI2 = document.getElementById(toI);
-        var valorRestar = parseInt(inputNumberI2.value);
+        var valorRestar3 = parseInt(inputNumberI2.value);
 
         //alert("Valor restar " + valorRestar);
 
-        inputNumberI1.value = valorActual - valorRestar;
+        inputNumberI1.value = valorActual3 - valorRestar3;
         //decrementar iva
 
 
 
-        padre = insumo.parentNode;
-        padre.removeChild(insumo);
+        padre = insumoE.parentNode;
+        padre.removeChild(insumoE);
         //alert("Insumo Eliminado");
         Swal.fire({
           position: 'top-end',
