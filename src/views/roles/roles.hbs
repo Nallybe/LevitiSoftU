@@ -36,14 +36,12 @@
             <div class="col-md-4">
                 <div class="row" style="margin-left: 8px;">
                     <div class="col-9">
-                        <input id="buscar-input"
-                            style=" border-radius: 0;"
-                            class="form-control" type="search" placeholder="Buscar Rol" aria-label="Search"
-                            oninput="filtrarTabla()">
+                        <input id="buscar-input" style=" border-radius: 0;" class="form-control" type="search"
+                            placeholder="Buscar Rol" aria-label="Search" oninput="filtrarTabla()">
                     </div>
                     <div class="col-3">
-                        <button class="btn btn-outline-success" type="submit"
-                            style=" border-radius: 0; " onclick="filtrarTabla()">
+                        <button class="btn btn-outline-success" type="submit" style=" border-radius: 0; "
+                            onclick="filtrarTabla()">
                             <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
                         </button>
                     </div>
@@ -80,7 +78,11 @@
                                 class="fa-sharp fa-solid fa-eye"></i></a>
 
                     </td>
-                    <td class="p-3 text-center">{{estado}}</td>
+                    <td class="p-3 text-center">
+                        <!-- Utilizamos una clase común para el botón 'estado' y asignamos el valor del estado actual del cliente como un atributo de datos -->
+                        <button class="btn estado-boton" style="border-radius:8px;" disabled
+                            data-estado="{{estado}}">{{estado}}</button>
+                    </td>
                     <td>
                         <a href="EditarRol/{{idRoles}}" style="color: #292b2c;" class="boton-enviar"><i type="button"
                                 class="fa-sharp fa-solid fa-pen"></i></a>
@@ -88,6 +90,25 @@
 
                     </td>
                 </tr>
+                <script>
+                    // Seleccionamos todos los botones de clase 'estado-boton'
+                    var botonesEstado = document.querySelectorAll(".estado-boton");
+
+                    // Iteramos a través de cada botón y cambiamos la clase según el valor del atributo de datos 'data-estado'
+                    botonesEstado.forEach(function (boton) {
+                        var estado = boton.getAttribute("data-estado");
+
+                        if (estado === "Activo") {
+                            boton.classList.add("btn-primary");
+                            boton.classList.remove("btn-secondary");
+                        } else if (estado === "Inactivo") {
+                            boton.classList.add("btn-secondary");
+                            boton.classList.remove("btn-primary");
+                        } else {
+                            // Si el estado no coincide con 'Activo' ni 'Inactivo', podemos manejar otras situaciones o no hacer ningún cambio en la clase del botón.
+                        }
+                    });
+                </script>
                 {{/each}}
 
             </tbody>
@@ -95,7 +116,6 @@
     </div>
 </center>
 
-<br><br><br><br>
 
 {{#if asignacion}}
 <script>

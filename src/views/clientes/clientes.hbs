@@ -28,85 +28,108 @@
   <!--Start Navbar-->
   <!--////////////////////-->
 
-{{>bar}}
+  {{>bar}}
 
 
-      <br><br><br>
-      <!--INICIO CUERPO-->
-      <center>
-        <div class="container">
+  <br><br><br>
+  <!--INICIO CUERPO-->
+  <center>
+    <div class="container">
 
-          <!--Start Botones sobre la tabla-->
+      <!--Start Botones sobre la tabla-->
+      <div class="row">
+        <div class="col-md-4">
           <div class="row">
-            <div class="col-md-4">
-              <div class="row" >
-                <div class="col-9">
-                  <input id="buscar-input"
-                    style=" border-radius: 0; "
-                    class="form-control " type="search" placeholder="Buscar Documento" aria-label="Search"
-                    oninput="filtrarTabla()">
-                </div>
-                <div class="col-3 ">
-                  <button class="btn btn-outline-success" type="submit"
-                    style=" border-radius: 0; " onclick="filtrarTabla()">
-                    <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
-                  </button>
-                </div>
-              </div>
+            <div class="col-9">
+              <input id="buscar-input" style=" border-radius: 0; " class="form-control " type="search"
+                placeholder="Buscar Documento" aria-label="Search" oninput="filtrarTabla()">
             </div>
-            <div class="col-md-5">
-              <!--Espacio entre botón buscar y registrar-->
-            </div>
-            <div class="col-md-3">
-              <!--Start Botón registrar-->
-              <a href="clientes_agregar" class="btn btn-success" style="border-radius: 2;"><i
-                  class="fa-solid fa-circle-plus"></i> Registrar Cliente</a>
-              <!--End Botón registrar-->
+            <div class="col-3 ">
+              <button class="btn btn-outline-success" type="submit" style=" border-radius: 0; "
+                onclick="filtrarTabla()">
+                <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
+              </button>
             </div>
           </div>
-          <!--End Botones sobre la tabla-->
-          <br>
-          <!--Start Table-->
-          <table class="table" id="tabla-clientes">
-            <thead class="table" style="background-color: #282d32; color:white;">
-              <tr style="text-align: center;">
-                <th>#</th>
-                <th>Documento</th>
-                <th>Nombre</th>
-                <th>Telefono</th>
-                <th>Correo</th>
-                <th>Ventas</th>
-                <th>Reparaciones</th>
-                <th>Estado</th>
-                <th>Funciones</th>
-              </tr>
-
-            </thead>
-            <tbody>
-              {{#each clientes}}
-              <tr>
-                <td class="py-3 px-6 text-center">{{cont}}</td>
-                <td class="py-3 px-6 text-center">{{documento}}</td>
-                <td class="p-3 text-center">{{nombre}}</td>
-                <td class="p-3 text-center">{{telefono}}</td>
-                <td class="p-3 text-center">{{correo}}</td>
-                <td class="p-3 text-center">{{numero_ventas}}</td>
-                <td class="p-3 text-center">{{numero_reparaciones}}</td>
-                <td class="p-3 text-center">{{estado}}</td>
-                <td class="p-3 text-center">
-                  <a href="clientes_editar/{{idInfo}}" style="color: #292b2c; " class="boton-insumo"><i type="button"
-                      class="fa-sharp fa-solid fa-pen"></i></a>
-                </td>
-              </tr>
-              {{/each}}
-            </tbody>
-          </table>
-          <!--End Table-->
         </div>
-      </center>
+        <div class="col-md-5">
+          <!--Espacio entre botón buscar y registrar-->
+        </div>
+        <div class="col-md-3">
+          <!--Start Botón registrar-->
+          <a href="clientes_agregar" class="btn btn-success" style="border-radius: 2;"><i
+              class="fa-solid fa-circle-plus"></i> Registrar Cliente</a>
+          <!--End Botón registrar-->
+        </div>
+      </div>
+      <!--End Botones sobre la tabla-->
       <br>
-      <br><br><br><br><br>
+      <!--Start Table-->
+      <table class="table" id="tabla-clientes">
+        <thead class="table" style="background-color: #282d32; color:white;">
+          <tr style="text-align: center;">
+            <th>#</th>
+            <th>Documento</th>
+            <th>Nombre</th>
+            <th>Telefono</th>
+            <th>Correo</th>
+            <th>Ventas</th>
+            <th>Reparaciones</th>
+            <th>Estado</th>
+            <th>Funciones</th>
+          </tr>
+
+        </thead>
+        <tbody>
+          {{#each clientes}}
+          <tr>
+            <td class="py-3 px-6 text-center">{{cont}}</td>
+            <td class="py-3 px-6 text-center">{{documento}}</td>
+            <td class="p-3 text-center">{{nombre}}</td>
+            <td class="p-3 text-center">{{telefono}}</td>
+            <td class="p-3 text-center">{{correo}}</td>
+            <td class="p-3 text-center">{{numero_ventas}}</td>
+            <td class="p-3 text-center">{{numero_reparaciones}}</td>
+
+
+            <td class="p-3 text-center">
+              <!-- Utilizamos una clase común para el botón 'estado' y asignamos el valor del estado actual del cliente como un atributo de datos -->
+              <button class="btn estado-boton" style="border-radius:8px;" disabled
+                data-estado="{{estado}}">{{estado}}</button>
+            </td>
+            <td class="p-3 text-center">
+              <a href="clientes_editar/{{idInfo}}" style="color: #292b2c; " class="boton-insumo"><i type="button"
+                  class="fa-sharp fa-solid fa-pen"></i></a>
+            </td>
+          </tr>
+          <script>
+            // Seleccionamos todos los botones de clase 'estado-boton'
+            var botonesEstado = document.querySelectorAll(".estado-boton");
+
+            // Iteramos a través de cada botón y cambiamos la clase según el valor del atributo de datos 'data-estado'
+            botonesEstado.forEach(function (boton) {
+              var estado = boton.getAttribute("data-estado");
+
+              if (estado === "Activo") {
+                boton.classList.add("btn-primary");
+                boton.classList.remove("btn-secondary");
+              } else if (estado === "Inactivo") {
+                boton.classList.add("btn-secondary");
+                boton.classList.remove("btn-primary");
+              } else {
+                // Si el estado no coincide con 'Activo' ni 'Inactivo', podemos manejar otras situaciones o no hacer ningún cambio en la clase del botón.
+              }
+            });
+          </script>
+          {{/each}}
+        </tbody>
+      </table>
+      <!--End Table-->
     </div>
+  </center>
+  <br>
+  <br><br><br><br><br>
+  </div>
   </div>
   <!--FIN CUERPO-->
 </body>
@@ -117,25 +140,25 @@
 <!--START JS-->
 <!--////////////////////-->
 {{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
+<script>
+  var permisosInput = document.querySelector('#permisosInput');
+  var permisosValue = permisosInput.value;
 
-      var palabras = permisosValue.split(',');
+  var palabras = permisosValue.split(',');
 
-      var menuItems = document.querySelectorAll('.nav li');
+  var menuItems = document.querySelectorAll('.nav li');
 
-      menuItems.forEach(function (item) {
-        var items = item.querySelector('p').textContent.trim().toLowerCase();
+  menuItems.forEach(function (item) {
+    var items = item.querySelector('p').textContent.trim().toLowerCase();
 
-        if (palabras.includes(items)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    </script>
-    {{/if}}
+    if (palabras.includes(items)) {
+      item.style.display = 'block';
+    } else {
+      item.style.display = 'none';
+    }
+  });
+</script>
+{{/if}}
 
 
 <script>
@@ -227,8 +250,8 @@
 <!--Paginacion-->
 <!-- JQUERY -->
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous">
-    </script>
+  crossorigin="anonymous">
+  </script>
 <!-- DATATABLES -->
 <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
 </script>
@@ -236,35 +259,36 @@
 <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
 </script>
 <script>
-    $(document).ready(function () {
-        $('#tabla-clientes').DataTable({ //se debe seleccionar el id de la tabla $('#id..
-            language: { //Como el original esta en inglés, aqui se traducen los textos
-                processing: "Tratamiento en curso...",
-                search: "Buscar&nbsp;:",
-                lengthMenu: "Agrupar de _MENU_",
-                info: "_START_ al _END_ de _TOTAL_",
-                infoEmpty: "No existen datos.",
-                infoFiltered: "(filtrado de _MAX_ elementos en total)",
-                infoPostFix: "",
-                loadingRecords: "Cargando...",
-                zeroRecords: "No se encontraron datos con tu busqueda",
-                emptyTable: "No hay datos disponibles en la tabla.",
-                paginate: {
-                    first: "Primero",
-                    previous: "Anterior",
-                    next: "Siguiente",
-                    last: "Ultimo"
-                },
-                aria: {
-                    sortAscending: ": active para ordenar la columna en orden ascendente",
-                    sortDescending: ": active para ordenar la columna en orden descendente"
-                }
-            },
-            lengthMenu: [[5], [5]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
-            searching: false, //Ocultar buscador
-            lengthChange: false,//Ocultar filtro de cantidad de filas
-            ordering: false //Ocultar filtro de ordenación por columnas
-        });
+  $(document).ready(function () {
+    $('#tabla-clientes').DataTable({ //se debe seleccionar el id de la tabla $('#id..
+      language: { //Como el original esta en inglés, aqui se traducen los textos
+        processing: "Tratamiento en curso...",
+        search: "Buscar&nbsp;:",
+        lengthMenu: "Agrupar de _MENU_",
+        info: "_START_ al _END_ de _TOTAL_",
+        infoEmpty: "No existen datos.",
+        infoFiltered: "(filtrado de _MAX_ elementos en total)",
+        infoPostFix: "",
+        loadingRecords: "Cargando...",
+        zeroRecords: "No se encontraron datos con tu busqueda",
+        emptyTable: "No hay datos disponibles en la tabla.",
+        paginate: {
+          first: "Primero",
+          previous: "Anterior",
+          next: "Siguiente",
+          last: "Ultimo"
+        },
+        aria: {
+          sortAscending: ": active para ordenar la columna en orden ascendente",
+          sortDescending: ": active para ordenar la columna en orden descendente"
+        }
+      },
+      lengthMenu: [[5], [5]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
+      searching: false, //Ocultar buscador
+      lengthChange: false,//Ocultar filtro de cantidad de filas
+      ordering: false //Ocultar filtro de ordenación por columnas
     });
+  });
 </script>
+
 </html>

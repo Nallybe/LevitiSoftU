@@ -20,7 +20,7 @@
                                 <div class="row justify-content-center">
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label for="floatingInput">Nombre</label>
+                                            <label style="float: left; padding-right: 10px;">Nombre</label>
                                             <select class="form-control" id="nombre" style="border-radius: 0;"
                                                 name="nombre">
                                                 {{#each nombre}}
@@ -31,16 +31,33 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group ">
-                                            <label for="floatingInput">Total</label>
+                                            <label for="floatingInput" style="float: left; padding-right: 10px;">Total</label>
                                             <input type="text" class="form-control" id="totalInput"
                                                 style="border-radius: 0;" name="total">
                                         </div>
+                                    </div>
+
+                                </div>
+                                <div class="row pb-2">
+                                    <div class="col-12">
+
+                                        <label class="form-label" style="float: left; padding-right: 10px;">Descripción</label>
+                                        <textarea class="form-control" id="descripcion" style="border: 1px solid #ccc;"
+                                            name="descripcion" autocomplete="off"></textarea>
+
                                     </div>
                                 </div>
                                 <div class="row justify-content-center">
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label for="floatingInput">Estado</label>
+                                            <label for="floatingInput" style="float: left; padding-right: 10px;">Fecha</label>
+                                            <input type="date" class="form-control" id=" floatingInput"
+                                                style="border-radius: 0;" name="fecha" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="form-group">
+                                            <label for="floatingInput" style="float: left; padding-right: 10px;">Estado</label>
                                             <select class="form-control" id="floatingInput" style="border-radius: 0;"
                                                 name="estado">
                                                 <option value="Contado">Contado</option>
@@ -49,15 +66,9 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="col-6">
-                                        <div class="form-group">
-                                            <label for="floatingInput">Fecha</label>
-                                            <input type="date" class="form-control" id=" floatingInput"
-                                                style="border-radius: 0;" name="fecha" required>
-                                        </div>
-                                    </div>
+
                                 </div>
-                                
+
                             </div>
 
                             <div class="row">
@@ -173,7 +184,7 @@
 
     // Agregar un event listener al botón para el evento 'click'
     const validarBoton = document.getElementById('boton');
-    validarBoton.addEventListener('click', function(event) {
+    validarBoton.addEventListener('click', function (event) {
         verificarCheckboxes(); // Verificar los checkboxes antes del envío
         if (!event.defaultPrevented) {
             document.getElementById('formulario').submit(); // Enviar el formulario si no hay errores

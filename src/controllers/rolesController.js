@@ -1,10 +1,15 @@
 
 function listar(req, res) {
   req.getConnection((err, conn) => {
-    conn.query('SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont,tbl_roles.*FROM tbl_roles;', (err, roles) => {
+    conn.query('SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont,tbl_roles.* FROM tbl_roles;', (err, roles) => {
       if (err) {
         res.json(err);
       }
+
+       // Reemplazar los valores 'A' por 'Activo' y 'I' por 'Inactivo' en los resultados
+       roles.forEach(rol => {
+        rol.estado = rol.estado === 'A' ? 'Activo' : 'Inactivo';
+    });
       res.render('roles/roles', { roles });
     });
   });
