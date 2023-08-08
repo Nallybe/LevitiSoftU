@@ -58,7 +58,7 @@ function crear(req, res) {
 
 function registrar(req, res) {
     const data = req.body;
-    console.log(data);
+    //console.log(data);
     let idProducto = data.idProducto;
     let unidadesArray = data.cantidadProducto;
 
@@ -114,7 +114,7 @@ function registrar(req, res) {
                                 idProducto: idProducto[i],
                                 Unidad: unidadesArray[i]
                             };
-                            console.log("Registro de venta: ", RegistroDetVent)
+                            //console.log("Registro de venta: ", RegistroDetVent)
                             conn.query(
                                 "INSERT INTO tbl_detalleventas SET ?",
                                 [RegistroDetVent],
@@ -314,14 +314,14 @@ function agregarProducto(req, res) {
 }
 function listarProducto(req, res) {
     const idVentas = req.params.idVentas;
-    console.log("IdVentas: ", idVentas)
+    //console.log("IdVentas: ", idVentas)
     const baseUrl = 'http://localhost:8181'
     req.getConnection((err, conn) => {
         conn.query('SELECT p.imagen, p.nombre, p.precio, dv.Unidad FROM tbl_productos p INNER JOIN tbl_detalleventas dv ON p.idProducto = dv.idProducto WHERE dv.idVentas = ?', [idVentas], (err, productos) => {
             if (err) {
                 res.json(err);
             }
-            console.log(productos)
+            //console.log(productos)
             res.render('ventas/ListarProduc', { productos, baseUrl });
         })
     })

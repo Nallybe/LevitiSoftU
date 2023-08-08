@@ -288,7 +288,7 @@ async function producciones_detallar(req, res) {
         });
 
         const users = await new Promise((resolve, reject) => {
-            conn.query("SELECT * FROM tbl_users_info", (err, users) => {
+            conn.query("SELECT * FROM users_info", (err, users) => {
                 if (err) {
                     reject(err);
                 } else {
