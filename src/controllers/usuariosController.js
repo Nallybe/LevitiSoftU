@@ -58,7 +58,7 @@ function usuarios_crear(req, res) {
       if (err) {
         return res.status(500).json(err);
       } else {
-        conn.query(`SELECT * FROM tbl_roles WHERE estado = 'Activo'`, (err, roles) => {
+        conn.query(`SELECT * FROM tbl_roles WHERE estado = 'A'`, (err, roles) => {
           if (err) {
             return res.status(500).json(err);
           } else {

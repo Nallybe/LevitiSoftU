@@ -263,7 +263,7 @@
     });
 </script>
 {{/if}}
-
+{{!-- Alerta de eliminar insumo y el buscar --}}
 <script>
     function alerta(event, idInsumo) {
         event.preventDefault(); // Evitar que el formulario se envíe automáticamente
@@ -313,6 +313,56 @@
         }
     }
 </script>
+{{!-- Validacion solo numeros campo stock --}}
+<script>
+    // Obtener referencia al input
+    const stockInput = document.getElementById('stockInsumo');
+
+    // Agregar un evento para validar el input cada vez que se cambie su valor
+    stockInput.addEventListener('input', function () {
+        const inputValue = stockInput.value;
+
+        // Reemplazar los caracteres no deseados con una cadena vacía
+        const cleanedValue = inputValue.replace(/[+\-,]/g, '');
+
+        // Validar si el valor ingresado es un número y si es positivo
+        if (isNaN(cleanedValue) || cleanedValue < 0) {
+            // Si el valor no es válido, mostrar un mensaje de error
+            document.getElementById('mensajeErrorStock').textContent = 'Debe ingresar un número positivo';
+            // También podrías cambiar el estilo del input para resaltar el error
+            stockInput.style.border = '1px solid red';
+        } else {
+            // Si el valor es válido, asignar el valor limpiado al input
+            stockInput.value = cleanedValue;
+            // Limpiar el mensaje de error y el estilo
+            document.getElementById('mensajeErrorStock').textContent = '';
+            stockInput.style.border = '';
+        }
+    });
+
+    //Validacion inout nombreInsumo
+    // Obtener referencia al input de nombreInsumo
+    const nombreInput = document.getElementById('nombreInsumo');
+
+    // Agregar un evento para validar el input cada vez que se cambie su valor
+    nombreInput.addEventListener('input', function () {
+        const inputValue = nombreInput.value;
+
+        // Validar si el valor ingresado contiene algún número
+        if (/\d/.test(inputValue)) {
+            // Si el valor contiene números, mostrar un mensaje de error
+            document.getElementById('mensajeErrorNombre').textContent = 'No se permiten números en el nombre';
+            // También podrías cambiar el estilo del input para resaltar el error
+            nombreInput.style.border = '1px solid red';
+        } else {
+            // Si el valor no contiene números, limpiar el mensaje de error y el estilo
+            document.getElementById('mensajeErrorNombre').textContent = '';
+            nombreInput.style.border = '';
+        }
+    });
+</script>
+
+
 {{!-- Validacion Agregar Insumo --}}
 <script>
     function validarFormularioModal() {

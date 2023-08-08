@@ -146,7 +146,7 @@ app.get('/ProductosH', (req, res) => {
             return res.status(500).json(err);
         } else {
             // Consultar los productos en la base de datos
-            conn.query('SELECT nombre, descripcion, imagen, precio, stock FROM tbl_productos', (err, productos) => {
+            conn.query('SELECT p.nombre, p.descripcion, p.imagen, p.precio, p.stock, c.nombre AS nombre_categoria FROM tbl_productos p INNER JOIN tbl_categoria c ON p.idCategoria = c.idCategoria;', (err, productos) => {
                 if (err) {
                     // Si hay un error al consultar las productos, enviar una respuesta con el error
                     return res.status(500).json(err);

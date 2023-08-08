@@ -90,13 +90,13 @@ function auth(req, res) {
                               return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
                             }
                             const permisos = permissionResults.map((row) => row.nombrePermisos);
-                            console.log('Permisos: ', permissionResults)
+                            //console.log('Permisos: ', permissionResults)
                             req.session.asignacion = permisos;
                             
                             // Redireccionar al primer permiso que coincida
                             var firstMatchingPermission = permisos.find((permiso) => true);
 
-                            console.log("Primer " + firstMatchingPermission)
+                            //console.log("Primer " + firstMatchingPermission)
                             if (firstMatchingPermission) {
                               res.redirect('/' + firstMatchingPermission);
                             } else {
@@ -149,7 +149,7 @@ function auth(req, res) {
 
 function registrar(req, res) {
   const data = req.body;
-  console.log(data)
+  //console.log(data)
   req.getConnection((err, conn) => {
     if (err) {
       console.log(err);
@@ -183,12 +183,11 @@ function registrar(req, res) {
                 return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
               }
               const registroUsuario = {
-                idRoles: idRoles,
+                idRoles: idRoles[0].idRoles,
                 correo: data.correo,
                 passsword: hash,
                 estado: 'A'
               };
-
               conn.query(
                 'INSERT INTO users_access SET ?',
                 registroUsuario,
@@ -223,7 +222,7 @@ function registrar(req, res) {
                             console.log(error);
                             return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
                           }
-                          console.log(req.session.roles)
+                          //console.log(req.session.roles)
                           req.session.roles = roleResults;
 
                           conn.query(
@@ -262,7 +261,6 @@ function registrar(req, res) {
     );
   });
 }
-
 
 
 
