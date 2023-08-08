@@ -35,39 +35,113 @@
     <section class="py-3">
         <header class="text-center mb-4">
             <h2>Productos</h2>
+            <div class="d-flex justify-content-end align-items-center" style="padding-right: 4px;">
+                <input id="searchInput" type="text" placeholder="Buscar productos..." oninput="buscarProductos()">
+                <button class="btn btn-outline-success buscarbtn" style="margin-left: 10px; height:32px;"><i
+                        class="fas fa-search fa-sm align-items-center"></i></button>
+            </div>
+
         </header>
         <div class="container p-0">
             <div class="row">
+                <!-- TEXTO ADICIONAL -->
+                <div class="col-lg-4 col-md-4">
+                    <h5 class="text-uppercase mb-4">Categorias</h5>
+                    <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal">
+                        <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="todos">Todos</a></li>
+                        <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Chaquetas">Chaquetas</a></li>
+                        <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Billeteras">Billeteras</a></li>
+                        <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Accesorios">Accesorios</a></li>
+                        <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Zapatos">Zapatos</a></li>
+                        <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Bolsos">Bolsos</a></li>
+                        <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Morrales">Morrales</a></li>
+                    </ul>
 
-                <!-- SHOP LISTING-->
-                        <!-- PRODUCT-->
-                        {{#each productos}}
-                        <div class="col-lg-4 col-md-4 " >
-                            <div class="product productosI text-center ">
-                                <div class="" >
-                                    <div class="badge text-white "></div><a class="d-block" href="#"><img
-                                            class="" width="200" height="200" src="assets/img/Productos/{{imagen}}" alt="..."></a>
-                                </div>
-                                <h6> <a class="reset-anchor " href="#">{{nombre}}</a></h6>
-                                <p class="small text-muted"><strong>Precio:</strong> {{precio}}<br>
-                                <strong>Stock: </strong>{{stock}}</p>
-                            </div>
-                        </div>
-                        {{/each}}
                 </div>
+
+                <!-- PRODUCTOS -->
+                {{#each productos}}
+                <div class="col-lg-4 col-md-4">
+                    <div class="product productosI text-center">
+                        <div class="">
+                            <div class="badge text-white"></div>
+                            <a class="d-block" href="#">
+                                <img class="" width="200" height="200" src="assets/img/Productos/{{imagen}}" alt="...">
+                            </a>
+                        </div>
+                        <h6><a class="reset-anchor" href="#">{{nombre}}</a></h6>
+                        <p class="small text-muted">
+                            <strong>Precio:</strong> {{precio}}<br>
+                            <strong>Stock:</strong> {{stock}}
+                            <strong data-nombre_categoria="{{nombre_categoria}}" hidden>{{nombre_categoria}}</strong>
+                        </p>
+                    </div>
+                </div>
+                {{/each}}
             </div>
+        </div>
     </section>
+
     <div class="whatsapp-container">
-      <a href="https://wa.me/5211234567890?text=Me%20gustaría%20saber%20el%20precio%20del%20coche" class="whatsapp"
-        target="_blank">
-        <i class="fab fa-whatsapp whatsapp-icon"></i>
-        <div class="whatsapp-tooltip p-1">Chatea con nosotros</div>
-      </a>
-      
+        <a href="https://wa.me/5211234567890?text=Me%20gustaría%20saber%20el%20precio%20del%20coche" class="whatsapp"
+            target="_blank">
+            <i class="fab fa-whatsapp whatsapp-icon"></i>
+            <div class="whatsapp-tooltip p-1">Chatea con nosotros</div>
+        </a>
+
     </div>
     {{>footer}}
     <!-- JavaScript files-->
+    <!-- PRIMER SCRIPT -->
+    <!-- PRIMER SCRIPT -->
+    <script>
+        function filtrarProductosPorCategoria(categoriaSeleccionada) {
+            const productos = document.querySelectorAll('.product');
 
+            productos.forEach((producto) => {
+                const categoriaProducto = producto.querySelector('strong[data-nombre_categoria]').getAttribute('data-nombre_categoria');
+
+                if (categoriaSeleccionada === 'todos' || categoriaSeleccionada === categoriaProducto) {
+                    producto.style.display = 'block';
+                } else {
+                    producto.style.display = 'none';
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const categorias = document.querySelectorAll('.reset-anchor');
+            categorias.forEach((categoria) => {
+                categoria.addEventListener('click', function () {
+                    const categoriaSeleccionada = this.getAttribute('data-nombre_categoria');
+                    filtrarProductosPorCategoria(categoriaSeleccionada);
+                });
+            });
+
+            // Mostrar todos los productos al cargar la página
+            filtrarProductosPorCategoria('todos');
+        });
+    </script>
+
+
+
+
+    <script>
+        function buscarProductos() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toUpperCase();
+            const productos = document.querySelectorAll('.product');
+
+            productos.forEach((producto) => {
+                const nombreProducto = producto.querySelector('h6').textContent.toUpperCase();
+                if (nombreProducto.includes(filter)) {
+                    producto.style.display = 'block';
+                } else {
+                    producto.style.display = 'none';
+                }
+            });
+        }
+    </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

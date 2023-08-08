@@ -45,7 +45,7 @@ function registrar(req, res) {
   //console.log(data)
   const RegistroRol = {
     nombreRoles: data.nombreRol,
-    estado: data.estadoRol,
+    estado: "A",
   };
 
   req.getConnection((err, conn) => {
