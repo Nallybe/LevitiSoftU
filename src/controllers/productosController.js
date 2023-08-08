@@ -40,16 +40,10 @@ function productos_listar(req, res) {
                                 productos[index].categoria = "Zapatos";
                                 break;
                         }
-
-
-
                         // Parsear precio
                         productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
-
                     }
-                    // Renderizar la plantilla 'productos/listar' y enviar los datos a la vista
-                    const numP = productos.length;
-                    res.render('productos/listar', { productos, numP });
+                    res.render('productos/listar', { productos });
                 }
             });
         }
@@ -73,7 +67,6 @@ function productos_detallar(req, res) {
                         producto[index].estado2 = true;
                     }
 
-
                     switch (producto[index].idCategoria) {
                         case 1:
                             producto[index].categoria = "Accesorios";
@@ -94,8 +87,6 @@ function productos_detallar(req, res) {
                             producto[index].categoria = "Zapatos";
                             break;
                     }
-
-
                 }
                 conn.query("SELECT * FROM tbl_productos_detalles WHERE idProducto = ?", [idProducto], (err, detallesproducto) => {
                     if (err) {
@@ -308,7 +299,7 @@ function productos_editar(req, res) {
                         return res.status(500).json(err);
                     } else {
                         for (i in producto) {
-                            // Actualizar el estado de la Producto
+                            // Actualizar el estado del Producto
                             switch (producto[i].estado) {
                                 case 'A':
                                     producto[i].estado1 = true;
@@ -358,7 +349,6 @@ function productos_editar(req, res) {
                                         }
                                     }
                                     res.render('productos/editar', { productos, producto, detallesproducto, insumos });
-
                                 });
                             }
                         });
@@ -637,52 +627,6 @@ function productos_eliminar(req, res) {
 
 
 //Cambiar Estado Producto
-function productos_estado(req, res) {
-    const idProducto = req.params.idProducto;
-    req.getConnection((err, conn) => {
-        conn.query(`SELECT * FROM tbl_productos WHERE idProducto= ?`, [idProducto], (err, producto) => {
-            if (err) {
-                return res.status(500).json(err);
-            } else {
-                for (i in producto) {
-                    if (producto[i].estado == 'A') {
-                        var estado = {
-                            estado: 'I'
-                        }
-
-                        conn.query(`Update tbl_productos set ? where idProducto= ?`, [estado, idProducto],
-                            (err) => {
-                                if (err) {
-                                    return res.status(500).json(err);
-                                } else {
-                                    console.log("Estado Producto Actualizado");
-                                }
-                            });
-                    } else {
-                        var estado = {
-                            estado: 'A'
-                        }
-
-                        conn.query(`Update tbl_productos set ? where idProducto= ?`, [estado, idProducto],
-                            (err) => {
-                                if (err) {
-                                    return res.status(500).json(err);
-                                } else {
-                                    console.log("Estado Producto Actualizado");
-
-
-                                }
-                            });
-
-                    }
-                }
-            }
-            res.redirect("/productos");
-        });
-    });
-}
-
-//Cambiar Estado Producto
 module.exports = {
     productos_listar: productos_listar,
     productos_detallar: productos_detallar,
@@ -690,6 +634,5 @@ module.exports = {
     productos_crear: productos_crear,
     productos_registrar: productos_registrar,
     productos_editar: productos_editar,
-    productos_modificar: productos_modificar,
-    productos_estado: productos_estado
+    productos_modificar: productos_modificar
 }

@@ -4,34 +4,26 @@
 {{>headerD}}
 
 <style>
-    .fa-eye:hover {
-        color: aqua;
-    }
-
     .fa-pen:hover {
         color: #0275d8;
-    }
-
-    .pen-2:hover {
-        color: white;
     }
 
     .fa-trash:hover {
         color: red;
     }
 
-    .boton-producto {
+    .boton-user {
         display: inline-block;
         vertical-align: middle;
         margin-right: 10px;
     }
 
     .btn {
-        border-radius: 0;
+        border-radius: 8px;
     }
 
     .badge {
-        border-radius: 0;
+        border-radius: 8px;
     }
 </style>
 
@@ -60,7 +52,7 @@
             </div>
             <div class="col-md-5"></div>
             <div class="col-md-3">
-                <a href="/usuarios_registrar" class="btn btn-success" style="border-radius: 0;"><i
+                <a href="/usuarios_registrar" class="btn btn-success"><i
                         class="fa-solid fa-circle-plus"></i>
                     Registrar Usuario</a>
             </div>
@@ -94,37 +86,6 @@
                 {{#each usuarios}}
                 <tr>
                     <td class="py-3 px-6 text-center">{{cont}}</td>
-                    <!--<td class="p-3 text-center">
-
-
-                        <a class="user-link" href="/usuarios" href="#" data-bs-toggle="popover" data-bs-trigger="hover"
-                            data-bs-html="true" title="<b>Datos Usuario {{cont}}</b>" data-bs-content="
-                            <div class='row'>
-                                <div class='col-md-4'>
-                                    <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
-                                </div>
-                                <div class='col-md-8'>
-                                    <b>Documento:</b> {{documento}}<br>
-                                    <b>Nombre:{{nombre}}</b> <br>
-                                    <b>Teléfono:{{telefono}}</b> <br>
-                                </div>
-                            </div>
-                            "><i class="fas fa-user" style="color:black; font-size: 50;"></i>
-                        </a>
-                    </td>-->
-
-
-                    <!--<td class="p-2 text-center">
-                                <a class="btn btn-info" href="/roles/{{idRol}}" data-bs-toggle="popover"
-                                    data-bs-trigger="hover" data-bs-title="<b>Rol {{idRol}}</b>"
-                                    data-bs-html="true" data-bs-content="
-                                    <b>ID Rol:</b> {{idRol}}<br>
-                                    <b>Nombre:</b> {{nombreRol}}<br>
-                                    <b>Estado:</b> {{estadoRol}}<br>
-                                ">{{nombreRol}} <span class="badge text-bg-secondary"><i class="fas fa-user"
-                                            style="color: black"></i></span></a>
-                            </td>-->
-
                     <td class="p-3 text-center">{{documento}}</td>
                     <td class="p-3 text-center">{{nombre}}</td>
                     <td class="p-3 text-center">{{correo}}</td>
@@ -133,25 +94,21 @@
 
                     {{#if estado1}}
                     <td class="p-3 text-center">
-                        <button class="btn btn-primary" style="border-radius:20px;" disabled>Activo</button>
-                        <!--<input class="check" type="checkbox" role="switch" checked
-                                    onchange="location.href='usuarios_estado/{{idAccess}}'">-->
+                        <button class="btn btn-primary" disabled>Activo</button>
                     </td>
                     <!--Activo-->
                     {{/if}}
                     {{#if estado2}}
                     <td class="p-3 text-center">
-                        <button class="btn btn-secondary" style="border-radius:20px;" disabled>Inactivo</button>
-                        <!--<input class="check" type="checkbox" role="switch"
-                                    onchange="location.href='usuarios_estado/{{idAccess}}'">-->
+                        <button class="btn btn-secondary" disabled>Inactivo</button>
                     </td>
                     <!--Inactivo-->
                     {{/if}}
                     <td class="p-3 px-1 ">
-                        <a href="/usuarios_editar/{{idAccess}}" style="color: #292b2c; " class="boton-producto">
+                        <a href="/usuarios_editar/{{idAccess}}" style="color: #292b2c; " class="boton-user">
                             <i type="button" class="fa-sharp fa-solid fa-pen"></i>
                         </a>
-                        {{!-- <form action="/usuarios_eliminar" method="POST" class="boton-producto"
+                        {{!-- <form action="/usuarios_eliminar" method="POST" class="boton-user"
                             id="FormEliminarUsario{{idAccess}}">
                             <input type="hidden" value="{{idAccess}}" name="idAccess">
                             <a type="button" onclick="Eliminar({{idAccess}})"><i class="fa fa-trash"></i></a>
@@ -326,13 +283,3 @@
         });
     });
 </script>
-
-
-
-
-
-{{!--
-<script src="assets/js/ValidacionEliminarInsumo.js"></script>
-<!--  Google Maps Plugin-->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
---}}

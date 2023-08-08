@@ -4,219 +4,308 @@
 {{>headerId}}
 
 <style>
-    .fa-eye:hover {
-        color: aqua;
+    /* Estilos para el popover */
+    .custom-popover {
+        position: relative;
+        max-width: 330px;
+        border: 3px gray solid;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        background-color: white;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        color: black;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bs-white */
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
-    .fa-ban:hover {
-        color: red;
+    .custom-popover2 {
+        position: relative;
+        max-width: 300px;
+        border: 3px gray solid;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        background-color: white;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        color: black;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bs-white */
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
-    .ban-2:hover {
-        color: white;
+    /* Estilos para la flecha del popover */
+    .custom-popover::before,
+    .custom-popover2::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: -16px;
+        /* Ubica la flecha justo a la izquierda del popover */
+        border-width: 8px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+        /* Utiliza el color correspondiente a --bd-violet-bg */
+        transform: translateY(-50%);
+        border-right-color: gray;
+        /* Agrega un borde negro de 1px a la derecha de la flecha */
     }
 
-    .boton-compra {
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 10px;
+    p {
+        margin-bottom: 1%;
     }
 
-    .btn-info {
-        border-radius: 0;
+    .btn {
+        border-radius: 8px;
+    }
+
+    button {
+        border-radius: 8px;
+        border: 1px gray solid;
     }
 
     .badge {
         border-radius: 0;
     }
+
+    .fa-dolly:hover {
+        color: gray;
+    }
+
+    /* Add this style to your existing CSS */
+    .table-container {
+        max-height: 450px;
+        height: 450px;
+        /* Adjust this value as per your requirement */
+        overflow-y: auto;
+        position: relative;
+        /* Add this to enable positioning of thead */
+    }
+
+    /* Add this style to fix thead */
+    .table-container table {
+        position: relative;
+    }
+
+    .table-container thead {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
 </style>
 
 <!--Barra de navegación-->
 {{>barId}}
-        <!--Barra de navegación-->
-        <br><br><br>
-        <center>
-            <div class="container mb-5">
-                <table class="table table-hover" style="text-align:center;" id="tabla-compras-detalles">
-                    <thead style="background-color: #282d32; color:white;">
-                        <tr>
-                            <th colspan="3" style="background-color: #30363d; color:white;"><b>Registro</b></th>
-                        </tr>
-                        <tr>
-                            <th class="w-1/4 ...">#</th>
-                            <!--<th class="w-1/5 ...">Registrador</th>-->
-                            <th class="w-1/5 ...">Cliente</th>
-                            <th class="w-1/4 ..."># Artículos</th>
-                            <th class="w-1/4 ...">Total</th>
-                            <th class="w-1/4 ...">FechaEntrega</th>
-                            <th class="w-1/4 ...">FechaRegistro</th>
-                            <th class="w-1/3 ...">Estado</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each reparacion}}
-                        <tr class="table-active">
-                            <td class="py-3 px-6 text-center">{{idReparacion}}</td>
+<!--Barra de navegación-->
+<br><br><br>
 
-                            <!--<td class="p-3 text-center">
-                                <button class="btn btn-warning" href="/usuarios/{{idInfoUser1}}" type="button"
-                                    data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
-                                    title="<b>Usuario {{idInfoUser1}}</b>" data-bs-content="
-                                    <div class='row'>
-                                        <div class='col-md-4'>
-                                            <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
-                                        </div>
-                                        <div class='col-md-8'>
-                                            <b>ID:</b> {{idInfoUser1}}<br>
-                                            <b>Nombre:</b> {{userName1}}<br>
-                                            <b>Teléfono:</b> {{userTell1}}<br>
-                                            <b>#Reparaciones:</b> {{userNumR1}}
-                                        </div>
-                                    </div>
-                                    ">{{userName1}} <span class="badge text-bg-secondary"><i class="fas fa-user"
-                                            style="color:black"></i></span>
-                                </button>
-                            </td>-->
+<div class="row ml-2">
+    <div class="col-md-3">
+        {{#each reparacion}}
 
-                            <td class="p-3 text-center">
-                                <button class="btn btn-warning" href="/usuarios/{{idInfoUser2}}" type="button"
-                                    data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
-                                    title="<b>Usuario {{idInfoUser2}}</b>" data-bs-content="
-                                    <div class='row'>
-                                      <div class='col-md-4'>
-                                        <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
-                                      </div>
-                                      <div class='col-md-8'>
-                                        <b>ID:</b> {{idInfoUser2}}<br>
-                                        <b>Nombre:</b> {{userName2}}<br>
-                                        <b>Teléfono:</b> {{userTell2}}<br>
-                                        <b>#Reparaciones:</b> {{userNumR2}}
-                                      </div>
-                                    </div>
-                                    ">{{userName2}} <span class="badge text-bg-secondary"><i class="fas fa-user"
-                                            style="color:black"></i></span>
-                                </button>
-                            </td>
-                            <td class="p-3 text-center">
-                                {{numDR}}
-                            </td>
-
-                            <td class="p-3 text-center">{{total}}</td>
-                            <td class="p-3 text-center">{{fechaEntrega}}</td>
-                            <td class="p-3 text-center">{{fechaRegistro}}</td>
-                            {{#if estado1}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-primary" style="border-radius:0;">Iniciado</button>
-                            </td>
-                            {{/if}}
-                            {{#if estado2}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-success" style="border-radius:0;">En Proceso</button>
-                            </td>
-                            {{/if}}
-                            {{#if estado3}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-secondary" style="border-radius:0;">Terminado</button>
-                            </td>
-                            {{/if}}
-                            {{#if estado4}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-warning" style="border-radius:0;">Terminado y entregado</button>
-                            </td>
-                            {{/if}}
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-
-
-                <table class="table table-hover mt-4" style="text-align:center;" id="tabla-compras">
-                    <thead style="background-color: #282d32; color:white;">
-                        <tr>
-                            <th colspan="3" style="background-color: #30363d; color:white;"><b>Detalles</b></th>
-                        </tr>
-                        <tr>
-                            <th class="w-1/4 ...">#</th>
-                            <th class="w-2/4...">Artículo a reparar</th>
-                            <th class="w-2/4...">Descripción</th>
-                            <th class="w-2/4...">Observación</th>
-                            <th class="w-2/4...">Estado</th>
-                            <th class="w-2/4...">Última Actualización</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each detallesreparacion}}
-                        <tr class="table-active">
-                            <td class="py-2 px-6 text-center">{{cont}}</td>
-                            <!--<td class="py-2 px-6 text-center">{{idDetalleCompra}}</td>-->
-                            <!--<td class="p-3 text-center">{{idCompra}}</td>-->
-                            <td class="p-3 text-center">{{productoReparar}}</td>
-                            <td class="p-3 text-center">{{descripcion}}</td>
-                            <td class="p-3 text-center">{{observacion}}</td>
-                            {{#if estado1}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-primary" style="border-radius:0;">Iniciado</button>
-                            </td>
-                            {{/if}}
-                            {{#if estado2}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-success" style="border-radius:0;">En Proceso</button>
-                            </td>
-                            {{/if}}
-                            {{#if estado3}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-secondary" style="border-radius:0;">Terminado</button>
-                            </td>
-                            {{/if}}
-
-                            <td class="py-2 px-6 text-center">{{fechaEstado}}</td>
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-
-
-            </div>
-    </div>
-</div>
-</center>
-
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-    <!-- Position it: -->
-    <!-- - `.toast-container` for spacing between toasts -->
-    <!-- - `top-0` & `end-0` to position the toasts in the upper right corner -->
-    <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
-    <div class="toast-container position-fixed bottom-0 end-0 right-0 p-3">
-        <div id="myToast" class="toast align-items-center border-0" role="alert" aria-live="assertive"
-            aria-atomic="true" data-delay="1000">
-            <!--Tiempo de espera--><!--data-bs-autohide="false" Dejar el toast estatico-->
-            <div class="d-flex">
-                <div class="toast-body">
-                    <strong class="me-auto"> Reparación {{#each reparacion}}{{idReparacion}}{{/each}}<br></strong>
-                    La reparación cuenta con un total de <b>({{numDR}}) detalles </b>
-                    <!--<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
-
-                    <!--<div class="col-md-2">
-              <button type="button" class="btn btn-secondary mr-0" data-bs-dismiss="toast" aria-label="Close"
-                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                <i class="fa-solid fa-x"></i></button>
-            </div>-->
+        <div class="card mb-3" style="max-width: 100%; border-radius: 0;">
+            <div class="card-body">
+                <h5 class="card-title">REPARACIÓN</h5>
+                <div class="card-text">
+                    <p><b>Cliente:</b>
+                        <button type="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true"
+                            data-bs-custom-class="custom-popover" title="<b>Usuario</b>" data-bs-content="
+                            <div class='row'>
+                                <div class='col-md-3'>
+                                    <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
+                                </div>
+                                <div class='col-md-9'>
+                                    <b>Nombre:</b> {{userName}}<br>
+                                    <b>Teléfono:</b> {{userTell}}<br>
+                                    <b>Correo:</b> {{userEmail}}<br>
+                                </div>
+                            </div>
+                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user"
+                                    style="color:black"></i></span>
+                        </button>
+                        <br>
+                    </p>
+                    <p><b>Fecha_Registro: </b>{{fechaRegistro}}<br></p>
+                    <p><b>Feha_Entrega: </b>{{fechaEntrega}}<br></p>
+                    <p><b>Total: </b>{{total}}<br></p>
+                    <p><b>Estado: </b>
+                        {{#if estado1}}
+                        <button class="btn btn-primary btn-sm" style="border-radius:20px;" disabled>Iniciado</button>
+                        <!--Activo-->
+                        {{/if}}
+                        {{#if estado2}}
+                        <button class="btn btn-success btn-sm" style="border-radius:20px;" disabled>En Proceso</button>
+                        <!--Inactivo-->
+                        {{/if}}
+                        {{#if estado3}}
+                        <button class="btn btn-secondary btn-sm" style="border-radius:20px;" disabled>Terminado</button>
+                        <!--Inactivo-->
+                        {{/if}}
+                        {{#if estado4}}
+                        <button class="btn btn-warning btn-sm" style="border-radius:20px;" disabled>T.. y
+                            Entregado</button>
+                        <!--Inactivo-->
+                        {{/if}}
+                    </p>
                 </div>
             </div>
         </div>
+        {{/each}}
     </div>
-</div>
 
 
-<div class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-        <div class="toast-body">
-            Hello, world! This is a toast message.
+    <div class="col-md-9">
+        <!--Start Card #3-->
+        <div class="card" style="width: 98%; border-radius: 0;">
+            <div class="card-body">
+                <h6 class="card-title">Articulos a reparar</h6>
+                <!--Start Table-->
+                <div class="table-container">
+                    <table class="table table-sm">
+                        <thead class="table" style="background-color: #282d32; color:white;">
+                            <tr style="text-align: center;">
+                                <th>#</th>
+                                <th>Artículo</th>
+                                <th>Descripción</th>
+                                <th>Observación</th>
+                                <th>Estado</th>
+                                <th>Última Actualización</th>
+                                <th>Insumos Requeridos</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each detallesreparacion}}
+                            <tr class="clickable-row"><!---->
+                                <td class="py-2 px-6 text-center">{{cont}}</td>
+                                <td class="p-3 text-center">{{articulo}}</td>
+                                <td class="p-3 text-center">{{descripcion}}</td>
+                                <td class="p-3 text-center">{{observacion}}</td>
+                                {{#if estado1}}
+                                <td class="p-3 text-center">
+                                    <button class="btn btn-primary" disabled>Iniciado</button>
+                                </td>
+                                {{/if}}
+                                {{#if estado2}}
+                                <td class="p-3 text-center">
+                                    <button class="btn btn-success" disabled>En Proceso</button>
+                                </td>
+                                {{/if}}
+                                {{#if estado3}}
+                                <td class="p-3 text-center">
+                                    <button class="btn btn-secondary" disabled>Terminado</button>
+                                </td>
+                                {{/if}}
+
+                                <td class="p-3 text-center">{{fechaEstado}}</td>
+
+                                <td class="py-2 px-6 text-center"><a type="button" data-toggle="modal"
+                                        data-target="#id{{cont}}"> <!--<i class="fa-solid fa-caret-down"></i>--> <i
+                                            class="fa-solid fa-dolly"></i></a></td>
+                            </tr>
+
+                            <!--
+                            <tr class="extra-row">
+                                <td colspan="7">
+                                    <div class="card-body" style="display:none;">
+                                        <div class="card" style="width: 100%; border-radius: 0;">
+                                            <div class="card-body">
+                                                <h6 class="card-title">INSUMOS REQUERIDOS</h6>
+                                               
+                                                <div class="table-container-1">
+                                                    <table class="table table-sm">
+                                                        <thead class="table"
+                                                            style="background-color: #282d32; color:white;">
+                                                            <tr style="text-align: center;">
+                                                                <th>#</th>
+                                                                <th>Insumo</th>
+                                                                <th>Cantidad</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="ListaInsumos" style="text-align: center;">
+                                                            <tr>
+                                                                <td colspan="4"></td>
+                                                            </tr>
+
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>-->
+
+                            {{/each}}
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <button class="prev-btn">Anterior</button>
+                        <button class="next-btn">Siguiente</button>
+                    </div>
+                </div>
+                <!--End Table-->
+            </div>
         </div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-            aria-label="Close"></button>
+        <!--End Card #3-->
+    </div>
+
+</div>
+
+<!--Modal-->
+{{#each detallesreparacion}}
+<div class="modal fade" id="id{{cont}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Insumos requeridos por
+                    articulo {{cont}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead style="background-color: #282d32; color:white;">
+                        <tr style="text-align: center;">
+                            <th>#</th>
+                            <th>Insumo</th>
+                            <th>Cantidad</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: center;">
+                        {{#each detalles}}
+                        <tr>
+                            <td>{{this.cont}}</td>
+                            <td>
+                                <button type="button" data-bs-toggle="popover" data-bs-trigger="focus"
+                                    data-bs-custom-class="custom-popover2" data-bs-title="<b>Insumo {{this.cont}}</b>"
+                                    data-bs-html="true" data-bs-content="
+                                    <div class='row'>
+                                        <div class='col-md-4'>
+                                            <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Box-Open-icon.png' width='100' />
+                                        </div>
+                                        <div class='col-md-8'>
+                                            <b>Nombre:</b> {{this.idInsumo}}<br>
+                                            <b>Medida:</b> {{this.medida}}<br>
+                                            <b>Stock:</b> {{this.stock}}<br>
+                                        </div>
+                                    </div>
+                                ">{{this.idInsumo}} <i class="fas fa-box-open" style="color: black"></i></button>
+
+                            </td>
+                            <td>{{this.cantidad_n}}</td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+{{/each}}
+<!--End Modal-->
 
 </body>
 
@@ -224,25 +313,25 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
 <!--Validacion nav bar-->
 {{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
+<script>
+    var permisosInput = document.querySelector('#permisosInput');
+    var permisosValue = permisosInput.value;
 
-      var palabras = permisosValue.split(',');
+    var palabras = permisosValue.split(',');
 
-      var menuItems = document.querySelectorAll('.nav li');
+    var menuItems = document.querySelectorAll('.nav li');
 
-      menuItems.forEach(function (item) {
+    menuItems.forEach(function (item) {
         var items = item.querySelector('p').textContent.trim().toLowerCase();
 
         if (palabras.includes(items)) {
-          item.style.display = 'block';
+            item.style.display = 'block';
         } else {
-          item.style.display = 'none';
+            item.style.display = 'none';
         }
-      });
-    </script>
-    {{/if}}
+    });
+</script>
+{{/if}}
 
 <script>
     // Inicializar los popovers
@@ -281,14 +370,95 @@
     $(document).ready(function () {
         // Javascript method's body can be found in assets/js/demos.js
         demo.initDashboardPageCharts();
-
     });
 </script>
 
 
+<!--
+    Detalles de los detalles
+-->
 
-{{!--
-<script src="assets/js/ValidacionEliminarInsumo.js"></script>
-<!--  Google Maps Plugin-->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
---}}
+<script>
+    // Desplegar detalle del detalle
+    document.addEventListener("DOMContentLoaded", function () {
+        var clickableRows = document.getElementsByClassName("clickable-row");
+
+        for (var i = 0; i < clickableRows.length; i++) {
+            clickableRows[i].addEventListener("click", function () {
+                var nextRow = this.nextElementSibling;
+                if (nextRow.classList.contains("extra-row")) {
+                    var cardBody = nextRow.querySelector(".card-body");
+                    cardBody.style.display = cardBody.style.display === "none" ? "block" : "none";
+                }
+            });
+        }
+    });
+</script>
+
+
+<script>
+    const itemsPerPage = 3; // Define el número de registros por página
+    let currentPage = 1;
+
+    function showPage(page) {
+        const rows = document.querySelectorAll('.clickable-row');
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+
+        rows.forEach((row, index) => {
+            if (index >= startIndex && index < endIndex) {
+                row.style.display = 'table-row';
+                row.setAttribute('data-visible', 'true');
+            } else {
+                row.style.display = 'none';
+                row.setAttribute('data-visible', 'false');
+            }
+        });
+    }
+
+    function updatePagination() {
+        const rows = document.querySelectorAll('.clickable-row');
+        const totalRows = rows.length;
+        const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+        if (currentPage === 1) {
+            document.querySelector('.prev-btn').disabled = true;
+        } else {
+            document.querySelector('.prev-btn').disabled = false;
+        }
+
+        if (currentPage === totalPages) {
+            document.querySelector('.next-btn').disabled = true;
+        } else {
+            document.querySelector('.next-btn').disabled = false;
+        }
+    }
+
+    document.querySelector('.prev-btn').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            showPage(currentPage);
+            updatePagination();
+        }
+    });
+
+    document.querySelector('.next-btn').addEventListener('click', () => {
+        const rows = document.querySelectorAll('.clickable-row');
+        const totalRows = rows.length;
+        const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+        if (currentPage < totalPages) {
+            currentPage++;
+            showPage(currentPage);
+            updatePagination();
+        }
+    });
+
+    // Mostrar la primera página al cargar la tabla
+    showPage(currentPage);
+    updatePagination();
+</script>
+
+<!--
+    End Detalles de los detalles
+-->

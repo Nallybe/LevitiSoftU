@@ -4,317 +4,436 @@
 {{>headerId}}
 
 <style>
-    .fa-eye:hover {
-        color: aqua;
+    #descripcion {
+        border-radius: 0;
+        border: 1px rgb(206, 212, 218) solid;
+        line-height: 1.5;
+        max-height: 200px;
+        padding-top: 0;
+        height: 70px;
     }
 
-    .fa-ban:hover {
-        color: red;
+
+    /* Estilos para el popover */
+    .custom-popover {
+        position: relative;
+        max-width: 330px;
+        border: 3px gray solid;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        background-color: white;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        color: black;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bs-white */
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
-    .ban-2:hover {
-        color: white;
+    .custom-popover2 {
+        position: relative;
+        max-width: 300px;
+        border: 3px gray solid;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        background-color: white;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        color: black;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bs-white */
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
-    .boton-compra {
-        display: inline-block;
-        vertical-align: middle;
-        margin-right: 10px;
+    /* Estilos para la flecha del popover */
+    .custom-popover::before,
+    .custom-popover2::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: -16px;
+        /* Ubica la flecha justo a la izquierda del popover */
+        border-width: 8px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+        /* Utiliza el color correspondiente a --bd-violet-bg */
+        transform: translateY(-50%);
+        border-right-color: gray;
+        /* Agrega un borde negro de 1px a la derecha de la flecha */
+    }
+
+    p {
+        margin-bottom: 1%;
     }
 
     .btn {
-        border-radius: 0;
+        border-radius: 8px;
+    }
+
+    button {
+        border-radius: 8px;
+        border: 1px gray solid;
     }
 
     .badge {
         border-radius: 0;
     }
+
+    .fa-dolly:hover {
+        color: gray;
+    }
+
+    /* Add this style to your existing CSS */
+    .table-container {
+        max-height: 380px;
+        height: 380px;
+        /* Adjust this value as per your requirement */
+        overflow-y: auto;
+        position: relative;
+        /* Add this to enable positioning of thead */
+    }
+
+    /* Add this style to fix thead */
+    .table-container table {
+        position: relative;
+    }
+
+    .table-container thead {
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
 </style>
 
 <!--Barra de navegación-->
 {{> barId}}
-        <!--Barra de navegación-->
-        <br><br><br>
-        <center>
-            <div class="container mb-5">
-                <table class="table table-hover" style="text-align:center;" id="tabla-compras-detalles">
-                    <thead style="background-color: #282d32; color:white;">
-                        <tr>
-                            <th colspan="3" style="background-color: #30363d; color:white;"><b>Registro</b></th>
-                        </tr>
-                        <tr>
-                            <th class="w-1/4 ...">#</th>
-                            <!--<th class="w-1/4 ...">Registrador</th>-->
-                            <th class="w-1/4 ...">Encargado</th>
-                            <th class="w-1/4 ...">Producto</th>
-                            <th class="w-1/4 ...">Cantidad Producir</th>
-                            <th class="w-1/4 ...">Fecha Inicio</th>
-                            <th class="w-1/4 ...">Fecha Fin</th>
-                            <th class="w-1/4 ...">Estado</th>
-                            <!-- <th class="w-1/4 ...">Funciones</th>-->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each producciones}}
-                        <tr class="table-active">
-                            <td class="py-3 px-6 text-center">{{idOrdenProduccion}}</td>
-                            <td class="p-3 text-center">
-                                <button class="btn btn-warning" href="/usuarios/{{idInfoUser}}" type="button"
-                                    data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
-                                    title="<b>Usuario {{idInfoUser}}</b>" data-bs-content="
-                                    <div class='row'>
-                                      <div class='col-md-4'>
-                                        <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
-                                      </div>
-                                      <div class='col-md-8'>
-                                        <b>Nombre:</b> {{userName}}<br>
-                                        <b>Teléfono:</b> {{userTell}}<br>
-                                        <b>#Producciones:</b> {{userNumOP}}
-                                      </div>
+<!--Barra de navegación-->
+<br><br><br>
+
+
+
+<div class="row ml-1">
+    <div class="col-md-3">
+        {{#each producciones}}
+
+        <div class="card mb-3" style="max-width: 100%; border-radius: 0;">
+            <div class="card-body">
+                <h5 class="card-title">PRODUCCIÓN</h5>
+                <div class="card-text">
+                    <p><b>Encargado:</b>
+                        <button type="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true"
+                            data-bs-custom-class="custom-popover" title="<b>Usuario</b>" data-bs-content="
+                            <div class='row'>
+                                <div class='col-md-3'>
+                                    <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
+                                </div>
+                                <div class='col-md-9'>
+                                    <b>Nombre:</b> {{userName}}<br>
+                                    <b>Teléfono:</b> {{userTell}}<br>
+                                    <b>Correo:</b> {{userEmail}}<br>
+                                </div>
+                            </div>
+                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user"
+                                    style="color:black"></i></span>
+                        </button>
+                        <br>
+                    </p>
+                    <p><b>Producto:</b>
+                        <button type="button" data-bs-trigger="focus" data-bs-toggle="popover" data-bs-html="true"
+                            data-bs-custom-class="custom-popover" title="<b>Producto Producción {{cont}}</b>"
+                            data-bs-content="
+                            <div class='popover-content'>
+                                <div class='row'>
+                                    <div class='col-md-4'>
+                                        <img src='/assets/img/Productos/img.jpg' alt='Imagen del producto'
+                                            style='max-width:100%; max-height:100px'> 
+                                        <!--<img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Gift.png' width='100' />-->
                                     </div>
-                                    ">{{userName}} <span class="badge text-bg-secondary"><i class="fas fa-user" style="color:black"></i></span>
-                                </button>
-                            </td>
-
-
-                            <td class="p-3 text-center">
-                                <button class="btn btn-info" href="/productos/{{idProducto}}" type="button"
-                                    data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
-                                    title="<b>Producto {{idProducto}}</b>" data-bs-content="
-                                    <div class='popover-content'>
-                                    <div class='row'>
-                                      <div class='col-md-4'>
-                                        <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Gift.png' width='100' />
-                                      </div>
-                                      <div class='col-md-8'>
+                                    <div class='col-md-8'>
                                         <b>Nombre:</b> {{proName}}<br>
                                         <b>Descripción:</b> {{proDes}}<br>
                                         <b>Precio:</b> {{proPrecio}}<br>
                                         <b>Stock:</b> {{proStock}}
-                                      </div>
                                     </div>
-                                    </div>
-                                    ">{{proName}} <span class="badge text-bg-secondary"><i class="fas fa-gift" style="color:black"></i></span>
-                                </button>
-                            </td>
-                            <td class="p-3 text-center">{{cantidad}}</td>
-                            <td class="p-3 text-center">{{fechaInicio}}</td>
-                            <td class="p-3 text-center">{{fechaFin}}</td>
-                            {{#if estado1}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-primary" style="border-radius:0;" data-bs-toggle="modal"
-                                    data-bs-target="#Iniciado" disabled>Iniciado</button>
-                            </td>
-                            {{/if}}
-                            {{#if estado2}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-success" style="border-radius:0;" data-bs-toggle="modal"
-                                    data-bs-target="#Proceso" disabled>En
-                                    Proceso</button>
-                            </td>
-                            {{/if}}
-                            {{#if estado3}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-secondary" style="border-radius:0;" data-bs-toggle="modal"
-                                    data-bs-target="#Terminado" disabled>
-                                    Terminado
-                                </button>
-                            </td>
-                            {{/if}}
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-
-                <table class="table table-hover mt-5 mb-5" style="text-align:center;" id="tabla-compras">
-                    <thead style="background-color: #282d32; color:white;">
-                        <tr>
-                            <th colspan="3" style="background-color: #30363d; color:white;"><b>Detalles</b></th>
-                        </tr>
-                        <tr>
-                            <th class="w-1/4 ...">#</th>
-                            <!--<th class="w-1/4 ...">Registrador</th>-->
-                            <th class="w-1/4 ...">Titulo</th>
-                            <th class="w-1/4 ...">Descripción</th>
-                            <th class="w-1/4 ...">Observaciones</th>
-                            <th class="w-1/4 ...">Fecha Inicio</th>
-                            <th class="w-1/4 ...">Fecha Fin</th>
-                            <th class="w-1/4 ...">Estado</th>
-                            <!-- <th class="w-1/4 ...">Funciones</th>-->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each d_produccion}}
-                        <tr class="table-active">
-                            <td class="py-3 px-6 text-center">{{cont}}</td>
-                            
-                            <td class="p-3 text-center">{{titulo}}</td>
-                            <td class="p-3 text-center">{{descripcion}}</td>
-                            <td class="p-3 text-center">{{observacion}}</td>
-                            <td class="p-3 text-center">{{fechaInicio}}</td>
-                            <td class="p-3 text-center">{{fechaFin}}</td>
-                            {{#if estado1}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-primary" style="border-radius:0;" data-bs-toggle="modal"
-                                    data-bs-target="#Iniciado" disabled>Iniciado</button>
-                            </td>
-                            {{/if}}
-                            {{#if estado2}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-success" style="border-radius:0;" data-bs-toggle="modal"
-                                    data-bs-target="#Proceso" disabled>En
-                                    Proceso</button>
-                            </td>
-                            {{/if}}
-                            {{#if estado3}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-secondary" style="border-radius:0;" data-bs-toggle="modal"
-                                    data-bs-target="#Terminado" disabled>
-                                    Terminado
-                                </button>
-                            </td>
-                            {{/if}}
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
-
-                <!-- Prieba 3 ya va saliendo mejor-->
-                <style type="text/css">
-                    div.scroll_horizontal {
-                        width: 100%;
-                        overflow: auto;
-                        border: 1px solid #666;
-                        background-color: #f5f5f5;
-                        padding: 8px;
-                        padding-left: 1px;
-                    }
-
-                    table.table-bordered.sticky th:first-child {
-                        position: sticky;
-                        left: 0;
-                        background-color: white;
-                        z-index: 1;
-                        border: 1px solid #666;
-                    }
-
-                    table.table-bordered {
-                        border-collapse: collapse;
-                        width: 100%;
-                    }
-
-                    table.table-bordered th,
-                    table.table-bordered td {
-                        border: 1px solid #ddd;
-                        padding: 8px;
-                        background-color: white;
-                    }
-
-                    table.table-bordered td.x {
-                        background-color: lightblue;
-                    }
-                </style>
+                                </div>
+                            </div>
+                            ">{{proName}} <span class="badge text-bg-secondary"><i class="fas fa-gift"
+                                    style="color:black"></i></span>
+                        </button>
+                        <br>
+                    </p>
+                    <p><b>Cantidad_Producir: </b>{{cantidad}}<br></p>
+                    <p><b>Fecha_Inicio: </b>{{fechaInicio}}<br></p>
+                    <p><b>Fecha_Fin: </b>{{fechaFin}}<br></p>
+                    <p><b>Estado: </b>
+                        {{#if estado1}}
+                        <button class="btn btn-primary btn-sm" style="border-radius:20px;" disabled>Iniciado</button>
+                        <!--Iniciado-->
+                        {{/if}}
+                        {{#if estado2}}
+                        <button class="btn btn-success btn-sm" style="border-radius:20px;" disabled>En Proceso</button>
+                        <!--Proceso-->
+                        {{/if}}
+                        {{#if estado3}}
+                        <button class="btn btn-secondary btn-sm" style="border-radius:20px;" disabled>Terminado</button>
+                        <!--Terminado-->
+                        {{/if}}
+                    </p>
+                </div>
+            </div>
+        </div>
+        {{/each}}
 
 
-                <h4 class="mt-6" style="text-align: left; margin-left: 20%;">Cronograma</h4>
-                <center>
-                    <div class="scroll_horizontal">
-                        <table class="table table-bordered border-primary table-hover sticky ml-0">
-                            <thead>
-                                <tr>
-                                    <td style="background: cornflowerblue;"></td>
-                                    {{#each dates3}}
-                                    <th style="background: cornflowerblue;">
-                                        <h6 style="width: 100px; text-align: center;">{{this}}</h6>
-                                    </th>
-                                    {{/each}}
+        <center>
+            <button type="button" data-toggle="modal" data-target="#Insumos">
+                Insumos Requeridos <i class="fa-solid fa-dolly"></i>
+            </button>
+        </center>
+
+
+        <!--Modal Insumos-->
+        <div class="modal fade" id="Insumos" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Insumos Requeridos
+                        </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table">
+                            <thead style="background-color: #282d32; color:white;">
+                                <tr style="text-align: center;">
+                                    <th class="w-1/4 py-4 ...">#</th>
+                                    <th class="w-1/4 py-4 ...">Insumo</th>
+                                    <th class="w-1/4 py-4 ...">Cantidad Necesaria</th>
                                 </tr>
                             </thead>
-
-                            <tbody>
-                                {{#each records3}}
+                            <tbody style="text-align: center;">
+                                {{#each d_producto}}
                                 <tr>
-                                    {{#each this}}
-                                    {{#if this.titulo}}
-                                    <th style="background: cornflowerblue;" data-bs-toggle="popover"
-                                        data-bs-trigger="hover" data-bs-html="true" title="<b>Tarea/Evento/Proceso</b>"
-                                        data-bs-content="
-                                        <div class='popover-content'>
-                                            <b>Titulo:</b> {{this.titulo}}<br>
-                                            <b>Descripción:</b> {{this.descripcion}}<br>
-                                            <b>Observaciones:</b> {{this.observacion}}<br>
-                                            <b>Fecha inicio (estimado):</b> {{this.fechaInicio}}<br>
-                                            <b>Fecha fin (estimado):</b> {{this.fechaFin}}<br>
-                                            <b>Estado: </b>{{this.estado}}
-                                        </div>
-                                        ">
-                                        <span><i class="fas fa-list-ol" style="color:black"></i></span>{{this.titulo}}
-                                    </th>
-                                    {{else}}
-                                    <td class="{{#if this.seleccionado}} text-primary{{/if}} {{#if this.seleccionado}}x{{/if}}"
-                                        style="text-align: center;">
-                                        {{!--{{#if this.seleccionado}}{{/if}}--}}
+                                    <td class="py-2 px-6 text-center">{{cont}}</td>
+                                    <td class="p-3 text-center">
+
+                                        <button type="button" data-bs-toggle="popover" data-bs-trigger="focus"
+                                            data-bs-custom-class="custom-popover2"
+                                            data-bs-title="<b>Insumo {{cont}}</b>" data-bs-html="true" data-bs-content="
+                                            <div class='row'>
+                                                <div class='col-md-4'>
+                                                    <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Box-Open-icon.png' width='100' />
+                                                </div>
+                                                <div class='col-md-8'>
+                                                    <b>Nombre:</b> {{nombreI}}<br>
+                                                    <b>Medida:</b> {{medidaI}}<br>
+                                                    <b>Stock:</b> {{cantidadI}}<br>
+                                                </div>
+                                            </div>
+                                        ">{{nombreI}} <i class="fas fa-box-open" style="color: black"></i></button>
                                     </td>
-                                    {{/if}}
-                                    {{/each}}
+                                    <!--<td class="p-3 text-center">{{cantidad_n}}</td>-->
+                                    <td class="p-3 text-center">{{totalN}}</td>
                                 </tr>
                                 {{/each}}
                             </tbody>
                         </table>
                     </div>
-                </center>
-            </div>
-    </div>
-</div>
-</center>
-
-
-
-
-
-
-<!--Inicio footer-->
-<!--Inicio footer-->
-
-<!--Fin footer-->
-<!--Fin footer-->
-
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-    <!-- Position it: -->
-    <!-- - `.toast-container` for spacing between toasts -->
-    <!-- - `top-0` & `end-0` to position the toasts in the upper right corner -->
-    <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
-    <div class="toast-container position-fixed bottom-0 end-0 right-0 p-3">
-        <div id="myToast" class="toast align-items-center border-0" role="alert" aria-live="assertive"
-            aria-atomic="true" data-delay="1000">
-            <!--Tiempo de espera--><!--data-bs-autohide="false" Dejar el toast estatico-->
-            <div class="d-flex">
-                <div class="toast-body">
-                    <strong class="me-auto"> Compra {{#each compra}}{{idCompra}}{{/each}}<br></strong>
-                    La compra cuenta con un total de <b>({{numDC}}) detalles </b>
-                    <!--<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
-
-                    <!--<div class="col-md-2">
-              <button type="button" class="btn btn-secondary mr-0" data-bs-dismiss="toast" aria-label="Close"
-                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                <i class="fa-solid fa-x"></i></button>
-            </div>-->
                 </div>
             </div>
         </div>
+
+        <!--End Modal Insumos-->
+
     </div>
-</div>
 
 
-<div class="toast align-items-center text-bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
-    <div class="d-flex">
-        <div class="toast-body">
-            Hello, world! This is a toast message.
+    <div class="col-md-9">
+        <!--Start Card #3-->
+        <div class="card" style="width: 98%; border-radius: 0;">
+            <div class="card-body">
+                <h6 class="card-title">Eventos</h6>
+                <!--Start Table-->
+                <div class="table-container">
+                    <table class="table table-sm">
+                        <thead class="table" style="background-color: #282d32; color:white;">
+                            <tr style="text-align: center;">
+                                <th>#</th>
+                                <th>Título</th>
+                                <th>Descripción</th>
+                                <th>Observación</th>
+                                <th>Fecha_Inicio</th>
+                                <th>Fecha_Fin</th>
+                                <th>Estado</th>
+                                <th>Última Actualización</th>
+                                <th>Participantes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {{#each d_produccion}}
+                            <tr class="clickable-row">
+                                <td class="py-3 px-6 text-center">{{cont}}</td>
+                                <td class="p-3 text-center">{{titulo}}</td>
+                                <td class="p-3 text-center"><textarea name="" id="" cols="20"
+                                        rows="2">{{descripcion}}</textarea></td>
+                                <td class="p-3 text-center"><textarea name="" id="" cols="20"
+                                        rows="2">{{observacion}}</textarea></td>
+                                <td class="p-3 text-center">{{fechaInicio}}</td>
+                                <td class="p-3 text-center">{{fechaFin}}</td>
+                                {{#if estado1}}
+                                <td class="p-3 text-center">
+                                    <button class="btn btn-primary" disabled>Iniciado</button>
+                                </td>
+                                {{/if}}
+                                {{#if estado2}}
+                                <td class="p-3 text-center">
+                                    <button class="btn btn-success" disabled>En
+                                        Proceso</button>
+                                </td>
+                                {{/if}}
+                                {{#if estado3}}
+                                <td class="p-3 text-center">
+                                    <button class="btn btn-secondary" disabled>
+                                        Terminado
+                                    </button>
+                                </td>
+                                {{/if}}
+
+                                <td class="p-3 text-center">
+                                    {{fechaEstado}}
+
+                                </td>
+                                <td class="py-2 px-6 text-center"><a type="button" data-toggle="modal"
+                                        data-target="#id{{cont}}"><i class="fa fa-users"></i></a></td>
+
+                            </tr>
+
+                            <!--
+                            <tr class="extra-row">
+                                <td colspan="7">
+                                    <div class="card-body" style="display:none;">
+                                        <div class="card" style="width: 100%; border-radius: 0;">
+                                            <div class="card-body">
+                                                <h6 class="card-title">INSUMOS REQUERIDOS</h6>
+                                               
+                                                <div class="table-container-1">
+                                                    <table class="table table-sm">
+                                                        <thead class="table"
+                                                            style="background-color: #282d32; color:white;">
+                                                            <tr style="text-align: center;">
+                                                                <th>#</th>
+                                                                <th>Insumo</th>
+                                                                <th>Cantidad</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="ListaInsumos" style="text-align: center;">
+                                                            <tr>
+                                                                <td colspan="4"></td>
+                                                            </tr>
+
+                                                        </tbody>
+
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>-->
+
+                            {{/each}}
+                        </tbody>
+                    </table>
+                    <div class="pagination">
+                        <button class="prev-btn">Anterior</button>
+                        <button class="next-btn">Siguiente</button>
+                    </div>
+                </div>
+                <!--End Table-->
+            </div>
         </div>
-        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"
-            aria-label="Close"></button>
+        <!--End Card #3-->
+    </div>
+
+</div>
+
+<!--Modal-->
+{{#each d_produccion}}
+<div class="modal fade" id="id{{cont}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Participantes Evento #{{cont}}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table">
+                    <thead style="background-color: #282d32; color:white;">
+                        <tr style="text-align: center;">
+                            <th>#</th>
+                            <th>Participante</th>
+                        </tr>
+                    </thead>
+                    <tbody style="text-align: center;">
+                        {{#each participes}}
+                        <tr>
+                            <td>{{this.cont}}</td>
+                            <td>
+                                <button type="button" data-bs-toggle="popover" data-bs-trigger="focus"
+                                    data-bs-custom-class="custom-popover2"
+                                    data-bs-title="<b>Participante {{this.cont}}</b>" data-bs-html="true"
+                                    data-bs-content="
+                                    <div class='row'>
+                                        <div class='col-md-4'>
+                                            <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Box-Open-icon.png' width='100' />
+                                        </div>
+                                        <div class='col-md-8'>
+                                            <b>Nombre:</b> {{this.userName}}<br>
+                                            <b>Teléfono:</b> {{this.userTel}}<br>
+                                            <b>Correo:</b> {{this.userEmail}}<br>
+                                        </div>
+                                    </div>
+                                ">{{this.userName}} <i class="fas fa-user" style="color: black"></i></button>
+                            </td>
+                        </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+{{/each}}
+<!--End Modal-->
+
+<br>
+
+<center>
+    <div class="card mb-3" style="max-width: 70%; border-radius: 0;">
+        <div class="card-body">
+            <div id='calendar' style="max-height: 500px;"></div>
+        </div>
+    </div>
+</center>
+
+<br>
+<br>
+
+<center>
+    <div class="card mb-3" style="max-width: 95%; border-radius: 0;">
+        <div class="card-body">
+            <div id='calendar2' style="max-height: 550px;"></div>
+        </div>
+    </div>
+</center>
+
+<br>
+
+
+
 
 </body>
 
@@ -327,11 +446,6 @@
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl);
     });
-
-    // Mostrar el toast
-    var toastEl = document.getElementById('myToast');
-    var toast = new bootstrap.Toast(toastEl);
-    toast.show();
 </script>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -363,9 +477,133 @@
 </script>
 
 
+<!--Detalles de los detalles-->
 
-{{!--
-<script src="assets/js/ValidacionEliminarInsumo.js"></script>
-<!--  Google Maps Plugin-->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
---}}
+<script>
+    // Desplegar detalle del detalle
+    document.addEventListener("DOMContentLoaded", function () {
+        var clickableRows = document.getElementsByClassName("clickable-row");
+
+        for (var i = 0; i < clickableRows.length; i++) {
+            clickableRows[i].addEventListener("click", function () {
+                var nextRow = this.nextElementSibling;
+                if (nextRow.classList.contains("extra-row")) {
+                    var cardBody = nextRow.querySelector(".card-body");
+                    cardBody.style.display = cardBody.style.display === "none" ? "block" : "none";
+                }
+            });
+        }
+    });
+</script>
+
+
+<script>
+    const itemsPerPage = 3; // Define el número de registros por página
+    let currentPage = 1;
+
+    function showPage(page) {
+        const rows = document.querySelectorAll('.clickable-row');
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+
+        rows.forEach((row, index) => {
+            if (index >= startIndex && index < endIndex) {
+                row.style.display = 'table-row';
+                row.setAttribute('data-visible', 'true');
+            } else {
+                row.style.display = 'none';
+                row.setAttribute('data-visible', 'false');
+            }
+        });
+    }
+
+    function updatePagination() {
+        const rows = document.querySelectorAll('.clickable-row');
+        const totalRows = rows.length;
+        const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+        if (currentPage === 1) {
+            document.querySelector('.prev-btn').disabled = true;
+        } else {
+            document.querySelector('.prev-btn').disabled = false;
+        }
+
+        if (currentPage === totalPages) {
+            document.querySelector('.next-btn').disabled = true;
+        } else {
+            document.querySelector('.next-btn').disabled = false;
+        }
+    }
+
+    document.querySelector('.prev-btn').addEventListener('click', () => {
+        if (currentPage > 1) {
+            currentPage--;
+            showPage(currentPage);
+            updatePagination();
+        }
+    });
+
+    document.querySelector('.next-btn').addEventListener('click', () => {
+        const rows = document.querySelectorAll('.clickable-row');
+        const totalRows = rows.length;
+        const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+        if (currentPage < totalPages) {
+            currentPage++;
+            showPage(currentPage);
+            updatePagination();
+        }
+    });
+
+    // Mostrar la primera página al cargar la tabla
+    showPage(currentPage);
+    updatePagination();
+</script>
+
+<!--End Detalles de los detalles-->
+
+
+
+
+<!--CALENDARIO-->
+<script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js'></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendarEl2 = document.getElementById('calendar2');
+
+        // Obtener el JSON de eventosList.eventos utilizando toJson helper
+        var eventosJSON = {{{ toJson eventosList.eventos }}};
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        timeZone: 'UTC',
+        defaultView: 'month', // Vista por defecto: mes
+        editable: false,
+        locale: 'es', //español
+        selectable: false, // Deshabilitamos la selección manual
+        buttonText: {
+            today: 'Hoy' // Cambiamos el texto del botón "Today" a "Hoy"
+        },
+        events: eventosJSON // Asignar la cadena JSON al atributo events
+    });
+
+    var calendar2 = new FullCalendar.Calendar(calendarEl2, {
+        timeZone: 'UTC',
+        initialView: 'multiMonthYear',
+        editable: false,
+        locale: 'es', //español
+        buttonText: {
+            today: 'Hoy' // Cambiamos el texto del botón "Today" a "Hoy"
+        },
+        //initialDate: '2023-09-01',  Establecemos la fecha inicial 
+        events: eventosJSON
+    });
+
+
+    calendar.render();
+    calendar2.render();
+        });
+</script>
+
+<!--END CALENDARIO-->

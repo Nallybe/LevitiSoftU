@@ -64,7 +64,8 @@
     #mensajeErrorPrecio,
     #mensajeErrorStock,
     #mensajeErrorInsumo,
-    #mensajeErrorCantidad {
+    #mensajeErrorCantidad,
+    #mensajeErrorCategoria {
       display: none;
       color: red;
       margin-top: 5px;
@@ -76,7 +77,8 @@
     #mensajeErrorPrecio .icono,
     #mensajeErrorStock .icono,
     #mensajeErrorInsumo .icono,
-    #mensajeErrorCantidad .icono {
+    #mensajeErrorCantidad .icono,
+    #mensajeErrorCategoria .icono {
       display: inline-block;
       vertical-align: middle;
       margin-right: 5px;
@@ -135,7 +137,7 @@
 
                   <!--Input Categoria-->
                   <label class="form-label" for="categoria">Categoria</label>
-                  <select class="form-control form-control-sm" style="border-radius: 0;" id="categoria"
+                  <select class="form-control form-control-sm" style="border-radius: 0;" id="categoria" onchange="val_categotia()"
                     name="categoria">
                     <option value=""></option>
                     <option value="1">Accesorios</option>
@@ -151,7 +153,7 @@
                   <!--Input Descripción-->
                   <label class="form-label mt-2" for="descripcion_R">Descripción</label>
                   <textarea class="form-control form-control-sm" id="descripcion" name="descripcion" autocomplete="off"
-                    maxlength="250" oninput="val_descripcion()"></textarea>
+                    maxlength="250" onchange="val_descripcion()"></textarea>
                   <!--End Input Descripción-->
 
                   <center>
@@ -386,6 +388,15 @@
       }
     }
 
+    function val_categoria() {
+      var categoria = document.getElementById("categoria");
+
+      if (categoria.value != "") {
+        mensajeErrorCategoria.innerHTML = '';
+        mensajeErrorCategoria.style.display = 'none';
+      }
+    }
+
     function val_descripcion() {
       var descripcion = document.getElementById("descripcion");
 
@@ -511,88 +522,6 @@
   </script>
   <!--End Agregar y eliminar insumo-->
 
-
-  <!--Validar Envio-->
-  <script>
-    function validarCampos() {
-      var imagen = document.getElementById("imagen");
-      var nombre = document.getElementById("nombre");
-      var descripcion = document.getElementById("descripcion");
-      var precio = document.getElementById("precio");
-      var stock = document.getElementById("stock");
-
-      if (imagen.value == "") {
-        mensajeErrorImagen.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La imagen es un campo obligatorio';
-        mensajeErrorImagen.style.display = 'block';
-      }
-
-      if (nombre.value == "") {
-        mensajeErrorNombre.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El nombre es un campo obligatorio';
-        mensajeErrorNombre.style.display = 'block';
-      }
-
-      if (descripcion.value == "") {
-        mensajeErrorDescripcion.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La descripcion es un campo obligatorio';
-        mensajeErrorDescripcion.style.display = 'block';
-      }
-
-      if (precio.value == "") {
-        mensajeErrorPrecio.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El precio es un campo obligatorio';
-        mensajeErrorPrecio.style.display = 'block';
-      }
-
-      if (stock.value == "") {
-        mensajeErrorStock.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El stock es un campo obligatorio';
-        mensajeErrorStock.style.display = 'block';
-      }
-
-    }
-
-    function validarEnvio() {
-      var list = document.getElementById('ListaInsumosReq');
-      var imagen = document.getElementById("imagen");
-      var nombre = document.getElementById("nombre");
-      var descripcion = document.getElementById("descripcion");
-      var precio = document.getElementById("precio");
-      var stock = document.getElementById("stock");
-
-
-      if (imagen.value == "" || nombre.value == "" || descripcion.value == "" || precio.value == "" || stock.value == "") {
-
-        //alert('campos obligatorios');
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'Campos Obligatorios',
-          showConfirmButton: false,
-          timer: 1500
-        });
-        validarCampos();
-        return false; // Detener el envío del formulario
-      }
-
-      // Verificar si la lista tiene al menos un elemento
-      if (list.childElementCount === 0) {
-        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún insumo");
-        Swal.fire({
-          position: 'top-end',
-          icon: 'info',
-          title: 'No se puede enviar el formulario porque aún no se ha agregado nungún insumo',
-          showConfirmButton: false,
-          timer: 6000
-        });
-        return false; // Detener el envío del formulario
-      }
-      // Permite el envío del formulario
-      return true;
-    }
-  </script>
-  <!--End Validar Envio-->
-
-
-
-
-
   <script>
     // Función para abrir el diálogo de selección de archivos
     function seleccionarNuevaImagen() {
@@ -622,6 +551,89 @@
   </script>
 
 
+
+  <!--Validar Envio-->
+  <script>
+    function validarCampos() {
+      var imagen = document.getElementById("imagen");
+      var nombre = document.getElementById("nombre");
+      var descripcion = document.getElementById("descripcion");
+      var precio = document.getElementById("precio");
+      var stock = document.getElementById("stock");
+      var categoria = document.getElementById("categoria");
+
+      if (imagen.value == "") {
+        mensajeErrorImagen.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La imagen es un campo obligatorio';
+        mensajeErrorImagen.style.display = 'block';
+      }
+
+      if (categoria.value == "") {
+        mensajeErrorCategoria.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La categoria es un campo obligatorio';
+        mensajeErrorCategoria.style.display = 'block';
+      }
+
+      if (nombre.value == "") {
+        mensajeErrorNombre.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El nombre es un campo obligatorio';
+        mensajeErrorNombre.style.display = 'block';
+      }
+
+      if (descripcion.value == "") {
+        mensajeErrorDescripcion.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La descripcion es un campo obligatorio';
+        mensajeErrorDescripcion.style.display = 'block';
+      }
+
+      if (precio.value == "") {
+        mensajeErrorPrecio.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El precio es un campo obligatorio';
+        mensajeErrorPrecio.style.display = 'block';
+      }
+
+      if (stock.value == "") {
+        mensajeErrorStock.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El stock es un campo obligatorio';
+        mensajeErrorStock.style.display = 'block';
+      }
+
+    }
+
+    function validarEnvio() {
+      var list = document.getElementById('ListaInsumosReq');
+      var imagen = document.getElementById("imagen");
+      var nombre = document.getElementById("nombre");
+      var categoria = document.getElementById("categoria");
+      var descripcion = document.getElementById("descripcion");
+      var precio = document.getElementById("precio");
+      var stock = document.getElementById("stock");
+
+      if (imagen.value == '' || nombre.value == '' || descripcion.value == '' || precio.value == '' || stock.value == '' || categoria.value == '') {
+        //alert('campos obligatorios');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Campos Obligatorios',
+          showConfirmButton: false,
+          timer: 1500
+        });
+        validarCampos();
+        return false; // Detener el envío del formulario
+      }
+
+      // Verificar si la lista tiene al menos un elemento
+      if (list.childElementCount === 0) {
+        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún insumo");
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'No se puede enviar el formulario porque aún no se ha agregado nungún insumo',
+          showConfirmButton: false,
+          timer: 6000
+        });
+        return false; // Detener el envío del formulario
+      }
+
+      // Permite el envío del formulario
+      return true;
+    }
+  </script>
+  <!--End Validar Envio-->
 
   <!--Inicio footer-->
 
@@ -664,13 +676,4 @@
         }
       });
     });
-  </script>
-
-  <script>
-    // Ejemplo de arreglo de objetos para probar
-    const arregloObjetos = [
-      { nombre: "Persona 1", edad: 25 },
-      { nombre: "Persona 2", edad: 30 },
-      { nombre: "Persona 3", edad: 22 }
-    ];
   </script>

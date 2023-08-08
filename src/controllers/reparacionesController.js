@@ -13,9 +13,12 @@ function reparaciones_listar(req, res) {
                 // Si hay un error al consultar las reparaciones, enviar una respuesta con el error
                 return res.status(500).json(err);
             }
+            var cont = 1;
 
             // Consultar los detalles de las reparaciones para cada reparación
             for (let index in reparaciones) {
+                reparaciones[index].cont = cont;
+                cont++;
                 conn.query('SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion=?', [reparaciones[index].idReparacion], (err, d_reparaciones) => {
                     if (err) {
                         // Si hay un error al consultar los detalles de la reparación, enviar una respuesta con el error
@@ -55,34 +58,24 @@ function reparaciones_listar(req, res) {
                             return res.status(500).json(err);
                         } else {
                             for (index in reparaciones) {
-                                reparaciones[index].userName1;
-                                reparaciones[index].userTell1;
-                                reparaciones[index].userEmail1;
-                                reparaciones[index].userName2;
-                                reparaciones[index].userTell2;
-                                reparaciones[index].userEmail2;
+                                reparaciones[index].userName;
+                                reparaciones[index].userTell;
+                                reparaciones[index].userEmail;
                                 for (iA in usersA) {
                                     for (iI in usersI) {
-                                        if (usersI[iI].idInfo == reparaciones[index].idInfoUser1 && usersI[iI].idAccess == usersA[iA].idAccess) {
-                                            reparaciones[index].userName1 = usersI[iI].nombre;
-                                            reparaciones[index].userTell1 = usersI[iI].telefono;
-                                            reparaciones[index].userEmail1 = usersA[iA].correo;
-                                        }
-                                        if (usersI[iI].idInfoUser == reparaciones[index].idInfoUser2 && usersI[iI].idAccess == usersA[iA].idAccess) {
-                                            reparaciones[index].userName2 = usersI[iI].nombre;
-                                            reparaciones[index].userTell2 = usersI[iI].telefono;
-                                            reparaciones[index].userEmail2 = usersA[iA].correo;
+                                        if (usersI[iI].idInfo == reparaciones[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
+                                            reparaciones[index].userName = usersI[iI].nombre;
+                                            reparaciones[index].userTell = usersI[iI].telefono;
+                                            reparaciones[index].userEmail = usersA[iA].correo;
                                         }
                                     }
                                 }
                             }
-                            let numR = reparaciones.length;
-                            res.status(200).render("reparaciones/listar", { reparaciones, numR });
+                            res.status(200).render("reparaciones/listar", { reparaciones });
                         }
                     });
                 }
             });
-
         });
     });
 }
@@ -90,6 +83,7 @@ function reparaciones_listar(req, res) {
 
 
 //Detallar
+/*
 function reparaciones_detallar(req, res) {
     const idReparacion = req.params.idReparacion;
     req.getConnection((err, conn) => {
@@ -130,45 +124,196 @@ function reparaciones_detallar(req, res) {
             }
 
             // Consultar los usuarios de la tabla tbl_users_info
-            conn.query("SELECT * FROM users_info", (err, users) => {
+
+            conn.query("SELECT * FROM users_access", (err, usersA) => {
                 if (err) {
-                    // Si hay un error al consultar los usuarios, enviar una respuesta con el error
                     return res.status(500).json(err);
-                }
+                } else {
+                    conn.query("SELECT * FROM users_info", (err, usersI) => {
+                        if (err) {
+                            return res.status(500).json(err);
+                        } else {
+                            for (index in reparacion) {
+                                reparacion[index].userName;
+                                reparacion[index].userTell;
+                                reparacion[index].userEmail;
+                                for (iA in usersA) {
+                                    for (iI in usersI) {
+                                        if (usersI[iI].idInfo == reparacion[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
+                                            reparacion[index].userName = usersI[iI].nombre;
+                                            reparacion[index].userTell = usersI[iI].telefono;
+                                            reparacion[index].userEmail = usersA[iA].correo;
+                                        }
+                                    }
+                                }
+                            }
 
-                // Actualizar los campos de la reparación con la información de los usuarios para los popovers en el hbs
-                for (let index in reparacion) {
-                    for (let i in users) {
-                        if (users[i].idInfoUser == reparacion[index].idInfoUser1) {
-                            reparacion[index].userName1 = users[i].nombre;
-                            reparacion[index].userTell1 = users[i].telefono;
-                            reparacion[index].userNumR1 = users[i].numReparaciones;
-                            // reparaciones[index].userEmail = users[i].correo
+                            // Consultar los detalles de la reparación
+                            conn.query("SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, detallesreparacion) => {
+                                if (err) {
+                                    // Si hay un error al consultar los detalles de la reparación, enviar una respuesta con el error
+                                    return res.status(500).json(err);
+                                }
+
+                                // Actualizar los campos de los detalles de la reparación 
+                                let cont = 1;
+                                for (let index in detallesreparacion) {
+                                    detallesreparacion[index].fechaEstado = detallesreparacion[index].fechaEstado.toLocaleString();
+                                    detallesreparacion[index].cont = cont;
+                                    cont++;
+
+                                    // Actualizar el estado de la reparación para que en el hbs el estado tenga su propio diseño dependiendo del valor
+                                    switch (detallesreparacion[index].estado) {
+                                        case 'Iniciado':
+                                            detallesreparacion[index].estado1 = true;
+                                            break;
+                                        case 'Proceso':
+                                            detallesreparacion[index].estado2 = true;
+                                            break;
+                                        case 'Terminado':
+                                            detallesreparacion[index].estado3 = true;
+                                            break;
+                                    }
+                                    //Parsear fecha
+                                    detallesreparacion[index].fechaEstado = detallesreparacion[index].fechaEstado.toLocaleString();
+                                }
+
+                                conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
+                                    if (err) {
+                                        // Si hay un error al consultar los detalles de la reparación, enviar una respuesta con el error
+                                        return res.status(500).json(err);
+                                    }
+
+                                    for (let ix in detallesreparacion) {
+                                        // Consultar los detalles de los detalles de la reparación
+                                        conn.query("SELECT * FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [detallesreparacion[ix].idDetalleReparacion], (err, detalles) => {
+                                            if (err) {
+                                                // Si hay un error al consultar los detalles de la reparación, enviar una respuesta con el error
+                                                return res.status(500).json(err);
+                                            }
+
+                                            var contD  = 1;
+                                            for(i in detalles){
+                                                for(ix in insumos){
+                                                    if(insumos[ix].idInsumo == detalles[i].idInsumo){
+                                                        detalles[i].idInsumo = insumos[ix].nombre
+                                                    }
+                                                }
+
+                                                detalles[i].cont = contD;
+                                                contD ++;
+                                            }
+
+                                            detallesreparacion[index].detalles = detalles
+
+                                        });
+                                    }
+
+                                    //Redireccionar 
+                                    res.render("reparaciones/detallar", { detallesreparacion, reparacion });
+                                });
+
+                            });
                         }
-                        if (users[i].idInfoUser == reparacion[index].idInfoUser2) {
-                            reparacion[index].userName2 = users[i].nombre;
-                            reparacion[index].userTell2 = users[i].telefono;
-                            reparacion[index].userNumR2 = users[i].numReparaciones;
-                            // reparaciones[index].userEmail = users[i].correo
+                    });
+                }
+            });
+        });
+    });
+}
+
+*/
+
+
+async function reparaciones_detallar(req, res) {
+    try {
+        const idReparacion = req.params.idReparacion;
+        const conn = await new Promise((resolve, reject) => {
+            req.getConnection((err, conn) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(conn);
+                }
+            });
+        });
+
+        const reparacion = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_reparaciones WHERE idReparacion = ?", [idReparacion], (err, reparacion) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    for (let index in reparacion) {
+                        reparacion[index].fechaEntrega = reparacion[index].fechaEntrega.toLocaleDateString();
+                        reparacion[index].fechaRegistro = reparacion[index].fechaRegistro.toLocaleDateString(); //toLocaleString();
+                        reparacion[index].total = "$ " + reparacion[index].total.toLocaleString('es-CO');
+
+                        switch (reparacion[index].estado) {
+                            case 'Iniciado':
+                                reparacion[index].estado1 = true;
+                                break;
+                            case 'Proceso':
+                                reparacion[index].estado2 = true;
+                                break;
+                            case 'Terminado':
+                                reparacion[index].estado3 = true;
+                                break;
+                            case 'Entregado':
+                                reparacion[index].estado4 = true;
+                                break;
                         }
                     }
+                    resolve(reparacion);
                 }
+            });
+        });
 
-                // Consultar los detalles de la reparación
-                conn.query("SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, detallesreparacion) => {
-                    if (err) {
-                        // Si hay un error al consultar los detalles de la reparación, enviar una respuesta con el error
-                        return res.status(500).json(err);
+        const usersA = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM users_access", (err, usersA) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(usersA);
+                }
+            });
+        });
+
+        const usersI = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM users_info", (err, usersI) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(usersI);
+                }
+            });
+        });
+
+        for (let index in reparacion) {
+            reparacion[index].userName;
+            reparacion[index].userTell;
+            reparacion[index].userEmail;
+            for (let iA in usersA) {
+                for (let iI in usersI) {
+                    if (usersI[iI].idInfo == reparacion[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
+                        reparacion[index].userName = usersI[iI].nombre;
+                        reparacion[index].userTell = usersI[iI].telefono;
+                        reparacion[index].userEmail = usersA[iA].correo;
                     }
+                }
+            }
+        }
 
-                    // Actualizar los campos de los detalles de la reparación 
+        const detallesreparacion = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, detallesreparacion) => {
+                if (err) {
+                    reject(err);
+                } else {
                     let cont = 1;
                     for (let index in detallesreparacion) {
                         detallesreparacion[index].fechaEstado = detallesreparacion[index].fechaEstado.toLocaleString();
                         detallesreparacion[index].cont = cont;
                         cont++;
 
-                        // Actualizar el estado de la reparación para que en el hbs el estado tenga su propio diseño dependiendo del valor
                         switch (detallesreparacion[index].estado) {
                             case 'Iniciado':
                                 detallesreparacion[index].estado1 = true;
@@ -180,25 +325,53 @@ function reparaciones_detallar(req, res) {
                                 detallesreparacion[index].estado3 = true;
                                 break;
                         }
-
-                        //Parsear fecha
                         detallesreparacion[index].fechaEstado = detallesreparacion[index].fechaEstado.toLocaleString();
                     }
-
-
-                    //Calcular Número Detalles
-                    let numDR = detallesreparacion.length;
-                    for (let i in reparacion) {
-                        reparacion[i].numDR = numDR;
-                    }
-                    //End Calcular Número Detalles
-
-                    //Redireccionar 
-                    res.render("reparaciones/detallar", { detallesreparacion, reparacion, numDR });
-                });
+                    resolve(detallesreparacion);
+                }
             });
         });
-    });
+
+        const insumos = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(insumos);
+                }
+            });
+        });
+
+        for (let ix in detallesreparacion) {
+            const detalles = await new Promise((resolve, reject) => {
+                conn.query("SELECT * FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [detallesreparacion[ix].idDetalleReparacion], (err, detalles) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        var contD = 1;
+                        for (let i in detalles) {
+                            for (let ix in insumos) {
+                                if (insumos[ix].idInsumo == detalles[i].idInsumo) {
+                                    detalles[i].idInsumo = insumos[ix].nombre;
+                                    
+                                    detalles[i].medida = insumos[ix].medida;
+                                    detalles[i].stock = insumos[ix].stock;
+                                }
+                            }
+                            detalles[i].cont = contD;
+                            contD++;
+                        }
+                        resolve(detalles);
+                    }
+                });
+            });
+            detallesreparacion[ix].detalles = detalles;
+        }
+        // Redireccionar 
+        res.render("reparaciones/detallar", { detallesreparacion, reparacion });
+    } catch (err) {
+        res.status(500).json(err);
+    }
 }
 //End Detallar
 
@@ -471,7 +644,7 @@ function reparaciones_modificar(req, res) {
         total: data.total,
         fechaEntrega: data.fechaEntrega
     };
-    
+
     req.getConnection((err, conn) => {
         //Actualizar Reparación
         conn.query('UPDATE tbl_reparaciones SET ? WHERE idReparacion = ?', [RegistroReparacion, idReparacion], (err, rows) => {

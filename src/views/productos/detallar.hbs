@@ -17,32 +17,32 @@
 
     /* Add this style to your existing CSS */
     .table-container {
-      max-height: 280px;
-      height: 280px;
-      /* Adjust this value as per your requirement */
-      overflow-y: auto;
-      position: relative;
-      /* Add this to enable positioning of thead */
+        max-height: 280px;
+        height: 280px;
+        /* Adjust this value as per your requirement */
+        overflow-y: auto;
+        position: relative;
+        /* Add this to enable positioning of thead */
     }
 
     /* Add this style to fix thead */
     .table-container table {
-      position: relative;
+        position: relative;
     }
 
     .table-container thead {
-      position: sticky;
-      top: 0;
-      z-index: 1;
+        position: sticky;
+        top: 0;
+        z-index: 1;
     }
-
 </style>
 
 <!--Barra de navegación-->
 {{>barId}}
 <!--Barra de navegación-->
 <br>
-
+<br>
+<br>
 
 <div class="row">
     <div class="col-md-7">
@@ -58,28 +58,26 @@
 
                         <h5 class="card-title">PRODUCTO</h5>
                         <div class="row">
-                            <p class="card-text"><b>Nombre: </b>{{nombre}}</p>
-                            <p class="card-text"><b>Descripcion: </b>{{descripcion}}</p>
-                            <p class="card-text"><b>Categoría: </b>{{categoria}}</p>
+                            <div class="card-text ml-1">
+                            <p><b>Nombre: </b>{{nombre}}<br></p>
+                            <p><b>Descripcion: </b>{{descripcion}}<br></p>
+                            <p><b>Categoría: </b>{{categoria}}<br></p>
 
-                            <p class="card-text"><b>Precio: </b>{{precio}}</p>
-                            <p class="card-text"><b>Stock: </b>{{stock}}</p>
-                            <p class="card-text"><b>Estado: </b>
+                            <p><b>Precio: </b>{{precio}}<br></p>
+                            <p><b>Stock: </b>{{stock}}<br></p>
+                            <p><b>Estado: </b>
                                 {{#if estado1}}
-                                <td class="p-3 text-center">
-                                    <button class="btn btn-primary btn-sm" style="border-radius:20px;"
-                                        disabled>Activo</button>
-                                </td>
+                                <button class="btn btn-primary btn-sm" style="border-radius:20px;"
+                                    disabled>Activo</button>
                                 <!--Activo-->
                                 {{/if}}
                                 {{#if estado2}}
-                                <td class="p-3 text-center">
-                                    <button class="btn btn-secondary btn-sm" style="border-radius:20px;"
-                                        disabled>Inactivo</button>
-                                </td>
+                                <button class="btn btn-secondary btn-sm" style="border-radius:20px;"
+                                    disabled>Inactivo</button>
                                 <!--Inactivo-->
                                 {{/if}}
                             </p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -140,16 +138,6 @@
     </div>
 
 </div>
-
-
-</div>
-</div>
-
-<!--Inicio footer-->
-<!--Inicio footer-->
-
-<!--Fin footer-->
-<!--Fin footer-->
 
 </body>
 
@@ -217,11 +205,3 @@
 
     });
 </script>
-
-
-
-{{!--
-<script src="assets/js/ValidacionEliminarInsumo.js"></script>
-<!--  Google Maps Plugin-->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
---}}
