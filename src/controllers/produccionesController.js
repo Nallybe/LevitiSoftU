@@ -14,8 +14,11 @@ function producciones_listar(req, res) {
             }
 
             // Consultar los detalles de las producciones para cada reparación
+            var cont = 1
             for (let index in producciones) {
                 // Actualizar los campos de la reparación con la información obtenida
+                producciones[index].cont = cont;
+                cont++;
                 producciones[index].fechaInicio = producciones[index].fechaInicio.toLocaleDateString();
                 producciones[index].fechaFin = producciones[index].fechaFin.toLocaleDateString();
 
@@ -74,6 +77,7 @@ function producciones_listar(req, res) {
                                             producciones[index].proDes = productos[i].descripcion;
                                             producciones[index].proPrecio = productos[i].precio;
                                             producciones[index].proStock = productos[i].stock;
+                                            producciones[index].proImg = productos[i].imagen;
                                             // img
                                         }
                                     }
@@ -264,6 +268,256 @@ async function producciones_detallar(req, res) {
                     reject(err);
                 } else {
                     for (let index in producciones) {
+
+                        switch (producciones[index].estado) {
+                            case 'Iniciado':
+                                producciones[index].estado1 = true;
+                                break;
+                            case 'Proceso':
+                                producciones[index].estado2 = true;
+                                break;
+                            case 'Terminado':
+                                producciones[index].estado3 = true;
+                                break;
+                        }
+                    }
+
+                    resolve(producciones);
+                }
+            });
+        });
+
+        const users = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_users_info", (err, users) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(users);
+                }
+            });
+        });
+
+        let idProducto;
+        let cantidadProducir;
+
+        for (let index in producciones) {
+            for (let i in users) {
+                if (users[i].idInfo == producciones[index].idInfo) {
+                    producciones[index].userName = users[i].nombre;
+                    producciones[index].userTell = users[i].telefono;
+                }
+            }
+            idProducto = producciones[index].idProducto;
+            cantidadProducir = producciones[index].cantidad;
+        }
+
+        const productos = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_productos", (err, productos) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(productos);
+                }
+            });
+        });
+
+        for (let index in producciones) {
+            for (let i in productos) {
+                if (productos[i].idProducto == producciones[index].idProducto) {
+                    producciones[index].proName = productos[i].nombre;
+                    producciones[index].proDes = productos[i].descripcion;
+                    producciones[index].proPrecio = productos[i].precio;
+                    producciones[index].proStock = productos[i].stock;
+                }
+            }
+        }
+
+        const d_produccion = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_ordenes_produccion_detalles WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, d_produccion) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    var cont = 1;
+                    for (let index in d_produccion) {
+                        switch (d_produccion[index].estado) {
+                            case 'Iniciado':
+                                d_produccion[index].estado1 = true;
+                                break;
+                            case 'Proceso':
+                                d_produccion[index].estado2 = true;
+                                break;
+                            case 'Terminado':
+                                d_produccion[index].estado3 = true;
+                                break;
+                        }
+                        d_produccion[index].cont = cont;
+                        cont++;
+                    }
+                    resolve(d_produccion);
+                }
+            });
+        });
+
+        for (let index in d_produccion) {
+            const participes = await new Promise((resolve, reject) => {
+                conn.query("SELECT * FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [d_produccion[index].idDetalleOrdenProduccion], (err, participes) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(participes);
+                    }
+                });
+            });
+
+            d_produccion[index].participes = participes;
+
+            
+            var contd = 1;
+            for (let index1 in d_produccion[index].participes) {
+                d_produccion[index].participes[index1].cont = contd;
+                contd ++;
+                for (let i in users) {
+                    if (users[i].idInfo == d_produccion[index].participes[index1].idInfo) {
+                        d_produccion[index].participes[index1].userName = users[i].nombre;
+                        d_produccion[index].participes[index1].userTell = users[i].telefono;
+                        d_produccion[index].participes[index1].userNumOP = users[i].numProducciones;
+                    }
+                }
+            }
+        }
+
+
+
+        const d_producto = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_productos_detalles WHERE idProducto = ?", [idProducto], (err, d_producto) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(d_producto);
+                }
+            });
+        });
+
+        const insumos = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(insumos);
+                }
+            });
+        });
+
+        let cont = 1;
+        for (index in d_producto) {
+            d_producto[index].cont = cont;
+            d_producto[index].nombreI;
+            d_producto[index].medidaI;
+            d_producto[index].cantidadI;
+            d_producto[index].estadoI;
+            d_producto[index].totalN = d_producto[index].cantidad_n * cantidadProducir;
+
+            for (i in insumos) {
+                if (insumos[i].idInsumo == d_producto[index].idInsumo) {
+                    d_producto[index].nombreI = insumos[i].nombre;
+                    d_producto[index].medidaI = insumos[i].medida;
+                    d_producto[index].cantidadI = insumos[i].stock;
+                    d_producto[index].estadoI = insumos[i].estado;
+                }
+            }
+            cont++;
+        }
+
+
+        /*
+        const dates3 = [];
+        for (let i = 0; i < dates2.length; i++) {
+            const parts = dates2[i].split('-');
+            const day = parts[2];
+            const month = parts[1];
+            const year = parts[0];
+            const newDate = `${day}/${month}/${year}`;
+            dates3.push(newDate);
+        }
+
+        console.log(dates3);
+*/
+
+        for (i in producciones) {
+            producciones[i].fechaInicio = producciones[i].fechaInicio.toLocaleDateString();
+            producciones[i].fechaFin = producciones[i].fechaFin.toLocaleDateString();
+        }
+
+
+        function convertToISODate(dateString) {
+            const parts = dateString.split('/');
+            const day = parts[0].padStart(2, '0');
+            const month = parts[1].padStart(2, '0');
+            const year = parts[2];
+            return `${year}-${month}-${day}`;
+          }
+
+
+        var eventos = []
+        for (i in d_produccion) {
+            d_produccion[i].fechaInicio = convertToISODate(d_produccion[i].fechaInicio.toLocaleDateString());  //
+            d_produccion[i].fechaFin = convertToISODate(d_produccion[i].fechaFin.toLocaleDateString()); //;
+            d_produccion[i].fechaEstado = d_produccion[i].fechaEstado.toLocaleString();
+            
+            var color;
+            if(d_produccion[i].estado1){
+                color = '#62a1fd'
+            }
+            if(d_produccion[i].estado2){
+               color = '#6ab090'
+            }
+            if(d_produccion[i].estado3){
+                color = '#a0a6ab'
+            }
+
+            var evento = {
+                title: 'Evento #'+d_produccion[i].cont+' '+d_produccion[i].titulo,
+                start: d_produccion[i].fechaInicio,
+                end: d_produccion[i].fechaFin,
+                color: color
+            }
+            eventos.push(evento);
+        }
+
+        console.log(eventos)
+
+        eventosList={
+            eventos
+        } 
+
+        console.log(eventosList)
+
+        res.render("producciones/detallar", {producciones, d_produccion, d_producto, eventosList});
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+
+/*
+async function producciones_detallar(req, res) {
+    try {
+        const idOrdenProduccion = req.params.idOrdenProduccion;
+        const conn = await new Promise((resolve, reject) => {
+            req.getConnection((err, conn) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(conn);
+                }
+            });
+        });
+
+        const producciones = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_ordenes_produccion WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, producciones) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    for (let index in producciones) {
                         //producciones[index].fechaInicio = producciones[index].fechaInicio.toLocaleDateString();
                         //producciones[index].fechaFin = producciones[index].fechaFin.toLocaleDateString();
 
@@ -286,7 +540,7 @@ async function producciones_detallar(req, res) {
         });
 
         const users = await new Promise((resolve, reject) => {
-            conn.query("SELECT * FROM users_info", (err, users) => {
+            conn.query("SELECT * FROM tbl_users_info", (err, users) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -483,19 +737,20 @@ async function producciones_detallar(req, res) {
                 records2.push(records[i][ix])
             }
         }
+        console.log('recod2')
         console.log(records2)
 
         console.log('Records')
+
         let records3 = []
         for (i in records2) {
-            records3[i] = [{ titulo: d_produccion[i].titulo, descripcion: d_produccion[i].descripcion, observacion: d_produccion[i].observacion, estado: d_produccion[i].estado, fechaFin: d_produccion[i].fechaFin.toLocaleDateString(), fechaInicio: d_produccion[i].fechaInicio.toLocaleDateString() }, ...dates2];
+            records3[i] = [{ titulo: d_produccion[i].titulo, descripcion:d_produccion[i].descripcion, observacion: d_produccion[i].observacion, estado: d_produccion[i].estado, fechaInicio: d_produccion[i].fechaInicio, fechaFin: d_produccion[i].fechaFin }, ...dates2];
             //console.log(records3[i])
 
             for (ix in records2[i]) {
 
                 for (x in records3[i]) {
-
-
+                    
                     if (records3[i][x] == records2[i][ix]) {
                         const f = { fecha: records3[i][x], seleccionado: true }
                         records3[i][x] = f
@@ -503,6 +758,7 @@ async function producciones_detallar(req, res) {
                 }
             }
         }
+        console.log('record')
         console.log(records3)
 
 
@@ -516,18 +772,13 @@ async function producciones_detallar(req, res) {
             dates3.push(newDate);
         }
 
+        console.log('dates3')
         console.log(dates3);
 
 
-        for (i in producciones) {
+        for(i in producciones){
             producciones[i].fechaInicio = producciones[i].fechaInicio.toLocaleDateString();
             producciones[i].fechaFin = producciones[i].fechaFin.toLocaleDateString();
-
-        }
-
-        for (i in d_produccion) {
-            d_produccion[i].fechaInicio = d_produccion[i].fechaInicio.toLocaleDateString();
-            d_produccion[i].fechaFin = d_produccion[i].fechaFin.toLocaleDateString();
 
         }
 
@@ -536,7 +787,7 @@ async function producciones_detallar(req, res) {
         res.status(500).json(err);
     }
 }
-
+*/
 //End Detallar
 
 
@@ -747,8 +998,8 @@ function producciones_editar(req, res) {
                             return res.status(500).json(err);
                         } else {
                             for (i in produccion) {
-                                for(index in productos){
-                                    if(produccion[i].idProducto == productos[index].idProducto){
+                                for (index in productos) {
+                                    if (produccion[i].idProducto == productos[index].idProducto) {
                                         produccion[i].idProducto = productos[index].nombre;
                                     }
                                 }

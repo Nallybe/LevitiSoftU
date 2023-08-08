@@ -5,6 +5,10 @@
 
 <body>
   <style>
+    .btn{
+      border-radius: 8px;
+    }
+
     .fa-trash:hover {
       color: red;
     }
@@ -110,7 +114,7 @@
 
                 <!--Input Fecha Recibo-->
                 <label class="form-label mt-2" for="fechaRecibo">Fecha Recibo</label>
-                <input type="date" class="form-control" style="border-radius: 0;" id="fechaRecibo" name="fechaRecibo"
+                <input type="date" class="form-control form-control-sm mb-2" style="border-radius: 0;" id="fechaRecibo" name="fechaRecibo"
                   oninput="val_f_recibo()" autocomplete="off">
                 <div id="mensajeErrorFechaRecibo"></div>
                 <!--End Input Fecha Recibo-->
@@ -256,12 +260,12 @@
               <div class="col-8"></div>
               <div class="col-4">
                 <!--Start Btn Cancelar-->
-                <a class="btn btn-danger btn-sm" href="/compras" style="border-radius: 0; margin-top: 1px;"
+                <a class="btn btn-danger btn-sm" href="/compras" style="margin-top: 1px;"
                   type="button">Cancelar</a>
                 <!--End Btn Cancelar-->
 
                 <!--Start Btn Registrar-->
-                <button type="submit" class="btn btn-success btn-sm" style="border-radius: 0; margin-bottom: 1px;">
+                <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
                   Registrar Compra</button>
                 <!--End Btn Regiastrar-->
               </div>

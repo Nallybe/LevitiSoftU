@@ -1,7 +1,6 @@
 const express = require('express');
 const ReparacionesController = require('../controllers/reparacionesController');
 
-
 // Middleware de verificación de sesión
 const checkSession = (req, res, next) => {
     if (req.session.loggedin && tienePermisos(req.session)) {

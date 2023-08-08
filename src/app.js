@@ -27,13 +27,22 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(bodyParser.json());
 
+
+// Helper personalizado para serializar un objeto a JSON
+const helpers = {
+    toJson: function (obj) {
+        return JSON.stringify(obj);
+    }
+};
+
 // Motor de plantilla
-hbs.registerPartials(__dirname + '/views/partials', function (err) { });
-app.set('view engine', 'hbs')
+hbs.registerPartials(__dirname + '/views/partials', function (err) {});
+app.set('view engine', 'hbs');
 app.engine('.hbs', engine({
     extname: '.hbs',
+    helpers: helpers // Agregar los helpers personalizados aquí
 }));
-app.set('views', __dirname + '/views')
+app.set('views', __dirname + '/views');
 
 app.use(myconnection(mysql, {
     host: 'localhost',
@@ -118,10 +127,10 @@ app.get('/home', (req, res) => {
 
                         // Parsear precio
                         productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
-                       
+
                     }
                     // Renderizar la plantilla 'productos/listar' y enviar los datos a la vista
-                    res.render('home', { productos});
+                    res.render('home', { productos });
                 }
             });
         }
@@ -152,10 +161,10 @@ app.get('/ProductosH', (req, res) => {
 
                         // Parsear precio
                         productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
-                       
+
                     }
                     // Renderizar la plantilla 'productos/listar' y enviar los datos a la vista
-                    res.render('ProductosH', { productos});
+                    res.render('ProductosH', { productos });
                 }
             });
         }
@@ -234,12 +243,12 @@ app.get('/contactanos', (req, res) => {
 
 app.get('/homeDash', (req, res) => {
     if (req.session.loggedin) {
-        
-      res.render('homeDash', { name: req.session.name, asignacion: req.session.asignacion});
+
+        res.render('homeDash', { name: req.session.name, asignacion: req.session.asignacion });
     } else {
-      res.redirect('/login');
+        res.redirect('/login');
     }
-  });
+});
 
 
 

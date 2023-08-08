@@ -17,16 +17,13 @@ function usuarios_listar(req, res) {
                   usuarios[index].nombreRol = roles[i].nombreRoles;
                 }
               }
-
               if (usuarios[index].estado == 'A') {
                 usuarios[index].estado1 = true;
               } else {
                 usuarios[index].estado2 = true;
               }
-
               cont += 1;
             }
-
             conn.query('SELECT * FROM users_info', (err, info) => {
               if (err) {
                 return res.status(500).json(err);
@@ -41,9 +38,7 @@ function usuarios_listar(req, res) {
                       usuarios[index].documento = info[i].documento;
                       usuarios[index].nombre = info[i].nombre;
                       usuarios[index].telefono = info[i].telefono;
-
                     }
-
                   }
                 }
                 res.render('usuarios/listar', { usuarios });
@@ -79,16 +74,15 @@ function usuarios_crear(req, res) {
                 }
                 //End seleccionar cliente
                 res.render('usuarios/registrar', { usuarios, roles, info });
-
               }
             });
           }
         });
       }
-
     });
   });
 }
+
 
 function usuarios_registrar(req, res) {
   const data = req.body;
@@ -106,7 +100,6 @@ function usuarios_registrar(req, res) {
         return res.status(500).json(err);
       } else {
         //console.log("Usuario Registrado");
-
         //Captura idAccess
         const idAccess = result.insertId;
 
@@ -227,54 +220,11 @@ function usuarios_modificar(req, res) {
     });
   });
 }
-/*
-//Cambiar Estado Usuario
-function usuarios_estado(req, res) {
-  const idAccess = req.params.idAccess;
-  req.getConnection((err, conn) => {
-    conn.query(`SELECT * FROM tbl_users_access WHERE idAccess= ?`, [idAccess], (err, usuario) => {
-      if (err) {
-        return res.status(500).json(err);
-      } else {
-        for (i in usuario) {
-          if (usuario[i].estado == 'A') {
-            var estado = {
-              estado: 'I'
-            }
-            conn.query(`Update tbl_users_access SET ?  WHERE idAccess= ?`, [estado, idAccess],
-              (err) => {
-                if (err) {
-                  return res.status(500).json(err);
-                } else {
-                  console.log("Estado Usuario(Acceso) Actualizado");
-                }
-              });
-          } else {
-            var estado = {
-              estado: 'A'
-            }
-            conn.query(`Update tbl_users_access SET ?  WHERE idAccess= ?`, [estado, idAccess],
-              (err) => {
-                if (err) {
-                  return res.status(500).json(err);
-                } else {
-                  console.log("Estado Usuario(Acceso) Actualizado");
-                }
-              });
-          }
-        }
-      }
-      res.redirect("/usuarios");
-    });
-  });
-}
-*/
 
 module.exports = {
   usuarios_listar: usuarios_listar,
   usuarios_crear: usuarios_crear,
   usuarios_registrar: usuarios_registrar,
   usuarios_editar: usuarios_editar,
-  usuarios_modificar: usuarios_modificar,
-  /*usuarios_estado: usuarios_estado*/
+  usuarios_modificar: usuarios_modificar
 }
