@@ -173,6 +173,8 @@
   <!--Barra de navegación-->
   {{> barId}}
       <!--Barra de navegación-->
+      
+      {{!--
       <center>
         <form action="/producciones_editar/" method="post" onsubmit="return validarEnvio()" id="FormEditarProduccion">
           <div class="container" style="margin-top: 80px; margin-bottom: 50px">
@@ -197,9 +199,9 @@
                             <h5>Encargado</h5>
                           </label>
                           <datalist id="lis_encargados">
-                            {{!-- {{#each usuarios}}
+                            <!-- {{#each usuarios}}
                             <option value="{{correo}}">ID({{idAccess}}) Correo({{correo}})</option>
-                            {{/each}}--}}
+                            {{/each}}-->
                           </datalist>
                           <div id="mensajeErrorEncargado"></div>
                         </div>
@@ -214,9 +216,9 @@
                             <h5>Producto</h5>
                           </label>
                           <datalist id="lis_productos">
-                            {{!-- {{#each productos}}
+                            <!-- {{#each productos}}
                             <option value="{{nombre}}">ID({{idProducto}}) Nombre({{nombre}}) Stock({{stock}})</option>
-                            {{/each}} --}}
+                            {{/each}} -->
                           </datalist>
                           <div id="mensajeErrorProducto"></div>
                         </div>
@@ -483,7 +485,7 @@
           </div>
         </form>
       </center>
-
+--}}
       <br>
     </div>
   </div>

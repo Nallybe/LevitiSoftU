@@ -4,16 +4,44 @@
 {{>headerD}}
 
 <style>
+    /* Estilos para el popover */
+    .custom-popover {
+        position: relative;
+        max-width: 330px;
+        border: 3px gray solid;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        background-color: white;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        color: black;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bs-white */
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    /* Estilos para la flecha del popover */
+    .custom-popover::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: -16px;
+        /* Ubica la flecha justo a la izquierda del popover */
+        border-width: 8px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+        /* Utiliza el color correspondiente a --bd-violet-bg */
+        transform: translateY(-50%);
+        border-right-color: gray;
+        /* Agrega un borde negro de 1px a la derecha de la flecha */
+    }
+
     .fa-eye:hover {
         color: #fae603;
     }
 
     .fa-pen:hover {
         color: #0275d8;
-    }
-
-    .pen-2:hover {
-        color: white;
     }
 
     .fa-trash:hover {
@@ -27,7 +55,12 @@
     }
 
     .btn {
-        border-radius: 0;
+        border-radius: 8px;
+    }
+
+    button {
+        border-radius: 8px;
+        border: 1px gray solid;
     }
 
     .badge {
@@ -37,266 +70,206 @@
 
 <!--Barra de navegación-->
 {{> bar}}
-        <!--Barra de navegación-->
-        <br><br><br>
-        <center>
-            <div class="container mb-5">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="row" style="margin-left: 8px;">
-                            <div class="col-md-8 col-9">
-                                <input id="buscar-input"
-                                    style="height: 100%; border-radius: 0; margin-top: 4px; width: 100%; margin-right: 0;"
-                                    class="form-control me-2" type="search" placeholder="Buscar Reparación"
-                                    aria-label="Search" oninput="filtrarTabla()">
-                            </div>
-                            <div class="col-md-2 col-3 pt-2">
-                                <button class="btn btn-outline-success" type="submit"
-                                    style="height: 100%; border-radius: 0; width: 100%; padding: 0;"
-                                    onclick="filtrarTabla()">
-                                    <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
-                                </button>
-                            </div>
-                        </div>
+<!--Barra de navegación-->
+<br><br><br>
+<center>
+    <div class="container mb-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="row" style="margin-left: 8px;">
+                    <div class="col-md-8 col-9">
+                        <input id="buscar-input"
+                            style="height: 100%; border-radius: 0; margin-top: 4px; width: 100%; margin-right: 0;"
+                            class="form-control me-2" type="search" placeholder="Buscar Reparación" aria-label="Search"
+                            oninput="filtrarTabla()">
                     </div>
-                    <div class="col-md-5"></div>
-                    <div class="col-md-3">
-                        <a href="/reparaciones_registrar" class="btn btn-success" style="border-radius: 0;"><i
-                                class="fa-solid fa-circle-plus"></i>
-                            Registrar Reparación</a>
+                    <div class="col-md-2 col-3 pt-2">
+                        <button class="btn btn-outline-success" type="submit"
+                            style="height: 100%; border-radius: 0; width: 100%; padding: 0;" onclick="filtrarTabla()">
+                            <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
+                        </button>
                     </div>
                 </div>
-
-                <br>
-                <table class="table table-hover" style="text-align:center;" id="tabla-reparaciones">
-                    <thead style="background-color: #282d32; color:white;">
-                        <tr>
-                            <th class="w-1/4 ...">#</th>
-                            <!--<th class="w-1/5 ...">Registrador</th>-->
-                            <th class="w-1/5 ...">Cliente</th>
-                            <th class="w-1/4 ..."># Artículos</th>
-                            <th class="w-1/4 ...">Total</th>
-                            <th class="w-1/4 ...">FechaEntrega</th>
-                            <th class="w-1/4 ...">FechaRegistro</th>
-                            <th class="w-1/3 ...">Estado</th>
-                            <th class="w-1/4 ...">Funciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {{#each reparaciones}}
-                        <tr>
-                            <td class="py-3 px-6 text-center">{{idReparacion}}</td>
-                            <!--<td class="p-3 text-center">
-                                <a class="btn btn-info" href="/usuarios/{{idInfoUser1}}" href="#"
-                                    data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
-                                    title="<b>Usuario {{idInfoUser1}}</b>" data-bs-content="
-                                    <div class='row'>
-                                        <div class='col-md-4'>
-                                            <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
-                                        </div>
-                                        <div class='col-md-8'>
-                                            <b>Nombre:</b> {{userName1}}<br>
-                                            <b>Teléfono:</b> {{userTell1}}<br>
-                                            <b>Correo:</b> {{userEmail1}}<br>
-                                        </div>
-                                    </div>
-                                    ">{{userName1}} <span class="badge text-bg-secondary"><i class="fas fa-user"
-                                            style="color:black"></i></span>
-                                </a>
-                            </td>-->
-                            <td class="p-3 text-center">
-                                <a class="btn btn-warning" href="/usuarios/{{idInfoUser2}}" href="#"
-                                    data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
-                                    title="<b>Usuario {{idInfoUser2}}</b>" data-bs-content="
-                                    <div class='row'>
-                                        <div class='col-md-4'>
-                                            <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
-                                        </div>
-                                        <div class='col-md-8'>
-                                            <b>Nombre:</b> {{userName2}}<br>
-                                            <b>Teléfono:</b> {{userTell2}}<br>
-                                            <b>Correo:</b> {{userEmail2}}<br>
-                                        </div>
-                                    </div>
-                                    ">{{userName2}} <span class="badge text-bg-secondary"><i class="fas fa-user"
-                                            style="color:black"></i></span>
-                                </a>
-                            </td>
-                            <td class="p-3 text-center">{{numPR}}</td>
-                            <td class="p-3 text-center">{{total}}</td>
-                            <td class="p-3 text-center">{{fechaEntrega}}</td>
-                            <td class="p-3 text-center">{{fechaRegistro}}</td>
-                            {{#if estado1}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-primary" style="border-radius:0;" data-bs-toggle="modal"
-                                    data-bs-target="#Iniciado" disabled>Iniciado</button>
-                            </td>
-                            <td class="p-3 px-1 ">
-                                <a href="/reparaciones/{{idReparacion}}" style="color: #292b2c; "
-                                    class="boton-reparacion">
-                                    <i type="button" class="fa-sharp fa-solid fa-eye"></i>
-                                </a>
-                                <a href="/reparaciones_editar/{{idReparacion}}" style="color: #292b2c; "
-                                    class="boton-reparacion">
-                                    <i type="button" class="fa-sharp fa-solid fa-pen"></i>
-                                </a>
-                                <form action="/reparaciones_eliminar" method="POST" class="boton-reparacion"
-                                    id="FormEliminarReparacion{{idReparacion}}">
-                                    <input type="hidden" value="{{idReparacion}}" name="idReparacion">
-                                    <a type="button" onclick="Eliminar({{idReparacion}})"><i class="fa fa-trash"></i></a>
-                                </form>
-                            </td>
-                            {{/if}}
-
-                            {{#if estado2}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-success" style="border-radius:0;" data-bs-toggle="modal"
-                                    data-bs-target="#Proceso" disabled>En
-                                    Proceso</button>
-                            </td>
-                            <td class="p-3 px-1 ">
-                                <a href="/reparaciones/{{idReparacion}}" style="color: #292b2c; "
-                                    class="boton-reparacion">
-                                    <i type="button" class="fa-sharp fa-solid fa-eye"></i>
-                                </a>
-                                <a href="/reparaciones_editar/{{idReparacion}}" style="color: #292b2c; "
-                                    class="boton-reparacion">
-                                    <i type="button" class="fa-sharp fa-solid fa-pen"></i>
-                                </a>
-                                <form action="/reparaciones_eliminar" method="POST" class="boton-reparacion"
-                                    id="FormEliminarReparacion">
-                                    <input type="hidden" value="{{idReparacion}}" name="idReparacion">
-                                    <a type="button" onclick="Eliminar()"><i class="fa fa-trash"></i></a>
-                                </form>
-                            </td>
-                            {{/if}}
-
-                            {{#if estado3}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-secondary" style="border-radius:0;" data-bs-toggle="modal"
-                                    data-bs-toggle="modal" data-bs-target="#id{{idReparacion}}">
-                                    Terminado <i class="fas fa-pen pen-2"></i>
-                                </button>
-                            </td>
-                            <!-- Modal -->
-                            <div class="modal fade" id="id{{idReparacion}}" tabindex="-1"
-                                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <form action="/reparaciones_estadoTyE" method="POST" class="mx-2">
-                                        <input type="hidden" name="idReparacion" value="{{idReparacion}}">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h2 class="modal-title fs-5" id="exampleModalLabel">Cambiar Estado
-                                                    Reparación {{idReparacion}}
-                                                </h2>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-
-
-                                            <div class="modal-body">
-
-                                                <div class="row">
-                                                    <div class="col-mb-2"></div>
-                                                    <div class="col-mb-8">
-                                                        <p>¿Ya le entregaste el/los producto/s a su respectivo
-                                                            cliente?<br><br>
-                                                            ¡Cámbia el estado de la reparación <br>a "Terminado y
-                                                            Entregado"!</p>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary"
-                                                    data-bs-dismiss="modal">Cancelar</button>
-                                                <button type="submit" class="btn btn-primary">Cambiar Estado</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <!--End Modal-->
-
-                            <td class="p-3 px-1 ">
-                                <a href="/reparaciones/{{idReparacion}}" style="color: #292b2c; "
-                                    class="boton-reparacion">
-                                    <i type="button" class="fa-sharp fa-solid fa-eye"></i>
-                                </a>
-                            </td>
-                            {{/if}}
-
-                            {{#if estado4}}
-                            <td class="p-3 text-center">
-                                <button class="btn btn-warning" style="border-radius:0;" data-bs-toggle="modal"
-                                    data-bs-target="#Entregado" disabled>Entregado</button>
-                            </td>
-                            <td class="p-3 px-1 ">
-                                <a href="/reparaciones/{{idReparacion}}" style="color: #292b2c; "
-                                    class="boton-reparacion">
-                                    <i type="button" class="fa-sharp fa-solid fa-eye"></i>
-                                </a>
-                            </td>
-                            {{/if}}
-                        </tr>
-                        {{/each}}
-                    </tbody>
-                </table>
             </div>
-    </div>
-</div>
-</center>
-
-
-
-<div aria-live="polite" aria-atomic="true" class="position-relative">
-    <!-- Position it: -->
-    <!-- - `.toast-container` for spacing between toasts -->
-    <!-- - `top-0` & `end-0` to position the toasts in the upper right corner -->
-    <!-- - `.p-3` to prevent the toasts from sticking to the edge of the container  -->
-    <div class="toast-container position-fixed bottom-0 end-0 right-0 p-3">
-        <div id="myToast" class="toast align-items-center border-0" role="alert" aria-live="assertive"
-            aria-atomic="true" data-delay="1000">
-            <!--Tiempo de espera--><!--data-bs-autohide="false" Dejar el toast estatico-->
-            <div class="d-flex">
-                <div class="toast-body">
-                    <strong class="me-auto"> Reparaciones<br></strong>
-                    Hay un total de <b>{{numR}} reparaciones registradas </b>
-                    <!--<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>-->
-
-                    <!--<div class="col-md-2">
-              <button type="button" class="btn btn-secondary mr-0" data-bs-dismiss="toast" aria-label="Close"
-                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .5rem; --bs-btn-font-size: .75rem;">
-                <i class="fa-solid fa-x"></i></button>
-            </div>-->
-                </div>
+            <div class="col-md-5"></div>
+            <div class="col-md-3">
+                <a href="/reparaciones_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
+                    Registrar Reparación</a>
             </div>
         </div>
+
+        <br>
+        <table class="table table-hover" style="text-align:center;" id="tabla-reparaciones">
+            <thead style="background-color: #282d32; color:white;">
+                <tr>
+                    <th class="w-1/4 ...">#</th>
+                    <!--<th class="w-1/5 ...">Registrador</th>-->
+                    <th class="w-1/5 ...">Cliente</th>
+                    <th class="w-1/4 ..."># Artículos</th>
+                    <th class="w-1/4 ...">Total</th>
+                    <th class="w-1/4 ...">FechaRegistro</th>
+                    <th class="w-1/4 ...">FechaEntrega</th>
+                    <th class="w-1/3 ...">Estado</th>
+                    <th class="w-1/4 ...">Funciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#each reparaciones}}
+                <tr>
+                    <td class="py-3 px-6 text-center">{{cont}}</td>
+                    <td class="p-3 text-center">
+                        <button type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus" 
+                            data-bs-custom-class="custom-popover" title="<b>Cliente Reparación {{cont}}</b>" data-bs-content="
+                            <div class='row'>
+                                <div class='col-md-3'>
+                                    <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
+                                </div>
+                                <div class='col-md-9'>
+                                    <b>Nombre:</b> {{userName}}<br>
+                                    <b>Teléfono:</b> {{userTell}}<br>
+                                    <b>Correo:</b> {{userEmail}}<br>
+                                </div>
+                            </div>
+                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user"
+                                style="color:black"></i></span>
+                        </button>
+                    </td>
+                    <td class="p-3 text-center">{{numPR}}</td>
+                    <td class="p-3 text-center">{{total}}</td>
+                    <td class="p-3 text-center">{{fechaRegistro}}</td>
+                    <td class="p-3 text-center">{{fechaEntrega}}</td>
+                    
+                    {{#if estado1}}
+                    <td class="p-3 text-center">
+                        <button class="btn btn-primary" disabled>Iniciado</button>
+                    </td>
+                    <td class="p-3 px-1 ">
+                        <a href="/reparaciones/{{idReparacion}}" style="color: #292b2c; " class="boton-reparacion">
+                            <i type="button" class="fa-sharp fa-solid fa-eye"></i>
+                        </a>
+                        <a href="/reparaciones_editar/{{idReparacion}}" style="color: #292b2c; "
+                            class="boton-reparacion">
+                            <i type="button" class="fa-sharp fa-solid fa-pen"></i>
+                        </a>
+                        <form action="/reparaciones_eliminar" method="POST" class="boton-reparacion"
+                            id="FormEliminarReparacion{{idReparacion}}">
+                            <input type="hidden" value="{{idReparacion}}" name="idReparacion">
+                            <a type="button" onclick="Eliminar({{idReparacion}})"><i class="fa fa-trash"></i></a>
+                        </form>
+                    </td>
+                    {{/if}}
+
+                    {{#if estado2}}
+                    <td class="p-3 text-center">
+                        <button class="btn btn-success" disabled>En Proceso</button>
+                    </td>
+                    <td class="p-3 px-1 ">
+                        <a href="/reparaciones/{{idReparacion}}" style="color: #292b2c; " class="boton-reparacion">
+                            <i type="button" class="fa-sharp fa-solid fa-eye"></i>
+                        </a>
+                        <a href="/reparaciones_editar/{{idReparacion}}" style="color: #292b2c; "
+                            class="boton-reparacion">
+                            <i type="button" class="fa-sharp fa-solid fa-pen"></i>
+                        </a>
+                        <form action="/reparaciones_eliminar" method="POST" class="boton-reparacion"
+                            id="FormEliminarReparacion">
+                            <input type="hidden" value="{{idReparacion}}" name="idReparacion">
+                            <a type="button" onclick="Eliminar()"><i class="fa fa-trash"></i></a>
+                        </form>
+                    </td>
+                    {{/if}}
+
+                    {{#if estado3}}
+                    <td class="p-3 text-center">
+                        <button class="btn btn-secondary" data-toggle="modal" data-toggle="modal"
+                            data-bs-target="#id{{idReparacion}}">
+                            Terminado <i class="fas fa-pen pen-2"></i>
+                        </button>
+                    </td>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="id{{idReparacion}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog">
+                            <form action="/reparaciones_estadoTyE" method="POST" class="mx-2">
+                                <input type="hidden" name="idReparacion" value="{{idReparacion}}">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Cambiar Estado
+                                            Reparación {{idReparacion}}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="row">
+                                            <div class="col-mb-2"></div>
+                                            <div class="col-mb-8">
+                                                <p>¿Ya le entregaste el/los artículo/s a su respectivo
+                                                    cliente?<br><br>
+                                                    ¡Cámbia el estado de la reparación <br>a "Terminado y
+                                                    Entregado"!</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"
+                                            data-bs-dismiss="modal">Cancelar</button>
+                                        <button type="submit" class="btn btn-primary">Cambiar Estado</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <!--End Modal-->
+
+                    <td class="p-3 px-1 ">
+                        <a href="/reparaciones/{{idReparacion}}" style="color: #292b2c; " class="boton-reparacion">
+                            <i type="button" class="fa-sharp fa-solid fa-eye"></i>
+                        </a>
+                    </td>
+                    {{/if}}
+
+                    {{#if estado4}}
+                    <td class="p-3 text-center">
+                        <button class="btn btn-warning" disabled>T.. y Entregado</button>
+                    </td>
+                    <td class="p-3 px-1 ">
+                        <a href="/reparaciones/{{idReparacion}}" style="color: #292b2c; " class="boton-reparacion">
+                            <i type="button" class="fa-sharp fa-solid fa-eye"></i>
+                        </a>
+                    </td>
+                    {{/if}}
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
     </div>
-</div>
+</center>
 
 </body>
 <!--Validacion nav bar-->
 {{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
+<script>
+    var permisosInput = document.querySelector('#permisosInput');
+    var permisosValue = permisosInput.value;
 
-      var palabras = permisosValue.split(',');
+    var palabras = permisosValue.split(',');
 
-      var menuItems = document.querySelectorAll('.nav li');
+    var menuItems = document.querySelectorAll('.nav li');
 
-      menuItems.forEach(function (item) {
+    menuItems.forEach(function (item) {
         var items = item.querySelector('p').textContent.trim().toLowerCase();
 
         if (palabras.includes(items)) {
-          item.style.display = 'block';
+            item.style.display = 'block';
         } else {
-          item.style.display = 'none';
+            item.style.display = 'none';
         }
-      });
-    </script>
-    {{/if}}
+    });
+</script>
+{{/if}}
 
 <script>
     function Eliminar(id) {
@@ -310,7 +283,7 @@
             confirmButtonText: 'Sí, eliminar reparación!'
         }).then((result) => {
             if (result.isConfirmed) {
-                document.getElementById("FormEliminarReparacion"+id).submit();
+                document.getElementById("FormEliminarReparacion" + id).submit();
             }
         });
     }
@@ -392,6 +365,51 @@
 
     });
 </script>
+
+
+<!-- JQUERY -->
+<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+    crossorigin="anonymous">
+    </script>
+<!-- DATATABLES -->
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+</script>
+<!-- BOOTSTRAP -->
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
+</script>
+<script>
+    $(document).ready(function () {
+        $('#tabla-reparaciones').DataTable({ //se debe seleccionar el id de la tabla $('#id..
+            language: { //Como el original esta en inglés, aqui se traducen los textos
+                processing: "Tratamiento en curso...",
+                search: "Buscar&nbsp;:",
+                lengthMenu: "Agrupar de _MENU_",
+                info: "_START_ al _END_ de _TOTAL_",
+                infoEmpty: "No existen datos.",
+                infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                infoPostFix: "",
+                loadingRecords: "Cargando...",
+                zeroRecords: "No se encontraron datos con tu busqueda",
+                emptyTable: "No hay datos disponibles en la tabla.",
+                paginate: {
+                    first: "Primero",
+                    previous: "Anterior",
+                    next: "Siguiente",
+                    last: "Ultimo"
+                },
+                aria: {
+                    sortAscending: ": active para ordenar la columna en orden ascendente",
+                    sortDescending: ": active para ordenar la columna en orden descendente"
+                }
+            },
+            lengthMenu: [[5], [5]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
+            searching: false, //Ocultar buscador
+            lengthChange: false,//Ocultar filtro de cantidad de filas
+            ordering: false //Ocultar filtro de ordenación por columnas
+        });
+    });
+</script>
+
 
 
 

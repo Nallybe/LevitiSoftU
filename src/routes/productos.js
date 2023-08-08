@@ -53,6 +53,4 @@ router.post('/productos_editar/:idProducto', upload.single('imagen'),  checkSess
 
 router.post('/productos_eliminar', checkSession,ProductosController.productos_eliminar);
 
-router.get('/productos_estado/:idProducto', checkSession,ProductosController.productos_estado);
-
 module.exports = router;
