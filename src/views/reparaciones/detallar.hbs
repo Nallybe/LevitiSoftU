@@ -4,6 +4,21 @@
 {{>headerId}}
 
 <style>
+    .btn-insumos:hover {
+        color: gray;
+    }
+
+    #descripcion_R,
+    #observacion_R {
+        border-radius: 0;
+        border: 1px rgb(206, 212, 218) solid;
+        line-height: 1.5;
+        max-height: 500px;
+        padding-top: 0;
+        height: 70px;
+        background-color: white;
+    }
+
     /* Estilos para el popover */
     .custom-popover {
         position: relative;
@@ -75,8 +90,8 @@
 
     /* Add this style to your existing CSS */
     .table-container {
-        max-height: 450px;
-        height: 450px;
+        max-height: 400px;
+        height: 400px;
         /* Adjust this value as per your requirement */
         overflow-y: auto;
         position: relative;
@@ -167,11 +182,9 @@
                             <tr style="text-align: center;">
                                 <th>#</th>
                                 <th>Artículo</th>
-                                <th>Descripción</th>
-                                <th>Observación</th>
                                 <th>Estado</th>
                                 <th>Última Actualización</th>
-                                <th>Insumos Requeridos</th>
+                                <th>Funciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -179,8 +192,6 @@
                             <tr class="clickable-row"><!---->
                                 <td class="py-2 px-6 text-center">{{cont}}</td>
                                 <td class="p-3 text-center">{{articulo}}</td>
-                                <td class="p-3 text-center">{{descripcion}}</td>
-                                <td class="p-3 text-center">{{observacion}}</td>
                                 {{#if estado1}}
                                 <td class="p-3 text-center">
                                     <button class="btn btn-primary" disabled>Iniciado</button>
@@ -199,53 +210,77 @@
 
                                 <td class="p-3 text-center">{{fechaEstado}}</td>
 
-                                <td class="py-2 px-6 text-center"><a type="button" data-toggle="modal"
-                                        data-target="#id{{cont}}"> <!--<i class="fa-solid fa-caret-down"></i>--> <i
-                                            class="fa-solid fa-dolly"></i></a></td>
+                                <td class="py-2 px-6 text-center">
+                                    <i class="fa-solid fa-caret-down"></i>
+                                </td>
                             </tr>
 
-                            <!--
+
                             <tr class="extra-row">
-                                <td colspan="7">
+                                <td colspan="6">
                                     <div class="card-body" style="display:none;">
                                         <div class="card" style="width: 100%; border-radius: 0;">
                                             <div class="card-body">
-                                                <h6 class="card-title">INSUMOS REQUERIDOS</h6>
-                                               
-                                                <div class="table-container-1">
-                                                    <table class="table table-sm">
-                                                        <thead class="table"
-                                                            style="background-color: #282d32; color:white;">
-                                                            <tr style="text-align: center;">
-                                                                <th>#</th>
-                                                                <th>Insumo</th>
-                                                                <th>Cantidad</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="ListaInsumos" style="text-align: center;">
-                                                            <tr>
-                                                                <td colspan="4"></td>
-                                                            </tr>
+                                                <!--<h6 class="card-title">DETALLES</h6>-->
 
-                                                        </tbody>
+                                                <div class="row">
+                                                    <div class="col-md-9">
+                                                        <!--Input Descripción-->
+                                                        <label class="form-label mt-1"
+                                                            for="descripcion_R">Descripción</label>
+                                                        <textarea class="form-control form-control-sm"
+                                                            style="border-radius: 0;" id="descripcion_R"
+                                                            readonly>{{descripcion}}</textarea>
+                                                        <!--End Input Descripción-->
+                                                    </div>
 
-                                                    </table>
+                                                    <div class="col-md-3">
+                                                        <center>
+                                                            <button type="button" class="btn-insumos btn-sm mt-4"
+                                                                data-toggle="modal" data-target="#id{{cont}}">
+
+                                                                <i class="fa-solid fa-dolly fa-2x"></i> <br>
+                                                                <p>Insumos <br>Requeridos</p>
+
+                                                            </button>
+                                                        </center>
+                                                    </div>
+
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-md-8">
+                                                        <!--Input Observación-->
+                                                        <label class="form-label mt-2"
+                                                            for="observacion_R">Observaciones</label>
+                                                        <textarea class="form-control form-control-sm mb-2"
+                                                            style="border-radius: 0;" id="observacion_R"
+                                                            readonly>{{observacion}}</textarea>
+                                                        <!--End Input Observación-->
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label class="form-label mt-4"
+                                                            for="observacion_R">Última_Actualización</label>
+                                                        <input class="form-control form-control-sm"
+                                                            style="border-radius: 0;" type="text"
+                                                            value="{{fechaEstado}}" readonly>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                            </tr>-->
+                            </tr>
 
                             {{/each}}
                         </tbody>
                     </table>
-                    <div class="pagination">
-                        <button class="prev-btn">Anterior</button>
-                        <button class="next-btn">Siguiente</button>
-                    </div>
                 </div>
                 <!--End Table-->
+                <div class="pagination">
+                    <button class="prev-btn mt-3">Anterior</button>
+                    <button class="next-btn mt-3">Siguiente</button>
+                </div>
             </div>
         </div>
         <!--End Card #3-->
@@ -397,7 +432,7 @@
 
 
 <script>
-    const itemsPerPage = 3; // Define el número de registros por página
+    const itemsPerPage = 4; // Define el número de registros por página
     let currentPage = 1;
 
     function showPage(page) {
