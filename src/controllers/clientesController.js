@@ -1,27 +1,47 @@
 function listar(req, res) {
     req.getConnection((err, conn) => {
         conn.query(`
-            SELECT 
-                ROW_NUMBER() OVER () AS cont,
-                subconsulta.*
-            FROM (
-                SELECT 
-                    ui.idInfo, 
-                    ua.correo, 
-                    ui.documento, 
-                    ui.nombre, 
-                    ui.telefono, 
-                    ui.estado, 
-                    COUNT(DISTINCT uv.idVentas) AS numero_ventas, 
-                    COUNT(DISTINCT ur.idReparacion) AS numero_reparaciones 
-                FROM users_access ua 
-                JOIN users_info ui ON ua.idAccess = ui.idAccess 
-                LEFT JOIN tbl_ventas uv ON ui.idVentas = uv.idVentas 
-                LEFT JOIN tbl_reparaciones ur ON ui.idReparaciones = ur.idReparacion 
-                JOIN tbl_roles r ON ua.idRoles = r.idRoles 
-                WHERE r.nombreRoles = 'Cliente'
-                GROUP BY ui.idInfo, ua.correo, ui.documento, ui.nombre, ui.telefono, ui.estado
-            ) AS subconsulta;
+        SELECT 
+        ROW_NUMBER() OVER () AS cont,
+        ui.idInfo,
+        ua.correo,
+        ui.documento,
+        ui.nombre,
+        ui.telefono,
+        ui.estado,
+        COALESCE(ventas.numero_ventas, 0) AS numero_ventas,
+        COALESCE(reparaciones.numero_reparaciones, 0) AS numero_reparaciones
+    FROM
+        users_info ui
+    JOIN
+        users_access ua ON ui.idAccess = ua.idAccess
+    JOIN
+        tbl_roles r ON ua.idRoles = r.idRoles
+    LEFT JOIN (
+        SELECT
+            ui.idInfo,
+            COUNT(uv.idVentas) AS numero_ventas
+        FROM
+            users_info ui
+        LEFT JOIN
+            tbl_ventas uv ON ui.idInfo = uv.idInfo
+        GROUP BY
+            ui.idInfo
+    ) ventas ON ui.idInfo = ventas.idInfo
+    LEFT JOIN (
+        SELECT
+            ui.idInfo,
+            COUNT(ur.idReparacion) AS numero_reparaciones
+        FROM
+            users_info ui
+        LEFT JOIN
+            tbl_reparaciones ur ON ui.idInfo = ur.idInfo
+        GROUP BY
+            ui.idInfo
+    ) reparaciones ON ui.idInfo = reparaciones.idInfo
+    WHERE
+        r.nombreRoles = 'Cliente';
+    
         `, (err, clientes) => {
             if (err) {
                 res.json(err);
@@ -32,7 +52,7 @@ function listar(req, res) {
                 cliente.estado = cliente.estado === 'A' ? 'Activo' : 'Inactivo';
             });
 
-            
+
 
             res.render('clientes/clientes', { clientes });
         });
@@ -55,7 +75,7 @@ function crear(req, res) {
                 }
                 res.render("usuarios/registrar", { clientes, roles });
             })
-            
+
         })
 
     });
@@ -103,7 +123,7 @@ function editar(req, res) {
                 }
                 res.render("clientes/clientes_editar", { info, documentos });
             })
-            
+
         });
     });
 }

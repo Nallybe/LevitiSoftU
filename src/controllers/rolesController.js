@@ -80,7 +80,7 @@ function registrar(req, res) {
                   } else {
                     console.log("Asignacion guardada");
                     var mensaje = "Registro éxitoso"
-                    res.redirect("/roles", );
+                    res.redirect("/roles?alert=success");
                   }
 
                 }
