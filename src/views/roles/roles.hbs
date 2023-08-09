@@ -80,7 +80,7 @@
                     </td>
                     <td class="p-3 text-center">
                         <!-- Utilizamos una clase común para el botón 'estado' y asignamos el valor del estado actual del cliente como un atributo de datos -->
-                        <button class="btn estado-boton" style="border-radius:8px;" disabled
+                        <button class="btn estado-boton btn-sm" style="border-radius:8px;" disabled
                             data-estado="{{estado}}">{{estado}}</button>
                     </td>
                     <td>
@@ -159,6 +159,22 @@
         }
     }
 </script>
+<!-- Sweet Alert 2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    // Verificar si hay un mensaje de éxito en el query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const alertParam = urlParams.get("alert");
+
+    if (alertParam === "success") {
+        // Mostrar el Sweet Alert
+        Swal.fire({
+            icon: "success",
+            title: "Éxito",
+            text: "La operación se realizó correctamente.",
+        });
+    }
+</script>
 <script>
     // Obtiene todos los botones de alternancia en la página
     var navbarTogglers = document.querySelectorAll('[data-bs-toggle="collapse"]');
@@ -186,15 +202,7 @@
 <script src="assets/js/plugins/bootstrap-notify.js"></script>
 <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-<!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
-<script src="assets/demo/demo.js"></script>
-<script>
-    $(document).ready(function () {
-        // Javascript method's body can be found in assets/js/demos.js
-        demo.initDashboardPageCharts();
 
-    });
-</script>
 <!--Paginacion-->
 <!-- JQUERY -->
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="

@@ -117,7 +117,7 @@
                 <tr>
                     <td class="py-3 px-6 text-center">{{cont}}</td>
                     <td class="p-3 text-center">
-                        <button type="button" data-bs-trigger="focus" data-bs-toggle="popover"
+                        <button type="button" data-bs-trigger="hover" data-bs-toggle="popover"
                             data-bs-custom-class="custom-popover" data-bs-html="true"
                             title="<b>Encargado Producción {{cont}}</b>" data-bs-content="
                                     <div class='row'>
@@ -130,12 +130,11 @@
                                             <b>Correo:</b> {{userEmail}}<br>
                                         </div>
                                     </div>
-                                    ">{{userName}} <span class="badge text-bg-secondary"><i class="fas fa-user"
-                                    style="color:black"></i></span>
+                                    ">{{userName}} <span class="badge text-bg-secondary"></span>
                         </button>
                     </td>
                     <td class="p-3 text-center">
-                        <button type="button" data-bs-trigger="focus" data-bs-toggle="popover" data-bs-html="true"
+                        <button type="button" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-html="true"
                             data-bs-custom-class="custom-popover" title="<b>Producto Producción {{cont}}</b>"
                             data-bs-content="
                                     <div class='popover-content'>
@@ -153,8 +152,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    ">{{proName}} <span class="badge text-bg-secondary"><i class="fas fa-gift"
-                                    style="color:black"></i></span>
+                                    ">{{proName}} <span class="badge text-bg-secondary"></span>
                         </button>
                     </td>
 
@@ -305,15 +303,7 @@
 <script src="/assets/js/plugins/bootstrap-notify.js"></script>
 <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-<!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
-<script src="/assets/demo/demo.js"></script>
-<script>
-    $(document).ready(function () {
-        // Javascript method's body can be found in assets/js/demos.js
-        demo.initDashboardPageCharts();
 
-    });
-</script>
 
 
 <!-- JQUERY -->
