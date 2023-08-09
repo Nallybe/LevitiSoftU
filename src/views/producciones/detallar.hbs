@@ -4,13 +4,20 @@
 {{>headerId}}
 
 <style>
-    #descripcion {
+    .btn-participantes:hover,
+    .btn-insumos:hover {
+        color: gray;
+    }
+
+    #descripcion_R,
+    #observacion_R {
         border-radius: 0;
         border: 1px rgb(206, 212, 218) solid;
         line-height: 1.5;
-        max-height: 200px;
+        max-height: 500px;
         padding-top: 0;
         height: 70px;
+        background-color: white;
     }
 
 
@@ -85,8 +92,8 @@
 
     /* Add this style to your existing CSS */
     .table-container {
-        max-height: 380px;
-        height: 380px;
+        max-height: 400px;
+        height: 400px;
         /* Adjust this value as per your requirement */
         overflow-y: auto;
         position: relative;
@@ -111,6 +118,7 @@
 <br><br><br>
 
 
+<a href="/producciones" style="color:black; text-decoration:none; margin-left: 2%"><i class="fa fa-arrow-left fa-2x"></i></a>
 
 <div class="row ml-1">
     <div class="col-md-3">
@@ -121,7 +129,7 @@
                 <h5 class="card-title">PRODUCCIÓN</h5>
                 <div class="card-text">
                     <p><b>Encargado:</b>
-                        <button type="button" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true"
+                        <button type="button" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
                             data-bs-custom-class="custom-popover" title="<b>Usuario</b>" data-bs-content="
                             <div class='row'>
                                 <div class='col-md-3'>
@@ -139,13 +147,13 @@
                         <br>
                     </p>
                     <p><b>Producto:</b>
-                        <button type="button" data-bs-trigger="focus" data-bs-toggle="popover" data-bs-html="true"
+                        <button type="button" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-html="true"
                             data-bs-custom-class="custom-popover" title="<b>Producto Producción {{cont}}</b>"
                             data-bs-content="
                             <div class='popover-content'>
                                 <div class='row'>
                                     <div class='col-md-4'>
-                                        <img src='/assets/img/Productos/img.jpg' alt='Imagen del producto'
+                                        <img src='/assets/img/Productos/{{proImg}}' alt='Imagen del producto'
                                             style='max-width:100%; max-height:100px'> 
                                         <!--<img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Gift.png' width='100' />-->
                                     </div>
@@ -186,7 +194,7 @@
 
 
         <center>
-            <button type="button" data-toggle="modal" data-target="#Insumos">
+            <button class="btn-insumos mb-4" type="button" data-toggle="modal" data-target="#Insumos">
                 Insumos Requeridos <i class="fa-solid fa-dolly"></i>
             </button>
         </center>
@@ -218,7 +226,7 @@
                                     <td class="py-2 px-6 text-center">{{cont}}</td>
                                     <td class="p-3 text-center">
 
-                                        <button type="button" data-bs-toggle="popover" data-bs-trigger="focus"
+                                        <button type="button" data-bs-toggle="popover" data-bs-trigger="hover"
                                             data-bs-custom-class="custom-popover2"
                                             data-bs-title="<b>Insumo {{cont}}</b>" data-bs-html="true" data-bs-content="
                                             <div class='row'>
@@ -260,14 +268,11 @@
                         <thead class="table" style="background-color: #282d32; color:white;">
                             <tr style="text-align: center;">
                                 <th>#</th>
-                                <th>Título</th>
-                                <th>Descripción</th>
-                                <th>Observación</th>
+                                <th>Evento</th>
                                 <th>Fecha_Inicio</th>
                                 <th>Fecha_Fin</th>
                                 <th>Estado</th>
-                                <th>Última Actualización</th>
-                                <th>Participantes</th>
+                                <th>Funciones</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -275,10 +280,6 @@
                             <tr class="clickable-row">
                                 <td class="py-3 px-6 text-center">{{cont}}</td>
                                 <td class="p-3 text-center">{{titulo}}</td>
-                                <td class="p-3 text-center"><textarea name="" id="" cols="20"
-                                        rows="2">{{descripcion}}</textarea></td>
-                                <td class="p-3 text-center"><textarea name="" id="" cols="20"
-                                        rows="2">{{observacion}}</textarea></td>
                                 <td class="p-3 text-center">{{fechaInicio}}</td>
                                 <td class="p-3 text-center">{{fechaFin}}</td>
                                 {{#if estado1}}
@@ -300,57 +301,76 @@
                                 </td>
                                 {{/if}}
 
-                                <td class="p-3 text-center">
-                                    {{fechaEstado}}
-
+                                <td class="p-3 text-center icono">
+                                    <a class="expand-button" type="button">
+                                        <i class="fa-solid fa-caret-down icon-collapse fa-2x"></i>
+                                        <i class="fa-solid fa-caret-up icon-expand fa-2x" style="display: none;"></i>
+                                    </a>
                                 </td>
-                                <td class="py-2 px-6 text-center"><a type="button" data-toggle="modal"
-                                        data-target="#id{{cont}}"><i class="fa fa-users"></i></a></td>
-
                             </tr>
 
-                            <!--
-                            <tr class="extra-row">
-                                <td colspan="7">
-                                    <div class="card-body" style="display:none;">
-                                        <div class="card" style="width: 100%; border-radius: 0;">
-                                            <div class="card-body">
-                                                <h6 class="card-title">INSUMOS REQUERIDOS</h6>
-                                               
-                                                <div class="table-container-1">
-                                                    <table class="table table-sm">
-                                                        <thead class="table"
-                                                            style="background-color: #282d32; color:white;">
-                                                            <tr style="text-align: center;">
-                                                                <th>#</th>
-                                                                <th>Insumo</th>
-                                                                <th>Cantidad</th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody id="ListaInsumos" style="text-align: center;">
-                                                            <tr>
-                                                                <td colspan="4"></td>
-                                                            </tr>
+                            <tr class="extra-row" style="display: none;">
+                                <td colspan="6">
+                                    <div class="card" style="width: 100%; border-radius: 0;">
+                                        <div class="card-body">
+                                            <!--<h6 class="card-title">DETALLES</h6>-->
 
-                                                        </tbody>
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <!--Input Descripción-->
+                                                    <label class="form-label mt-1"
+                                                        for="descripcion_R">Descripción</label>
+                                                    <textarea class="form-control form-control-sm"
+                                                        style="border-radius: 0;" id="descripcion_R"
+                                                        readonly>{{descripcion}}</textarea>
+                                                    <!--End Input Descripción-->
+                                                </div>
 
-                                                    </table>
+                                                <div class="col-md-3">
+                                                    <center>
+                                                        <button type="button" class="btn-participantes btn-sm mt-4"
+                                                            data-toggle="modal" data-target="#id{{cont}}">
+
+                                                            <i class="fa fa-users fa-2x"></i> <br>
+                                                            <p>Participantes</p>
+
+                                                        </button>
+                                                    </center>
+                                                </div>
+
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-8">
+                                                    <!--Input Observación-->
+                                                    <label class="form-label mt-2"
+                                                        for="observacion_R">Observaciones</label>
+                                                    <textarea class="form-control form-control-sm mb-2"
+                                                        style="border-radius: 0;" id="observacion_R"
+                                                        readonly>{{observacion}}</textarea>
+                                                    <!--End Input Observación-->
+                                                </div>
+
+                                                <div class="col-md-4">
+                                                    <label class="form-label mt-4"
+                                                        for="observacion_R">Última_Actualización</label>
+                                                    <input class="form-control form-control-sm"
+                                                        style="border-radius: 0;" type="text" value="{{fechaEstado}}"
+                                                        readonly>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </td>
-                            </tr>-->
-
+                            </tr>
                             {{/each}}
                         </tbody>
                     </table>
-                    <div class="pagination">
-                        <button class="prev-btn">Anterior</button>
-                        <button class="next-btn">Siguiente</button>
-                    </div>
                 </div>
                 <!--End Table-->
+                <div class="pagination">
+                    <button class="prev-btn mt-3">Anterior</button>
+                    <button class="next-btn mt-3">Siguiente</button>
+                </div>
             </div>
         </div>
         <!--End Card #3-->
@@ -358,7 +378,7 @@
 
 </div>
 
-<!--Modal-->
+<!--Modal Participantes-->
 {{#each d_produccion}}
 <div class="modal fade" id="id{{cont}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -382,13 +402,13 @@
                         <tr>
                             <td>{{this.cont}}</td>
                             <td>
-                                <button type="button" data-bs-toggle="popover" data-bs-trigger="focus"
+                                <button type="button" data-bs-toggle="popover" data-bs-trigger="hover"
                                     data-bs-custom-class="custom-popover2"
                                     data-bs-title="<b>Participante {{this.cont}}</b>" data-bs-html="true"
                                     data-bs-content="
                                     <div class='row'>
                                         <div class='col-md-4'>
-                                            <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Box-Open-icon.png' width='100' />
+                                            <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User-icon.png' width='100' />
                                         </div>
                                         <div class='col-md-8'>
                                             <b>Nombre:</b> {{this.userName}}<br>
@@ -474,23 +494,40 @@
 <script>
     // Desplegar detalle del detalle
     document.addEventListener("DOMContentLoaded", function () {
-        var clickableRows = document.getElementsByClassName("clickable-row");
+        var expandButtons = document.getElementsByClassName("expand-button");
 
-        for (var i = 0; i < clickableRows.length; i++) {
-            clickableRows[i].addEventListener("click", function () {
-                var nextRow = this.nextElementSibling;
+        for (var i = 0; i < expandButtons.length; i++) {
+            expandButtons[i].addEventListener("click", function () {
+                var button = this;
+                var clickableRow = button.closest(".clickable-row");
+                var nextRow = clickableRow.nextElementSibling;
+
                 if (nextRow.classList.contains("extra-row")) {
-                    var cardBody = nextRow.querySelector(".card-body");
-                    cardBody.style.display = cardBody.style.display === "none" ? "block" : "none";
+                    nextRow.style.display = nextRow.style.display === "none" ? "table-row" : "none";
+
+                    var iconCollapse = button.querySelector(".icon-collapse");
+                    var iconExpand = button.querySelector(".icon-expand");
+
+                    if (nextRow.style.display === "none") {
+                        iconCollapse.style.display = "block";
+                        iconExpand.style.display = "none";
+                    } else {
+                        iconCollapse.style.display = "none";
+                        iconExpand.style.display = "block";
+                    }
                 }
             });
         }
     });
+
+
+
+
 </script>
 
 
 <script>
-    const itemsPerPage = 3; // Define el número de registros por página
+    const itemsPerPage = 4; // Define el número de registros por página
     let currentPage = 1;
 
     function showPage(page) {
@@ -508,6 +545,7 @@
             }
         });
     }
+
 
     function updatePagination() {
         const rows = document.querySelectorAll('.clickable-row');
@@ -591,7 +629,6 @@
         //initialDate: '2023-09-01',  Establecemos la fecha inicial 
         events: eventosJSON
     });
-
 
     calendar.render();
     calendar2.render();
