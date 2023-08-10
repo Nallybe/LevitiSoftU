@@ -291,7 +291,6 @@ async function producciones_detallar(req, res) {
             producciones[i].fechaFin = producciones[i].fechaFin.toLocaleDateString();
         }
 
-
         function convertToISODate(dateString) {
             const parts = dateString.split('/');
             const day = parts[0].padStart(2, '0');
@@ -299,7 +298,6 @@ async function producciones_detallar(req, res) {
             const year = parts[2];
             return `${year}-${month}-${day}`;
         }
-
 
         var eventos = []
         for (i in d_produccion) {
@@ -361,6 +359,7 @@ function producciones_crear(req, res) {
                                 }
                             }
                         }
+
                         conn.query("SELECT * FROM tbl_productos WHERE estado ='A'", (err, productos) => {
                             if (err) {
                                 return res.status(500).json(err);
@@ -403,10 +402,10 @@ function producciones_crear(req, res) {
 //Registrar Reparación
 function producciones_registrar(req, res) {
     var data = req.body;
-    console.log(data)
+    //console.log(data)
 
     //Capturar Encargado
-   /* req.getConnection((err, conn) => {
+    req.getConnection((err, conn) => {
         conn.query("SELECT * FROM users_access", (err, usersA) => {
             if (err) {
                 return res.status(500).json(err);
@@ -415,16 +414,14 @@ function producciones_registrar(req, res) {
                     if (err) {
                         return res.status(500).json(err);
                     } else {
-                        data.idInfoUser = 0;
                         for (index in usersA) {
                             for (i in usersI) {
                                 if (data.idEncargado == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
-                                    data.idInfoUser = usersI[i].idInfoUser;
-                                    console.log("Usuario encontrado");
+                                    data.idEncargado = usersI[i].idInfo;
+                                    //console.log("Usuario encontrado");
                                 }
                             }
                         }
-
                         //End Capturar Encargado
 
                         //Capturar Producto 
@@ -435,13 +432,13 @@ function producciones_registrar(req, res) {
                                 for (index in productos) {
                                     if (data.idProducto == productos[index].nombre) {
                                         data.idProducto = productos[index].idProducto;
-                                        console.log("Producto encontrado");
+                                        //console.log("Producto encontrado");
                                     }
                                 }
                                 //End Capturar Producto
 
                                 const RegistroProduccion = {
-                                    idInfoUser: data.idInfoUser,
+                                    idInfo: data.idEncargado,
                                     idProducto: data.idProducto,
                                     cantidad: data.cantidad,
                                     fechaInicio: data.fechaInicio,
@@ -456,7 +453,7 @@ function producciones_registrar(req, res) {
                                         console.log("Produccion Registrada");
                                         //End Registrar Producción 
 
-                                        //Captura id
+                                        //Captura id produccion
                                         const idOrdenProduccion = result.insertId;
 
                                         //Registrar Detalles y Reconocer si se manda 1 o más detalles
@@ -515,13 +512,11 @@ function producciones_registrar(req, res) {
                 });
             }
         });
-    });*/
+    });
 }
 //End Registrar Reparación
 
-
-
-
+//EN PROCESO
 //Editar
 function producciones_editar(req, res) {
     const idOrden = req.params.idOrden;
