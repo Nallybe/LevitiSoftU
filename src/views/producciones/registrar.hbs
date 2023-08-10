@@ -1026,7 +1026,23 @@
   <script src="assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+<<<<<<< HEAD
   <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+=======
+
+
+  <script>
+    //SOLO NUMEROS
+    $(function () {
+      $(".validar").keydown(function (event) {
+        //alert(event.keyCode);
+        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
+          return false;
+        }
+      });
+    });
+  </script>
+>>>>>>> c1e219826f67754a556bc8dadb86ec57b97feca3
 
 
   <!--Detalles de los detalles-->
