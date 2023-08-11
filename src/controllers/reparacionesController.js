@@ -236,7 +236,7 @@ async function reparaciones_detallar(req, res) {
 //Crear (Función para redireccionar al hbs donde se encuentra el formulario)
 function reparaciones_crear(req, res) {
     req.getConnection((err, conn) => {
-        conn.query("SELECT * FROM users_access WHERE estado ='A' AND idRoles = 4", (err, clientes) => {
+        conn.query("SELECT * FROM users_access WHERE estado ='A' AND idRoles != 4", (err, clientes) => {
             if (err) {
                 return res.status(500).json(err);
             } else {
@@ -268,9 +268,6 @@ function reparaciones_registrar(req, res) {
                     if (err) {
                         return res.status(500).json(err);
                     } else {
-                        data.idInfoUser1 = 0;
-                        data.idInfoUser2 = 0;
-
                         for (index in usersA) {
                             for (i in usersI) {
                                 //if (data.idRegistrador == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
@@ -279,7 +276,7 @@ function reparaciones_registrar(req, res) {
                                 //}
 
                                 if (data.idCliente == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
-                                    data.idInfoUser2 = usersI[i].idInfo;
+                                    data.idCliente = usersI[i].idInfo;
                                     console.log("Cliente encontrado");
                                 }
                             }
@@ -307,7 +304,7 @@ function reparaciones_registrar(req, res) {
 
                         const RegistroReparacion = {
                             // idInfoUser1: data.idInfoUser1,
-                            idInfoUser2: data.idInfoUser2,
+                            idInfo: data.idCliente,
                             total: data.total,
                             fechaEntrega: data.fechaEntrega
                         };

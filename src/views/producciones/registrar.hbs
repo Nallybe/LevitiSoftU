@@ -295,9 +295,7 @@
               </div>
             </div>
 
-
             <!--End Card #3-->
-
             <div class="row">
               <div class="col-8"></div>
               <div class="col-4">
@@ -322,91 +320,9 @@
 
   </form>
   <br>
+
+
   <!--End Form&Card-->
-
-  {{!--
-  <!-- Modal editar-->
-  <div class="modal fade" id="editar${cont}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-      <div class="modal-content" style="border-radius: 0;">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Artículo ${cont}</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="form-floating mb-3">
-            <textarea class="form-control" id="titulo_R2_${cont}" style="border-radius: 0; text-align: left;"
-              placeholder="0000">${tarea.titulo}</textarea>
-            <label for="titulo_R2_${cont}">Articulo</label>
-          </div>
-
-          <div class="form-floating mb-3">
-            <textarea class="form-control pb-5" id="descripcion_R2_${cont}" style="border-radius: 0; text-align: left;"
-              placeholder="0000">${tarea.descripcion}</textarea>
-            <label for="descripcion_R2_${cont}">Descripción</label>
-          </div>
-
-          <div class="form-floating mb-3">
-            <textarea class="form-control pb-5" id="observacion_R2_${cont}" style="border-radius: 0; text-align: left;"
-              placeholder="0000">${tarea.observacion}</textarea>
-            <label for="observacion_R2_${cont}">Observaciones</label>
-          </div>
-
-          <div class="form-floating mb-3">
-            <input type="date" class="form-control" id="fechaInicio_R2_${cont}"
-              style="border-radius: 0; text-align: left;" placeholder="0000" value="${tarea.fechaInicio}" readonly>
-            <label for="fechaInicio_R2_${cont}">Fecha Inicio</label>
-          </div>
-
-          <div class="form-floating mb-3">
-            <input type="date" class="form-control" id="fechaFin_R2_${cont}" style="border-radius: 0; text-align: left;"
-              placeholder="0000" value="${tarea.fechaFin}" readonly>
-            <label for="fechaFin_R2_${cont}">Fecha Fin</label>
-          </div>
-
-        </div>
-        <div class="modal-footer">
-          <button class="btn btn-secondary boton-produccion mr-1" data-bs-dismiss="modal"
-            style="border-radius: 0;">Cancelar</button>
-          <button type="button" class="btn btn-primary boton-produccion ml-3" style="border-radius: 0;"
-            onclick="editarTarea(${cont})">Guardar Cambios</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <!--End Modal editar-->
-
-  Funcion editar:
-  function editarTarea(id) {
-  const idProR = 'titulo_' + id;
-  const idDes = 'descripcion_' + id;
-  const idObs = 'observacion_' + id;
-  /*const idFI = 'fechaInicio_' + id;
-  const idFF = 'fechaFin_' + id;*/
-
-  const idProR_R = 'titulo_R2_' + id;
-  const idDes_R = 'descripcion_R2_' + id;
-  const idObs_R = 'observacion_R2_' + id;
-  /*const idFI_R = 'fechaInicio_R2_' + id;
-  const idFF_R = 'fechaFin_R2_' + id;*/
-
-  document.getElementById(idProR).value = document.getElementById(idProR_R).value;
-  document.getElementById(idDes).value = document.getElementById(idDes_R).value;
-  document.getElementById(idObs).value = document.getElementById(idObs_R).value;
-  /*document.getElementById(IdFI).value = document.getElementById(IdFI_R).value;
-  document.getElementById(IdFF).value = document.getElementById(IdFF_R).value;*/
-
-  Swal.fire({
-  position: 'top-end',
-  icon: 'success',
-  title: 'Tarea Actualizada',
-  showConfirmButton: false,
-  timer: 1000
-  });
-  }
-  --}}
-
-
   <script>
     var lastValueI = ""; // Variable para almacenar el último valor válido
 
@@ -691,7 +607,6 @@
                               </datalist>
                               <!--<div id="mensajeErrorParticipante"></div> oninput="val_participante()"-->
                               <!--End Input Participante-->
-
                     
                             </div>
                             <div class="col-md-2">
@@ -707,10 +622,6 @@
                       </div>
                       <!--End Card-->
 
-                      <div id="listaParticipantes_${cont}_2"></div>
-
-
-
                       <table class="table">
                         <thead style="background-color: #282d32; color:white;">
                           <tr style="text-align: center;">
@@ -720,9 +631,6 @@
                           </tr>
                         </thead>
                         <tbody id="listaParticipantes_${cont}" style="text-align: center;">
-                          <tr>
-                            <td colspan="3">Datos</td>  
-                          <tr>
                         </tbody>
                       </table>
 
@@ -862,33 +770,22 @@
       let participacion = {
         participante: document.getElementById(part).value
       };
-      alert(participacion.participante);
-
-
-      let par2 = document.getElementById("ListaParticipantes_1_2");
-
-      if (par2) {
-        alert('existe');
-      } else {
-        alert('No existe');
-      }
+      //alert(participacion.participante);
 
       if (participacion.participante != "") {
-        let listP = "ListaParticipantes_" + idP + "_2";
-        alert(listP);
+        let listP = "listaParticipantes_" + idP;
         contPar++;
         let tbTabla = document.getElementById(listP);
-        alert(tbTabla);
-
+        //alert(tbTabla);
         tbTabla.innerHTML += `
          <tr id="participante_${idP}_${contPar}">
-               <td class="p-3 text-center">número_${contPar}</td>
+               <td class="p-3 text-center"></td>
                <td class="p-3 text-center">
                    <input type="hidden" name="evento_par" value="${idP}">
-                   <input name="participante" value="${participacion.participante}">
+                   <input name="participante" style="width: 100%; border: none; text-align: center;" value="${participacion.participante}" readonly>
                </td>
                <td class="p-3 text-center">
-                 <a class="boton-produccion" type="button" onclick="eliminarParticipante('${idP}_${contPar}')" style="color: #292b2c;">
+                 <a class="boton-produccion" type="button" onclick="eliminarParticipante('${idP}_${contPar}', '${listP}')" style="color: #292b2c;">
                    <i class="fas fa-trash"></i>
                  </a>
                </td>
@@ -897,10 +794,13 @@
         Swal.fire({
           position: 'top-end',
           icon: 'success',
-          title: 'Tarea Agregada',
+          title: 'Participación Agregada',
           showConfirmButton: false,
           timer: 1000
         });
+
+        //llamar función calcularContTDTable
+        ContTr(listP);
 
         document.getElementById(part).value = "";
       } else {
@@ -908,7 +808,7 @@
       }
     }
 
-    function eliminarParticipante(idEP) {
+    function eliminarParticipante(idEP, TP) {
       var partE = "participante_" + idEP;
       const participacion = document.getElementById(partE);
 
@@ -925,6 +825,22 @@
           showConfirmButton: false,
           timer: 1000
         });
+
+        //llamar función calcularContTDTable
+        ContTr(TP);
+      }
+    }
+
+    //Calcular cont td table
+    function ContTr(tbodyId) {
+      var tbody = document.getElementById(tbodyId);
+      var rows = tbody.getElementsByTagName("tr");
+      var contador = 1;
+
+      for (var i = 0; i < rows.length; i++) {
+        var td = rows[i].getElementsByTagName("td")[0];
+        td.textContent = contador;
+        contador++;
       }
     }
 
@@ -1026,129 +942,128 @@
   <script src="assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-<<<<<<< HEAD
-  <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
-=======
+  <<<<<<< HEAD <!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
+    =======
 
 
-  <script>
-    //SOLO NUMEROS
-    $(function () {
-      $(".validar").keydown(function (event) {
-        //alert(event.keyCode);
-        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
-          return false;
+    <script>
+      //SOLO NUMEROS
+      $(function () {
+        $(".validar").keydown(function (event) {
+          //alert(event.keyCode);
+          if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
+            return false;
+          }
+        });
+      });
+    </script>
+    >>>>>>> c1e219826f67754a556bc8dadb86ec57b97feca3
+
+
+    <!--Detalles de los detalles-->
+
+    <script>
+      // Desplegar detalle del detalle
+      document.addEventListener("DOMContentLoaded", function () {
+        var expandButtons = document.getElementsByClassName("expand-button");
+
+        for (var i = 0; i < expandButtons.length; i++) {
+          expandButtons[i].addEventListener("click", function () {
+            var button = this;
+            var clickableRow = button.closest(".clickable-row");
+            var nextRow = clickableRow.nextElementSibling;
+
+            if (nextRow.classList.contains("extra-row")) {
+              nextRow.style.display = nextRow.style.display === "none" ? "table-row" : "none";
+
+              var iconCollapse = button.querySelector(".icon-collapse");
+              var iconExpand = button.querySelector(".icon-expand");
+
+              if (nextRow.style.display === "none") {
+                iconCollapse.style.display = "block";
+                iconExpand.style.display = "none";
+              } else {
+                iconCollapse.style.display = "none";
+                iconExpand.style.display = "block";
+              }
+            }
+          });
         }
       });
-    });
-  </script>
->>>>>>> c1e219826f67754a556bc8dadb86ec57b97feca3
+
+    </script>
 
 
-  <!--Detalles de los detalles-->
+    <script>
+      const itemsPerPage = 4; // Define el número de registros por página
+      let currentPage = 1;
 
-  <script>
-    // Desplegar detalle del detalle
-    document.addEventListener("DOMContentLoaded", function () {
-      var expandButtons = document.getElementsByClassName("expand-button");
+      function showPage(page) {
+        const rows = document.querySelectorAll('.clickable-row');
+        const startIndex = (page - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
 
-      for (var i = 0; i < expandButtons.length; i++) {
-        expandButtons[i].addEventListener("click", function () {
-          var button = this;
-          var clickableRow = button.closest(".clickable-row");
-          var nextRow = clickableRow.nextElementSibling;
+        rows.forEach((row, index) => {
+          if (index >= startIndex && index < endIndex) {
+            row.style.display = 'table-row';
+            row.setAttribute('data-visible', 'true');
+          } else {
+            row.style.display = 'none';
+            row.setAttribute('data-visible', 'false');
+          }
 
-          if (nextRow.classList.contains("extra-row")) {
-            nextRow.style.display = nextRow.style.display === "none" ? "table-row" : "none";
-
-            var iconCollapse = button.querySelector(".icon-collapse");
-            var iconExpand = button.querySelector(".icon-expand");
-
-            if (nextRow.style.display === "none") {
-              iconCollapse.style.display = "block";
-              iconExpand.style.display = "none";
-            } else {
-              iconCollapse.style.display = "none";
-              iconExpand.style.display = "block";
-            }
+          // Oculta los elementos <tr> extra
+          const extraRow = row.nextElementSibling;
+          if (extraRow && extraRow.classList.contains('extra-row')) {
+            extraRow.style.display = 'none';
           }
         });
       }
-    });
 
-  </script>
+      function updatePagination() {
+        const rows = document.querySelectorAll('.clickable-row');
+        const totalRows = rows.length;
+        const totalPages = Math.ceil(totalRows / itemsPerPage);
 
-
-  <script>
-    const itemsPerPage = 4; // Define el número de registros por página
-    let currentPage = 1;
-
-    function showPage(page) {
-      const rows = document.querySelectorAll('.clickable-row');
-      const startIndex = (page - 1) * itemsPerPage;
-      const endIndex = startIndex + itemsPerPage;
-
-      rows.forEach((row, index) => {
-        if (index >= startIndex && index < endIndex) {
-          row.style.display = 'table-row';
-          row.setAttribute('data-visible', 'true');
+        if (currentPage === 1) {
+          document.querySelector('.prev-btn').disabled = true;
         } else {
-          row.style.display = 'none';
-          row.setAttribute('data-visible', 'false');
+          document.querySelector('.prev-btn').disabled = false;
         }
 
-        // Oculta los elementos <tr> extra
-        const extraRow = row.nextElementSibling;
-        if (extraRow && extraRow.classList.contains('extra-row')) {
-          extraRow.style.display = 'none';
+        if (currentPage === totalPages) {
+          document.querySelector('.next-btn').disabled = true;
+        } else {
+          document.querySelector('.next-btn').disabled = false;
+        }
+      }
+
+      document.querySelector('.prev-btn').addEventListener('click', () => {
+        if (currentPage > 1) {
+          currentPage--;
+          showPage(currentPage);
+          updatePagination();
         }
       });
-    }
 
-    function updatePagination() {
-      const rows = document.querySelectorAll('.clickable-row');
-      const totalRows = rows.length;
-      const totalPages = Math.ceil(totalRows / itemsPerPage);
+      document.querySelector('.next-btn').addEventListener('click', () => {
+        const rows = document.querySelectorAll('.clickable-row');
+        const totalRows = rows.length;
+        const totalPages = Math.ceil(totalRows / itemsPerPage);
 
-      if (currentPage === 1) {
-        document.querySelector('.prev-btn').disabled = true;
-      } else {
-        document.querySelector('.prev-btn').disabled = false;
-      }
+        if (currentPage < totalPages) {
+          currentPage++;
+          showPage(currentPage);
+          updatePagination();
+        }
+      });
 
-      if (currentPage === totalPages) {
-        document.querySelector('.next-btn').disabled = true;
-      } else {
-        document.querySelector('.next-btn').disabled = false;
-      }
-    }
+      // Configura los Event Listeners iniciales para los botones de expansión
+      setupExpandButtons();
 
-    document.querySelector('.prev-btn').addEventListener('click', () => {
-      if (currentPage > 1) {
-        currentPage--;
-        showPage(currentPage);
-        updatePagination();
-      }
-    });
+      // Mostrar la primera página al cargar la tabla
+      showPage(currentPage);
+      updatePagination();
+    </script>
 
-    document.querySelector('.next-btn').addEventListener('click', () => {
-      const rows = document.querySelectorAll('.clickable-row');
-      const totalRows = rows.length;
-      const totalPages = Math.ceil(totalRows / itemsPerPage);
-
-      if (currentPage < totalPages) {
-        currentPage++;
-        showPage(currentPage);
-        updatePagination();
-      }
-    });
-
-    // Configura los Event Listeners iniciales para los botones de expansión
-    setupExpandButtons();
-
-    // Mostrar la primera página al cargar la tabla
-    showPage(currentPage);
-    updatePagination();
-  </script>
-
-  <!--End Detalles de los detalles-->
+    <!--End Detalles de los detalles-->
