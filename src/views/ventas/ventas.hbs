@@ -138,6 +138,27 @@
     }
   }
 </script>
+{{!-- Alerta exito de registro de venta --}}
+<script>
+    // Verificar si hay un mensaje de éxito en el query parameter
+    const urlParams = new URLSearchParams(window.location.search);
+    const alertParam = urlParams.get("alert");
+
+    // Verificar si la alerta ya se mostró en esta sesión
+    const alertShown = sessionStorage.getItem("alertShown");
+
+    if (alertParam === "success" && !alertShown) {
+        // Mostrar el Sweet Alert
+        Swal.fire({
+            icon: "success",
+            title: "Éxito",
+            text: "La operación se realizó correctamente.",
+        });
+
+        // Marcar que la alerta ya se mostró en esta sesión
+        sessionStorage.setItem("alertShown", "true");
+    }
+</script>
 <!--   Core JS Files   -->
 <script src="assets/js/core/jquery.min.js"></script>
 <script src="assets/js/core/popper.min.js"></script>

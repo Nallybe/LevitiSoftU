@@ -54,13 +54,13 @@
               <form action="" method="post" id="formulario">
                 <div class="row justify-content-center">
                   <div class="col-8">
-                  <div class="form-group">
-                    <label for="nombreRol" style="float: left; padding-right: 10px;">Nombre</label>
-                    <input type="text" class="form-control" id="nombreRol" style="border-radius: 0;" name="nombreRol"
-                      onclick="validar()" placeholder="Nombre">
-                    <div id="mensajeError"></div>
+                    <div class="form-group">
+                      <label for="nombreRol" style="float: left; padding-right: 10px;">Nombre</label>
+                      <input type="text" class="form-control" id="nombreRol" style="border-radius: 0;" name="nombreRol"
+                        onclick="validar()" placeholder="Nombre">
+                      <div id="mensajeError"></div>
+                    </div>
                   </div>
-                </div>
                 </div>
             </div>
 
@@ -79,7 +79,7 @@
             </div>
             <br>
           </div>
-          
+
         </div>
         <div class="col-6 permisos">
           <form action="" method="post">
@@ -105,7 +105,7 @@
                 </tr>
               </tbody>
             </table>
-            <input type="hidden" name="idSeleccionado" id="idSeleccionado" value="">
+            <input type="" name="idSeleccionado" id="idSeleccionado" value="">
 
           </form>
         </div>
@@ -169,7 +169,6 @@
     } else {
       ocultarError(mensajeErrorNombre);
     }
-
     if (Permiso === "") {
       event.preventDefault();
       Swal.fire(
@@ -208,11 +207,31 @@
       //alert(idSeleccionado);
 
     } else {
+      alert('El checkbox está desactivado');
       idSeleccionado = [];
+      alert(idSeleccionado);
+
     }
     document.getElementById('idSeleccionado').value = idSeleccionado; // Asigna el valor de idSeleccionado al input oculto
 
   }
+</script>
+{{!-- Validar campo idSeleccionado --}}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    document.getElementById("formulario").addEventListener("submit", function (event) {
+      var inputValue = document.getElementById("idSeleccionado").value.trim();
+
+      if (inputValue === "") {
+        event.preventDefault(); // Evita que el formulario se envíe
+        Swal.fire(
+          'Asigne al menos un permiso',
+          '',
+          'error'
+        )
+      }
+    });
+  });
 </script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="public/assets/js/ValidacionRol.js"></script>

@@ -59,6 +59,7 @@ function crear(req, res) {
 function registrar(req, res) {
     const data = req.body;
     //console.log(data);
+
     let idProducto = data.idProducto;
     let unidadesArray = data.cantidadProducto;
 
@@ -159,7 +160,7 @@ function registrar(req, res) {
 
                         crearFacturaPDF(RegistroVenta, productoResults, unidadesArray, nombre, correo, (facturaPath, nombreUsuario, correo) => {
                             enviarFacturaPorCorreo(correo, facturaPath, nombreUsuario);
-                            res.redirect('/ventas')
+                            res.redirect('/ventas?alert=success')
                         });
                     }
                 });

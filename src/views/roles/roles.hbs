@@ -166,15 +166,22 @@
     const urlParams = new URLSearchParams(window.location.search);
     const alertParam = urlParams.get("alert");
 
-    if (alertParam === "success") {
+    // Verificar si la alerta ya se mostró en esta sesión
+    const alertShown = sessionStorage.getItem("alertShown");
+
+    if (alertParam === "success" && !alertShown) {
         // Mostrar el Sweet Alert
         Swal.fire({
             icon: "success",
             title: "Éxito",
             text: "La operación se realizó correctamente.",
         });
+
+        // Marcar que la alerta ya se mostró en esta sesión
+        sessionStorage.setItem("alertShown", "true");
     }
 </script>
+
 <script>
     // Obtiene todos los botones de alternancia en la página
     var navbarTogglers = document.querySelectorAll('[data-bs-toggle="collapse"]');

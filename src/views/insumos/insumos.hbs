@@ -365,6 +365,27 @@
 
 {{!-- Validacion Agregar Insumo --}}
 <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const form = document.querySelector("form");
+
+        form.addEventListener("submit", async function (event) {
+            event.preventDefault(); // Evita el envío normal del formulario
+
+            const validacionesExitosas = validarFormularioModal(); // Realiza las validaciones
+
+            // Si todas las validaciones son exitosas, muestra la alerta de éxito
+            if (validacionesExitosas) {
+                await Swal.fire({
+                    icon: "success",
+                    title: "Éxito",
+                    text: "La operación se realizó correctamente.",
+                });
+
+                form.submit(); // Envía el formulario después de mostrar la alerta
+            }
+        });
+    });
+
     function validarFormularioModal() {
         let nombreInput = document.querySelector('#nombreInsumo');
         let stockInput = document.querySelector('#stockInsumo');
@@ -372,28 +393,23 @@
         let mensajeErrorStock = document.querySelector('#mensajeErrorStock');
         let nombre = nombreInput.value;
         let stock = stockInput.value;
+        let validacionesExitosas = true;
 
         if (nombre.trim() === "") {
             mostrarError(mensajeErrorNombre, 'Campo Obligatorio');
-            Swal.fire({
-                icon: 'error',
-                title: 'Todos los campos son obligatorios',
-            })
-            event.preventDefault();
+            validacionesExitosas = false;
         } else {
             ocultarError(mensajeErrorNombre);
         }
 
         if (stock.trim() === "") {
             mostrarError(mensajeErrorStock, 'Campo Obligatorio');
-            Swal.fire({
-                icon: 'error',
-                title: 'Todos los campos son obligatorios',
-            })
-            event.preventDefault();
+            validacionesExitosas = false;
         } else {
             ocultarError(mensajeErrorStock);
         }
+
+        return validacionesExitosas;
     }
 
     function mostrarError(elemento, mensaje) {
@@ -406,6 +422,8 @@
         elemento.style.display = 'none';
     }
 </script>
+{{!-- Alerta de creacion extiosa --}}
+
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="assets/js/ValidacionEliminarInsumo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
