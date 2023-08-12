@@ -200,6 +200,7 @@ async function reparaciones_detallar(req, res) {
             });
         });
 
+
         for (let ix in detallesreparacion) {
             const detalles = await new Promise((resolve, reject) => {
                 conn.query("SELECT * FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [detallesreparacion[ix].idDetalleReparacion], (err, detalles) => {
@@ -236,17 +237,18 @@ async function reparaciones_detallar(req, res) {
 //Crear (Función para redireccionar al hbs donde se encuentra el formulario)
 function reparaciones_crear(req, res) {
     req.getConnection((err, conn) => {
-        conn.query("SELECT * FROM users_access WHERE estado ='A' AND idRoles = 4", (err, clientes) => {
+        conn.query("SELECT * FROM users_access WHERE estado ='A' AND idRoles != 4", (err, clientes) => {
             if (err) {
                 return res.status(500).json(err);
             } else {
-                /* conn.query("SELECT * FROM tbl_users_access WHERE estado ='A' AND idRol != 4", (err, registradores) => {
-                     if (err) {
-                         return res.status(500).json(err);
-                     } else {*/
-                res.render("reparaciones/registrar", { clientes });
-                /*}
-            });*/
+                conn.query("SELECT * FROM tbl_insumos WHERE estado ='A'", (err, insumos) => {
+                    if (err) {
+                        return res.status(500).json(err);
+                    } else {
+                        res.render("reparaciones/registrar", { clientes, insumos });
+
+                    }
+                });
             }
         });
     });
@@ -257,7 +259,8 @@ function reparaciones_crear(req, res) {
 //Registrar Reparación
 function reparaciones_registrar(req, res) {
     var data = req.body;
-
+    console.log(data);
+    /*
     //Capturar Cliente/Registrador 
     req.getConnection((err, conn) => {
         conn.query("SELECT * FROM users_access", (err, usersA) => {
@@ -268,29 +271,16 @@ function reparaciones_registrar(req, res) {
                     if (err) {
                         return res.status(500).json(err);
                     } else {
-                        data.idInfoUser1 = 0;
-                        data.idInfoUser2 = 0;
-
                         for (index in usersA) {
                             for (i in usersI) {
-                                //if (data.idRegistrador == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
-                                //    data.idInfoUser1 = usersI[i].idInfoUser;
-                                //    console.log("Registrador encontrado");
-                                //}
-
                                 if (data.idCliente == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
-                                    data.idInfoUser2 = usersI[i].idInfo;
+                                    data.idCliente = usersI[i].idInfo;
                                     console.log("Cliente encontrado");
                                 }
                             }
                         }
-                        //conn.query(`Update tbl_users_info set numReparaciones=numReparaciones+ 1 where idInfoUser= ?`, [data.idInfoUser1],
-                        //    (err) => {
-                        //         if (err) {
-                        //            return res.status(500).json(err);
-                        //        } else {
-                        //            console.log("Registrador Actualizado +1Reparación");
-                        conn.query(`Update users_info set numReparaciones=numReparaciones+ 1 where idInfo= ?`, [data.idInfoUser2],
+                        
+                        conn.query(`Update users_info set numReparaciones=numReparaciones+ 1 where idInfo= ?`, [data.idCliente],
                             (err) => {
                                 if (err) {
                                     return res.status(500).json(err);
@@ -299,15 +289,11 @@ function reparaciones_registrar(req, res) {
                                 }
                             }
                         );
-                        // }
-                        // }
-                        // );
-
+                        
                         //End Capturar Cliente/Registrador 
 
                         const RegistroReparacion = {
-                            // idInfoUser1: data.idInfoUser1,
-                            idInfoUser2: data.idInfoUser2,
+                            idInfo: data.idCliente,
                             total: data.total,
                             fechaEntrega: data.fechaEntrega
                         };
@@ -316,7 +302,6 @@ function reparaciones_registrar(req, res) {
                         conn.query("INSERT INTO tbl_reparaciones SET ?", [RegistroReparacion], (err, result) => {
                             if (err) {
                                 return res.status(500).json(err);
-                                return;
                             } else {
                                 console.log("Reparación Registrada");
                                 //End Registrar Reparación 
@@ -325,13 +310,13 @@ function reparaciones_registrar(req, res) {
                                 const idReparacion = result.insertId;
 
                                 //Registrar Detalles y Reconocer si se manda 1 o más detalles
-                                if (data.productoReparar[0].length > 1) {
+                                if (data.articulo[0].length > 1) {
                                     //Más de un detalle
-                                    for (index in data.productoReparar) {
-                                        conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,productoReparar,descripcion,observacion) VALUES (?,?,?,?)`,
+                                    for (index in data.articulo) {
+                                        conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,articulo,descripcion,observacion) VALUES (?,?,?,?)`,
                                             [
                                                 idReparacion,
-                                                data.productoReparar[index],
+                                                data.articulo[index],
                                                 data.descripcion[index],
                                                 data.observacion[index],
                                             ],
@@ -346,10 +331,10 @@ function reparaciones_registrar(req, res) {
                                     }
                                 } else {
                                     //Un detalle
-                                    conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,productoReparar,descripcion,observacion) VALUES (?,?,?,?)`,
+                                    conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,articulo,descripcion,observacion) VALUES (?,?,?,?)`,
                                         [
                                             idReparacion,
-                                            data.productoReparar,
+                                            data.articulo,
                                             data.descripcion,
                                             data.observacion,
                                         ],
@@ -374,7 +359,7 @@ function reparaciones_registrar(req, res) {
                 });
             }
         });
-    });
+    });*/
 }
 //End Registrar Reparación
 

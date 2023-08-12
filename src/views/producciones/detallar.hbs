@@ -286,18 +286,18 @@
                                 <td class="p-3 text-center">{{fechaFin}}</td>
                                 {{#if estado1}}
                                 <td class="p-3 text-center">
-                                    <button class="btn btn-primary" disabled>Iniciado</button>
+                                    <button class="btn btn-primary btn-sm" disabled>Iniciado</button>
                                 </td>
                                 {{/if}}
                                 {{#if estado2}}
                                 <td class="p-3 text-center">
-                                    <button class="btn btn-success" disabled>En
+                                    <button class="btn btn-success btn-sm" disabled>En
                                         Proceso</button>
                                 </td>
                                 {{/if}}
                                 {{#if estado3}}
                                 <td class="p-3 text-center">
-                                    <button class="btn btn-secondary" disabled>
+                                    <button class="btn btn-secondary btn-sm" disabled>
                                         Terminado
                                     </button>
                                 </td>
@@ -530,7 +530,7 @@
 
 
 <script>
-    const itemsPerPage = 4; // Define el número de registros por página
+    const itemsPerPage = 5; // Define el número de registros por página
     let currentPage = 1;
 
     function showPage(page) {
