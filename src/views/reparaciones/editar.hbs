@@ -5,86 +5,42 @@
 
 <body>
   <style>
+    #descripcion_R,
+    #descripcion,
+    #observacion_R,
+    #observacion {
+      border-radius: 0;
+      border: 1px rgb(206, 212, 218) solid;
+      line-height: 1.5;
+      max-height: 200px;
+      padding-top: 0;
+      height: 60px;
+    }
+
+    .btn {
+      border-radius: 8px;
+    }
+
     .fa-trash:hover {
       color: red;
     }
 
-    #mensajeErrorCliente {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorCliente .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorTotal {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorTotal .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorFechaEntrega {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorFechaEntrega .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorArticulo {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorArticulo .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorDescripcion {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorDescripcion .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
+    #mensajeErrorCliente,
+    #mensajeErrorTotal,
+    #mensajeErrorFechaEntrega,
+    #mensajeErrorArticulo,
+    #mensajeErrorDescripcion,
     #mensajeErrorObservacion {
       display: none;
       color: red;
       margin-top: 5px;
     }
 
+    #mensajeErrorCliente .icono,
+    #mensajeErrorTotal .icono,
+    #mensajeErrorFechaEntrega .icono,
+    #mensajeErrorArticulo .icono,
+    #mensajeErrorDescripcion .icono,
     #mensajeErrorObservacion .icono {
       display: inline-block;
       vertical-align: middle;
@@ -107,414 +63,716 @@
       vertical-align: middle;
       margin-right: 10px;
     }
+
+    /* Add this style to your existing CSS */
+    .table-container {
+      max-height: 400px;
+      height: 400px;
+      /* Adjust this value as per your requirement */
+      overflow-y: auto;
+      position: relative;
+      /* Add this to enable positioning of thead */
+    }
+
+    /* Add this style to fix thead */
+    .table-container table {
+      position: relative;
+    }
+
+    .table-container thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
   </style>
+
 
   <!--Barra de navegación-->
   {{>barId}}
-      <!--Barra de navegación-->
-     
-     {{!--
-      <center>
-        {{#each reparacion}}
-        <form action="/reparaciones_editar/{{idReparacion}}" method="post" onsubmit="return validarEnvio()"
-          id="FormEditarReparacion">
-          <div class="container" style="margin-top: 80px; margin-bottom: 50px">
-            <!--Start Card&Form-->
-            <div class="card" style="width: 95%; border-radius: 0;">
+  <!--Barra de navegación-->
+
+  {{#each reparacion}}
+  <form action="/reparaciones_editar/{{idReparacion}}" method="post" onsubmit="return validarEnvio()"
+    id="FormEditarReparacion">
+
+
+    <!--Start Card&Form-->
+    <div class="card" style="width: 98%; border-radius: 0; margin-left:1%; margin-top: 60px;">
+      <div class="card-body">
+        <h6 class="card-title" style="margin-bottom: 1%;">Editar Reparación</h6>
+
+        <div class="row">
+          <div class="col-3">
+            <!--Start Card #1-->
+            <div class="card" style="border-radius: 0; width: 100%; margin-bottom: 3%;">
               <div class="card-body">
-                <h4 class="card-title" style="margin-bottom: 2%;">Editar Reparación</h4>
-                {{#if estado1}}
+                <h6 class="card-title" style="margin-bottom: 2%;">Reparación</h6>
+
+                <!--Input Cliente-->
+                <label class="form-label" for="idCliente">Cliente</label>
+                <input type="text" class="form-control form-control-sm" list="lis_clientes" style="border-radius: 0;"
+                  id="idCliente" name="idCliente" autocomplete="off" oninput="val_cliente()" value="{{idInfo}}">
+
+                <datalist id="lis_clientes">
+                  {{#each clientes}}
+                  <option value="{{correo}}">IdCliente({{idAccess}}) Correo({{correo}})</option>
+                  {{/each}}
+                </datalist>
+                <div id="mensajeErrorCliente"></div>
+                <!--End Input Cliente-->
+
+                <!--Input Fecha Entrega-->
+                <label class="form-label mt-2" for="fechaEntrega">Fecha Entrega</label>
+                <input type="date" class="form-control form-control-sm" style="border-radius: 0;" id="fechaEntrega"
+                  name="fechaEntrega" oninput="val_f_entrega()" autocomplete="off" value="{{fechaEntrega}}">
+                <div id="mensajeErrorFechaEntrega"></div>
+                <!--End Input Fecha Entrega-->
+
+                <!--Input Total-->
+                <label class="form-label mt-2" for="total">Total</label>
+                <input type="number" class="form-control form-control-sm  mb-2" style="border-radius: 0;" id="total"
+                  name="total" oninput="val_total()" autocomplete="off" min="50" value="{{total}}">
+                <div id="mensajeErrorTotal"></div>
+                <!--End Input Total-->
+
+              </div>
+            </div>
+            <!--End Card #1-->
+
+          </div>
+          <div class="col-9">
+
+            <!--Start Card #2-->
+
+            <div class="card" style="border-radius: 0; width: 100%;">
+              <div class="card-body">
                 <div class="row">
-                  <div class="col-md-1"></div>
-                  <!--Start Card #1-->
-                  <div class="col-md-4">
-                    <div class="card mt-4" style="border-radius: 0;">
-                      <div class="card-body">
+                  <div class="col-md-10">
+                    <h6 class="card-title">Agregar artículo a reparar</h6>
 
-                        <!--Input Cliente-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Cliente X" list="lis_clientes"
-                            style="border-radius: 0;" id="idCliente" name="idCliente" value="{{idInfoUser2}}"
-                            autocomplete="off" oninput="val_cliente()" disabled>
-                          <label for="idCliente">
-                            <h5>Cliente</h5>
-                          </label>
-                          <datalist id="lis_clientes">
-                            {{#each clientes}}
-                            <option value="{{correo}}">IdCliente({{idAccess}}) Correo({{correo}})</option>
-                            {{/each}}
-                          </datalist>
-                          <div id="mensajeErrorCliente"></div>
-                        </div>
-                        <!--End Input Cliente-->
-
-                        <!--Input Fecha Entrega-->
-                        <div class="form-floating mb-3">
-                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
-                            id="fechaEntrega" name="fechaEntrega" oninput="val_f_entrega()" value="{{fechaEntrega}}"
-                            autocomplete="off">
-                          <label for="fechaEntrega">
-                            <h5>Fecha Entrega</h5>
-                          </label>
-                          <div id="mensajeErrorFechaEntrega"></div>
-                        </div>
-                        <!--End Input Fecha Entrega-->
-
-                        <!--Input Fecha Registro-->
-                        <div class="form-floating mb-3" hidden>
-                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
-                            id="fechaR" name="fechaR" autocomplete="off" value="{{fechaRegistro}}" readonly>
-                          <label for="fechaR">
-                            <h5>Fecha Registro</h5>
-                          </label>
-                        </div>
-                        <!--End Input Fecha Registro-->
-
-                        <!--Input Total-->
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" placeholder="Total X" style="border-radius: 0;"
-                            id="total" name="total" oninput="val_total()" value="{{total}}" autocomplete="off" min="50">
-                          <label for="total">
-                            <h5>Total</h5><br>
-                          </label>
-                          <div id="mensajeErrorTotal"></div>
-                        </div>
-                        <!--End Input Total-->
-
-                        
-
+                    <div class="row">
+                      <div class="col-md-4">
+                        <!--Input Artículo-->
+                        <label class="form-label mt-3" for="articulo_R">Artículo</label>
+                        <input type="text" class="form-control form-control-sm" style="border-radius: 0;"
+                          id="articulo_R" autocomplete="off" oninput="val_articulo()">
+                        <div id="mensajeErrorArticulo"></div>
+                        <!--End Input Artículo-->
                       </div>
-                    </div>
-                  </div>
-                  <!--End Card #1-->
-
-                  <!--Start Card #2-->
-                  <div class="col-md-6 w-4/4">
-                    <div class="card w-4/4" style="border-radius: 0;">
-                      <div class="card-body">
-                        <h5 class="card-title" style="margin-bottom: 4%;">Agregar artículo a la reparación
-                        </h5>
-                        <!--Input Insumo-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Artículo X" style="border-radius: 0;"
-                            id="productoReparar_R" name="productoReparar_R" autocomplete="off" oninput="val_articulo()">
-                          <label for="productoReparar_R">
-                            <h5>Artículo</h5>
-                          </label>
-                          <div id="mensajeErrorArticulo"></div>
-                        </div>
-                        <!--End Input Insumo-->
-
+                      <div class="col-md-4">
                         <!--Input Descripción-->
-                        <div class="form-floating mb-3">
-                          <textarea class="form-control pb-5" placeholder="Descripcion X" style="border-radius: 0;"
-                            id="descripcion_R" name="descripcion_R" autocomplete="off"
-                            oninput="val_descripcion()"></textarea>
-                          <label for="descripcion_R">
-                            <h5>Descripción</h5><br>
-                          </label>
-                          <div id="mensajeErrorDescripcion"></div>
-                        </div>
+                        <label class="form-label" for="descripcion_R">Descripción</label>
+                        <textarea class="form-control form-control-sm" style="border-radius: 0;" id="descripcion_R"
+                          autocomplete="off" oninput="val_descripcion()"></textarea>
+                        <div id="mensajeErrorDescripcion"></div>
                         <!--End Input Descripción-->
+                      </div>
+                      <div class="col-md-4">
 
                         <!--Input Observación-->
-                        <div class="form-floating mb-3">
-                          <textarea class="form-control pb-5" placeholder="Observación X" style="border-radius: 0;"
-                            id="observacion_R" name="observacion_R" autocomplete="off"
-                            oninput="val_observacion()"></textarea>
-                          <label for="observacion_R">
-                            <h5>Observaciones</h5><br>
-                          </label>
-                          <div id="mensajeErrorObservacion"></div>
-                        </div>
-                        <!--End Input Observación-->
-
-                        <!--Start Btn Agregar-->
-                        <div class="d-grid gap-2">
-                          <button class="btn btn-warning" style="border-radius: 0;" type="button"
-                            id="btnAgregarArticulo" onclick="agregarArticulo();"><i class="fa-solid fa-circle-plus"></i>
-                            Agregar</button>
-                        </div>
-                        <!--End Btn Agregar-->
+                        <label class="form-label" for="observacion_R">Observaciones</label>
+                        <textarea class="form-control form-control-sm" style="border-radius: 0;" id="observacion_R"
+                          autocomplete="off" oninput="val_observacion()"></textarea>
+                        <div id="mensajeErrorObservacion"></div>
                       </div>
+                      <!--End Input Observación-->
+
                     </div>
                   </div>
-                  <!--End Card #2-->
-                  
 
-                  <div class="col-md-1"></div>
-                </div>
-                {{/if}}
-
-                {{#if estado2}}
-                <div class="row">
-                  <div class="col-md-3"></div>
-                  <!--Start Card #1-->
-                  <div class="col-md-6">
-                    <div class="card" style="border-radius: 0;">
-                      <div class="card-body">
-
-                        <!--Input Cliente-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Cliente X" list="lis_clientes"
-                            style="border-radius: 0;" id="idCliente" name="idCliente" value="{{idInfoUser2}}"
-                            autocomplete="off" oninput="val_cliente()" disabled>
-                          <label for="idCliente">
-                            <h5>Cliente</h5>
-                          </label>
-                          <datalist id="lis_clientes">
-                            {{#each clientes}}
-                            <option value="{{correo}}">IdCliente({{idAccess}}) Correo({{correo}})</option>
-                            {{/each}}
-                          </datalist>
-                          <div id="mensajeErrorCliente"></div>
-                        </div>
-                        <!--End Input Cliente-->
-
-                        <!--Input Fecha Entrega-->
-                        <div class="form-floating mb-3">
-                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
-                            id="fechaEntrega" name="fechaEntrega" oninput="val_f_entrega()" value="{{fechaEntrega}}"
-                            autocomplete="off">
-                          <label for="fechaEntrega">
-                            <h5>Fecha Entrega</h5>
-                          </label>
-                          <div id="mensajeErrorFechaEntrega"></div>
-                        </div>
-                        <!--End Input Fecha Entrega-->
-
-                        <!--Input Fecha Registro-->
-                        <div class="form-floating mb-3" hidden>
-                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
-                            id="fechaR" name="fechaR" autocomplete="off" value="{{fechaRegistro}}" readonly>
-                          <label for="fechaR">
-                            <h5>Fecha Registro</h5>
-                          </label>
-                        </div>
-                        <!--End Input Fecha Registro-->
-
-                        <!--Input Total-->
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" placeholder="Total X" style="border-radius: 0;"
-                            id="total" name="total" oninput="val_total()" value="{{total}}" autocomplete="off" min="50">
-                          <label for="total">
-                            <h5>Total</h5><br>
-                          </label>
-                          <div id="mensajeErrorTotal"></div>
-                        </div>
-                        <!--End Input Total-->
-
-                        
-
-                      </div>
-                    </div>
+                  <div class="col-md-2">
+                    <!--Start Btn Agregar-->
+                    <i class="fa-solid fa-circle-plus fa-2x mt-5" style="margin-left: 25%;" type="button"
+                      id="btnAgregarArticulo" onclick="agregarArticulo();"></i>
+                    <!--End Btn Agregar-->
                   </div>
-                  <!--End Card #1-->
-
-                  <div class="col-md-3"></div>
-                </div>
-                {{/if}}
-
-                {{/each}}
-
-
-                <!--Start Card #3-->
-                <div class="card mt-2" style="width: 100%; border-radius: 0;">
-                  <div class="card-body">
-                    <h5 class="card-title" style="margin-bottom: 2%;">Artículos de la reparación</h5>
-                    <!--Start Table-->
-                    <table class="table table-hover">
-                      <thead class="table" style="background-color: #282d32; color:white;">
-                        <tr style="text-align: center;">
-                          <th>#</th>
-                          <th> Artículo</th>
-                          <th> Descripción</th>
-                          <th> Observaciones</th>
-                          <th> Estado</th>
-                          <th> Funciones </th>
-                        </tr>
-                      </thead>
-                      <tbody id="ListaArticulos">
-                        {{#each detallesreparacion}}
-                        <tr id="{{idDetalleReparacion}}" style="text-align: center">
-                          <td class="text-center"></td>
-
-                          <td class="text-center">
-                            <input type="hidden" name="idDetalleReparacion_1" value="{{idDetalleReparacion}}">
-                            <input name="productoReparar_1" id="productoReparar_1_{{idDetalleReparacion}}"
-                              value="{{productoReparar}}" style="text-align: center; width: 200px;  border: none;"
-                              readonly>
-                          </td>
-                          <td class="text-center w-4/4">
-                            <textarea name="descripcion_1" id="descripcion_1_{{idDetalleReparacion}}"
-                              style="text-align: center; width: 220px;  border: none;"
-                              readonly>{{descripcion}}</textarea>
-                          </td>
-                          <td class="text-center w-4/4">
-                            <textarea name="observacion_1" id="observacion_1_{{idDetalleReparacion}}"
-                              style="text-align: center; width: 220px;  border: none;"
-                              readonly>{{observacion}}</textarea>
-                          </td>
-                          {{#if estado1}}
-                          <td class="p-3 text-center">
-                            <select name="estado_1" class="w-4/5" style="text-align: center;">
-                              <option value="{{estado}}" selected>{{estado}}</option>
-                              <option value="Proceso">En Proceso</option>
-                              <option value="Terminado">Terminado</option>
-                            </select>
-                          </td>
-                          <td class="text-center">
-                            <a class="boton-reparacion" href="#" style="color: #292b2c;" data-bs-toggle="modal"
-                              data-bs-target="#editar{{idDetalleReparacion}}">
-                              <i class="fa-sharp fa-solid fa-pen" style="margin-left: 10px;"></i>
-                            </a>
-
-                            <a class="boton-reparacion" href="#" onclick="eliminarArticulo({{idDetalleReparacion}})"
-                              style="color: #292b2c;">
-                              <i class="fas fa-trash"></i>
-                            </a>
-                          </td>
-                          {{/if}}
-                          {{#if estado2}}
-                          <td class="p-3 text-center">
-                            <select name="estado_1" class="w-4/5" style="text-align: center;">
-                              <option value="{{estado}}" selected>En {{estado}}</option>
-                              <option value="Terminado">Terminado</option>
-                            </select>
-                          </td>
-                          <td class="text-center">
-                            <a class="boton-reparacion" href="#" style="color: #292b2c;" data-bs-toggle="modal"
-                              data-bs-target="#editar{{idDetalleReparacion}}">
-                              <i class="fa-sharp fa-solid fa-pen" style="margin-left: 10px;"></i>
-                            </a>
-
-                            <a class="boton-reparacion" href="#" onclick="eliminarArticulo({{idDetalleReparacion}})"
-                              style="color: #292b2c;">
-                              <i class="fas fa-trash"></i>
-                            </a>
-                          </td>
-
-                          {{/if}}
-                          {{#if estado3}}
-                          <td class="p-3 text-center">
-                            <select name="estado_1" class="w-4/5" style="text-align: center;">
-                              <option value="{{estado}}" selected>{{estado}}</option>
-                              <option value="Proceso">En Proceso</option>
-                            </select>
-                          </td>
-                          {{/if}}
-                        </tr>
-
-
-                        <!-- Modal editar-->
-                        <div class="modal fade" id="editar{{idDetalleReparacion}}" tabindex="-1"
-                          aria-labelledby="exampleModalLabel" aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div class="modal-content" style="border-radius: 0;">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Artículo</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                  aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                <div class="form-floating mb-3">
-                                  <textarea class="form-control" id="productoReparar_R2_{{idDetalleReparacion}}"
-                                    style="border-radius: 0; text-align: left;"
-                                    placeholder="0000" {{#if estado2}}readonly{{/if}}>{{productoReparar}}</textarea>
-                                  <label for="productoReparar_R2_{{idDetalleReparacion}}">Articulo</label>
-                                </div>
-
-                                <div class="form-floating mb-3">
-                                  <textarea class="form-control pb-5" id="descripcion_R2_{{idDetalleReparacion}}"
-                                    style="border-radius: 0; text-align: left;"
-                                    placeholder="0000" {{#if estado2}}readonly{{/if}}>{{descripcion}}</textarea>
-                                  <label for="descripcion_R2_{{idDetalleReparacion}}">Descripción</label>
-                                </div>
-
-                                <div class="form-floating mb-3">
-                                  <textarea class="form-control pb-5" id="observacion_R2_{{idDetalleReparacion}}"
-                                    style="border-radius: 0; text-align: left;"
-                                    placeholder="0000">{{observacion}}</textarea>
-                                  <label for="observacion_R2_{{idDetalleReparacion}}">Observaciones</label>
-                                </div>
-                              </div>
-                              <div class="modal-footer">
-                                <button class="btn btn-secondary boton-reparacion mr-1" data-bs-dismiss="modal"
-                                  style="border-radius: 0;">Cancelar</button>
-                                <button type="button" class="btn btn-primary boton-reparacion ml-3"
-                                  style="border-radius: 0;" onclick="editarArticulo1({{idDetalleReparacion}})">Guardar
-                                  Cambios</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!--End Modal editar-->
-                        {{/each}}
-                      </tbody>
-                    </table>
-                    <!--End Table-->
-                  </div>
-                </div>
-                <!--End Card #3-->
-
-
-                <div style="margin-top: 3%;">
-                  <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6" style="margin-top: 1%;">
-                      <!--Start Btn R&C-->
-                      <div class="d-grid gap-2">
-                        <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-                        <button type="submit" id="btnRegistrar" class="btn btn-success"
-                          style="border-radius: 0; margin-bottom: 1px;">
-                          Guardar Cambios</button>
-                        <!--End Btn Regiastrar-->
-                        <!--Start Btn Cancelar-->
-                        <a class="btn btn-danger" href="/reparaciones" style="border-radius: 0; margin-top: 1px;"
-                          type="button">Cancelar</a>
-                        <!--End Btn Cancelar-->
-                      </div>
-                      <!--End Btn R&C-->
-                    </div>
-                    <div class="col-md-3"></div>
-
-                  </div>
-                  <br>
                 </div>
               </div>
             </div>
-            <!--End Card&Form-->
+            <!--End Card #2-->
 
+            {{/each}}
+
+            <!--Start Card #3-->
+            <div class="card mt-3" style="width: 100%; border-radius: 0;">
+              <div class="card-body">
+                <h6 class="card-title">artículos a reparar</h6>
+                <!--Start Table-->
+                <div class="table-container">
+                  <table class="table table-sm">
+                    <thead class="table" style="background-color: #282d32; color:white;">
+                      <tr style="text-align: center;">
+                        <th>#</th>
+                        <th> Artículo</th>
+                        <th> Estado</th>
+                        <th> Funciones </th>
+                      </tr>
+                    </thead>
+                    <tbody id="ListaArticulos">
+                      {{#each detallesreparacion}}
+
+                      <tr class="clickable-row" id="{{idDetalleReparacion}}">
+                        <td class="text-center">{{cont}}</td>
+                        <td class="text-center">
+                          <input name="articulo" id="articulo_{{idDetalleReparacion}}" value="{{articulo}}"
+                            style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
+                        </td>
+
+                        {{#if estado1}}
+                        <td class="p-3 text-center">
+                          <select name="estado_1" class="w-4/5" style="text-align: center;">
+                            <option value="{{estado}}" selected>{{estado}}</option>
+                            <option value="Proceso">En Proceso</option>
+                            <option value="Terminado">Terminado</option>
+                          </select>
+                        </td>
+                        <td class="text-center">
+                          <a class="expand-button boton-reparacion" type="button">
+                            <i class="fa-solid fa-caret-down icon-collapse fa-2x"></i>
+                            <i class="fa-solid fa-caret-up icon-expand fa-2x" style="display: none; color:gray;"></i>
+                          </a>
+
+                          <a class="boton-reparacion" href="#" onclick="eliminarArticulo({{idDetalleReparacion}})"
+                            style="color: #292b2c;">
+                            <i class="fas fa-trash"></i>
+                          </a>
+                        </td>
+                        {{/if}}
+                        {{#if estado2}}
+                        <td class="p-3 text-center">
+                          <select name="estado_1" class="w-4/5" style="text-align: center;">
+                            <option value="{{estado}}" selected>En {{estado}}</option>
+                            <option value="Terminado">Terminado</option>
+                          </select>
+                        </td>
+                        <td class="text-center">
+                          <a class="expand-button boton-reparacion" type="button">
+                            <i class="fa-solid fa-caret-down icon-collapse fa-2x"></i>
+                            <i class="fa-solid fa-caret-up icon-expand fa-2x" style="display: none; color:gray;"></i>
+                          </a>
+
+                          <a class="boton-reparacion" href="#" onclick="eliminarArticulo({{idDetalleReparacion}})"
+                            style="color: #292b2c;">
+                            <i class="fas fa-trash"></i>
+                          </a>
+                        </td>
+
+                        {{/if}}
+                        {{#if estado3}}
+                        <td class="p-3 text-center">
+                          <select name="estado_1" class="w-4/5" style="text-align: center;">
+                            <option value="{{estado}}" selected>{{estado}}</option>
+                            <option value="Proceso">En Proceso</option>
+                          </select>
+                        </td>
+                        <td class="text-center">
+                          <a class="expand-button boton-reparacion" type="button">
+                            <i class="fa-solid fa-caret-down icon-collapse fa-2x"></i>
+                            <i class="fa-solid fa-caret-up icon-expand fa-2x" style="display: none; color:gray;"></i>
+                          </a>
+                        </td>
+
+                        {{/if}}
+                      </tr>
+
+                      <tr class="extra-row" style="display:none;">
+                        <td colspan="4">
+                          <div class="card" style="width: 100%; border-radius: 0;">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-9">
+
+                                  <label class="form-label mt-1" for="descripcion_${cont}">Descripción</label>
+                                  <textarea class="form-control form-control-sm des"
+                                    style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;"
+                                    id="descripcion_${cont}" name="descripcion"> {{descripcion}}</textarea>
+
+                                </div>
+
+                                <div class="col-md-3">
+                                  <center>
+                                    <button type="button" class="btn-reparacion btn-sm mt-4" data-toggle="modal"
+                                      data-target="#insumos_${cont}"
+                                      style="border-radius: 8px; border: 1px gray solid;">
+                                      <i class="fa-solid fa-dolly fa-2x"></i><br>
+                                      <p class="pb-0 mb-0">Agregar<br>Insumos</p>
+                                    </button>
+                                  </center>
+
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-md-8">
+
+                                  <label class="form-label mt-2" for="observacion_${cont}">Observaciones</label>
+                                  <textarea class="form-control form-control-sm ob mb-2"
+                                    style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;"
+                                    id="observacion_${cont}" name="observacion">{{observacion}}</textarea>
+
+                                </div>
+                                <div class="col-md-4">
+                                  <label class="form-label mt-4" for="observacion_R">Última_Actualización</label>
+                                  <input class="form-control form-control-sm" style="border-radius: 0;" type="text"
+                                    value="{{fechaEstado}}" readonly>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      {{/each}}
+
+                    </tbody>
+                  </table>
+                </div>
+                <!--End Table-->
+
+                <div class="pagination">
+                  <button type="button" class="prev-btn mt-3"><i class="fa-solid fa-arrow-left"></i></button>
+                  <button type="button" class="next-btn mt-3"><i class="fa-solid fa-arrow-right"></i></button>
+
+                </div>
+
+              </div>
+            </div>
+
+
+            <!--End Card #3-->
+
+            <div class="row">
+              <div class="col-8"></div>
+              <div class="col-4">
+                <!--Start Btn Cancelar-->
+                <a class="btn btn-danger btn-sm" href="/reparaciones" style="margin-top: 1px;"
+                  type="button">Cancelar</a>
+                <!--End Btn Cancelar-->
+
+                <!--Start Btn Registrar-->
+                <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
+                  Guardar Cambios</button>
+                <!--End Btn Regiastrar-->
+              </div>
+            </div>
           </div>
-        </form>
-      </center>
---}}
-      <br>
+        </div>
+      </div>
     </div>
+    <!--End Card&Form-->
+
+    <div id="modales">
+
+    </div>
+
+  </form>
+
+
+
+
+
+
+
+
+
+
+  {{!--
+  <center>
+    {{#each reparacion}}
+    <form action="/reparaciones_editar/{{idReparacion}}" method="post" onsubmit="return validarEnvio()"
+      id="FormEditarReparacion">
+      <div class="container" style="margin-top: 80px; margin-bottom: 50px">
+        <!--Start Card&Form-->
+        <div class="card" style="width: 95%; border-radius: 0;">
+          <div class="card-body">
+            <h4 class="card-title" style="margin-bottom: 2%;">Editar Reparación</h4>
+            {{#if estado1}}
+            <div class="row">
+              <div class="col-md-1"></div>
+              <!--Start Card #1-->
+              <div class="col-md-4">
+                <div class="card mt-4" style="border-radius: 0;">
+                  <div class="card-body">
+
+                    <!--Input Cliente-->
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" placeholder="Cliente X" list="lis_clientes"
+                        style="border-radius: 0;" id="idCliente" name="idCliente" value="{{idInfoUser2}}"
+                        autocomplete="off" oninput="val_cliente()" disabled>
+                      <label for="idCliente">
+                        <h5>Cliente</h5>
+                      </label>
+                      <datalist id="lis_clientes">
+                        {{#each clientes}}
+                        <option value="{{correo}}">IdCliente({{idAccess}}) Correo({{correo}})</option>
+                        {{/each}}
+                      </datalist>
+                      <div id="mensajeErrorCliente"></div>
+                    </div>
+                    <!--End Input Cliente-->
+
+                    <!--Input Fecha Entrega-->
+                    <div class="form-floating mb-3">
+                      <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
+                        id="fechaEntrega" name="fechaEntrega" oninput="val_f_entrega()" value="{{fechaEntrega}}"
+                        autocomplete="off">
+                      <label for="fechaEntrega">
+                        <h5>Fecha Entrega</h5>
+                      </label>
+                      <div id="mensajeErrorFechaEntrega"></div>
+                    </div>
+                    <!--End Input Fecha Entrega-->
+
+                    <!--Input Fecha Registro-->
+                    <div class="form-floating mb-3" hidden>
+                      <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
+                        id="fechaR" name="fechaR" autocomplete="off" value="{{fechaRegistro}}" readonly>
+                      <label for="fechaR">
+                        <h5>Fecha Registro</h5>
+                      </label>
+                    </div>
+                    <!--End Input Fecha Registro-->
+
+                    <!--Input Total-->
+                    <div class="form-floating mb-3">
+                      <input type="number" class="form-control" placeholder="Total X" style="border-radius: 0;"
+                        id="total" name="total" oninput="val_total()" value="{{total}}" autocomplete="off" min="50">
+                      <label for="total">
+                        <h5>Total</h5><br>
+                      </label>
+                      <div id="mensajeErrorTotal"></div>
+                    </div>
+                    <!--End Input Total-->
+
+
+
+                  </div>
+                </div>
+              </div>
+              <!--End Card #1-->
+
+              <!--Start Card #2-->
+              <div class="col-md-6 w-4/4">
+                <div class="card w-4/4" style="border-radius: 0;">
+                  <div class="card-body">
+                    <h5 class="card-title" style="margin-bottom: 4%;">Agregar artículo a la reparación
+                    </h5>
+                    <!--Input Insumo-->
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" placeholder="Artículo X" style="border-radius: 0;"
+                        id="articulo_R" name="articulo_R" autocomplete="off" oninput="val_articulo()">
+                      <label for="articulo_R">
+                        <h5>Artículo</h5>
+                      </label>
+                      <div id="mensajeErrorArticulo"></div>
+                    </div>
+                    <!--End Input Insumo-->
+
+                    <!--Input Descripción-->
+                    <div class="form-floating mb-3">
+                      <textarea class="form-control pb-5" placeholder="Descripcion X" style="border-radius: 0;"
+                        id="descripcion_R" name="descripcion_R" autocomplete="off"
+                        oninput="val_descripcion()"></textarea>
+                      <label for="descripcion_R">
+                        <h5>Descripción</h5><br>
+                      </label>
+                      <div id="mensajeErrorDescripcion"></div>
+                    </div>
+                    <!--End Input Descripción-->
+
+                    <!--Input Observación-->
+                    <div class="form-floating mb-3">
+                      <textarea class="form-control pb-5" placeholder="Observación X" style="border-radius: 0;"
+                        id="observacion_R" name="observacion_R" autocomplete="off"
+                        oninput="val_observacion()"></textarea>
+                      <label for="observacion_R">
+                        <h5>Observaciones</h5><br>
+                      </label>
+                      <div id="mensajeErrorObservacion"></div>
+                    </div>
+                    <!--End Input Observación-->
+
+                    <!--Start Btn Agregar-->
+                    <div class="d-grid gap-2">
+                      <button class="btn btn-warning" style="border-radius: 0;" type="button" id="btnAgregarArticulo"
+                        onclick="agregarArticulo();"><i class="fa-solid fa-circle-plus"></i>
+                        Agregar</button>
+                    </div>
+                    <!--End Btn Agregar-->
+                  </div>
+                </div>
+              </div>
+              <!--End Card #2-->
+
+
+              <div class="col-md-1"></div>
+            </div>
+            {{/if}}
+
+            {{#if estado2}}
+            <div class="row">
+              <div class="col-md-3"></div>
+              <!--Start Card #1-->
+              <div class="col-md-6">
+                <div class="card" style="border-radius: 0;">
+                  <div class="card-body">
+
+                    <!--Input Cliente-->
+                    <div class="form-floating mb-3">
+                      <input type="text" class="form-control" placeholder="Cliente X" list="lis_clientes"
+                        style="border-radius: 0;" id="idCliente" name="idCliente" value="{{idInfoUser2}}"
+                        autocomplete="off" oninput="val_cliente()" disabled>
+                      <label for="idCliente">
+                        <h5>Cliente</h5>
+                      </label>
+                      <datalist id="lis_clientes">
+                        {{#each clientes}}
+                        <option value="{{correo}}">IdCliente({{idAccess}}) Correo({{correo}})</option>
+                        {{/each}}
+                      </datalist>
+                      <div id="mensajeErrorCliente"></div>
+                    </div>
+                    <!--End Input Cliente-->
+
+                    <!--Input Fecha Entrega-->
+                    <div class="form-floating mb-3">
+                      <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
+                        id="fechaEntrega" name="fechaEntrega" oninput="val_f_entrega()" value="{{fechaEntrega}}"
+                        autocomplete="off">
+                      <label for="fechaEntrega">
+                        <h5>Fecha Entrega</h5>
+                      </label>
+                      <div id="mensajeErrorFechaEntrega"></div>
+                    </div>
+                    <!--End Input Fecha Entrega-->
+
+                    <!--Input Fecha Registro-->
+                    <div class="form-floating mb-3" hidden>
+                      <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
+                        id="fechaR" name="fechaR" autocomplete="off" value="{{fechaRegistro}}" readonly>
+                      <label for="fechaR">
+                        <h5>Fecha Registro</h5>
+                      </label>
+                    </div>
+                    <!--End Input Fecha Registro-->
+
+                    <!--Input Total-->
+                    <div class="form-floating mb-3">
+                      <input type="number" class="form-control" placeholder="Total X" style="border-radius: 0;"
+                        id="total" name="total" oninput="val_total()" value="{{total}}" autocomplete="off" min="50">
+                      <label for="total">
+                        <h5>Total</h5><br>
+                      </label>
+                      <div id="mensajeErrorTotal"></div>
+                    </div>
+                    <!--End Input Total-->
+
+
+
+                  </div>
+                </div>
+              </div>
+              <!--End Card #1-->
+
+              <div class="col-md-3"></div>
+            </div>
+            {{/if}}
+
+            {{/each}}
+
+
+            <!--Start Card #3-->
+            <div class="card mt-2" style="width: 100%; border-radius: 0;">
+              <div class="card-body">
+                <h5 class="card-title" style="margin-bottom: 2%;">Artículos de la reparación</h5>
+                <!--Start Table-->
+                <table class="table table-hover">
+                  <thead class="table" style="background-color: #282d32; color:white;">
+                    <tr style="text-align: center;">
+                      <th>#</th>
+                      <th> Artículo</th>
+                      <th> Descripción</th>
+                      <th> Observaciones</th>
+                      <th> Estado</th>
+                      <th> Funciones </th>
+                    </tr>
+                  </thead>
+                  <tbody id="ListaArticulos">
+                    {{#each detallesreparacion}}
+                    <tr id="{{idDetalleReparacion}}" style="text-align: center">
+                      <td class="text-center"></td>
+
+                      <td class="text-center">
+                        <input type="hidden" name="idDetalleReparacion_1" value="{{idDetalleReparacion}}">
+                        <input name="articulo_1" id="articulo_1_{{idDetalleReparacion}}" value="{{articulo}}"
+                          style="text-align: center; width: 200px;  border: none;" readonly>
+                      </td>
+                      <td class="text-center w-4/4">
+                        <textarea name="descripcion_1" id="descripcion_1_{{idDetalleReparacion}}"
+                          style="text-align: center; width: 220px;  border: none;" readonly>{{descripcion}}</textarea>
+                      </td>
+                      <td class="text-center w-4/4">
+                        <textarea name="observacion_1" id="observacion_1_{{idDetalleReparacion}}"
+                          style="text-align: center; width: 220px;  border: none;" readonly>{{observacion}}</textarea>
+                      </td>
+                      {{#if estado1}}
+                      <td class="p-3 text-center">
+                        <select name="estado_1" class="w-4/5" style="text-align: center;">
+                          <option value="{{estado}}" selected>{{estado}}</option>
+                          <option value="Proceso">En Proceso</option>
+                          <option value="Terminado">Terminado</option>
+                        </select>
+                      </td>
+                      <td class="text-center">
+                        <a class="boton-reparacion" href="#" style="color: #292b2c;" data-bs-toggle="modal"
+                          data-bs-target="#editar{{idDetalleReparacion}}">
+                          <i class="fa-sharp fa-solid fa-pen" style="margin-left: 10px;"></i>
+                        </a>
+
+                        <a class="boton-reparacion" href="#" onclick="eliminarArticulo({{idDetalleReparacion}})"
+                          style="color: #292b2c;">
+                          <i class="fas fa-trash"></i>
+                        </a>
+                      </td>
+                      {{/if}}
+                      {{#if estado2}}
+                      <td class="p-3 text-center">
+                        <select name="estado_1" class="w-4/5" style="text-align: center;">
+                          <option value="{{estado}}" selected>En {{estado}}</option>
+                          <option value="Terminado">Terminado</option>
+                        </select>
+                      </td>
+                      <td class="text-center">
+                        <a class="boton-reparacion" href="#" style="color: #292b2c;" data-bs-toggle="modal"
+                          data-bs-target="#editar{{idDetalleReparacion}}">
+                          <i class="fa-sharp fa-solid fa-pen" style="margin-left: 10px;"></i>
+                        </a>
+
+                        <a class="boton-reparacion" href="#" onclick="eliminarArticulo({{idDetalleReparacion}})"
+                          style="color: #292b2c;">
+                          <i class="fas fa-trash"></i>
+                        </a>
+                      </td>
+
+                      {{/if}}
+                      {{#if estado3}}
+                      <td class="p-3 text-center">
+                        <select name="estado_1" class="w-4/5" style="text-align: center;">
+                          <option value="{{estado}}" selected>{{estado}}</option>
+                          <option value="Proceso">En Proceso</option>
+                        </select>
+                      </td>
+                      {{/if}}
+                    </tr>
+
+
+                    <!-- Modal editar-->
+                    <div class="modal fade" id="editar{{idDetalleReparacion}}" tabindex="-1"
+                      aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                        <div class="modal-content" style="border-radius: 0;">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Artículo</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <div class="form-floating mb-3">
+                              <textarea class="form-control" id="articulo_R2_{{idDetalleReparacion}}"
+                                style="border-radius: 0; text-align: left;" placeholder="0000" {{#if
+                                estado2}}readonly{{/if}}>{{articulo}}</textarea>
+                              <label for="articulo_R2_{{idDetalleReparacion}}">Articulo</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                              <textarea class="form-control pb-5" id="descripcion_R2_{{idDetalleReparacion}}"
+                                style="border-radius: 0; text-align: left;" placeholder="0000" {{#if
+                                estado2}}readonly{{/if}}>{{descripcion}}</textarea>
+                              <label for="descripcion_R2_{{idDetalleReparacion}}">Descripción</label>
+                            </div>
+
+                            <div class="form-floating mb-3">
+                              <textarea class="form-control pb-5" id="observacion_R2_{{idDetalleReparacion}}"
+                                style="border-radius: 0; text-align: left;"
+                                placeholder="0000">{{observacion}}</textarea>
+                              <label for="observacion_R2_{{idDetalleReparacion}}">Observaciones</label>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button class="btn btn-secondary boton-reparacion mr-1" data-bs-dismiss="modal"
+                              style="border-radius: 0;">Cancelar</button>
+                            <button type="button" class="btn btn-primary boton-reparacion ml-3"
+                              style="border-radius: 0;" onclick="editarArticulo1({{idDetalleReparacion}})">Guardar
+                              Cambios</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!--End Modal editar-->
+                    {{/each}}
+                  </tbody>
+                </table>
+                <!--End Table-->
+              </div>
+            </div>
+            <!--End Card #3-->
+
+
+            <div style="margin-top: 3%;">
+              <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-6" style="margin-top: 1%;">
+                  <!--Start Btn R&C-->
+                  <div class="d-grid gap-2">
+                    <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+                    <button type="submit" id="btnRegistrar" class="btn btn-success"
+                      style="border-radius: 0; margin-bottom: 1px;">
+                      Guardar Cambios</button>
+                    <!--End Btn Regiastrar-->
+                    <!--Start Btn Cancelar-->
+                    <a class="btn btn-danger" href="/reparaciones" style="border-radius: 0; margin-top: 1px;"
+                      type="button">Cancelar</a>
+                    <!--End Btn Cancelar-->
+                  </div>
+                  <!--End Btn R&C-->
+                </div>
+                <div class="col-md-3"></div>
+
+              </div>
+              <br>
+            </div>
+          </div>
+        </div>
+        <!--End Card&Form-->
+
+      </div>
+    </form>
+  </center>
+  --}}
+  <br>
+  </div>
   </div>
 
   <!--End Form&Card-->
-<!--Validacion nav bar-->
-{{#if asignacion}}
-    <script>
-      var permisosInput = document.querySelector('#permisosInput');
-      var permisosValue = permisosInput.value;
+  <!--Validacion nav bar-->
+  {{#if asignacion}}
+  <script>
+    var permisosInput = document.querySelector('#permisosInput');
+    var permisosValue = permisosInput.value;
 
-      var palabras = permisosValue.split(',');
+    var palabras = permisosValue.split(',');
 
-      var menuItems = document.querySelectorAll('.nav li');
+    var menuItems = document.querySelectorAll('.nav li');
 
-      menuItems.forEach(function (item) {
-        var items = item.querySelector('p').textContent.trim().toLowerCase();
+    menuItems.forEach(function (item) {
+      var items = item.querySelector('p').textContent.trim().toLowerCase();
 
-        if (palabras.includes(items)) {
-          item.style.display = 'block';
-        } else {
-          item.style.display = 'none';
-        }
-      });
-    </script>
-    {{/if}}
+      if (palabras.includes(items)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  </script>
+  {{/if}}
 
 
   <script>
@@ -523,7 +781,7 @@
       const tabla = document.getElementById("ListaArticulos");
 
       // Enumerar las filas
-      let filas = tabla.getElementsByTagName("tr");
+      let filas = tabla.getElementsByClassName("clickable-row");
       for (let i = 0; i < filas.length; i++) {
         let celdaNumero = filas[i].getElementsByTagName("td")[0];
         celdaNumero.textContent = i + 1;
@@ -537,7 +795,7 @@
     var lastValueI = ""; // Variable para almacenar el último valor válido
 
     function val_articulo() {
-      var articulo = document.getElementById("productoReparar_R");
+      var articulo = document.getElementById("articulo_R");
 
       if (articulo.value != "") {
         mensajeErrorArticulo.innerHTML = '';
@@ -618,78 +876,87 @@
   <!--Agregar y eliminar insumo-->
   <script>
     var cont = 0;
+    var contGeneral = 0;
     function agregarArticulo() {
       const articulo = {
-        productoReparar: document.getElementById('productoReparar_R').value,
+        articulo: document.getElementById('articulo_R').value,
         descripcion: document.getElementById('descripcion_R').value,
         observacion: document.getElementById('observacion_R').value,
       };
 
-      if (articulo.productoReparar != "" && articulo.descripcion != "" && articulo.observacion != "") {
-        cont= cont -1;
+      if (articulo.articulo != "" && articulo.descripcion != "" && articulo.observacion != "") {
+        cont = cont - 1;
+        contGeneral++;
         document.getElementById('ListaArticulos').innerHTML += `
-          <tr id="${cont}"style="text-align: center; background-color: whitesmoke;">
-              <td class="text-center">${cont}</td>
-              <td class="text-center">
-                  <input name="productoReparar_2" id="productoReparar_2_${cont}" value="${articulo.productoReparar}" style="text-align: center; width: 200px;  border: none; background-color: whitesmoke;" readonly>
-              </td>
-              <td class="text-center w-4/4">
-                  <textarea name="descripcion_2" id="descripcion_2_${cont}" style="text-align: center; width: 220px;  border: none; background-color: whitesmoke;" readonly>${articulo.descripcion}</textarea>
-              </td>
-              <td class="text-center w-4/4">
-                  <textarea name="observacion_2" id="observacion_2_${cont}" style="text-align: center; width: 220px;  border: none; background-color: whitesmoke;" readonly>${articulo.observacion}</textarea>
-              </td>
-              <td class="text-center">
-              <select name="estado_2" style="text-align: center;">
-                <option value="Iniciado" selected>Iniciado</option>
-              </select>
-              </td>
-              <td class="text-center">
-                <a class="boton-reparacion" href="#" style="color: #292b2c;" data-bs-toggle="modal" data-bs-target="#editar${cont}">
-                  <i class="fa-sharp fa-solid fa-pen" style="margin-left: 10px;"></i>
-                </a>
 
-                <a class="boton-reparacion" href="#" onclick="eliminarArticulo(${cont})" style="color: #292b2c;">
-                  <i class="fas fa-trash"></i>
-                </a>
-              </td>
-          </tr>
+        <tr class="clickable-row" id="${cont}" style="text-align: center; background-color: whitesmoke;">
+          <td class="text-center"></td>
+          <td class="text-center">
+            <input name="articulo_2" id="articulo_2_${cont}" value="${articulo.articulo}"
+              style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
+          </td>
 
+          <td class="p-3 text-center">
+            <select name="estado_2" class="w-4/5" style="text-align: center;">
+              <option value="Iniciado" selected>Iniciado</option>
+            </select>
+          </td>
+          <td class="text-center">
+            <a class="expand-button boton-reparacion" type="button">
+              <i class="fa-solid fa-caret-down icon-collapse fa-2x"></i>
+              <i class="fa-solid fa-caret-up icon-expand fa-2x" style="display: none; color:gray;"></i>
+            </a>
 
-          <!-- Modal editar-->
-          <div class="modal fade" id="editar${cont}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-              <div class="modal-content" style="border-radius: 0;">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Artículo</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <a class="boton-reparacion" type="button" onclick="eliminarArticulo(${cont})"
+              style="color: #292b2c;">
+              <i class="fas fa-trash"></i>
+            </a>
+          </td>
+          
+        </tr>
+
+        <tr class="extra-row" style="display:none;">
+          <td colspan="4">
+            <div class="card" style="width: 100%; border-radius: 0;">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-9">
+
+                    <label class="form-label mt-1" for="descripcion_2_${cont}">Descripción</label>
+                    <textarea class="form-control form-control-sm"
+                      style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;"
+                      id="descripcion_2_${cont}" name="descripcion_2"> ${articulo.descripcion}</textarea>
+
+                  </div>
+
+                  <div class="col-md-3">
+                    <center>
+                      <button type="button" class="btn-reparacion btn-sm mt-4" data-toggle="modal"
+                        data-target="#insumos_${cont}"
+                        style="border-radius: 8px; border: 1px gray solid;">
+                        <i class="fa-solid fa-dolly fa-2x"></i><br>
+                        <p class="pb-0 mb-0">Agregar<br>Insumos</p>
+                      </button>
+                    </center>
+
+                  </div>
                 </div>
-                <div class="modal-body">
-                    <div class="form-floating mb-3">
-                      <textarea class="form-control" id="productoReparar_R2_${cont}" style="border-radius: 0; text-align: left;" placeholder="0000">${articulo.productoReparar}</textarea>
-                      <label for="productoReparar_R2_${cont}">Articulo</label>
-                    </div>
 
-                    <div class="form-floating mb-3">
-                      <textarea class="form-control pb-5" id="descripcion_R2_${cont}" style="border-radius: 0; text-align: left;" placeholder="0000">${articulo.descripcion}</textarea>
-                      <label for="descripcion_R2_${cont}">Descripción</label>
-                    </div>
+                <div class="row">
+                  <div class="col-md-9">
 
-                    <div class="form-floating mb-3">
-                      <textarea class="form-control pb-5" id="observacion_R2_${cont}" style="border-radius: 0; text-align: left;" placeholder="0000">${articulo.observacion}</textarea>
-                      <label for="observacion_R2_${cont}">Observaciones</label>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                  <button class="btn btn-secondary boton-reparacion mr-1" data-bs-dismiss="modal"
-                    style="border-radius: 0;">Cancelar</button>
-                  <button type="button" class="btn btn-primary boton-reparacion ml-3" style="border-radius: 0;"
-                    onclick="editarArticulo2(${cont})">Guardar Cambios</button>
+                    <label class="form-label mt-2" for="observacion_${cont}">Observaciones</label>
+                    <textarea class="form-control form-control-sm ob mb-2"
+                      style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;"
+                      id="observacion_2_${cont}" name="observacion_2">${articulo.observacion}</textarea>
+
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <!--End Modal editar-->
+          </td>
+        </tr>
+
         `;
 
         Swal.fire({
@@ -702,7 +969,17 @@
 
         tablaIndice();
 
-        document.getElementById('productoReparar_R').value = null;
+
+        // Después de agregar el evento, actualiza la paginación y muestra la última página
+        currentPage = Math.ceil(contGeneral / itemsPerPage);
+        showPage(currentPage);
+        updatePagination();
+
+        // Configura los Event Listeners para los botones de expansión
+        setupExpandButtons();
+
+
+        document.getElementById('articulo_R').value = null;
         document.getElementById('descripcion_R').value = null;
         document.getElementById('observacion_R').value = null;
 
@@ -717,7 +994,7 @@
           timer: 1000
         });
 
-        if (articulo.productoReparar == "") {
+        if (articulo.articulo == "") {
           mensajeErrorArticulo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El artículo es un campo requerido';
           mensajeErrorArticulo.style.display = 'block';
         }
@@ -733,104 +1010,96 @@
         }
 
       }
-      //} else {
-      // alert('El insumo seleccionado no es válido')
-      //}
     }
 
     function eliminarArticulo(id) {
-      articulo = document.getElementById(id);
-      if (!articulo) {
+      const art = document.getElementById(id);
+      if (!art) {
         alert("Error");
       } else {
-        padre = articulo.parentNode;
-        padre.removeChild(articulo);
-        //alert("articulo Eliminado");
+        const padre = art.parentNode;
+        const siguienteFila = art.nextElementSibling;
+
+        padre.removeChild(art);
+        if (siguienteFila && siguienteFila.classList.contains("extra-row")) {
+          padre.removeChild(siguienteFila);
+        }
+
+        contGeneral--;
+        tablaIndice();
+
+        updatePagination();
+        // Configura los Event Listeners para los botones de expansión
+        setupExpandButtons();
+
         Swal.fire({
           position: 'top-end',
           icon: 'success',
-          title: 'Articulo Eliminado',
+          title: 'Artículo Eliminado',
           showConfirmButton: false,
           timer: 1000
         });
-
-        tablaIndice();
       }
     }
 
 
+    // Agrega los Event Listeners para los botones de expansión después de agregar una nueva fila
+    function setupExpandButtons() {
+      var expandButtons = document.getElementsByClassName("expand-button");
 
-    function editarArticulo1(id) {
-      const idProR = 'productoReparar_1_' + id;
-      const idDes = 'descripcion_1_' + id;
-      const idObs = 'observacion_1_' + id;
+      for (var i = 0; i < expandButtons.length; i++) {
+        expandButtons[i].addEventListener("click", function () {
+          var button = this;
+          var clickableRow = button.closest(".clickable-row");
+          var nextRow = clickableRow.nextElementSibling;
 
-      const idProR_R = 'productoReparar_R2_' + id;
-      const idDes_R = 'descripcion_R2_' + id;
-      const idObs_R = 'observacion_R2_' + id;
+          if (nextRow.classList.contains("extra-row")) {
+            nextRow.style.display = nextRow.style.display === "none" ? "table-row" : "none";
 
-      document.getElementById(idProR).value = document.getElementById(idProR_R).value;
-      document.getElementById(idDes).value = document.getElementById(idDes_R).value;
-      document.getElementById(idObs).value = document.getElementById(idObs_R).value;
+            var iconCollapse = button.querySelector(".icon-collapse");
+            var iconExpand = button.querySelector(".icon-expand");
 
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Articulo Actualizado',
-        showConfirmButton: false,
-        timer: 1000
-      });
+            if (nextRow.style.display === "none") {
+              iconCollapse.style.display = "block";
+              iconExpand.style.display = "none";
+            } else {
+              iconCollapse.style.display = "none";
+              iconExpand.style.display = "block";
+            }
+          }
+        });
+      }
     }
-
-    function editarArticulo2(id) {
-      const idProR = 'productoReparar_2_' + id;
-      const idDes = 'descripcion_2_' + id;
-      const idObs = 'observacion_2_' + id;
-
-      const idProR_R = 'productoReparar_R2_' + id;
-      const idDes_R = 'descripcion_R2_' + id;
-      const idObs_R = 'observacion_R2_' + id;
-
-      document.getElementById(idProR).value = document.getElementById(idProR_R).value;
-      document.getElementById(idDes).value = document.getElementById(idDes_R).value;
-      document.getElementById(idObs).value = document.getElementById(idObs_R).value;
-
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Articulo Actualizado',
-        showConfirmButton: false,
-        timer: 1000
-      });
-    }
+    // Configura los Event Listeners para los botones de expansión
+    setupExpandButtons();
 
   </script>
   <!--End Agregar y eliminar insumo-->
 
   <!--Rango de fecha-->
   <script>
-    function capturarFechaActualR() {
-      var fechaEntrega = document.getElementById("fechaEntrega");
-      var fechaRegistro = document.getElementById("fechaR").value;
-      var fechaR = new Date(fechaRegistro);
-      var fechaN = new Date();
-      //alert(fechaR)
-
-      var fechaMinima = new Date(fechaR.getTime() + (1 * 24 * 60 * 60 * 1000)); // 1 día en milisegundos
-      var fechaMaxima = new Date(fechaMinima.getTime() + (3 * 30 * 24 * 60 * 60 * 1000)); // 3 meses en milisegundos
-
-      var fechaMinimaString = fechaMinima.toISOString().split("T")[0];
-      var fechaMaximaString = fechaMaxima.toISOString().split("T")[0];
-
-      var fechaNString = fechaN.toISOString().split("T")[0];
-
-      fechaEntrega.min = fechaMinimaString;
-      fechaEntrega.max = fechaMaximaString;
-
-      //alert("Fecha mínima establecida: " + fechaMinimaString);
-      //alert("Fecha máxima establecida: " + fechaMaximaString);
-    }
-    capturarFechaActualR();
+    /* function capturarFechaActualR() {
+       var fechaEntrega = document.getElementById("fechaEntrega");
+       var fechaRegistro = document.getElementById("fechaR").value;
+       var fechaR = new Date(fechaRegistro);
+       var fechaN = new Date();
+       //alert(fechaR)
+ 
+       var fechaMinima = new Date(fechaR.getTime() + (1 * 24 * 60 * 60 * 1000)); // 1 día en milisegundos
+       var fechaMaxima = new Date(fechaMinima.getTime() + (3 * 30 * 24 * 60 * 60 * 1000)); // 3 meses en milisegundos
+ 
+       var fechaMinimaString = fechaMinima.toISOString().split("T")[0];
+       var fechaMaximaString = fechaMaxima.toISOString().split("T")[0];
+ 
+       var fechaNString = fechaN.toISOString().split("T")[0];
+ 
+       fechaEntrega.min = fechaMinimaString;
+       fechaEntrega.max = fechaMaximaString;
+ 
+       //alert("Fecha mínima establecida: " + fechaMinimaString);
+       //alert("Fecha máxima establecida: " + fechaMaximaString);
+     }
+     capturarFechaActualR();*/
   </script>
   <!--End Rango de fecha-->
 
@@ -902,7 +1171,6 @@
 
   <!--Fin footer-->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="/assets/js/ValidacionInsumo.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
     crossorigin="anonymous"></script>
@@ -911,8 +1179,7 @@
   <script src="/assets/js/core/popper.min.js"></script>
   <script src="/assets/js/core/bootstrap.min.js"></script>
   <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+
   <!-- Chart JS -->
   <script src="/assets/js/plugins/chartjs.min.js"></script>
   <!--  Notifications Plugin    -->
@@ -931,3 +1198,113 @@
       });
     });
   </script>
+
+
+
+  <!--Detalles de los detalles-->
+  <script>
+    // Desplegar detalle del detalle
+    document.addEventListener("DOMContentLoaded", function () {
+      var expandButtons = document.getElementsByClassName("expand-button");
+
+      for (var i = 0; i < expandButtons.length; i++) {
+        expandButtons[i].addEventListener("click", function () {
+          var button = this;
+          var clickableRow = button.closest(".clickable-row");
+          var nextRow = clickableRow.nextElementSibling;
+
+          if (nextRow.classList.contains("extra-row")) {
+            nextRow.style.display = nextRow.style.display === "none" ? "table-row" : "none";
+
+            var iconCollapse = button.querySelector(".icon-collapse");
+            var iconExpand = button.querySelector(".icon-expand");
+
+            if (nextRow.style.display === "none") {
+              iconCollapse.style.display = "block";
+              iconExpand.style.display = "none";
+            } else {
+              iconCollapse.style.display = "none";
+              iconExpand.style.display = "block";
+            }
+          }
+        });
+      }
+    });
+
+  </script>
+
+
+  <script>
+    const itemsPerPage = 5; // Define el número de registros por página
+    let currentPage = 1;
+
+    function showPage(page) {
+      const rows = document.querySelectorAll('.clickable-row');
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      rows.forEach((row, index) => {
+        if (index >= startIndex && index < endIndex) {
+          row.style.display = 'table-row';
+          row.setAttribute('data-visible', 'true');
+        } else {
+          row.style.display = 'none';
+          row.setAttribute('data-visible', 'false');
+        }
+
+        // Oculta los elementos <tr> extra
+        const extraRow = row.nextElementSibling;
+        if (extraRow && extraRow.classList.contains('extra-row')) {
+          extraRow.style.display = 'none';
+        }
+      });
+    }
+
+    function updatePagination() {
+      const rows = document.querySelectorAll('.clickable-row');
+      const totalRows = rows.length;
+      const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+      if (currentPage === 1) {
+        document.querySelector('.prev-btn').disabled = true;
+      } else {
+        document.querySelector('.prev-btn').disabled = false;
+      }
+
+      if (currentPage === totalPages) {
+        document.querySelector('.next-btn').disabled = true;
+      } else {
+        document.querySelector('.next-btn').disabled = false;
+      }
+    }
+
+    document.querySelector('.prev-btn').addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+        updatePagination();
+      }
+    });
+
+    document.querySelector('.next-btn').addEventListener('click', () => {
+      const rows = document.querySelectorAll('.clickable-row');
+      const totalRows = rows.length;
+      const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+      if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+        updatePagination();
+      }
+    });
+
+    // Mostrar la primera página al cargar la tabla
+    showPage(currentPage);
+    updatePagination();
+
+    // Configura los Event Listeners iniciales para los botones de expansión
+    setupExpandButtons();
+
+  </script>
+
+  <!--End Detalles de los detalles-->

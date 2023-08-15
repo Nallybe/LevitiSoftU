@@ -200,7 +200,7 @@
                                 </tr>
                             </thead>
                             <tbody style="text-align: center;">
-                                {{#each d_producto}}
+                                {{#each totalInsumos}}
                                 <tr>
                                     <td class="py-2 px-6 text-center">{{cont}}</td>
                                     <td class="p-3 text-center">
@@ -213,15 +213,15 @@
                                                     <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Box-Open-icon.png' width='100' />
                                                 </div>
                                                 <div class='col-md-8'>
-                                                    <b>Nombre:</b> {{nombreI}}<br>
-                                                    <b>Medida:</b> {{medidaI}}<br>
-                                                    <b>Stock:</b> {{cantidadI}}<br>
+                                                    <b>Nombre:</b> {{nombre}}<br>
+                                                    <b>Medida:</b> {{medida}}<br>
+                                                    <b>Stock:</b> {{stock}}<br>
                                                 </div>
                                             </div>
-                                        ">{{nombreI}} <i class="fas fa-box-open" style="color: black"></i></button>
+                                        ">{{nombre}} <i class="fas fa-box-open" style="color: black"></i></button>
                                     </td>
                                     <!--<td class="p-3 text-center">{{cantidad_n}}</td>-->
-                                    <td class="p-3 text-center">{{totalN}}</td>
+                                    <td class="p-3 text-center">{{cantidad_n}}</td>
                                 </tr>
                                 {{/each}}
                             </tbody>
@@ -230,7 +230,6 @@
                 </div>
             </div>
         </div>
-
         <!--End Modal Insumos-->
     </div>
 

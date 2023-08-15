@@ -13,16 +13,16 @@ function producciones_listar(req, res) {
                 return res.status(500).json(err);
             }
 
-            // Consultar los detalles de las producciones para cada reparación
+            // Consultar los detalles de las producciones para cada Producción
             var cont = 1
             for (let index in producciones) {
-                // Actualizar los campos de la reparación con la información obtenida
+                // Actualizar los campos de la Producción con la información obtenida
                 producciones[index].cont = cont;
                 cont++;
                 producciones[index].fechaInicio = producciones[index].fechaInicio.toLocaleDateString();
                 producciones[index].fechaFin = producciones[index].fechaFin.toLocaleDateString();
 
-                // Actualizar el estado de la reparación
+                // Actualizar el estado de la Producción
                 switch (producciones[index].estado) {
                     case 'Iniciado':
                         producciones[index].estado1 = true;
@@ -69,7 +69,7 @@ function producciones_listar(req, res) {
                                     return res.status(500).json(err);
                                 }
 
-                                // Actualizar los campos de la reparación con la información de los usuarios
+                                // Actualizar los campos de la Producción con la información de los usuarios
                                 for (let index in producciones) {
                                     for (let i in productos) {
                                         if (productos[i].idProducto == producciones[index].idProducto) {
@@ -399,10 +399,10 @@ function producciones_crear(req, res) {
 //End Crear
 
 
-//Registrar Reparación
+//Registrar Producción
 function producciones_registrar(req, res) {
     var data = req.body;
-    //console.log(data)
+    console.log(data)
 
     //Capturar Encargado
     req.getConnection((err, conn) => {
@@ -422,6 +422,17 @@ function producciones_registrar(req, res) {
                                 }
                             }
                         }
+
+                         for(inx in data.participante){
+                            for (index in usersA) {
+                                for (i in usersI) {
+                                    if (data.participante[inx] == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
+                                        data.participante[inx] = usersI[i].idInfo;
+                                    }
+                                }
+                            }
+                        }
+                        
                         //End Capturar Encargado
 
                         //Capturar Producto 
@@ -445,65 +456,72 @@ function producciones_registrar(req, res) {
                                     fechaFin: data.fechaFin
                                 };
 
-                                //Registrar Producción
-                                conn.query("INSERT INTO tbl_ordenes_produccion SET ?", [RegistroProduccion], (err, result) => {
+                                conn.query("SELECT * FROM tbl_ordenes_produccion_detalles_participes", (err, participes) => {
                                     if (err) {
                                         return res.status(500).json(err);
                                     } else {
-                                        console.log("Produccion Registrada");
-                                        //End Registrar Producción 
+                                        //Registrar Producción
+                                        conn.query("INSERT INTO tbl_ordenes_produccion SET ?", [RegistroProduccion], (err, result) => {
+                                            if (err) {
+                                                return res.status(500).json(err);
+                                            } else {
+                                                console.log("Produccion Registrada");
+                                                //End Registrar Producción 
 
-                                        //Captura id produccion
-                                        const idOrdenProduccion = result.insertId;
+                                                //Captura id produccion
+                                                const idOrdenProduccion = result.insertId;
 
-                                        //Registrar Detalles y Reconocer si se manda 1 o más detalles
-                                        if (data.titulo[0].length > 1) {
+                                                //Registrar Detalles y Reconocer si se manda 1 o más detalles
+                                                if (data.titulo[0].length > 1) {
 
-                                            //Más de un detalle
-                                            for (index in data.titulo) {
-                                                conn.query(`INSERT INTO tbl_ordenes_produccion_detalles(idOrdenProduccion,titulo,descripcion,observacion, fechaInicio, fechaFin) VALUES (?,?,?,?,?,?)`,
-                                                    [
-                                                        idOrdenProduccion,
-                                                        data.titulo[index],
-                                                        data.descripcion[index],
-                                                        data.observacion[index],
-                                                        data.fechaInicio_detalle[index],
-                                                        data.fechaFin_detalle[index]
-                                                    ],
-                                                    (err) => {
-                                                        if (err) {
-                                                            return res.status(500).json(err);
-                                                        } else {
-                                                            console.log("Detalle Registrado");
+                                                    //Más de un detalle
+                                                    for (index in data.titulo) {
+                                                        conn.query(`INSERT INTO tbl_ordenes_produccion_detalles(idOrdenProduccion,titulo,descripcion,observacion, fechaInicio, fechaFin) VALUES (?,?,?,?,?,?)`,
+                                                            [
+                                                                idOrdenProduccion,
+                                                                data.titulo[index],
+                                                                data.descripcion[index],
+                                                                data.observacion[index],
+                                                                data.fechaInicio_detalle[index],
+                                                                data.fechaFin_detalle[index]
+                                                            ],
+                                                            (err) => {
+                                                                if (err) {
+                                                                    return res.status(500).json(err);
+                                                                } else {
+                                                                    console.log("Detalle Registrado");
+
+                                                                }
+                                                            }
+                                                        );
+                                                    }
+                                                } else {
+                                                    //Un detalle
+                                                    conn.query(`INSERT INTO tbl_ordenes_produccion_detalles(idOrdenProduccion,titulo,descripcion,observacion, fechaInicio, fechaFin) VALUES (?,?,?,?,?,?)`,
+                                                        [
+                                                            idOrdenProduccion,
+                                                            data.titulo,
+                                                            data.descripcion,
+                                                            data.observacion,
+                                                            data.fechaInicio_detalle,
+                                                            data.fechaFin_detalle
+                                                        ],
+                                                        (err) => {
+                                                            if (err) {
+                                                                return res.status(500).json(err);
+                                                            } else {
+                                                                console.log("Detalle Registrado");
+                                                            }
                                                         }
-                                                    }
-                                                );
-                                            }
-                                        } else {
-                                            //Un detalle
-                                            conn.query(`INSERT INTO tbl_ordenes_produccion_detalles(idOrdenProduccion,titulo,descripcion,observacion, fechaInicio, fechaFin) VALUES (?,?,?,?,?,?)`,
-                                                [
-                                                    idOrdenProduccion,
-                                                    data.titulo,
-                                                    data.descripcion,
-                                                    data.observacion,
-                                                    data.fechaInicio_detalle,
-                                                    data.fechaFin_detalle
-                                                ],
-                                                (err) => {
-                                                    if (err) {
-                                                        return res.status(500).json(err);
-                                                    } else {
-                                                        console.log("Detalle Registrado");
-                                                    }
+                                                    );
                                                 }
-                                            );
-                                        }
-                                        //End Registrar Detalles
+                                                //End Registrar Detalles
 
-                                        //Redireccionar
-                                        console.log("Registro de orden de producción exitoso");
-                                        res.redirect("/producciones");
+                                                //Redireccionar
+                                                console.log("Registro de orden de producción exitoso");
+                                                res.redirect("/producciones");
+                                            }
+                                        });
                                     }
                                 });
                             }
@@ -514,7 +532,9 @@ function producciones_registrar(req, res) {
         });
     });
 }
-//End Registrar Reparación
+//End Registrar Producción
+
+
 
 //EN PROCESO
 //Editar
@@ -527,7 +547,7 @@ function producciones_editar(req, res) {
             } else {
 
                 for (i in produccion) {
-                    // Actualizar el estado de la reparación
+                    // Actualizar el estado de la Producción
                     switch (produccion[i].estado) {
                         case 'Iniciado':
                             produccion[i].estado1 = true;
@@ -597,7 +617,7 @@ function producciones_editar(req, res) {
                         return res.status(500).json(err);
                     } else {
                         for (let index in d_produccion) {
-                            // Actualizar el estado de la reparación para que en el hbs el estado tenga su propio diseño dependiendo del valor
+                            // Actualizar el estado de la Producción para que en el hbs el estado tenga su propio diseño dependiendo del valor
                             switch (d_produccion[index].estado) {
                                 case 'Iniciado':
                                     d_produccion[index].estado1 = true;
