@@ -14,7 +14,7 @@
     }
 
     .btn-participantes:hover,
-    .btn-insumos:hover,
+    .btn-s:hover,
     .icon-collapse:hover {
       color: gray;
     }
@@ -305,7 +305,7 @@
                 <!--End Btn Cancelar-->
 
                 <!--Start Btn Registrar-->
-                <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
+                <button id="btnRegistrar" type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
                   Registrar Producción</button>
                 <!--End Btn Regiastrar-->
               </div>
@@ -665,7 +665,7 @@
         document.getElementById('fechaFin_R').value = null;
 
 
-        //alert("Insumo Agregado");
+        //alert(" Agregado");
       } else {
         //alert("Campos obligatorios");
         Swal.fire({
@@ -845,7 +845,7 @@
     }
 
   </script>
-  <!--End Agregar y eliminar insumo-->
+  <!--End Agregar y eliminar -->
 
   <!--Validar Envio-->
   <script>
@@ -907,7 +907,7 @@
 
       // Verificar si la lista tiene al menos un elemento
       if (list.childElementCount === 0) {
-        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún insumo");
+        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún ");
         Swal.fire({
           position: 'top-end',
           icon: 'info',
@@ -943,110 +943,110 @@
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
 
-    <!--Detalles de los detalles-->
+  <!--Detalles de los detalles-->
 
-    <script>
-      // Desplegar detalle del detalle
-      document.addEventListener("DOMContentLoaded", function () {
-        var expandButtons = document.getElementsByClassName("expand-button");
+  <script>
+    // Desplegar detalle del detalle
+    document.addEventListener("DOMContentLoaded", function () {
+      var expandButtons = document.getElementsByClassName("expand-button");
 
-        for (var i = 0; i < expandButtons.length; i++) {
-          expandButtons[i].addEventListener("click", function () {
-            var button = this;
-            var clickableRow = button.closest(".clickable-row");
-            var nextRow = clickableRow.nextElementSibling;
+      for (var i = 0; i < expandButtons.length; i++) {
+        expandButtons[i].addEventListener("click", function () {
+          var button = this;
+          var clickableRow = button.closest(".clickable-row");
+          var nextRow = clickableRow.nextElementSibling;
 
-            if (nextRow.classList.contains("extra-row")) {
-              nextRow.style.display = nextRow.style.display === "none" ? "table-row" : "none";
+          if (nextRow.classList.contains("extra-row")) {
+            nextRow.style.display = nextRow.style.display === "none" ? "table-row" : "none";
 
-              var iconCollapse = button.querySelector(".icon-collapse");
-              var iconExpand = button.querySelector(".icon-expand");
+            var iconCollapse = button.querySelector(".icon-collapse");
+            var iconExpand = button.querySelector(".icon-expand");
 
-              if (nextRow.style.display === "none") {
-                iconCollapse.style.display = "block";
-                iconExpand.style.display = "none";
-              } else {
-                iconCollapse.style.display = "none";
-                iconExpand.style.display = "block";
-              }
+            if (nextRow.style.display === "none") {
+              iconCollapse.style.display = "block";
+              iconExpand.style.display = "none";
+            } else {
+              iconCollapse.style.display = "none";
+              iconExpand.style.display = "block";
             }
-          });
-        }
-      });
-
-    </script>
-
-
-    <script>
-      const itemsPerPage = 4; // Define el número de registros por página
-      let currentPage = 1;
-
-      function showPage(page) {
-        const rows = document.querySelectorAll('.clickable-row');
-        const startIndex = (page - 1) * itemsPerPage;
-        const endIndex = startIndex + itemsPerPage;
-
-        rows.forEach((row, index) => {
-          if (index >= startIndex && index < endIndex) {
-            row.style.display = 'table-row';
-            row.setAttribute('data-visible', 'true');
-          } else {
-            row.style.display = 'none';
-            row.setAttribute('data-visible', 'false');
-          }
-
-          // Oculta los elementos <tr> extra
-          const extraRow = row.nextElementSibling;
-          if (extraRow && extraRow.classList.contains('extra-row')) {
-            extraRow.style.display = 'none';
           }
         });
       }
+    });
 
-      function updatePagination() {
-        const rows = document.querySelectorAll('.clickable-row');
-        const totalRows = rows.length;
-        const totalPages = Math.ceil(totalRows / itemsPerPage);
+  </script>
 
-        if (currentPage === 1) {
-          document.querySelector('.prev-btn').disabled = true;
+
+  <script>
+    const itemsPerPage = 4; // Define el número de registros por página
+    let currentPage = 1;
+
+    function showPage(page) {
+      const rows = document.querySelectorAll('.clickable-row');
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      rows.forEach((row, index) => {
+        if (index >= startIndex && index < endIndex) {
+          row.style.display = 'table-row';
+          row.setAttribute('data-visible', 'true');
         } else {
-          document.querySelector('.prev-btn').disabled = false;
+          row.style.display = 'none';
+          row.setAttribute('data-visible', 'false');
         }
 
-        if (currentPage === totalPages) {
-          document.querySelector('.next-btn').disabled = true;
-        } else {
-          document.querySelector('.next-btn').disabled = false;
+        // Oculta los elementos <tr> extra
+        const extraRow = row.nextElementSibling;
+        if (extraRow && extraRow.classList.contains('extra-row')) {
+          extraRow.style.display = 'none';
         }
+      });
+    }
+
+    function updatePagination() {
+      const rows = document.querySelectorAll('.clickable-row');
+      const totalRows = rows.length;
+      const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+      if (currentPage === 1) {
+        document.querySelector('.prev-btn').disabled = true;
+      } else {
+        document.querySelector('.prev-btn').disabled = false;
       }
 
-      document.querySelector('.prev-btn').addEventListener('click', () => {
-        if (currentPage > 1) {
-          currentPage--;
-          showPage(currentPage);
-          updatePagination();
-        }
-      });
+      if (currentPage === totalPages) {
+        document.querySelector('.next-btn').disabled = true;
+      } else {
+        document.querySelector('.next-btn').disabled = false;
+      }
+    }
 
-      document.querySelector('.next-btn').addEventListener('click', () => {
-        const rows = document.querySelectorAll('.clickable-row');
-        const totalRows = rows.length;
-        const totalPages = Math.ceil(totalRows / itemsPerPage);
+    document.querySelector('.prev-btn').addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+        updatePagination();
+      }
+    });
 
-        if (currentPage < totalPages) {
-          currentPage++;
-          showPage(currentPage);
-          updatePagination();
-        }
-      });
+    document.querySelector('.next-btn').addEventListener('click', () => {
+      const rows = document.querySelectorAll('.clickable-row');
+      const totalRows = rows.length;
+      const totalPages = Math.ceil(totalRows / itemsPerPage);
 
-      // Configura los Event Listeners iniciales para los botones de expansión
-      setupExpandButtons();
+      if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+        updatePagination();
+      }
+    });
 
-      // Mostrar la primera página al cargar la tabla
-      showPage(currentPage);
-      updatePagination();
-    </script>
+    // Configura los Event Listeners iniciales para los botones de expansión
+    setupExpandButtons();
 
-    <!--End Detalles de los detalles-->
+    // Mostrar la primera página al cargar la tabla
+    showPage(currentPage);
+    updatePagination();
+  </script>
+
+  <!--End Detalles de los detalles-->
