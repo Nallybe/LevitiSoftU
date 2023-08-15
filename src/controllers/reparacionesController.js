@@ -225,8 +225,63 @@ async function reparaciones_detallar(req, res) {
             });
             detallesreparacion[ix].detalles = detalles;
         }
-        // Redireccionar 
-        res.render("reparaciones/detallar", { detallesreparacion, reparacion });
+
+
+        const DetallesDetalles = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_reparaciones_detalles_detalles", (err, DetallesDetalles) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(DetallesDetalles);
+                }
+            });
+        });
+
+        const R_Detalles = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, DetallesDetalles) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(DetallesDetalles);
+                }
+            });
+        });
+
+        const totalInsumos = [];
+        let contDD = 1;
+
+        for (const dd of DetallesDetalles) {
+            for (const d of R_Detalles) {
+                if (d.idDetalleReparacion === dd.idDetalleReparacion) {
+                    const matchingInsumo = insumos.find(ins => ins.idInsumo === dd.idInsumo);
+
+                    if (matchingInsumo) {
+                        const existingInsumo = totalInsumos.find(ti => ti.idInsumo === dd.idInsumo);
+
+                        if (existingInsumo) {
+                            existingInsumo.cantidad_n += dd.cantidad_n;
+                        } else {
+                            totalInsumos.push({
+                                cont: contDD,
+                                idInsumo: dd.idInsumo,
+                                nombre: matchingInsumo.nombre,
+                                medida: matchingInsumo.medida,
+                                stock: matchingInsumo.stock,
+                                cantidad_n: dd.cantidad_n
+                            });
+
+                            contDD++;
+                        }
+                    }
+                }
+            }
+        }
+
+        // Redireccionar
+
+        console.log("total Insumos");
+        console.log(totalInsumos);
+        res.render("reparaciones/detallar", { detallesreparacion, reparacion, totalInsumos });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -260,7 +315,7 @@ function reparaciones_crear(req, res) {
 function reparaciones_registrar(req, res) {
     var data = req.body;
     console.log(data);
-    /*
+    
     //Capturar Cliente/Registrador 
     req.getConnection((err, conn) => {
         conn.query("SELECT * FROM users_access", (err, usersA) => {
@@ -359,7 +414,7 @@ function reparaciones_registrar(req, res) {
                 });
             }
         });
-    });*/
+    });
 }
 //End Registrar Reparación
 
@@ -423,33 +478,25 @@ function reparaciones_editar(req, res) {
                         }
                     }
 
-                    //conn.query('SELECT * FROM tbl_users_info WHERE idInfoUser = ?', [reparacion[i].idInfoUser1], (err, user1) => {
-                    //    if (err) {
-                    //        return res.status(500).json(err);
-                    //    } else {
-                    //        for (i2 in user1) {
-                    //            reparacion[i].idInfoUser1 = user1[i2].nombre;
-                    //        }
-                    conn.query('SELECT * FROM users_info WHERE idInfo = ?', [reparacion[i].idInfoUser2], (err, user2) => {
+                    conn.query('SELECT * FROM users_info WHERE idInfo = ?', [reparacion[i].idInfo], (err, user) => {
                         if (err) {
                             return res.status(500).json(err);
                         } else {
-                            for (i3 in user2) {
-                                reparacion[i].idInfoUser2 = user2[i3].nombre;
+                            for (i in user) {
+                                reparacion[i].idInfo = user[i].nombre;
                             }
                         }
                     });
 
-
-                    //    }
-                    //});
-
                 }
+                
                 conn.query('SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?', [idReparacion], (err, detallesreparacion) => {
                     if (err) {
                         return res.status(500).json(err);
                     } else {
                         for (let index in detallesreparacion) {
+                            detallesreparacion[index].fechaEstado = detallesreparacion[index].fechaEstado.toLocaleString();
+                        
                             // Actualizar el estado de la reparación para que en el hbs el estado tenga su propio diseño dependiendo del valor
                             switch (detallesreparacion[index].estado) {
                                 case 'Iniciado':
@@ -678,7 +725,7 @@ function reparaciones_eliminar(req, res) {
                                 return res.status(500).json(err);
                             } else {
                                 console.log("Registrador Actualizado -1Reparación");
-                                conn.query(`Update users_info set numReparaciones=numReparaciones- 1 where idInfo= ?`, [reparacion[i].idInfoUser2],
+                                conn.query(`Update users_info set numReparaciones=numReparaciones- 1 where idInfo= ?`, [reparacion[i].idInfo],
                                     (err) => {
                                         if (err) {
                                             return res.status(500).json(err);
