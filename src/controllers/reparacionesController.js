@@ -494,7 +494,10 @@ function reparaciones_editar(req, res) {
                     if (err) {
                         return res.status(500).json(err);
                     } else {
+                        cont=0;
                         for (let index in detallesreparacion) {
+                            cont--;
+                            detallesreparacion[index].cont = cont;
                             detallesreparacion[index].fechaEstado = detallesreparacion[index].fechaEstado.toLocaleString();
                         
                             // Actualizar el estado de la reparación para que en el hbs el estado tenga su propio diseño dependiendo del valor
@@ -526,6 +529,7 @@ function reparaciones_editar(req, res) {
 function reparaciones_modificar(req, res) {
     const idReparacion = req.params.idReparacion;
     const data = req.body;
+    console.log(data);
 
     //console.log(data);
 
@@ -535,29 +539,33 @@ function reparaciones_modificar(req, res) {
     };
 
     req.getConnection((err, conn) => {
+        if (err) {
+            return conn.status(500).json(err);
+        }
+
         //Actualizar Reparación
-        conn.query('UPDATE tbl_reparaciones SET ? WHERE idReparacion = ?', [RegistroReparacion, idReparacion], (err, rows) => {
+        conn.query('UPDATE tbl_reparaciones SET ? WHERE idReparacion = ?', [RegistroReparacion, idReparacion], (err, upd_r) => {
             if (err) {
-                return res.status(500).json(err);
+                return upd_r.status(500).json(err);
             } else {
-                console.log('Reparación Actualizada')
+                console.log('Reparación Actualizada');
                 //End Actualizar Reparación
 
                 //Reconocer si se mandan detalles ya registrados 
-                if (data.productoReparar_1) {
+                if (data.articulo_1) {
                     conn.query('SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?', [idReparacion], (err, d_reparacion) => {
                         if (err) {
-                            return res.status(500).json(err);
+                            return d_reparacion.status(500).json(err);
                         } else {
                             //Reconocer si se manda 1 o más detalles
-                            if (data.productoReparar_1[0].length > 1) {
+                            if (data.articulo_1[0].length > 1) {
                                 //Más de un detalle
 
                                 //Actualizar Detalles
-                                for (index in data.productoReparar_1) {
+                                for (index in data.articulo_1) {
                                     const RegistroDetalleReparacion = {
                                         //idReparacion: idReparacion,
-                                        productoReparar: data.productoReparar_1[index],
+                                        articulo: data.articulo_1[index],
                                         descripcion: data.descripcion_1[index],
                                         observacion: data.observacion_1[index],
                                         estado: data.estado_1[index]
@@ -567,9 +575,9 @@ function reparaciones_modificar(req, res) {
                                         [
                                             RegistroDetalleReparacion, idReparacion, data.idDetalleReparacion_1[index]
                                         ],
-                                        (err) => {
+                                        (err, upd_dr) => {
                                             if (err) {
-                                                return res.status(500).json(err);
+                                                return upd_dr.status(500).json(err);
                                             } else {
                                                 console.log("Detalle Actualizado");
                                             }
@@ -579,7 +587,7 @@ function reparaciones_modificar(req, res) {
 
                                 //Eliminar Detalles
                                 for (index in d_reparacion) {
-                                    var r = 0;
+                                    let r = 0;
                                     //Reconocer si se eliminó algún detalle que se había registrado con anterioridad
                                     //Comparando los detallas enviados vs los detalles ya registrados 
                                     for (i in data.idDetalleReparacion_1) {
@@ -589,9 +597,9 @@ function reparaciones_modificar(req, res) {
                                     }
 
                                     if (r == 0) {
-                                        conn.query("DELETE FROM tbl_reparaciones_detalles WHERE idDetalleReparacion = ?", [d_reparacion[index].idDetalleReparacion], (err, res) => {
+                                        conn.query("DELETE FROM tbl_reparaciones_detalles WHERE idDetalleReparacion = ?", [d_reparacion[index].idDetalleReparacion], (err, d_dr) => {
                                             if (err) {
-                                                return res.status(500).json(err);
+                                                return d_dr.status(500).json(err);
                                             } else {
                                                 console.log("Detalle Eliminado");
                                             }
@@ -603,7 +611,7 @@ function reparaciones_modificar(req, res) {
                                 //Actualizar Detalle
                                 const RegistroDetalleReparacion = {
                                     idReparacion: idReparacion,
-                                    productoReparar: data.productoReparar_1,
+                                    articulo: data.articulo_1,
                                     descripcion: data.descripcion_1,
                                     observacion: data.observacion_1,
                                     estado: data.estado_1
@@ -613,9 +621,9 @@ function reparaciones_modificar(req, res) {
                                     [
                                         RegistroDetalleReparacion, idReparacion, data.idDetalleReparacion_1
                                     ],
-                                    (err) => {
+                                    (err, upd_dr) => {
                                         if (err) {
-                                            return res.status(500).json(err);
+                                            return upd_dr.status(500).json(err);
                                         } else {
                                             console.log("Detalle Actualizado");
                                         }
@@ -626,9 +634,9 @@ function reparaciones_modificar(req, res) {
                                 //Eliminar Detalles
                                 for (i in d_reparacion) {
                                     if (d_reparacion[i].idDetalleReparacion != data.idDetalleReparacion_1) {
-                                        conn.query("DELETE FROM tbl_reparaciones_detalles WHERE idDetalleReparacion = ?", [d_reparacion[i].idDetalleReparacion], (err, res) => {
+                                        conn.query("DELETE FROM tbl_reparaciones_detalles WHERE idDetalleReparacion = ?", [d_reparacion[i].idDetalleReparacion], (err, d_dr) => {
                                             if (err) {
-                                                return res.status(500).json(err);
+                                                return d_dr.status(500).json(err);
                                             } else {
                                                 console.log("Detalle Eliminado");
                                             }
@@ -644,10 +652,10 @@ function reparaciones_modificar(req, res) {
                 } else {
                     //Eliminar todos los detalles registrados si fueron eliminados del form
 
-                    if (!data.productoReparar_1 && data.productoReparar_2) {
-                        conn.query("DELETE FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, res) => {
+                    if (!data.articulo_1 && data.articulo_2) {
+                        conn.query("DELETE FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, d_dr) => {
                             if (err) {
-                                return res.status(500).json(err);
+                                return d_dr.status(500).json(err);
                             } else {
                                 console.log("Detalles Eliminados");
                             }
@@ -658,22 +666,23 @@ function reparaciones_modificar(req, res) {
 
                 //Registrar Detalles
                 //Verificar si se enviaron nuevos detalles
-                if (data.productoReparar_2) {
+                if (data.articulo_2) {
                     //Reconocer si se manda 1 o más detalles
-                    if (data.productoReparar_2[0].length > 1) {
+                    if (data.articulo_2[0].length > 1) {
+                        console.log('Si son dos articulos nuevos')
                         //Más de un detalle
-                        for (index in data.productoReparar_2) {
-                            conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,productoReparar,descripcion,observacion) VALUES (?,?,?,?)`,
+                        for (index in data.articulo_2) {
+                            conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,articulo,descripcion,observacion) VALUES (?,?,?,?)`,
                                 [
                                     idReparacion,
-                                    data.productoReparar_2[index],
+                                    data.articulo_2[index],
                                     data.descripcion_2[index],
                                     data.observacion_2[index]
                                     //data.estado_2[index] Estado por defecto es Iniciado
                                 ],
-                                (err) => {
+                                (err, i_dr) => {
                                     if (err) {
-                                        return res.status(500).json(err);
+                                        return i_dr.status(500).json(err);
                                     } else {
                                         console.log("Detalle Registrado");
                                     }
@@ -681,18 +690,19 @@ function reparaciones_modificar(req, res) {
                             );
                         }
                     } else {
+                        console.log('Si son un articulo nuevos')
                         //Un detalle
-                        conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,productoReparar,descripcion,observacion) VALUES (?,?,?,?)`,
+                        conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,articulo,descripcion,observacion) VALUES (?,?,?,?)`,
                             [
                                 idReparacion,
-                                data.productoReparar_2,
+                                data.articulo_2,
                                 data.descripcion_2,
                                 data.observacion_2
                                 //data.estado_2  Estado por defecto es Iniciado
                             ],
-                            (err) => {
+                            (err, i_dr) => {
                                 if (err) {
-                                    return res.status(500).json(err);
+                                    return i_dr.status(500).json(err);
                                 } else {
                                     console.log("Detalle Registrado");
                                 }
