@@ -130,8 +130,8 @@
 {{/if}}
 <script>
     let formulario = document.querySelector('#formulario');
-    let nombreInputs = document.querySelectorAll('input[name="nombreInsumo"]');
-    let stockInputs = document.querySelectorAll('input[name="stockInsumo"]');
+    let nombreInputs = document.querySelectorAll('input[name="nombre"]');
+    let stockInputs = document.querySelectorAll('input[name="stock"]');
     let mensajeErrorNombre = document.querySelector('#mensajeErrorNombre');
     let mensajeErrorStock = document.querySelector('#mensajeErrorStock');
 
@@ -169,6 +169,9 @@
     function validarStock(stock) {
         if (stock === "") {
             mostrarError(mensajeErrorStock, 'Campo Obligatorio');
+            return false;
+        } else if (!/^[0-9]+$/.test(stock) || Number(stock) < 1) {
+            mostrarError(mensajeErrorStock, 'Ingrese un valor numérico válido mayor o igual a 1');
             return false;
         } else {
             ocultarError(mensajeErrorStock);

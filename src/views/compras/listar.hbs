@@ -44,33 +44,23 @@
     <div class="container mb-5">
         <div class="row">
             <div class="col-md-4">
-                <div class="row" style="margin-left: 8px;">
-                    <div class="col-md-8 col-9">
-                        <input id="buscar-input"
-                            style="height: 100%; border-radius: 0; margin-top: 4px; width: 100%; margin-right: 0;"
-                            class="form-control me-2" type="search" placeholder="Buscar Compra" aria-label="Search"
-                            oninput="filtrarTabla()">
-                    </div>
-                    <div class="col-md-2 col-3 pt-2">
-                        <button class="btn btn-outline-success" type="submit"
-                            style="height: 100%; border-radius: 0; width: 100%; padding: 0;" onclick="filtrarTabla()">
-                            <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
-                        </button>
-                    </div>
+                <div class="input-group">
+                    <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
+                        placeholder="Buscar compra" aria-label="Search" oninput="filtrarTabla()">
+                    <button type="submit" class="btn"
+                        style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
+                        <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
+                    </button>
                 </div>
             </div>
             <div class="col-md-3"></div>
             <div class="col-md-5">
-                <a href="/compras_registrar" class="btn btn-success"><i
-                        class="fa-solid fa-circle-plus"></i>
+                <a href="/compras_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
                     Registrar Compra</a>
-                <a href="/compras_anulaciones" class="btn btn-secondary"><i
-                        class="fa-solid fa-ban ban-2"></i>
+                <a href="/compras_anulaciones" class="btn btn-secondary"><i class="fa-solid fa-ban ban-2"></i>
                     Compras Anuladas</a>
             </div>
         </div>
-
-        <br>
         <table class="table table-hover" style="text-align:center;" id="tabla-compras">
             <thead style="background-color: #282d32; color:white;">
                 <tr>
@@ -153,7 +143,8 @@
                                             Anulación</label>
                                         <div class="col-sm-10">
                                             <textarea class="form-control" name="motivoAnulacion" id="motivoAnulacion"
-                                                style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 70px;" required></textarea>
+                                                style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 70px;"
+                                                required></textarea>
                                         </div>
                                     </div>
                                     <input type="hidden" name="tipoAnulacion" id="tipoAnulacion" value="General">

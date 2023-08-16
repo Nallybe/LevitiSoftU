@@ -22,7 +22,7 @@
                                         <div class="form-group">
                                             <label style="float: left; padding-right: 10px;">Nombre</label>
                                             <select class="form-control" id="nombre" style="border-radius: 0;"
-                                                name="nombre">
+                                                name="nombre" required>
                                                 {{#each nombre}}
                                                 <option value="{{nombre}}">{{nombre}}</option>
                                                 {{/each}}
@@ -31,9 +31,10 @@
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group ">
-                                            <label for="floatingInput" style="float: left; padding-right: 10px;">Total</label>
+                                            <label for="floatingInput"
+                                                style="float: left; padding-right: 10px;">Total</label>
                                             <input type="text" class="form-control" id="totalInput"
-                                                style="border-radius: 0;" name="total">
+                                                style="border-radius: 0;" name="total" required>
                                         </div>
                                     </div>
 
@@ -41,25 +42,28 @@
                                 <div class="row pb-2">
                                     <div class="col-12">
 
-                                        <label class="form-label" style="float: left; padding-right: 10px;">Descripción</label>
+                                        <label class="form-label"
+                                            style="float: left; padding-right: 10px;">Descripción</label>
                                         <textarea class="form-control" id="descripcion" style="border: 1px solid #ccc;"
-                                            name="descripcion" autocomplete="off"></textarea>
+                                            name="descripcion" autocomplete="off" required></textarea>
 
                                     </div>
                                 </div>
                                 <div class="row justify-content-center">
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label for="floatingInput" style="float: left; padding-right: 10px;">Fecha</label>
+                                            <label for="floatingInput"
+                                                style="float: left; padding-right: 10px;">Fecha</label>
                                             <input type="date" class="form-control" id=" floatingInput"
                                                 style="border-radius: 0;" name="fecha" required>
                                         </div>
                                     </div>
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label for="floatingInput" style="float: left; padding-right: 10px;">Estado</label>
+                                            <label for="floatingInput"
+                                                style="float: left; padding-right: 10px;">Estado</label>
                                             <select class="form-control" id="floatingInput" style="border-radius: 0;"
-                                                name="estado">
+                                                name="estado" required>
                                                 <option value="Contado">Contado</option>
                                                 <option value="Plan separe">Plan separe</option>
 
@@ -132,7 +136,6 @@
                 </div>
             </form>
         </div>
-
         <br>
     </center>
 </body>
@@ -157,7 +160,13 @@
     });
 </script>
 {{/if}}
+{{!-- Validación campos vacios --}}
+<script>
+    
+</script>
 
+
+{{!-- Checkbox productos --}}
 <script>
     // Obtener todos los elementos de tipo checkbox dentro de la tabla
     const checkboxes = document.querySelectorAll('#tabla-productos input[type="checkbox"]');
@@ -191,7 +200,7 @@
         }
     });
 </script>
-
+{{!-- Calcular total productos --}}
 <script>
     let total = 0; // Declare the 'total' variable outside the function
 

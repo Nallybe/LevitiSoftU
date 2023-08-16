@@ -65,6 +65,10 @@
         padding: 0;
         margin: 0;
     }
+
+    .hidden-form {
+        display: none;
+    }
 </style>
 
 <!--Barra de navegación-->
@@ -77,17 +81,13 @@
 
         <div class="row">
             <div class="col-md-4">
-                <div class="row">
-                    <div class="col-9">
-                        <input id="buscar-input" style="border-radius: 0; " class="form-control " type="search"
-                            placeholder="Buscar Insumo" aria-label="Search" oninput="filtrarTabla()">
-                    </div>
-                    <div class="col-3 ">
-                        <button class="btn btn-outline-success" type="submit" style=" border-radius: 0; "
-                            onclick="filtrarTabla()">
-                            <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
-                        </button>
-                    </div>
+                <div class="input-group">
+                    <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
+                        placeholder="Buscar insumo" aria-label="Search" oninput="filtrarTabla()">
+                    <button type="submit" class="btn"
+                        style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
+                        <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
+                    </button>
                 </div>
             </div>
             <div class="col-md-5"></div>
@@ -115,7 +115,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="" method="post">
+                                <form action="" method="post" id="formularioInsumo">
                                     <div class="row">
                                         <div class="col-7">
                                             <div class="form-group">
@@ -134,7 +134,6 @@
                                                 <input type="number" class="form-control" id="stockInsumo"
                                                     style="border-radius: 0;" name="stockInsumo" placeholder="Stock">
                                                 <div id="mensajeErrorStock"></div>
-
                                             </div>
                                         </div>
                                     </div>
@@ -155,7 +154,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button class="btn btn-danger" data-dismiss="modal" style="border-radius: 2;"
-                                    type="button">Cancelar</button>
+                                    type="button" onclick="limpiarCampos()">Cancelar</button>
                                 <button type="submit" class="btn btn-success" style="border-radius: 2;"
                                     onclick="validarFormularioModal()">Agregar</button>
                             </div>
@@ -166,8 +165,6 @@
                 {{!-- Modal --}}
             </div>
         </div>
-
-        <br>
         <table class="table" style="text-align:center;" id="tabla-insumos">
             <thead style="background-color: #282d32; color:white;">
                 <tr>
@@ -196,16 +193,14 @@
                         <a href="EditarInsumo/{{idInsumo}}" style="color: #292b2c; " class="boton-insumo">
                             <i type="button" class="fa-sharp fa-solid fa-pen"></i>
                         </a>
-                        <form action="/EliminarInsumo" method="POST" class="boton-insumo" id="eliminarInsumoForm"
-                            onsubmit="alerta(event, '{{idInsumo}}')">
-                            <input type="hidden" value="{{idInsumo}}" name="idInsumo">
-                            <button type="submit" class="boton-eliminar"><i class="fa fa-trash" style=""></i></button>
-                        </form>
+
                     </td>
                 </tr>
+                {{!-- Agregar botones al estado --}}
                 <script>
                     // Seleccionamos todos los botones de clase 'estado-boton'
                     var botonesEstado = document.querySelectorAll(".estado-boton");
+                    var FormularioEliminar = document.querySelectorAll(".boton-eliminar");
 
                     // Iteramos a través de cada botón y cambiamos la clase según el valor del atributo de datos 'data-estado'
                     botonesEstado.forEach(function (boton) {
@@ -214,27 +209,17 @@
                         if (estado === "Activo") {
                             boton.classList.add("btn-primary");
                             boton.classList.remove("btn-secondary");
+
                         } else if (estado === "Inactivo") {
                             boton.classList.add("btn-secondary");
                             boton.classList.remove("btn-primary");
-                        } else {
-                            // Si el estado no coincide con 'Activo' ni 'Inactivo', podemos manejar otras situaciones o no hacer ningún cambio en la clase del botón.
+
                         }
                     });
                 </script>
+
                 {{/each}}
 
-                <script>
-                    document.addEventListener("DOMContentLoaded", function () {
-                        const stockCells = document.querySelectorAll(".stock-cell");
-                        stockCells.forEach(function (cell) {
-                            const stockValue = parseInt(cell.dataset.stock);
-                            if (stockValue <= 5) {
-                                cell.innerHTML = `<button class="stock-btn btn-sm">${stockValue}</button>`;
-                            }
-                        });
-                    });
-                </script>
 
             </tbody>
         </table>
@@ -263,36 +248,20 @@
     });
 </script>
 {{/if}}
-{{!-- Alerta de eliminar insumo y el buscar --}}
+{{!-- Agregar botn en rojo el stock cuando es menor o igual a 5 --}}
 <script>
-    function alerta(event, idInsumo) {
-        event.preventDefault(); // Evitar que el formulario se envíe automáticamente
-
-        Swal.fire({
-            title: '¿Estás seguro?',
-            text: "¡No podrás revertir esto!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Sí, eliminar insumo!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const form = document.createElement('form');
-                form.method = 'POST';
-                form.action = '/EliminarInsumo';
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = 'idInsumo';
-                input.value = idInsumo;
-                form.appendChild(input);
-                document.body.appendChild(form);
-                form.submit();
+    document.addEventListener("DOMContentLoaded", function () {
+        const stockCells = document.querySelectorAll(".stock-cell");
+        stockCells.forEach(function (cell) {
+            const stockValue = parseInt(cell.dataset.stock);
+            if (stockValue <= 5) {
+                cell.innerHTML = `<button class="stock-btn btn-sm">${stockValue}</button>`;
             }
         });
-    }
-
-
+    });
+</script>
+{{!-- Funcion buscar insumo --}}
+<script>
     function filtrarTabla() {
         var input = document.getElementById("buscar-input");
         var filtro = input.value.toUpperCase();
@@ -313,51 +282,24 @@
         }
     }
 </script>
+
+
 {{!-- Validacion solo numeros campo stock --}}
 <script>
-    // Obtener referencia al input
     const stockInput = document.getElementById('stockInsumo');
+    const formulario = document.getElementById('formularioInsumo');
 
-    // Agregar un evento para validar el input cada vez que se cambie su valor
-    stockInput.addEventListener('input', function () {
+    formulario.addEventListener('submit', function(event) {
         const inputValue = stockInput.value;
-
-        // Reemplazar los caracteres no deseados con una cadena vacía
         const cleanedValue = inputValue.replace(/[+\-,]/g, '');
 
-        // Validar si el valor ingresado es un número y si es positivo
-        if (isNaN(cleanedValue) || cleanedValue < 0) {
-            // Si el valor no es válido, mostrar un mensaje de error
-            document.getElementById('mensajeErrorStock').textContent = 'Debe ingresar un número positivo';
-            // También podrías cambiar el estilo del input para resaltar el error
-            stockInput.style.border = '1px solid red';
+        if (isNaN(cleanedValue) || cleanedValue === '0') {
+            mostrarError(mensajeErrorStock, 'Ingrese números mayores de 0');
+            validacionesExitosas = false;
+            event.preventDefault();
         } else {
-            // Si el valor es válido, asignar el valor limpiado al input
-            stockInput.value = cleanedValue;
-            // Limpiar el mensaje de error y el estilo
             document.getElementById('mensajeErrorStock').textContent = '';
             stockInput.style.border = '';
-        }
-    });
-
-    //Validacion inout nombreInsumo
-    // Obtener referencia al input de nombreInsumo
-    const nombreInput = document.getElementById('nombreInsumo');
-
-    // Agregar un evento para validar el input cada vez que se cambie su valor
-    nombreInput.addEventListener('input', function () {
-        const inputValue = nombreInput.value;
-
-        // Validar si el valor ingresado contiene algún número
-        if (/\d/.test(inputValue)) {
-            // Si el valor contiene números, mostrar un mensaje de error
-            document.getElementById('mensajeErrorNombre').textContent = 'No se permiten números en el nombre';
-            // También podrías cambiar el estilo del input para resaltar el error
-            nombreInput.style.border = '1px solid red';
-        } else {
-            // Si el valor no contiene números, limpiar el mensaje de error y el estilo
-            document.getElementById('mensajeErrorNombre').textContent = '';
-            nombreInput.style.border = '';
         }
     });
 </script>
@@ -386,6 +328,16 @@
         });
     });
 
+   /*Eliminar campos al cancelar la modal*/
+   function limpiarCampos() {
+        document.getElementById("nombreInsumo").value = ""; // Limpiar el campo "nombreInsumo"
+        document.getElementById("stockInsumo").value = "";  // Limpiar el campo "stockInsumo"
+        ocultarError(mensajeErrorStock);
+        ocultarError(mensajeErrorNombre);
+        
+        // También puedes agregar código similar para limpiar otros campos si es necesario.
+    }
+    /*-----------------------*/
     function validarFormularioModal() {
         let nombreInput = document.querySelector('#nombreInsumo');
         let stockInput = document.querySelector('#stockInsumo');
@@ -394,7 +346,7 @@
         let nombre = nombreInput.value;
         let stock = stockInput.value;
         let validacionesExitosas = true;
-
+        
         if (nombre.trim() === "") {
             mostrarError(mensajeErrorNombre, 'Campo Obligatorio');
             validacionesExitosas = false;
@@ -405,10 +357,16 @@
         if (stock.trim() === "") {
             mostrarError(mensajeErrorStock, 'Campo Obligatorio');
             validacionesExitosas = false;
-        } else {
+        }else {
             ocultarError(mensajeErrorStock);
         }
 
+        if(stock.trim() === "0"){
+            mostrarError(mensajeErrorStock, 'Ingrese números mayores de 0');
+            validacionesExitosas = false;
+        }else {
+            ocultarError(mensajeErrorStock);
+        }
         return validacionesExitosas;
     }
 
