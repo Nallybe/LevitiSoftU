@@ -7,8 +7,8 @@ function reparaciones_listar(req, res) {
             return res.status(500).json(err);
         }
 
-        // Consultar las reparaciones en la base de datos
-        conn.query('SELECT * FROM tbl_reparaciones ORDER BY CASE WHEN estado = "Entregado" THEN 1 ELSE 0 END, estado ASC;', (err, reparaciones) => {
+        // Consultar las reparaciones en la base de datos   CASE WHEN estado = "Entregado" THEN 1 ELSE 0 END, estado ASC;
+        conn.query('SELECT * FROM tbl_reparaciones ORDER BY fechaRegistro DESC;', (err, reparaciones) => {
             if (err) {
                 // Si hay un error al consultar las reparaciones, enviar una respuesta con el error
                 return res.status(500).json(err);
@@ -292,7 +292,7 @@ async function reparaciones_detallar(req, res) {
 //Crear (Función para redireccionar al hbs donde se encuentra el formulario)
 function reparaciones_crear(req, res) {
     req.getConnection((err, conn) => {
-        conn.query("SELECT * FROM users_access WHERE estado ='A' AND idRoles != 4", (err, clientes) => {
+        conn.query("SELECT * FROM users_access WHERE estado ='A'", (err, clientes) => {
             if (err) {
                 return res.status(500).json(err);
             } else {
@@ -315,8 +315,8 @@ function reparaciones_crear(req, res) {
 function reparaciones_registrar(req, res) {
     var data = req.body;
     console.log(data);
-    
-    //Capturar Cliente/Registrador 
+
+    //Capturar Cliente
     req.getConnection((err, conn) => {
         conn.query("SELECT * FROM users_access", (err, usersA) => {
             if (err) {
@@ -334,7 +334,9 @@ function reparaciones_registrar(req, res) {
                                 }
                             }
                         }
-                        
+                        //End Capturar Cliente
+
+                        //Actualizar datos del cliente
                         conn.query(`Update users_info set numReparaciones=numReparaciones+ 1 where idInfo= ?`, [data.idCliente],
                             (err) => {
                                 if (err) {
@@ -344,71 +346,146 @@ function reparaciones_registrar(req, res) {
                                 }
                             }
                         );
-                        
-                        //End Capturar Cliente/Registrador 
+                        //Actualizar datos del cliente
 
-                        const RegistroReparacion = {
-                            idInfo: data.idCliente,
-                            total: data.total,
-                            fechaEntrega: data.fechaEntrega
-                        };
-
-                        //Registrar Reparación
-                        conn.query("INSERT INTO tbl_reparaciones SET ?", [RegistroReparacion], (err, result) => {
+                        //Capturar y actualizar insumos
+                        conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
                             if (err) {
                                 return res.status(500).json(err);
                             } else {
-                                console.log("Reparación Registrada");
-                                //End Registrar Reparación 
 
-                                //Captura idReparación
-                                const idReparacion = result.insertId;
+                                //Actualizar insumos y Reconocer si se manda 1 o más insumos
+                                if (data.articulo_par[0].length > 1) {
+                                    //Más de un insumo
+                                    for (let i in data.articulo_par) {
+                                        for (let ix in insumos) {
+                                            if (data.idInsumo[i] == insumos[ix].nombre) {
+                                                data.idInsumo[i] = insumos[ix].idInsumo;
+                                            }
+                                        }
+                                    }
 
-                                //Registrar Detalles y Reconocer si se manda 1 o más detalles
-                                if (data.articulo[0].length > 1) {
-                                    //Más de un detalle
-                                    for (index in data.articulo) {
+                                } else {
+                                    //un insumo
+                                    for (let ix in insumos) {
+                                        if (data.idInsumo == insumos[ix].nombre) {
+                                            data.idInsumo = insumos[ix].idInsumo;
+                                        }
+                                    }
+                                }
+                            }
+                            //End capturar y actualizar insumos
+
+
+                            //Definir registro Reparación
+                            const RegistroReparacion = {
+                                idInfo: data.idCliente,
+                                total: data.total,
+                                fechaEntrega: data.fechaEntrega
+                            };
+
+
+                            //Registrar Reparación
+                            conn.query("INSERT INTO tbl_reparaciones SET ?", [RegistroReparacion], (err, result) => {
+                                if (err) {
+                                    return res.status(500).json(err);
+                                } else {
+                                    console.log("Reparación Registrada");
+                                    //End Registrar Reparación 
+
+                                    //Captura idReparación
+                                    const idReparacion = result.insertId;
+
+                                    let contDetalle = 0;
+
+                                    //Registrar Detalles y Reconocer si se manda 1 o más detalles
+                                    if (data.articulo[0].length > 1) {
+                                        //Más de un detalle
+
+                                        //Registrar detalles
+
+                                        for (index in data.articulo) {
+                                            conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,articulo,descripcion,observacion) VALUES (?,?,?,?)`,
+                                                [
+                                                    idReparacion,
+                                                    data.articulo[index],
+                                                    data.descripcion[index],
+                                                    data.observacion[index],
+                                                ],
+                                                (err) => {
+                                                    if (err) {
+                                                        return res.status(500).json(err);
+                                                    } else {
+
+                                                        //Organizar
+
+                                                        console.log("Detalle Registrado");
+                                                    }
+                                                }
+                                            );
+                                        }
+
+                                        //End Registrar detalles
+
+                                    } else {
+                                        //Un detalle
+
+                                        //Registrar detalle
                                         conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,articulo,descripcion,observacion) VALUES (?,?,?,?)`,
                                             [
                                                 idReparacion,
-                                                data.articulo[index],
-                                                data.descripcion[index],
-                                                data.observacion[index],
+                                                data.articulo,
+                                                data.descripcion,
+                                                data.observacion,
                                             ],
-                                            (err) => {
+                                            (err, detalle) => {
                                                 if (err) {
                                                     return res.status(500).json(err);
                                                 } else {
-                                                    console.log("Detalle Registrado");
+
+                                                    //Capturar idDetalle
+                                                    const idDetalleReparacion = detalle.insertId;
+
+
+                                                    //Registrar Insumos y Reconocer si se manda 1 o más insumos para el articulo
+                                                    if (data.articulo_par[0].length > 1) {
+                                                        //Más de un insumo
+                                                        console.log('Mas de un insumo');
+
+                                                    } else {
+                                                        //un insumo
+
+                                                        //Registrar insumo
+                                                        conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion,idInsumo,cantidad_n) VALUES (?,?,?)`,
+                                                            [
+                                                                idDetalleReparacion,
+                                                                data.idInsumo,
+                                                                data.cantidad_n
+                                                            ],
+                                                            (err) => {
+                                                                if (err) {
+                                                                    return res.status(500).json(err);
+                                                                } else {
+                                                                    console.log("Insumo Registrado");
+                                                                }
+                                                            }
+                                                        );
+                                                        //End registrar insumo
+                                                        console.log("Detalle Registrado");
+                                                    }
                                                 }
                                             }
                                         );
+
+                                        //End registrar detalle
                                     }
-                                } else {
-                                    //Un detalle
-                                    conn.query(`INSERT INTO tbl_reparaciones_detalles(idReparacion,articulo,descripcion,observacion) VALUES (?,?,?,?)`,
-                                        [
-                                            idReparacion,
-                                            data.articulo,
-                                            data.descripcion,
-                                            data.observacion,
-                                        ],
-                                        (err) => {
-                                            if (err) {
-                                                return res.status(500).json(err);
-                                            } else {
-                                                console.log("Detalle Registrado");
-                                            }
-                                        }
-                                    );
+                                    //End Registrar Detalles
 
+                                    //Redireccionar
+                                    console.log("Registro de reparación exitoso");
+                                    res.redirect("/reparaciones");
                                 }
-                                //End Registrar Detalles
-
-                                //Redireccionar
-                                console.log("Registro de reparación exitoso");
-                                res.redirect("/reparaciones");
-                            }
+                            });
                         });
                     }
                 });
@@ -489,17 +566,17 @@ function reparaciones_editar(req, res) {
                     });
 
                 }
-                
+
                 conn.query('SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?', [idReparacion], (err, detallesreparacion) => {
                     if (err) {
                         return res.status(500).json(err);
                     } else {
-                        cont=0;
+                        cont = 0;
                         for (let index in detallesreparacion) {
                             cont--;
                             detallesreparacion[index].cont = cont;
                             detallesreparacion[index].fechaEstado = detallesreparacion[index].fechaEstado.toLocaleString();
-                        
+
                             // Actualizar el estado de la reparación para que en el hbs el estado tenga su propio diseño dependiendo del valor
                             switch (detallesreparacion[index].estado) {
                                 case 'Iniciado':

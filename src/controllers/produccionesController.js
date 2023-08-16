@@ -7,7 +7,7 @@ function producciones_listar(req, res) {
             return res.status(500).json(err);
         }
         // Consultar las producciones en la base de datos
-        conn.query('SELECT * FROM tbl_ordenes_produccion', (err, producciones) => {
+        conn.query('SELECT * FROM tbl_ordenes_produccion ORDER BY fechaRegistro DESC;', (err, producciones) => {
             if (err) {
                 // Si hay un error al consultar las producciones, enviar una respuesta con el error
                 return res.status(500).json(err);
