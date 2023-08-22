@@ -144,8 +144,8 @@
                   id="idCliente" name="idCliente" autocomplete="off" oninput="val_cliente()" value="{{idInfo}}">
 -->
                 <div class="input-group input-group-sm">
-                  <input type="text" class="form-control" aria-describedby="cliente-sm"
-                    style="border-radius: 0;" value="{{idInfo}}" readonly>
+                  <input type="text" class="form-control" aria-describedby="cliente-sm" style="border-radius: 0;"
+                    value="{{idInfo}}" readonly>
                   <div class="input-group-prepend">
 
                     <a type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="hover"
@@ -1026,8 +1026,11 @@
         let listP = "listaInsumos_" + idP;
 
         if (repetido != null) {
-          //var total = parseInt(repetido.value) + parseInt(requerido.cantidad);
-          //repetido.value = total;
+          var total = parseInt(repetido.value) + parseInt(requerido.cantidad);
+          repetido.value = total;
+
+          repetido.setAttribute("value", repetido.value);
+
 
           Swal.fire({
             position: 'top-end',
