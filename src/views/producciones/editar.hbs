@@ -5,17 +5,51 @@
 
 <body>
   <style>
+    .fa-circle-plus:hover {
+      color: gray;
+    }
+
     .fa-trash:hover {
       color: red;
     }
 
-    #mensajeErrorEncargado {
+    .btn-participantes:hover,
+    .btn-s:hover,
+    .icon-collapse:hover {
+      color: gray;
+    }
+
+    #descripcion_R,
+    #observacion_R {
+      border-radius: 0;
+      border: 1px rgb(206, 212, 218) solid;
+      line-height: 1.5;
+      max-height: 200px;
+      padding-top: 0;
+      height: 60px;
+    }
+
+    .btn {
+      border-radius: 8px;
+    }
+
+    #mensajeErrorEncargado,
+    #mensajeErrorProducto,
+    #mensajeErrorCantidad,
+    #mensajeErrorFechaInicio,
+    #mensajeErrorFechaFin,
+    #mensajeErrorParticipante {
       display: none;
       color: red;
       margin-top: 5px;
     }
 
-    #mensajeErrorEncargado .icono {
+    #mensajeErrorEncargado .icono,
+    #mensajeErrorProducto .icono,
+    #mensajeErrorCantidad .icono,
+    #mensajeErrorFechaInicio .icono,
+    #mensajeErrorFechaFin .icono,
+    #mensajeErrorParticipante {
       display: inline-block;
       vertical-align: middle;
       margin-right: 5px;
@@ -23,129 +57,20 @@
       height: 15px;
     }
 
-    #mensajeErrorProducto {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorProducto .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorCantidad {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorCantidad .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorFechaInicio {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorFechaInicio .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorFechaFin {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorFechaFin .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    /*End DG*/
-
-    /*Dtr DD*/
-
-    #mensajeErrorTitulo {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorTitulo .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorDescripcion {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorDescripcion .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-    #mensajeErrorObservacion {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorObservacion .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
-
-    #mensajeErrorFechaInicioD {
-      display: none;
-      color: red;
-      margin-top: 5px;
-    }
-
-    #mensajeErrorFechaInicioD .icono {
-      display: inline-block;
-      vertical-align: middle;
-      margin-right: 5px;
-      width: 15px;
-      height: 15px;
-    }
-
+    #mensajeErrorTitulo,
+    #mensajeErrorDescripcion,
+    #mensajeErrorObservacion,
+    #mensajeErrorFechaInicioD,
     #mensajeErrorFechaFinD {
       display: none;
       color: red;
       margin-top: 5px;
     }
 
+    #mensajeErrorTitulo .icono,
+    #mensajeErrorDescripcion .icono,
+    #mensajeErrorObservacion .icono,
+    #mensajeErrorFechaInicioD .icono,
     #mensajeErrorFechaFinD .icono {
       display: inline-block;
       vertical-align: middle;
@@ -153,7 +78,6 @@
       width: 15px;
       height: 15px;
     }
-
 
     .fa-pen:hover {
       color: #0275d8;
@@ -168,330 +92,519 @@
       vertical-align: middle;
       margin-right: 10px;
     }
+
+    /* Add this style to your existing CSS */
+    .table-container {
+      max-height: 400px;
+      height: auto;
+      /* Adjust this value as per your requirement */
+      overflow-y: auto;
+      position: relative;
+      /* Add this to enable positioning of thead */
+    }
+
+    /* Add this style to fix thead */
+    .table-container table {
+      position: relative;
+    }
+
+    .table-container thead {
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
   </style>
 
   <!--Barra de navegación-->
   {{> barId}}
-      <!--Barra de navegación-->
-      
-      {{!--
-      <center>
-        <form action="/producciones_editar/" method="post" onsubmit="return validarEnvio()" id="FormEditarProduccion">
-          <div class="container" style="margin-top: 80px; margin-bottom: 50px">
-            <!--Start Card&Form-->
-            <div class="card" style="width: 95%; border-radius: 0;">
+  <!--Barra de navegación-->
+
+  {{#each produccion}}
+  <form action="/producciones_editar/{{idOrdenProduccion}}" method="post" onsubmit="return validarEnvio()"
+    id="FormEditarProduccion">
+    <!--Start Card&Form-->
+    <div class="card" style="width: 98%; border-radius: 0; margin-left:1%; margin-top: 60px;">
+      <div class="card-body">
+        <h6 class="card-title" style="margin-bottom: 1%;">Editar Orden de Producción</h6>
+
+        <div class="row">
+          <div class="col-3">
+
+            <!--Start Card #1-->
+            <div class="card" style="border-radius: 0; width: 100%; margin-bottom: 3%;">
               <div class="card-body">
-                <h4 class="card-title" style="margin-bottom: 4%;">Editar Orden de Producción</h4>
-                <div class="row">
-                  <div class="col-md-1"></div>
-                  {{#each produccion}}
-                  <!--Start Card #1-->
-                  <div class="col-md-4">
-                    <div class="card mt-4" style="border-radius: 0;">
-                      <div class="card-body">
+                <h6 class="card-title" style="margin-bottom: 2%;">Producción</h6>
 
-                        <!--Input Encargado-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Encargado X" list="lis_encargados"
-                            style="border-radius: 0;" id="idEncargado" name="idEncargado" autocomplete="off"
-                            oninput="val_encargado()" value="Usuario {{idInfoUser}}">
-                          <label for="idEncargado">
-                            <h5>Encargado</h5>
-                          </label>
-                          <datalist id="lis_encargados">
-                            <!-- {{#each usuarios}}
-                            <option value="{{correo}}">ID({{idAccess}}) Correo({{correo}})</option>
-                            {{/each}}-->
-                          </datalist>
-                          <div id="mensajeErrorEncargado"></div>
-                        </div>
-                        <!--End Input Encargado-->
+                <!--Input Encargado-->
+                <label class="form-label" for="idEncargado">Encargado</label>
+                <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="idEncargado"
+                  name="idEncargado" autocomplete="off" value="{{idInfo}}" readonly>
 
-                        <!--Input Encargado-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Producto X" list="lis_productos"
-                            style="border-radius: 0;" id="idProducto" name="idProducto" autocomplete="off"
-                            oninput="val_producto()" value="{{idProducto}}">
-                          <label for="idProducto">
-                            <h5>Producto</h5>
-                          </label>
-                          <datalist id="lis_productos">
-                            <!-- {{#each productos}}
-                            <option value="{{nombre}}">ID({{idProducto}}) Nombre({{nombre}}) Stock({{stock}})</option>
-                            {{/each}} -->
-                          </datalist>
-                          <div id="mensajeErrorProducto"></div>
-                        </div>
-                        <!--End Input Encargado-->
+                <!--
+                  list="lis_encargados"
+                  oninput="val_encargado()"
 
-                        <!--Input Cantidad-->
-                        <div class="form-floating mb-3">
-                          <input type="number" class="form-control" placeholder="Cantidad X" style="border-radius: 0;"
-                            id="cantidad" name="cantidad" oninput="val_cantidad()" autocomplete="off"
-                            value="{{cantidad}}">
-                          <label for="cantidad">
-                            <h5>Cantidad Producir</h5><br>
-                          </label>
-                          <div id="mensajeErrorCantidad"></div>
-                        </div>
-                        <!--End Input Cantidad-->
-
-                        <!--Input Fecha Inicio-->
-                        <div class="form-floating mb-3">
-                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
-                            id="fechaInicio" name="fechaInicio" oninput="val_f_inicio()" autocomplete="off"
-                            value="{{fechaInicio}}">
-                          <label for="fechaInicio">
-                            <h5>Fecha Inicio</h5>
-                          </label>
-                          <div id="mensajeErrorFechaInicio"></div>
-                        </div>
-                        <!--End Input Fecha Inicio-->
-
-                        <!--Input Fecha Fin-->
-                        <div class="form-floating mb-3">
-                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
-                            id="fechaFin" name="fechaFin" oninput="val_f_fin()" autocomplete="off" value="{{fechaFin}}">
-                          <label for="fechaFin">
-                            <h5>Fecha Fin</h5>
-                          </label>
-                          <div id="mensajeErrorFechaFin"></div>
-                        </div>
-                        <!--End Input Fecha Fin-->
-
-                      </div>
-                    </div>
-                  </div>
-                  <!--End Card #1-->
+                  <datalist id="lis_encargados">
+                  {{#each usuarios}}
+                  <option value="{{correo}}">Nombre({{nombre}}) Teléfono({{telefono}}) Correo({{correo}})</option>
                   {{/each}}
+                </datalist>-->
+                <div id="mensajeErrorEncargado"></div>
+                <!--End Input Encargado-->
 
-                  <!--Start Card #2-->
-                  <div class="col-md-6 w-4/4">
-                    <div class="card w-4/4" style="border-radius: 0;">
-                      <div class="card-body">
-                        <h5 class="card-title" style="margin-bottom: 4%;">Agregar tarea a la orden de producción
-                        </h5>
-
-                        <!--Input Titulo-->
-                        <div class="form-floating mb-3">
-                          <input type="text" class="form-control" placeholder="Titulo X" style="border-radius: 0;"
-                            id="titulo_R" name="titulo_R" autocomplete="off" oninput="val_titulo()">
-                          <label for="titulo_R">
-                            <h5>Titulo</h5>
-                          </label>
-                          <div id="mensajeErrorTitulo"></div>
-                        </div>
-                        <!--End Input Titulo-->
-
-                        <!--Input Descripción-->
-                        <div class="form-floating mb-3">
-                          <textarea class="form-control pb-5" placeholder="Descripcion X" style="border-radius: 0;"
-                            id="descripcion_R" name="descripcion_R" autocomplete="off"
-                            oninput="val_descripcion()"></textarea>
-                          <label for="descripcion_R">
-                            <h5>Descripción</h5><br>
-                          </label>
-                          <div id="mensajeErrorDescripcion"></div>
-                        </div>
-                        <!--End Input Descripción-->
-
-                        <!--Input Observación-->
-                        <div class="form-floating mb-3">
-                          <textarea class="form-control pb-5" placeholder="Observación X" style="border-radius: 0;"
-                            id="observacion_R" name="observacion_R" autocomplete="off"
-                            oninput="val_observacion()"></textarea>
-                          <label for="observacion_R">
-                            <h5>Observaciones</h5><br>
-                          </label>
-                          <div id="mensajeErrorObservacion"></div>
-                        </div>
-                        <!--End Input Observación-->
-
-                        <!--Input Fecha Inicio-->
-                        <div class="form-floating mb-3">
-                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
-                            id="fechaInicio_R" name="fechaInicio_R" oninput="val_f_inicio_d()" autocomplete="off">
-                          <label for="fechaInicio_R">
-                            <h5>Fecha Inicio</h5>
-                          </label>
-                          <div id="mensajeErrorFechaInicioD"></div>
-                        </div>
-                        <!--End Input Fecha Inicio-->
-
-                        <!--Input Fecha Fin-->
-                        <div class="form-floating mb-3">
-                          <input type="date" class="form-control" placeholder="Fecha X" style="border-radius: 0;"
-                            id="fechaFin_R" name="fechaFin_R" oninput="val_f_fin_d()" autocomplete="off">
-                          <label for="fechaFin_R">
-                            <h5>Fecha Fin</h5>
-                          </label>
-                          <div id="mensajeErrorFechaFinD"></div>
-                        </div>
-                        <!--End Input Fecha Fin-->
-
-
-                        <!--Start Btn Agregar-->
-                        <div class="d-grid gap-2">
-                          <button class="btn btn-warning" style="border-radius: 0;" type="button" id="btnAgregarTarea"
-                            onclick="agregarTarea();"><i class="fa-solid fa-circle-plus"></i>
-                            Agregar</button>
-                        </div>
-                        <!--End Btn Agregar-->
+                <!--Input Producto-->
+                <label class="form-label mt-2" for="idProducto">Producto</label>
+                <input type="text" class="form-control form-control-sm" list="lis_productos" style="border-radius: 0;"
+                  id="idProducto" name="idProducto" autocomplete="off" oninput="val_producto()" value="{{idProducto}}"
+                  {{#if estado2}} readonly {{/if}}>
+                <datalist id="lis_productos">
+                  {{#each ../productos}}
+                  <option value="{{nombre}}" style="color: black;">
+                    <div class="row">
+                      <div class="col-md-3">
+                        <img src="/assets/img/Productos/{{imagen}}" alt="Imagen del producto"
+                          style="max-width:40px; max-height:40px, display: inline-block;">
+                      </div>
+                      <div class="col-md-9">
+                        <p>Nombre({{nombre}}) Categoría({{categoria}}) Stock({{stock}})</p>
                       </div>
                     </div>
+
+                  </option>
+                  {{/each}}
+                </datalist>
+                <div id="mensajeErrorProducto"></div>
+                <!--End Input Producto-->
+
+                <!--Input Cantidad-->
+                <label class="form-label mt-2" for="cantidad">Cantidad Producir</label>
+                <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="cantidad"
+                  name="cantidad" oninput="val_cantidad();" onkeypress="return solonumeros(event)" autocomplete="off" value="{{cantidad}}">
+                <div id="mensajeErrorCantidad"></div>
+                <!--End Input Cantidad-->
+
+                <!--Input Fecha Inicio-->
+                <label class="form-label mt-2" for="fechaInicio">Fecha Inicio</label>
+                <input type="date" class="form-control form-control-sm" style="border-radius: 0;" id="fechaInicio"
+                  name="fechaInicio" oninput="val_f_inicio(); updateFechaFinMin2();" autocomplete="off"
+                  value="{{fechaInicio}}">
+                <div id="mensajeErrorFechaInicio"></div>
+                <!--End Input Fecha Inicio-->
+
+                <!--Input Fecha Fin-->
+                <label class="form-label mt-2" for="fechaFin">Fecha Fin</label>
+                <input type="date" class="form-control form-control-sm mb-2" style="border-radius: 0;" id="fechaFin"
+                  name="fechaFin" oninput="val_f_fin()" autocomplete="off" value="{{fechaFin}}">
+                <div id="mensajeErrorFechaFin"></div>
+                <!--End Input Fecha Fin-->
+
+                <script>
+                  function updateFechaFinMin2() {
+                    const fechaInicioInput = document.getElementById('fechaInicio');
+                    const fechaFinInput = document.getElementById('fechaFin');
+
+                    fechaFinInput.min = fechaInicioInput.value;
+
+                    if (fechaInicioInput.value == '' || fechaInicioInput.value == null) {
+                      fechaFinInput.disabled = true;
+                    } else {
+                      fechaFinInput.disabled = false;
+                    }
+                  }
+
+                </script>
+              </div>
+            </div>
+            <!--End Card #1-->
+            {{/each}}
+          </div>
+          <div class="col-9">
+
+            <!--Start Card #2-->
+            <div class="card" style="border-radius: 0; width: 100%;">
+              <div class="card-body">
+                <h6 class="card-title">Agregar Tarea</h6>
+                <div class="row">
+                  <div class="col-md-4">
+
+                    <!--Input Titulo-->
+                    <label class="form-label" for="titulo_R">Título</label>
+                    <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="titulo_R"
+                      autocomplete="off" oninput="val_titulo()">
+                    <div id="mensajeErrorTitulo"></div>
+                    <!--End Input Titulo-->
+
                   </div>
-                  <!--End Card #2-->
-                  <div class="col-md-1"></div>
+                  <div class="col-md-4">
+
+                    <!--Input Fecha Inicio-->
+                    <label class="form-label" for="fechaInicio_R">Fecha Inicio</label>
+                    <input type="date" class="form-control form-control-sm" style="border-radius: 0;" id="fechaInicio_R"
+                      oninput="val_f_inicio_d(); updateFechaFinMin()" autocomplete="off">
+                    <div id="mensajeErrorFechaInicioD"></div>
+                    <!--End Input Fecha Inicio-->
+
+                  </div>
+                  <div class="col-md-4">
+
+                    <!--Input Fecha Fin-->
+                    <label class="form-label mt-2" for="fechaFin_R">Fecha Fin</label>
+                    <input type="date" class="form-control form-control-sm" style="border-radius: 0;" id="fechaFin_R"
+                      oninput="val_f_fin_d()" autocomplete="off" disabled>
+                    <div id="mensajeErrorFechaFinD"></div>
+                    <!--End Input Fecha Fin-->
+
+                  </div>
+
+                  <script>
+                    function updateFechaFinMin() {
+                      const fechaInicioInput = document.getElementById('fechaInicio_R');
+                      const fechaFinInput = document.getElementById('fechaFin_R');
+
+                      fechaFinInput.min = fechaInicioInput.value;
+
+                      if (fechaInicioInput.value == '' || fechaInicioInput.value == null) {
+                        fechaFinInput.disabled = true;
+                      } else {
+                        fechaFinInput.disabled = false;
+                      }
+                    }
+
+                  </script>
+
                 </div>
+                <div class="row">
+                  <div class="col-md-5">
 
-
-                <!--Start Card #3-->
-                <div class="card mt-2" style="width: 100%; border-radius: 0;">
-                  <div class="card-body">
-                    <h5 class="card-title" style="margin-bottom: 2%;">Artículos de la reparación</h5>
-                    <!--Start Table-->
-                    <table class="table table-hover">
-                      <thead class="table" style="background-color: #282d32; color:white;">
-                        <tr style="text-align: center;">
-                          <th>#</th>
-                          <th> Titulo</th>
-                          <th> Descripción</th>
-                          <th> Observaciones</th>
-                          <th> Fecha Inicio</th>
-                          <th> Fecha Fin</th>
-                          <th> Funciones </th>
-                        </tr>
-                      </thead>
-                      <tbody id="ListaArticulos">
-                        {{#each d_produccion}}
-                        <tr id="{{idDetalleOrdenProduccion}}" style="text-align: center">
-                          <td class="text-center">{{idDetalleOrdenProduccion}}</td>
-                          <td class="text-center">
-                            <input name="titulo" id="titulo_{{idDetalleOrdenProduccion}}" value="{{titulo}}"
-                              style="text-align: center; width: 150px;  border: none;"  readonly>
-                          </td>
-                          <td class="text-center w-4/4">
-                            <textarea name="descripcion" id="descripcion_{{idDetalleOrdenProduccion}}"
-                              style="text-align: center; width: 200px;  border: none;"
-                              readonly>{{descripcion}}</textarea>
-                          </td>
-                          <td class="text-center w-4/4">
-                            <textarea name="observacion" id="observacion_{{idDetalleOrdenProduccion}}"
-                              style="text-align: center; width: 200px;  border: none;"
-                              readonly>{{observacion}}</textarea>
-                          </td>
-                          <td class="text-center">
-                            <input type="date" name="fechaInicio_detalle" id="fechaInicio_{{idDetalleOrdenProduccion}}"
-                              value="{{fechaInicio}}" style="text-align: center; width: 100px;  border: none;">
-                          </td>
-                          <td class="text-center">
-                            <input type="date" name="fechaFin_detalle" id="fechaFin_{{idDetalleOrdenProduccion}}" value="{{fechaFin}}"
-                              style="text-align: center; width: 100px;  border: none;">
-                          </td>
-                          <td class="text-center">
-
-                            <a class="boton-produccion" href="#" style="color: #292b2c;" data-bs-toggle="modal"
-                              data-bs-target="#editar{{idDetalleOrdenProduccion}}">
-                              <i class="fa-sharp fa-solid fa-pen" style="margin-left: 10px;"></i>
-                            </a>
-
-                            <a class="boton-produccion" href="#" onclick="eliminarTarea({{idDetalleOrdenProduccion}})"
-                              style="color: #292b2c;">
-                              <i class="fas fa-trash"></i>
-                            </a>
-                          </td>
-                        </tr>
-
-
-                        <!-- Modal editar-->
-                        <div class="modal fade" id="editar{{idDetalleOrdenProduccion}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-                          aria-hidden="true">
-                          <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-                            <div class="modal-content" style="border-radius: 0;">
-                              <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Artículo {{idDetalleOrdenProduccion}}</h1>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                  aria-label="Close"></button>
-                              </div>
-                              <div class="modal-body">
-                                <div class="form-floating mb-3">
-                                  <textarea class="form-control" id="titulo_R2_{{idDetalleOrdenProduccion}}"
-                                    style="border-radius: 0; text-align: left;"
-                                    placeholder="0000">{{titulo}}</textarea>
-                                  <label for="titulo_R2_{{idDetalleOrdenProduccion}}">Articulo</label>
-                                </div>
-
-                                <div class="form-floating mb-3">
-                                  <textarea class="form-control pb-5" id="descripcion_R2_{{idDetalleOrdenProduccion}}"
-                                    style="border-radius: 0; text-align: left;"
-                                    placeholder="0000">{{descripcion}}</textarea>
-                                  <label for="descripcion_R2_{{idDetalleOrdenProduccion}}">Descripción</label>
-                                </div>
-
-                                <div class="form-floating mb-3">
-                                  <textarea class="form-control pb-5" id="observacion_R2_{{idDetalleOrdenProduccion}}"
-                                    style="border-radius: 0; text-align: left;"
-                                    placeholder="0000">{{observacion}}</textarea>
-                                  <label for="observacion_R2_{{idDetalleOrdenProduccion}}">Observaciones</label>
-                                </div>
-
-                              </div>
-                              <div class="modal-footer">
-                                <button class="btn btn-secondary boton-produccion mr-1" data-bs-dismiss="modal"
-                                  style="border-radius: 0;">Cancelar</button>
-                                <button type="button" class="btn btn-primary boton-produccion ml-3"
-                                  style="border-radius: 0;" onclick="editarTarea({{idDetalleOrdenProduccion}})">Guardar Cambios</button>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <!--End Modal editar-->
-                        {{/each}}
-                      </tbody>
-                    </table>
-                    <!--End Table-->
-                  </div>
-                </div>
-                <!--End Card #3-->
-
-
-                <div style="margin-top: 3%;">
-                  <div class="row">
-                    <div class="col-md-3"></div>
-                    <div class="col-md-6" style="margin-top: 1%;">
-                      <!--Start Btn R&C-->
-                      <div class="d-grid gap-2">
-                        <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-                        <button type="submit" id="btnRegistrar" class="btn btn-success"
-                          style="border-radius: 0; margin-bottom: 1px;">
-                          Registrar Producción</button>
-                        <!--End Btn Regiastrar-->
-                        <!--Start Btn Cancelar-->
-                        <a class="btn btn-danger" href="/producciones" style="border-radius: 0; margin-top: 1px;"
-                          type="button">Cancelar</a>
-                        <!--End Btn Cancelar-->
-                      </div>
-                      <!--End Btn R&C-->
-                    </div>
-                    <div class="col-md-3"></div>
+                    <!--Input Descripción-->
+                    <label class="form-label" for="descripcion_R">Descripción</label>
+                    <textarea class="form-control form-control-sm mb-2" style="border-radius: 0;" id="descripcion_R"
+                      autocomplete="off" oninput="val_descripcion()"></textarea>
+                    <div id="mensajeErrorDescripcion"></div>
+                    <!--End Input Descripción-->
 
                   </div>
-                  <br>
+                  <div class="col-md-5">
+
+                    <!--Input Observación-->
+                    <label class="form-label" for="observacion_R">Observaciones</label>
+                    <textarea class="form-control form-control-sm" style="border-radius: 0;" id="observacion_R"
+                      autocomplete="off" oninput="val_observacion()"></textarea>
+                    <div id="mensajeErrorObservacion"></div>
+                    <!--End Input Observación-->
+
+                  </div>
+
+                  <div class="col-md-2">
+                    <center>
+                      <!--Start Btn Agregar-->
+                      <i class="fa-solid fa-circle-plus fa-2x mt-4" type="button" id="btnAgregarTarea"
+                        onclick="agregarTarea();"></i>
+                      <!--End Btn Agregar-->
+                    </center>
+
+                  </div>
                 </div>
               </div>
             </div>
-            <!--End Card&Form-->
+            <!--End Card #2-->
+
+            <!--Start Card #3-->
+            <div class="card mt-3" style="width: 100%; max-width: 100%; border-radius: 0;">
+              <div class="card-body">
+                <h6 class="card-title">Tareas</h6>
+                <!--Start Table-->
+                <div class="table-container">
+                  <table class="table table-sm">
+                    <thead class="table" style="background-color: #282d32; color:white;">
+                      <tr style="text-align: center;">
+                        <th>#</th>
+                        <th> Titulo</th>
+                        <th> Fecha Inicio</th>
+                        <th> Fecha Fin</th>
+                        <th> Estado </th>
+                        <th> Funciones </th>
+                      </tr>
+                    </thead>
+                    <tbody id="ListaTareas">
+                      {{#each d_produccion}}
+                      <tr class="clickable-row" id="{{cont}}">
+                        <td class="p-3 text-center">{{contMas}}</td>
+                        <td class="p-3 text-center">
+                          <input type="hidden" name="idDetalleOrdenProduccion_1" value="{{idDetalleOrdenProduccion}}">
+                          <input type="hidden" name="titulo_1" id="titulo_1_{{cont}}" value="{{titulo}}">
+                          <input name="titulo_1_a" id="titulo_1_a_{{cont}}" oninput="updateValueInput(this)"
+                            value="{{titulo}}" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
+                        </td>
+                        <td class="p-3 text-center">
+                          <input type="date" name="fechaInicio_detalle_1" id="fechaInicio_1_{{cont}}"
+                            value="{{fechaInicio}}" oninput="updateValueInput(this)">
+                        </td>
+                        <td class="p-3 text-center">
+                          <input type="date" name="fechaFin_detalle_1" id="fechaFin_1_{{cont}}" value="{{fechaFin}}"
+                            oninput="updateValueInput(this)">
+                        </td>
+
+                        {{#if estado1}}
+                        <td class="p-3 text-center">
+                          <select name="estado_1" style="text-align: center; width: auto;"
+                            onchange="updateValueSelect(this)">
+                            <option value="{{estado}}" selected>{{estado}}</option>
+                            <option value="Proceso">En Proceso</option>
+                            <option value="Terminado">Terminado</option>
+                          </select>
+                        </td>
+
+                        <td class="text-center">
+                          <a class="expand-button boton-produccion" type="button">
+                            <i class="fa-solid fa-caret-down icon-collapse fa-2x"></i>
+                            <i class="fa-solid fa-caret-up icon-expand fa-2x" style="display: none; color:gray;"></i>
+                          </a>
+
+                          <a class="boton-produccion" type="button" onclick="eliminarTarea({{cont}})"
+                            style="color: #292b2c;">
+                            <i class="fas fa-trash"></i>
+                          </a>
+                        </td>
+                        {{/if}}
+                        {{#if estado2}}
+                        <td class="p-3 text-center">
+                          <select name="estado_1" style="text-align: center; width: auto;"
+                            onchange="updateValueSelect(this)">
+                            <option value="{{estado}}" selected>En {{estado}}</option>
+                            <option value="Terminado">Terminado</option>
+                          </select>
+                        </td>
+                        <td class="text-center">
+                          <a class="expand-button boton-produccion" type="button">
+                            <i class="fa-solid fa-caret-down icon-collapse fa-2x"></i>
+                            <i class="fa-solid fa-caret-up icon-expand fa-2x" style="display: none; color:gray;"></i>
+                          </a>
+                          <!-- <a class="boton-produccion" type="button" onclick="eliminarTarea({{cont}})"
+                            style="color: #292b2c;">
+                            <i class="fas fa-trash"></i>
+                          </a>-->
+                        </td>
+
+                        {{/if}}
+                        {{#if estado3}}
+                        <td class="p-3 text-center">
+                          <select name="estado_1" style="text-align: center;  width: auto;"
+                            onchange="updateValueSelect(this)">
+                            <option value="{{estado}}" selected>{{estado}}</option>
+                            <option value="Proceso">En Proceso</option>
+                          </select>
+                        </td>
+
+                        <td class="text-center">
+                          <a class="expand-button boton-produccion" type="button">
+                            <i class="fa-solid fa-caret-down icon-collapse fa-2x"></i>
+                            <i class="fa-solid fa-caret-up icon-expand fa-2x" style="display: none; color:gray;"></i>
+                          </a>
+                        </td>
+                        {{/if}}
+                      </tr>
+
+                      <tr class="extra-row" style="display:none;">
+                        <td colspan="6">
+                          <div class="card" style="width: 100%; border-radius: 0;">
+                            <div class="card-body">
+                              <div class="row">
+                                <div class="col-md-9">
+
+                                  <label class="form-label mt-1" for="descripcion_1_{{cont}}">Descripción</label>
+                                  <textarea class="form-control form-control-sm des"
+                                    style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;"
+                                    id="descripcion_1_{{cont}}" name="descripcion_1"
+                                    oninput="updateValueTextarea(this)"> {{descripcion}}</textarea>
+
+                                </div>
+
+                                <div class="col-md-3">
+                                  <center>
+                                    <button type="button" class="btn-participantes btn-sm mt-4" data-toggle="modal"
+                                      data-target="#participantes_{{cont}}"
+                                      style="border-radius: 8px; border: 1px gray solid;">
+                                      <i class="fa-solid fa-user-plus fa-2x"></i><br>
+                                      <p class="pb-0 mb-0">Agregar<br>Participantes</p>
+                                    </button>
+                                  </center>
+
+                                </div>
+                              </div>
+
+                              <div class="row">
+                                <div class="col-md-9">
+
+                                  <label class="form-label mt-2" for="observacion_1_{{cont}}">Observaciones</label>
+                                  <textarea class="form-control form-control-sm ob mb-2"
+                                    style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;"
+                                    id="observacion_1_{{cont}}" name="observacion_1"
+                                    oninput="updateValueTextarea(this)">{{observacion}}</textarea>
+
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+
+                      {{/each}}
+                    </tbody>
+                  </table>
+                </div>
+                <!--End Table-->
+                <div class="row">
+                  <div class="col-md-5"></div>
+                  <div class="col-md-2">
+                    <div class="pagination">
+                      <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i
+                          class="fa-solid fa-arrow-left"></i></button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i
+                          class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                  </div>
+                  <div class="col-md-5"></div>
+                </div>
+              </div>
+            </div>
+
+            <!--End Card #3-->
+
+
+            <div style="text-align: right;">
+              <!--Start Btn Cancelar-->
+              <a class="btn btn-danger btn-sm" href="/producciones" style="margin-top: 1px;" type="button">Cancelar</a>
+              <!--End Btn Cancelar-->
+
+              <!--Start Btn Registrar-->
+              <button id="btnRegistrar" type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
+                Guardar Cambios</button>
+              <!--End Btn Regiastrar-->
+            </div>
 
           </div>
-        </form>
-      </center>
---}}
-      <br>
+        </div>
+      </div>
     </div>
+    <!--End Card&Form-->
+
+    <div id="modales">
+      <datalist id="lis_Participantes">
+        {{#each usersA}}
+        <option value="{{correo}}">Nombre({{nombre}}) Teléfono({{telefono}}) Correo({{correo}})</option>
+        {{/each}}
+      </datalist>
+
+      {{#each d_produccion}}
+      <div class="modal fade modalP" id="participantes_{{cont}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Participantes Tarea (existente) #{{contMas}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <!--Start Card-->
+              <div class="card" style="border-radius: 0; width: 100%;">
+                <div class="card-body">
+                  <h6 class="card-title">Agregar Participante</h6>
+                  <div class="row">
+                    <div class="col-md-10">
+
+                      <!--Input Participante-->
+                      <label class="form-label" for="idParticipante_{{cont}}">Participante</label>
+                      <input type="text" class="form-control form-control-sm" list="lis_Participantes"
+                        style="border-radius: 0;" id="idParticipante_{{cont}}" autocomplete="off">
+                      <!--<div id="mensajeErrorParticipante"></div> oninput="val_participante()"-->
+                      <!--End Input Participante-->
+
+                    </div>
+                    <div class="col-md-2">
+                      <center>
+                        <!--Start Btn Agregar-->
+                        <i class="fa-solid fa-circle-plus fa-2x" type="button" id="btnAgregarParticipante"
+                          onclick="agregarParticipante({{cont}});"></i>
+                        <!--End Btn Agregar-->
+                      </center>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--End Card-->
+
+              <table class="table">
+                <thead style="background-color: #282d32; color:white;">
+                  <tr style="text-align: center;">
+                    <th>#</th>
+                    <th>Participante</th>
+                    <th>Funciones</th>
+                  </tr>
+                </thead>
+                <tbody id="listaParticipantes_{{cont}}" style="text-align: center;">
+                  {{#each this.participes}}
+                  <tr id="participante_{{../cont}}_{{cont_i}}">
+                    <td class="p-3 text-center">{{cont_c}}</td>
+                    <td class="p-3 text-center">
+                      <input name="{{../titulo}}_idParticipante" style="width: 100%; border: none; text-align: center;"
+                        id="{{../titulo}}_{{idInfo}}" value="{{idInfo}}" readonly>
+                    </td>
+                    <td class="p-3 text-center">
+                      <a class="boton-produccion" type="button"
+                        onclick="eliminarParticipante('{{../cont}}_{{cont_i}}', 'listaParticipantes_{{../cont}}')"
+                        style="color: #292b2c;">
+                        <i class="fas fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+                  {{/each}}
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      {{/each}}
+    </div>
+
+  </form>
+  <!--End Form&Card-->
+
+  <br>
+  </div>
   </div>
 
   <!--End Form&Card-->
+  <!--Validacion nav bar-->
+  {{#if asignacion}}
+  <script>
+    var permisosInput = document.querySelector('#permisosInput');
+    var permisosValue = permisosInput.value;
 
+    var palabras = permisosValue.split(',');
+
+    var menuItems = document.querySelectorAll('.nav li');
+
+    menuItems.forEach(function (item) {
+      var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+      if (palabras.includes(items)) {
+        item.style.display = 'block';
+      } else {
+        item.style.display = 'none';
+      }
+    });
+  </script>
+  {{/if}}
+
+
+
+  <!--Mensajes Error-->
   <script>
     var lastValueI = ""; // Variable para almacenar el último valor válido
 
@@ -540,14 +653,12 @@
       }
     }
 
-
     lastValueE = "";
     function val_encargado() {
       var producto = document.getElementById("idProducto");
       var encargado = document.getElementById("idEncargado");
       var cantidad = document.getElementById("cantidad");
       var fechaInicio = document.getElementById("fechaInicio");
-      var fechaFin = document.getElementById("fechaFin");
       var btn = document.getElementById("btnRegistrar");
 
       var selectedOptionE = document.querySelector('#lis_encargados option[value="' + encargado.value + '"]');
@@ -559,7 +670,6 @@
 
         producto.disabled = false;
         cantidad.disabled = false;
-        fechaFin.disabled = false;
         fechaInicio.disabled = false;
         btn.disabled = false;
 
@@ -568,7 +678,6 @@
       } else {
         producto.disabled = true;
         cantidad.disabled = true;
-        fechaFin.disabled = true;
         fechaInicio.disabled = true;
         btn.disabled = true;
 
@@ -577,6 +686,29 @@
       }
     }
 
+    lastValuePart = "";
+    function val_participante(idEvento) {
+      var participante = document.getElementById("idParticipante");
+      var btn_part = "btnAgregarParticipante" + idEvento;
+      var btn = document.getElementById(btn_part);
+
+      var selectedOptionPart = document.querySelector('#lis_encargados option[value="' + participante.value + '"]');
+
+      if (selectedOptionPart) {
+        var participanteValue = selectedOptionPart.getAttribute('nombre');
+        participante.value = selectedOptionPart.value; // Establecer el valor del campo "idRegistrador" como el valor de la opción del datalist
+        lastValuePart = participanteValue; // Actualizar lastValue con el valor del usuario
+        btn.disabled = false;
+
+        mensajeErrorParticipante.innerHTML = '';
+        mensajeErrorParticipante.style.display = 'none';
+      } else {
+        btn.disabled = true;
+
+        mensajeErrorParticipante.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El usuario no es válido';
+        mensajeErrorParticipante.style.display = 'block';
+      }
+    }
 
     lastValueP = "";
     function val_producto() {
@@ -584,7 +716,6 @@
       var encargado = document.getElementById("idEncargado");
       var cantidad = document.getElementById("cantidad");
       var fechaInicio = document.getElementById("fechaInicio");
-      var fechaFin = document.getElementById("fechaFin");
       var btn = document.getElementById("btnRegistrar");
 
       var selectedOptionP = document.querySelector('#lis_productos option[value="' + producto.value + '"]');
@@ -596,7 +727,6 @@
 
         encargado.disabled = false;
         cantidad.disabled = false;
-        fechaFin.disabled = false;
         fechaInicio.disabled = false;
         btn.disabled = false;
 
@@ -605,7 +735,6 @@
       } else {
         encargado.disabled = true;
         cantidad.disabled = true;
-        fechaFin.disabled = true;
         fechaInicio.disabled = true;
         btn.disabled = true;
 
@@ -641,10 +770,18 @@
       }
     }
   </script>
+  <!--Mensajes Error-->
 
-  <!--Agregar, Eliminar y Editar Tareas-->
+
+
+  <!--Agregar, Eliminar Tareas y Partícipes-->
   <script>
+    //Contadores
     var cont = 0;
+    var contGeneral = 0;
+    var contPar = 0;
+
+    //Tareas
     function agregarTarea() {
       const tarea = {
         titulo: document.getElementById('titulo_R').value,
@@ -656,73 +793,144 @@
 
       if (tarea.titulo != "" && tarea.descripcion != "" && tarea.observacion != "" && tarea.fechaInicio != "" && tarea.fechaFin != "") {
         cont++;
-        document.getElementById('ListaArticulos').innerHTML += `
-          <tr id="${cont}"style="text-align: center">
-              <td class="text-center">${cont}</td>
-              <td class="text-center">
-                  <input name="titulo" id="titulo_${cont}" value="${tarea.titulo}" style="text-align: center; width: 150px;  border: none;" readonly>
+        contGeneral++;
+        document.getElementById('ListaTareas').innerHTML += `
+            <tr class="clickable-row" id="${cont}">
+              <td class="p-3 text-center">${cont}</td>
+              <td class="p-3 text-center">
+                  <input type="hidden" name="titulo_2" id="titulo_2_${cont}" value="${tarea.titulo}">
+                  <input name="titulo_2_a" id="titulo_2_a_${cont}" oninput="updateValueInput(this)" value="${tarea.titulo}" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
               </td>
-              <td class="text-center w-4/4">
-                  <textarea name="descripcion" id="descripcion_${cont}" style="text-align: center; width: 200px;  border: none;" readonly>${tarea.descripcion}</textarea>
+              <td class="p-3 text-center">
+                  <input type="date" name="fechaInicio_detalle_2" id="fechaInicio_2_${cont}" value="${tarea.fechaInicio}" oninput="updateValueInput(this)">
               </td>
-              <td class="text-center w-4/4">
-                  <textarea name="observacion" id="observacion_${cont}" style="text-align: center; width: 200px;  border: none;" readonly>${tarea.observacion}</textarea>
+              <td class="p-3 text-center">
+                  <input type="date" name="fechaFin_detalle_2" id="fechaFin_2_${cont}" value="${tarea.fechaFin}" oninput="updateValueInput(this)">
               </td>
-              <td class="text-center">
-                  <input type="date" name="fechaInicio_detalle" id="fechaInicio_${cont}" value="${tarea.fechaInicio}" style="text-align: center; width: 100px;  border: none;">
+              <td class="p-3 text-center">
+                <select name="estado_2" style="text-align: center; width: auto;">
+                  <option value="Iniciado" selected>Iniciado</option>
+                </select>
               </td>
-              <td class="text-center">
-                  <input type="date" name="fechaFin_detalle" id="fechaFin_${cont}" value="${tarea.fechaFin}" style="text-align: center; width: 100px;  border: none;">
-              </td>
-              <td class="text-center">
-
-                <a class="boton-produccion" href="#" style="color: #292b2c;" data-bs-toggle="modal" data-bs-target="#editar${cont}">
-                  <i class="fa-sharp fa-solid fa-pen" style="margin-left: 10px;"></i>
+              <td class="p-3 text-center">
+                <a class="expand-button boton-produccion" type="button">
+                  <i class="fa-solid fa-caret-down icon-collapse fa-2x"></i>
+                  <i class="fa-solid fa-caret-up icon-expand fa-2x" style="display: none; color:gray;"></i>
                 </a>
 
-                <a class="boton-produccion" href="#" onclick="eliminarTarea(${cont})" style="color: #292b2c;">
+                <a class="boton-produccion" type="button" onclick="eliminarTarea(${cont})" style="color: #292b2c;">
                   <i class="fas fa-trash"></i>
                 </a>
+              </td>
+            </tr>
+
+            <tr class="extra-row" style="display:none;">
+              <td colspan="6">
+                <div class="card" style="width: 100%; border-radius: 0;">
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-md-9">
+                                
+                        <label class="form-label mt-1" for="descripcion_2_${cont}">Descripción</label>
+                        <textarea class="form-control form-control-sm des" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;" 
+                          id="descripcion_2_${cont}" name="descripcion_2" oninput="updateValueTextarea(this)"> ${tarea.descripcion}</textarea>
+                                
+                      </div>
+
+                      <div class="col-md-3">
+                        <center>
+                          <button type="button" class="btn-participantes btn-sm mt-4"
+                              data-toggle="modal" data-target="#participantes_${cont}" style="border-radius: 8px; border: 1px gray solid;">
+                            <i class="fa-solid fa-user-plus fa-2x"></i><br>
+                            <p class="pb-0 mb-0">Agregar<br>Participantes</p>
+                          </button>
+                        </center>
+
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-md-9">
+                                
+                        <label class="form-label mt-2" for="observacion_2_${cont}">Observaciones</label>
+                          <textarea class="form-control form-control-sm ob mb-2"
+                            style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;" id="observacion_2_${cont}"
+                            name="observacion_2" oninput="updateValueTextarea(this)">${tarea.observacion}</textarea>
+                                
+                      </div>
+                    </div>
+                  </div>
+                </div>
             </td>
-          </tr>
-
-
-          <!-- Modal editar-->
-          <div class="modal fade" id="editar${cont}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
-              <div class="modal-content" style="border-radius: 0;">
-                <div class="modal-header">
-                  <h1 class="modal-title fs-5" id="exampleModalLabel">Editar Artículo ${cont}</h1>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-floating mb-3">
-                      <textarea class="form-control" id="titulo_R2_${cont}" style="border-radius: 0; text-align: left;" placeholder="0000">${tarea.titulo}</textarea>
-                      <label for="titulo_R2_${cont}">Articulo</label>
-                    </div>
-
-                    <div class="form-floating mb-3">
-                      <textarea class="form-control pb-5" id="descripcion_R2_${cont}" style="border-radius: 0; text-align: left;" placeholder="0000">${tarea.descripcion}</textarea>
-                      <label for="descripcion_R2_${cont}">Descripción</label>
-                    </div>
-
-                    <div class="form-floating mb-3">
-                      <textarea class="form-control pb-5" id="observacion_R2_${cont}" style="border-radius: 0; text-align: left;" placeholder="0000">${tarea.observacion}</textarea>
-                      <label for="observacion_R2_${cont}">Observaciones</label>
-                    </div>
-
-                </div>
-                <div class="modal-footer">
-                  <button class="btn btn-secondary boton-produccion mr-1" data-bs-dismiss="modal"
-                    style="border-radius: 0;">Cancelar</button>
-                  <button type="button" class="btn btn-primary boton-produccion ml-3" style="border-radius: 0;"
-                    onclick="editarTarea(${cont})">Guardar Cambios</button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!--End Modal editar-->
+          </tr>            
         `;
+
+        document.getElementById('modales').innerHTML += `
+        <!--Modal Participantes-->
+        <div class="modal fade modalP" id="participantes_${cont}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Participantes Tarea #${cont}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+
+                      <!--Start Card-->
+                      <div class="card" style="border-radius: 0; width: 100%;">
+                        <div class="card-body">
+                          <h6 class="card-title">Agregar Participante</h6>
+                          <div class="row">
+                            <div class="col-md-10">
+
+                              <!--Input Participante-->
+                              <label class="form-label" for="idParticipante">Participante</label>
+                              <input type="text" class="form-control form-control-sm" list="lis_Participantes" style="border-radius: 0;"
+                                id="idParticipante_${cont}" autocomplete="off" >
+                              <datalist id="lis_Participantes">
+                                {{#each usuarios}}
+                                <option value="{{correo}}">Nombre({{nombre}}) Teléfono({{telefono}}) Correo({{correo}})</option>
+                                {{/each}}
+                              </datalist>
+                              <!--<div id="mensajeErrorParticipante"></div> oninput="val_participante()"-->
+                              <!--End Input Participante-->
+                    
+                            </div>
+                            <div class="col-md-2">
+                              <center>
+                                <!--Start Btn Agregar-->
+                                <i class="fa-solid fa-circle-plus fa-2x" type="button" id="btnAgregarParticipante"
+                                  onclick="agregarParticipante(${cont});"></i>
+                                <!--End Btn Agregar-->
+                              </center>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--End Card-->
+
+                      <table class="table">
+                        <thead style="background-color: #282d32; color:white;">
+                          <tr style="text-align: center;">
+                            <th>#</th>
+                            <th>Participante</th>
+                            <th>Funciones</th>
+                          </tr>
+                        </thead>
+                        <tbody id="listaParticipantes_${cont}" style="text-align: center;">
+                        </tbody>
+                      </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Modal-->
+        `;
+
+        document.getElementById('fechaFin_R').disabled = true;
 
         Swal.fire({
           position: 'top-end',
@@ -732,22 +940,35 @@
           timer: 1000
         });
 
+         tablaIndice();
+
+        const totalVisibleRows = document.querySelectorAll('.clickable-row[data-visible="true"]').length;
+        const totalPages = Math.ceil(totalVisibleRows / itemsPerPage);
+        currentPage = totalPages;
+        showPage(currentPage);
+        updatePagination();
+
+        // Configura los Event Listeners para los botones de expansión
+        setupExpandButtons();
+
+
         document.getElementById('titulo_R').value = null;
         document.getElementById('descripcion_R').value = null;
         document.getElementById('observacion_R').value = null;
         document.getElementById('fechaInicio_R').value = null;
         document.getElementById('fechaFin_R').value = null;
 
-        //alert("Insumo Agregado");
+
+        //alert(" Agregado");
       } else {
         //alert("Campos obligatorios");
-        Swal.fire({
+        /*Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Campos Obligatorios',
           showConfirmButton: false,
           timer: 1000
-        });
+        });*/
 
         if (tarea.titulo == "") {
           mensajeErrorTitulo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El artículo es un campo requerido';
@@ -775,19 +996,47 @@
         }
 
       }
-      //} else {
-      // alert('El insumo seleccionado no es válido')
-      //}
     }
 
     function eliminarTarea(id) {
-      tarea = document.getElementById(id);
-      if (!tarea) {
+      const tarea = document.getElementById(id);
+      const idM = "participantes_" + id;
+      const modal = document.getElementById(idM);
+      if (!tarea || !modal) {
         alert("Error");
       } else {
-        padre = tarea.parentNode;
+        const padre = tarea.parentNode;
+        const siguienteFila = tarea.nextElementSibling;
+
         padre.removeChild(tarea);
-        //alert("Tarea Eliminada");
+
+        if (siguienteFila && siguienteFila.classList.contains("extra-row")) {
+          padre.removeChild(siguienteFila);
+        }
+
+        const padre2 = modal.parentNode;
+        padre2.removeChild(modal);
+
+        contGeneral--;
+
+        // Ajustar la página actual si es necesario
+        const visibleRows = document.querySelectorAll('.clickable-row[data-visible="true"]');
+        const totalVisibleRows = visibleRows.length;
+        const totalPages = Math.ceil(totalVisibleRows / itemsPerPage);
+
+        if (currentPage > totalPages) {
+          currentPage = Math.max(1, totalPages); // Asegura que no vaya a una página negativa
+        }
+        showPage(currentPage);
+        updatePagination();
+
+        /*
+
+        // Configura los Event Listeners para los botones de expansión
+        setupExpandButtons();
+
+        updatePagination();*/
+
         Swal.fire({
           position: 'top-end',
           icon: 'success',
@@ -797,39 +1046,165 @@
         });
       }
     }
+    //End Tareas
 
+    //Partícipes
+    function agregarParticipante(idP) {
+      let part = "idParticipante_" + idP;
+      let arr;
+      if (parseFloat(idP) > 0) {
+        arr = "titulo_2_" + idP;
+      } else {
+        if (parseFloat(idP) < 0) {
+          arr = "titulo_1_" + idP;
+        }
+      }
 
+      let participacion = {
+        participante: document.getElementById(part).value,
+        titulo: document.getElementById(arr).value
+      };
 
-    function editarTarea(id) {
-      const idProR = 'titulo_' + id;
-      const idDes = 'descripcion_' + id;
-      const idObs = 'observacion_' + id;
-      /*const idFI = 'fechaInicio_' + id;
-      const idFF = 'fechaFin_' + id;*/
+      if (participacion.participante != "" && participacion.titulo != "") {
+        const repetido = document.getElementById(participacion.titulo + '_' + participacion.participante);
+        let listP = "listaParticipantes_" + idP;
 
-      const idProR_R = 'titulo_R2_' + id;
-      const idDes_R = 'descripcion_R2_' + id;
-      const idObs_R = 'observacion_R2_' + id;
-      /*const idFI_R = 'fechaInicio_R2_' + id;
-      const idFF_R = 'fechaFin_R2_' + id;*/
+        if (repetido != null) {
+          Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: 'El usuario ya está en la lista',
+            showConfirmButton: false,
+            timer: 2000
+          });
 
-      document.getElementById(idProR).value = document.getElementById(idProR_R).value;
-      document.getElementById(idDes).value = document.getElementById(idDes_R).value;
-      document.getElementById(idObs).value = document.getElementById(idObs_R).value;
-      /*document.getElementById(IdFI).value = document.getElementById(IdFI_R).value;
-      document.getElementById(IdFF).value = document.getElementById(IdFF_R).value;*/
+        } else {
+          contPar++;
 
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Tarea Actualizada',
-        showConfirmButton: false,
-        timer: 1000
-      });
+          let tbTabla = document.getElementById(listP);
+          //alert(tbTabla);
+
+          tbTabla.innerHTML += `
+         <tr id="participante_${idP}_${contPar}">
+               <td class="p-3 text-center"></td>
+               <td class="p-3 text-center">
+                   <input name="${participacion.titulo}_idParticipante" style="width: 100%; border: none; text-align: center;" id="${participacion.titulo}_${participacion.participante}" value="${participacion.participante}" readonly>
+               </td>
+               <td class="p-3 text-center">
+                 <a class="boton-produccion" type="button" onclick="eliminarParticipante('${idP}_${contPar}', '${listP}')" style="color: #292b2c;">
+                   <i class="fas fa-trash"></i>
+                 </a>
+               </td>
+             </tr>
+         `;
+
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Participante Agregado',
+            showConfirmButton: false,
+            timer: 1000
+          });
+
+        }
+
+        //llamar función calcularContTDTable
+        ContTr(listP);
+
+        document.getElementById(part).value = "";
+      } else {
+        alert('Vacío');
+      }
     }
 
+    function eliminarParticipante(idEP, TP) {
+      var partE = "participante_" + idEP;
+      const participacionE = document.getElementById(partE);
+
+      if (!participacionE) {
+        alert("Error");
+      } else {
+        const padre = participacionE.parentNode;
+        padre.removeChild(participacionE);
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Participante Eliminado',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
+        //llamar función calcularContTDTable
+        ContTr(TP);
+      }
+    }
+    //End Partícipes
   </script>
-  <!--End Agregar y eliminar insumo-->
+  <!--End Agregar, Eliminar Tareas y Partícipes-->
+
+
+
+  <!--ContTr & ExpandButtons-->
+  <script>
+    // Agrega los Event Listeners para los botones de expansión después de agregar una nueva fila
+    function setupExpandButtons() {
+      var expandButtons = document.getElementsByClassName("expand-button");
+
+      for (var i = 0; i < expandButtons.length; i++) {
+        expandButtons[i].addEventListener("click", function () {
+          var button = this;
+          var clickableRow = button.closest(".clickable-row");
+          var nextRow = clickableRow.nextElementSibling;
+
+          if (nextRow.classList.contains("extra-row")) {
+            nextRow.style.display = nextRow.style.display === "none" ? "table-row" : "none";
+
+            var iconCollapse = button.querySelector(".icon-collapse");
+            var iconExpand = button.querySelector(".icon-expand");
+
+            if (nextRow.style.display === "none") {
+              iconCollapse.style.display = "block";
+              iconExpand.style.display = "none";
+            } else {
+              iconCollapse.style.display = "none";
+              iconExpand.style.display = "block";
+            }
+          }
+        });
+      }
+    }
+    setupExpandButtons();
+
+    //Calcular cont td table
+    function ContTr(tbodyId) {
+      var tbody = document.getElementById(tbodyId);
+      var rows = tbody.getElementsByTagName("tr");
+      var contador = 1;
+
+      for (var i = 0; i < rows.length; i++) {
+        var td = rows[i].getElementsByTagName("td")[0];
+        td.textContent = contador;
+        contador++;
+      }
+    }
+
+    function tablaIndice() {
+      // Obtener la referencia de la tabla
+      const tabla = document.getElementById("ListaTareas");
+
+      // Enumerar las filas
+      let filas = tabla.getElementsByClassName("clickable-row");
+      for (let i = 0; i < filas.length; i++) {
+        let celdaNumero = filas[i].getElementsByTagName("td")[0];
+        celdaNumero.textContent = i + 1;
+      }
+    }
+    tablaIndice()
+  </script>
+  <!--End ContTr & ExpandButtons-->
+
+
 
   <!--Validar Envio-->
   <script>
@@ -868,7 +1243,7 @@
     }
 
     function validarEnvio() {
-      var list = document.getElementById('ListaArticulos');
+      var list = document.getElementById('ListaTareas');
 
       var producto = document.getElementById("idProducto");
       var encargado = document.getElementById("idEncargado");
@@ -878,20 +1253,20 @@
 
       if (encargado.value == "" || producto.value == "" || cantidad.value == "" || fechaInicio.value == "" || fechaFin.value == "") {
         //alert('campos obligatorios');
-        Swal.fire({
+        /*Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Campos Obligatorios',
           showConfirmButton: false,
           timer: 1500
-        });
+        });*/
         validarCampos();
         return false; // Detener el envío del formulario
       }
 
       // Verificar si la lista tiene al menos un elemento
       if (list.childElementCount === 0) {
-        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún insumo");
+        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún ");
         Swal.fire({
           position: 'top-end',
           icon: 'info',
@@ -908,37 +1283,231 @@
   <!--End Validar Envio-->
 
 
+
   <!--Inicio footer-->
 
   <!--Fin footer-->
+  <!--Bootstrap-->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Inicializar los popovers
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+      return new bootstrap.Popover(popoverTriggerEl);
+    });
+  </script>
+
+
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="assets/js/ValidacionInsumo.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
     crossorigin="anonymous"></script>
   <!--   Core JS Files   -->
-  <script src="assets/js/core/jquery.min.js"></script>
-  <script src="assets/js/core/popper.min.js"></script>
-  <script src="assets/js/core/bootstrap.min.js"></script>
-  <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-  <!--  Google Maps Plugin    -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+  <script src="/assets/js/core/jquery.min.js"></script>
+  <script src="/assets/js/core/popper.min.js"></script>
+  <script src="/assets/js/core/bootstrap.min.js"></script>
+  <script src="/assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+
   <!-- Chart JS -->
-  <script src="assets/js/plugins/chartjs.min.js"></script>
+  <script src="/assets/js/plugins/chartjs.min.js"></script>
   <!--  Notifications Plugin    -->
-  <script src="assets/js/plugins/bootstrap-notify.js"></script>
+  <script src="/assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-  <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+  <script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+
+
+  <!--Detalles de los detalles-->
+  <script>
+    // Desplegar detalle del detalle
+    document.addEventListener("DOMContentLoaded", function () {
+      var expandButtons = document.getElementsByClassName("expand-button");
+
+      for (var i = 0; i < expandButtons.length; i++) {
+        expandButtons[i].addEventListener("click", function () {
+          var button = this;
+          var clickableRow = button.closest(".clickable-row");
+          var nextRow = clickableRow.nextElementSibling;
+
+          if (nextRow.classList.contains("extra-row")) {
+            nextRow.style.display = nextRow.style.display === "none" ? "table-row" : "none";
+
+            var iconCollapse = button.querySelector(".icon-collapse");
+            var iconExpand = button.querySelector(".icon-expand");
+
+            if (nextRow.style.display === "none") {
+              iconCollapse.style.display = "block";
+              iconExpand.style.display = "none";
+            } else {
+              iconCollapse.style.display = "none";
+              iconExpand.style.display = "block";
+            }
+          }
+        });
+      }
+    });
+
+  </script>
 
 
   <script>
-    //SOLO NUMEROS
-    $(function () {
-      $(".validar").keydown(function (event) {
-        //alert(event.keyCode);
-        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
-          return false;
+    const itemsPerPage = 5; // Define el número de registros por página
+    let currentPage = 1;
+
+    function showPage(page) {
+      const rows = document.querySelectorAll('.clickable-row');
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      rows.forEach((row, index) => {
+        if (index >= startIndex && index < endIndex) {
+          row.style.display = 'table-row';
+          row.setAttribute('data-visible', 'true');
+        } else {
+          row.style.display = 'none';
+          row.setAttribute('data-visible', 'false');
+        }
+
+        // Oculta los elementos <tr> extra
+        const extraRow = row.nextElementSibling;
+        if (extraRow && extraRow.classList.contains('extra-row')) {
+          extraRow.style.display = 'none';
         }
       });
+    }
+
+    function updatePagination() {
+      const rows = document.querySelectorAll('.clickable-row');
+      const totalRows = rows.length;
+      const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+      if (currentPage === 1) {
+        document.querySelector('.prev-btn').disabled = true;
+      } else {
+        document.querySelector('.prev-btn').disabled = false;
+      }
+
+      if (currentPage === totalPages) {
+        document.querySelector('.next-btn').disabled = true;
+      } else {
+        document.querySelector('.next-btn').disabled = false;
+      }
+    }
+
+    document.querySelector('.prev-btn').addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+        updatePagination();
+      }
     });
+
+    document.querySelector('.next-btn').addEventListener('click', () => {
+      const rows = document.querySelectorAll('.clickable-row');
+      const totalRows = rows.length;
+      const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+      if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+        updatePagination();
+      }
+    });
+
+    // Mostrar la primera página al cargar la tabla
+    showPage(currentPage);
+    updatePagination();
+
+    // Configura los Event Listeners iniciales para los botones de expansión
+    setupExpandButtons();
+
+  </script>
+
+  <!--End Detalles de los detalles-->
+
+
+
+
+
+
+  <script>
+    function solonumeros(e) {
+      key = e.keyCode || e.which;
+
+      teclado = String.fromCharCode(key);
+
+      letras = "1234567890";
+
+      especiales = "8-37-38-46";
+
+      teclado_especial = false;
+
+      for (var i in especiales) {
+        if (key == especiales[i]) {
+          teclado_especial = true; break
+        }
+      }
+
+      if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+        return false;
+      }
+
+    }
+
+    function solonumeros2(e) {
+      key = e.keyCode || e.which;
+
+      teclado = String.fromCharCode(key);
+
+      letras = "1234567890-";
+
+      especiales = "8-37-38-46";
+
+      teclado_especial = false;
+
+      for (var i in especiales) {
+        if (key == especiales[i]) {
+          teclado_especial = true; break
+        }
+      }
+
+      if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+        return false;
+      }
+
+    }
+
+
+    /*
+    function puntos(valor){
+      return(valor.toLocaleString('es-CO');)
+    }*/
+
+  </script>
+
+
+
+
+  <script>
+    //Actualizar valor
+    function updateValueInput(input) {
+      input.setAttribute("value", input.value);
+    }
+
+    function updateValueTextarea(textarea) {
+      textarea.textContent = textarea.value;
+    }
+
+    function updateValueSelect(select) {
+      var selectedOption = select.options[select.selectedIndex];
+
+      // Remover el atributo "selected" de todas las opciones
+      for (var i = 0; i < select.options.length; i++) {
+        select.options[i].removeAttribute("selected");
+      }
+
+      // Agregar el atributo "selected" a la opción seleccionada
+      selectedOption.setAttribute("selected", "selected");
+    }
   </script>

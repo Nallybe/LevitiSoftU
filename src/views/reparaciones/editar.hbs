@@ -5,6 +5,39 @@
 
 <body>
   <style>
+    /* Estilos para el popover */
+    .custom-popover {
+      position: relative;
+      max-width: 330px;
+      border: 3px gray solid;
+      /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+      background-color: white;
+      /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+      color: black;
+      /* Reemplaza esto con el color hexadecimal que corresponda a --bs-white */
+      padding-left: 0;
+      padding-right: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    /* Estilos para la flecha del popover */
+    .custom-popover::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: -16px;
+      /* Ubica la flecha justo a la izquierda del popover */
+      border-width: 8px;
+      border-style: solid;
+      border-color: transparent black transparent transparent;
+      /* Utiliza el color correspondiente a --bd-violet-bg */
+      transform: translateY(-50%);
+      border-right-color: gray;
+      /* Agrega un borde negro de 1px a la derecha de la flecha */
+    }
+
+
     #descripcion_R,
     #descripcion,
     #observacion_R,
@@ -25,7 +58,6 @@
       color: red;
     }
 
-    #mensajeErrorCliente,
     #mensajeErrorTotal,
     #mensajeErrorFechaEntrega,
     #mensajeErrorArticulo,
@@ -36,7 +68,6 @@
       margin-top: 5px;
     }
 
-    #mensajeErrorCliente .icono,
     #mensajeErrorTotal .icono,
     #mensajeErrorFechaEntrega .icono,
     #mensajeErrorArticulo .icono,
@@ -67,7 +98,7 @@
     /* Add this style to your existing CSS */
     .table-container {
       max-height: 400px;
-      height: 400px;
+      height: auto;
       /* Adjust this value as per your requirement */
       overflow-y: auto;
       position: relative;
@@ -85,7 +116,6 @@
       z-index: 1;
     }
   </style>
-
 
   <!--Barra de navegación-->
   {{>barId}}
@@ -110,19 +140,45 @@
 
                 <!--Input Cliente-->
                 <label class="form-label" for="idCliente">Cliente</label>
-                <input type="text" class="form-control form-control-sm" list="lis_clientes" style="border-radius: 0;"
+                <!-- <input type="text" class="form-control form-control-sm" list="lis_clientes" style="border-radius: 0;"
                   id="idCliente" name="idCliente" autocomplete="off" oninput="val_cliente()" value="{{idInfo}}">
+-->
+                <div class="input-group input-group-sm">
+                  <input type="text" class="form-control" aria-describedby="cliente-sm"
+                    style="border-radius: 0;" value="{{idInfo}}" readonly>
+                  <div class="input-group-prepend">
 
-                <datalist id="lis_clientes">
+                    <a type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="hover"
+                      data-bs-custom-class="custom-popover" title="<b>Cliente Reparación {{cont}}</b>"
+                      data-bs-placement="right" data-bs-content="
+                            <div class='row'>
+                                <div class='col-md-3'>
+                                    <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
+                                </div>
+                                <div class='col-md-9'>
+                                    <b>Nombre:</b> {{userName}}<br>
+                                    <b>Teléfono:</b> {{userTell}}<br>
+                                    <b>Correo:</b> {{userEmail}}<br>
+                                </div>
+                            </div>
+                            ">
+
+                      <span class="input-group-text" id="cliente-sm"><i class="fas fa-user"
+                          style="color:black"></i></span>
+                    </a>
+                  </div>
+                </div>
+                <!--<datalist id="lis_clientes">
                   {{#each clientes}}
                   <option value="{{correo}}">IdCliente({{idAccess}}) Correo({{correo}})</option>
                   {{/each}}
                 </datalist>
-                <div id="mensajeErrorCliente"></div>
+                <div id="mensajeErrorCliente"></div>-->
+
                 <!--End Input Cliente-->
 
                 <!--Input Fecha Entrega-->
-                <label class="form-label mt-2" for="fechaEntrega">Fecha Entrega</label>
+                <label class="form-label" for="fechaEntrega">Fecha Entrega</label>
                 <input type="date" class="form-control form-control-sm" style="border-radius: 0;" id="fechaEntrega"
                   name="fechaEntrega" oninput="val_f_entrega()" autocomplete="off" value="{{fechaEntrega}}">
                 <div id="mensajeErrorFechaEntrega"></div>
@@ -218,13 +274,16 @@
                         <td class="text-center">{{cont}}</td>
                         <td class="text-center">
                           <input type="hidden" name="idDetalleReparacion_1" value="{{idDetalleReparacion}}">
-                          <input name="articulo_1" id="articulo_1_{{idDetalleReparacion}}" value="{{articulo}}"
+                          <input type="hidden" name="articulo_1" id="articulo_1_{{cont}}" value="{{articulo}}">
+
+                          <input name="articulo_1_a" value="{{articulo}}" oninput="updateValueInput(this)"
                             style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
                         </td>
 
                         {{#if estado1}}
                         <td class="p-3 text-center">
-                          <select name="estado_1" style="text-align: center; width: 100%;">
+                          <select name="estado_1" style="text-align: center; width: 100%;"
+                            onchange="updateValueSelect(this)">
                             <option value="{{estado}}" selected>{{estado}}</option>
                             <option value="Proceso">En Proceso</option>
                             <option value="Terminado">Terminado</option>
@@ -244,7 +303,8 @@
                         {{/if}}
                         {{#if estado2}}
                         <td class="p-3 text-center">
-                          <select name="estado_1" style="text-align: center; width: 100%;">
+                          <select name="estado_1" style="text-align: center; width: 100%;"
+                            onchange="updateValueSelect(this)">
                             <option value="{{estado}}" selected>En {{estado}}</option>
                             <option value="Terminado">Terminado</option>
                           </select>
@@ -254,17 +314,18 @@
                             <i class="fa-solid fa-caret-down icon-collapse fa-2x"></i>
                             <i class="fa-solid fa-caret-up icon-expand fa-2x" style="display: none; color:gray;"></i>
                           </a>
-
-                          <a class="boton-reparacion" href="#" onclick="eliminarArticulo({{idDetalleReparacion}})"
+                          <!--
+                          <a class="boton-reparacion" href="#" onclick="eliminarArticulo({{cont}})"
                             style="color: #292b2c;">
                             <i class="fas fa-trash"></i>
-                          </a>
+                          </a>-->
                         </td>
 
                         {{/if}}
                         {{#if estado3}}
                         <td class="p-3 text-center">
-                          <select name="estado_1" style="text-align: center; width: 100%;">
+                          <select name="estado_1" style="text-align: center; width: 100%;"
+                            onchange="updateValueSelect(this)">
                             <option value="{{estado}}" selected>{{estado}}</option>
                             <option value="Proceso">En Proceso</option>
                           </select>
@@ -286,16 +347,18 @@
                               <div class="row">
                                 <div class="col-md-9">
 
-                                  <label class="form-label mt-1" for="descripcion_{{idDetalleReparacion}}">Descripción</label>
+                                  <label class="form-label mt-1"
+                                    for="descripcion_{{idDetalleReparacion}}">Descripción</label>
                                   <textarea class="form-control form-control-sm des"
                                     style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;"
-                                    id="descripcion_{{idDetalleReparacion}}" name="descripcion_1">{{descripcion}}</textarea>
+                                    id="descripcion_{{idDetalleReparacion}}" oninput="updateValueTextarea(this)"
+                                    name="descripcion_1">{{descripcion}}</textarea>
                                 </div>
 
                                 <div class="col-md-3">
                                   <center>
                                     <button type="button" class="btn-reparacion btn-sm mt-4" data-toggle="modal"
-                                      data-target="#insumos_{{idDetalleReparacion}}"
+                                      data-target="#insumos_{{cont}}"
                                       style="border-radius: 8px; border: 1px gray solid;">
                                       <i class="fa-solid fa-dolly fa-2x"></i><br>
                                       <p class="pb-0 mb-0">Agregar<br>Insumos</p>
@@ -308,10 +371,12 @@
                               <div class="row">
                                 <div class="col-md-8">
 
-                                  <label class="form-label mt-2" for="observacion_{{idDetalleReparacion}}">Observaciones</label>
+                                  <label class="form-label mt-2"
+                                    for="observacion_{{idDetalleReparacion}}">Observaciones</label>
                                   <textarea class="form-control form-control-sm ob mb-2"
                                     style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;"
-                                    id="observacion_{{idDetalleReparacion}}" name="observacion_1">{{observacion}}</textarea>
+                                    id="observacion_{{idDetalleReparacion}}" oninput="updateValueTextarea(this)"
+                                    name="observacion_1">{{observacion}}</textarea>
 
                                 </div>
                                 <div class="col-md-4">
@@ -330,17 +395,20 @@
                   </table>
                 </div>
                 <!--End Table-->
-
-                <div class="pagination">
-                  <button type="button" class="prev-btn mt-3"><i class="fa-solid fa-arrow-left"></i></button>
-                  <button type="button" class="next-btn mt-3"><i class="fa-solid fa-arrow-right"></i></button>
-
+                <div class="row">
+                  <div class="col-md-5"></div>
+                  <div class="col-md-2">
+                    <div class="pagination">
+                      <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i
+                          class="fa-solid fa-arrow-left"></i></button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i
+                          class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                  </div>
+                  <div class="col-md-5"></div>
                 </div>
-
               </div>
             </div>
-
-
             <!--End Card #3-->
 
             <div class="row">
@@ -364,6 +432,115 @@
     <!--End Card&Form-->
 
     <div id="modales">
+      <datalist id="lis_Insumos">
+        {{#each insumos}}
+        <option value="{{nombre}}">nombre({{nombre}}) medida({{medida}}) stock({{stock}})</option>
+        {{/each}}
+      </datalist>
+
+      {{#each detallesreparacion}}
+
+      <div class="modal fade modalP" id="insumos_{{cont}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Insumos Requeridos Artículo (existente) #{{contMas}}</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+
+              <!--Start Card-->
+              <div class="card" style="border-radius: 0; width: 100%;">
+                <div class="card-body">
+                  <h6 class="card-title">Agregar Inusmo</h6>
+                  <div class="row">
+                    <div class="col-md-10">
+
+                      <div class="row">
+                        <div class="col-md-7">
+
+                          <!--Input Insumo-->
+                          <label class="form-label" for="idInsumo">Insumo</label>
+                          <input type="text" class="form-control form-control-sm" list="lis_Insumos"
+                            style="border-radius: 0; width: 100%;" id="idInsumo_{{cont}}" autocomplete="off">
+                          <!--<div id="mensajeErrorInsumo"></div> oninput="val_Insumo()"-->
+                          <!--End Input Insumo-->
+
+                        </div>
+
+                        <div class="col-md-5">
+
+                          <!--Input Cantidad-->
+                          <label class="form-label" for="cantidad">Cantidad</label>
+                          <input type="text" class="form-control form-control-sm" style="border-radius: 0;"
+                            id="cantidad_{{cont}}" autocomplete="off" onkeypress="return solonumeros(event)">
+                          <!--<div id="mensajeErrorCantidad"></div> oninput="val_cantidad()"-->
+                          <!--End Input Cantidad-->
+
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="col-md-2">
+                      <center>
+                        <!--Start Btn Agregar-->
+                        <i class="fa-solid fa-circle-plus fa-2x" type="button" id="btnAgregarInsumo"
+                          onclick="agregarInsumo('{{cont}}');"></i>
+                        <!--End Btn Agregar-->
+                      </center>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!--End Card-->
+
+              <table class="table">
+                <thead style="background-color: #282d32; color:white;">
+                  <tr style="text-align: center;">
+                    <th>#</th>
+                    <th>Insumo</th>
+                    <th>Cantidad</th>
+                    <th>Funciones</th>
+                  </tr>
+                </thead>
+                <tbody id="listaInsumos_{{cont}}" style="text-align: center;">
+                  {{#each this.insumos_r}}
+                  <tr id="insumo_{{../cont}}_{{cont_i}}">
+                    <td class="p-3 text-center">{{cont_c}}</td>
+                    <td class="p-3 text-center">
+                      <input name="{{../articulo}}_idInsumo" style="width: 100%; border: none; text-align: center;"
+                        value="{{idInsumo}}" readonly>
+                    </td>
+                    <td class="p-3 text-center">
+                      <input onkeypress="return solonumeros(event)" type="text" name="{{../articulo}}_cantidad"
+                        style="width: 100%; text-align: center;" id="{{../articulo}}_{{idInsumo}}_cant"
+                        value="{{cantidad_n}}" oninput="updateValueInput(this)">
+                    </td>
+                    <td class="p-3 text-center">
+                      <a class="boton-reparacion" type="button"
+                        onclick="eliminarInsumo('{{../cont}}_{{cont_i}}', 'listaInsumos_{{../cont}}')"
+                        style="color: #292b2c;">
+                        <i class="fas fa-trash"></i>
+                      </a>
+                    </td>
+                  </tr>
+
+                  {{/each}}
+
+                </tbody>
+              </table>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {{/each}}
+
+
 
     </div>
 
@@ -461,39 +638,40 @@
       }
     }
 
-    function val_cliente() {
-      var cliente = document.getElementById("idCliente");
-      var total = document.getElementById("total");
-      var fechaEntrega = document.getElementById("fechaEntrega");
-      var btn = document.getElementById("btnRegistrar");
+    /*
+        function val_cliente() {
+          var cliente = document.getElementById("idCliente");
+          var total = document.getElementById("total");
+          var fechaEntrega = document.getElementById("fechaEntrega");
+          var btn = document.getElementById("btnRegistrar");
+    
+    
+          var selectedOptionI = document.querySelector('#lis_clientes option[value="' + cliente.value + '"]');
+    
+          if (selectedOptionI) {
+            var clienteValue = selectedOptionI.getAttribute('correo');
+            cliente.value = selectedOptionI.value; // Establecer el valor del campo "idRegistrador" como el valor de la opción del datalist
+            lastValueI = clienteValue; // Actualizar lastValue con el valor del usuario
+            //var medidaValue = selectedOptionI.getAttribute('medida');
+            //medida.value = medidaValue;
+            total.disabled = false;
+            fechaEntrega.disabled = false;
+            btn.disabled = false;
+    
+            mensajeErrorCliente.innerHTML = '';
+            mensajeErrorCliente.style.display = 'none';
+          } else {
+            total.disabled = true;
+            fechaEntrega.disabled = true;
+            btn.disabled = true;
+    
+            mensajeErrorCliente.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El cliente no es válido';
+            mensajeErrorCliente.style.display = 'block';
+          }
+        }
+      */
 
-
-      var selectedOptionI = document.querySelector('#lis_clientes option[value="' + cliente.value + '"]');
-
-      if (selectedOptionI) {
-        var clienteValue = selectedOptionI.getAttribute('correo');
-        cliente.value = selectedOptionI.value; // Establecer el valor del campo "idRegistrador" como el valor de la opción del datalist
-        lastValueI = clienteValue; // Actualizar lastValue con el valor del usuario
-        //var medidaValue = selectedOptionI.getAttribute('medida');
-        //medida.value = medidaValue;
-        total.disabled = false;
-        fechaEntrega.disabled = false;
-        btn.disabled = false;
-
-        mensajeErrorCliente.innerHTML = '';
-        mensajeErrorCliente.style.display = 'none';
-      } else {
-        total.disabled = true;
-        fechaEntrega.disabled = true;
-        btn.disabled = true;
-
-        mensajeErrorCliente.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El cliente no es válido';
-        mensajeErrorCliente.style.display = 'block';
-      }
-    }
   </script>
-
-
 
   <!--Agregar y eliminar insumo-->
   <script>
@@ -514,7 +692,9 @@
         <tr class="clickable-row" id="${cont}" style="text-align: center; background-color: whitesmoke;">
           <td class="text-center"></td>
           <td class="text-center">
-            <input name="articulo_2" id="articulo_2_${cont}" value="${articulo.articulo}"
+            <input type="hidden" name="articulo_2" id="articulo_2_${cont}" value="${articulo.articulo}">
+
+            <input name="articulo_2_a" value="${articulo.articulo}" oninput="updateValueInput(this)"
               style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
           </td>
 
@@ -547,7 +727,7 @@
                     <label class="form-label mt-1" for="descripcion_2_${cont}">Descripción</label>
                     <textarea class="form-control form-control-sm"
                       style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;"
-                      id="descripcion_2_${cont}" name="descripcion_2">${articulo.descripcion}</textarea>
+                      id="descripcion_2_${cont}" name="descripcion_2" oninput="updateValueTextarea(this)">${articulo.descripcion}</textarea>
 
                   </div>
 
@@ -570,8 +750,7 @@
                     <label class="form-label mt-2" for="observacion_${cont}">Observaciones</label>
                     <textarea class="form-control form-control-sm ob mb-2"
                       style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;"
-                      id="observacion_2_${cont}" name="observacion_2">${articulo.observacion}</textarea>
-
+                      id="observacion_2_${cont}" name="observacion_2" oninput="updateValueTextarea(this)">${articulo.observacion}</textarea>
                   </div>
                 </div>
               </div>
@@ -580,6 +759,85 @@
         </tr>
 
         `;
+
+        document.getElementById('modales').innerHTML += `
+        <div class="modal fade modalP" id="insumos_${cont}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Insumos Requeridos Artículo (añadido) #${cont}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+
+                      <!--Start Card-->
+                      <div class="card" style="border-radius: 0; width: 100%;">
+                        <div class="card-body">
+                          <h6 class="card-title">Agregar Inusmo</h6>
+                          <div class="row">
+                            <div class="col-md-10">
+
+                              <div class="row">
+                                <div class="col-md-7">
+
+                                  <!--Input Insumo-->
+                              <label class="form-label" for="idInsumo">Insumo</label>
+                              <input type="text" class="form-control form-control-sm" list="lis_Insumos" style="border-radius: 0; width: 100%;"
+                                id="idInsumo_${cont}" autocomplete="off">
+                              <!--<div id="mensajeErrorInsumo"></div> oninput="val_Insumo()"-->
+                              <!--End Input Insumo-->
+
+                                </div>
+
+                                <div class="col-md-5">
+
+                          <!--Input Cantidad-->
+                              <label class="form-label" for="cantidad">Cantidad</label>
+                              <input type="text" class="form-control form-control-sm" style="border-radius: 0;"
+                                id="cantidad_${cont}" onkeypress="return solonumeros(event)" autocomplete="off" >
+                              <!--<div id="mensajeErrorCantidad"></div> oninput="val_cantidad()"-->
+                              <!--End Input Cantidad-->
+
+                                </div>
+                              </div>
+
+                              
+                    
+                            </div>
+                            <div class="col-md-2">
+                              <center>
+                                <!--Start Btn Agregar-->
+                                <i class="fa-solid fa-circle-plus fa-2x" type="button" id="btnAgregarInsumo"
+                                  onclick="agregarInsumo('${cont}');"></i>
+                                <!--End Btn Agregar-->
+                              </center>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!--End Card-->
+
+                      <table class="table">
+                        <thead style="background-color: #282d32; color:white;">
+                          <tr style="text-align: center;">
+                            <th>#</th>
+                            <th>Insumo</th>
+                            <th>Cantidad</th>
+                            <th>Funciones</th>
+                          </tr>
+                        </thead>
+                        <tbody id="listaInsumos_${cont}" style="text-align: center;">
+                        </tbody>
+                      </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        `;
+
 
         Swal.fire({
           position: 'top-end',
@@ -592,13 +850,38 @@
         tablaIndice();
 
 
-        // Después de agregar el evento, actualiza la paginación y muestra la última página
-        currentPage = Math.ceil(contGeneral / itemsPerPage);
+        // Ajustar la página actual si es necesario
+        /* const visibleRows = document.querySelectorAll('.clickable-row[data-visible="true"]');
+         const totalVisibleRows = visibleRows.length;
+         const totalPages = Math.ceil(totalVisibleRows / itemsPerPage);
+ 
+         if (currentPage > totalPages) {
+           currentPage = totalPages;
+         }
+ 
+         showPage(currentPage);
+         updatePagination();*/
+
+
+        const totalVisibleRows = document.querySelectorAll('.clickable-row[data-visible="true"]').length;
+
+        const totalPages = Math.ceil(totalVisibleRows / itemsPerPage);
+        currentPage = totalPages;
         showPage(currentPage);
         updatePagination();
 
         // Configura los Event Listeners para los botones de expansión
         setupExpandButtons();
+
+
+
+        /*
+                // Después de agregar el evento, actualiza la paginación y muestra la última página
+                currentPage = Math.ceil(contGeneral / itemsPerPage);
+                showPage(currentPage);
+                updatePagination();*/
+
+        // Configura los Event Listeners para los botones de expansión
 
 
         document.getElementById('articulo_R').value = null;
@@ -635,24 +918,43 @@
     }
 
     function eliminarArticulo(id) {
-      const art = document.getElementById(id);
-      if (!art) {
+      const articulo = document.getElementById(id);
+      const idM = "insumos_" + id;
+      const modal = document.getElementById(idM);
+      if (!articulo || !modal) {
         alert("Error");
       } else {
-        const padre = art.parentNode;
-        const siguienteFila = art.nextElementSibling;
+        const padre = articulo.parentNode;
+        const siguienteFila = articulo.nextElementSibling;
 
-        padre.removeChild(art);
+        padre.removeChild(articulo);
+
         if (siguienteFila && siguienteFila.classList.contains("extra-row")) {
           padre.removeChild(siguienteFila);
         }
 
+        const padre2 = modal.parentNode;
+        padre2.removeChild(modal);
+
         contGeneral--;
+
+        // Ajustar la página actual si es necesario
+        const visibleRows = document.querySelectorAll('.clickable-row[data-visible="true"]');
+        const totalVisibleRows = visibleRows.length;
+        const totalPages = Math.ceil(totalVisibleRows / itemsPerPage);
+
+        if (currentPage > totalPages) {
+          currentPage = Math.max(1, totalPages); // Asegura que no vaya a una página negativa
+        }
+        showPage(currentPage);
+        updatePagination();
+
+        /*
 
         // Configura los Event Listeners para los botones de expansión
         setupExpandButtons();
 
-        updatePagination();
+        updatePagination();*/
 
         Swal.fire({
           position: 'top-end',
@@ -695,6 +997,127 @@
     // Configura los Event Listeners para los botones de expansión
     setupExpandButtons();
 
+
+
+
+    var contPar = 0;
+
+    function agregarInsumo(idP) {
+      let part = "idInsumo_" + idP;
+      let part2 = "cantidad_" + idP;
+
+      let arr;
+      if (parseFloat(idP) > 0) {
+        arr = "articulo_2_" + idP;
+      } else {
+        if (parseFloat(idP) < 0) {
+          arr = "articulo_1_" + idP;
+        }
+      }
+
+      let requerido = {
+        idInsumo: document.getElementById(part).value,
+        cantidad: document.getElementById(part2).value,
+        articulo: document.getElementById(arr).value
+      };
+
+      if (requerido.idInsumo != "" && requerido.cantidad != "" && requerido.articulo != "") {
+        const repetido = document.getElementById(requerido.articulo + '_' + requerido.idInsumo + '_cant');
+        let listP = "listaInsumos_" + idP;
+
+        if (repetido != null) {
+          //var total = parseInt(repetido.value) + parseInt(requerido.cantidad);
+          //repetido.value = total;
+
+          Swal.fire({
+            position: 'top-end',
+            icon: 'info',
+            title: 'El insumo ya está agregado',
+            showConfirmButton: false,
+            timer: 2000
+          });
+
+        } else {
+
+          contPar++;
+          let tbTabla = document.getElementById(listP);
+          //alert(tbTabla);
+          tbTabla.innerHTML += `
+         <tr id="insumo_${idP}_${contPar}">
+               <td class="p-3 text-center"></td>
+               <td class="p-3 text-center">
+                   <input name="${requerido.articulo}_idInsumo" style="width: 100%; border: none; text-align: center;" value="${requerido.idInsumo}" readonly>
+               </td>
+               <td class="p-3 text-center">
+                   <input onkeypress="return solonumeros(event)" type="text" name="${requerido.articulo}_cantidad" style="width: 100%; text-align: center;" id="${requerido.articulo}_${requerido.idInsumo}_cant" value="${requerido.cantidad}" oninput="updateValueInput(this)">
+               </td>
+               <td class="p-3 text-center">
+                 <a class="boton-reparacion" type="button" onclick="eliminarInsumo('${idP}_${contPar}', '${listP}')" style="color: #292b2c;">
+                   <i class="fas fa-trash"></i>
+                 </a>
+               </td>
+             </tr>
+         `;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Insumo Agregado',
+            showConfirmButton: false,
+            timer: 1000
+          });
+
+        }
+
+        //llamar función calcularContTDTable
+        ContTr(listP);
+
+        document.getElementById(part).value = "";
+        document.getElementById(part2).value = "";
+
+      } else {
+        alert('Vacío');
+      }
+    }
+
+
+
+    function eliminarInsumo(idEP, TP) {
+      var partE = "insumo_" + idEP;
+      const insumoE = document.getElementById(partE);
+
+      if (!insumoE) {
+        alert("Error");
+      } else {
+        const padre = insumoE.parentNode;
+        padre.removeChild(insumoE);
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Insumo Eliminado',
+          showConfirmButton: false,
+          timer: 1000
+        });
+
+        //llamar función calcularContTDTable
+        ContTr(TP);
+      }
+    }
+
+    //Calcular cont td table
+    function ContTr(tbodyId) {
+      var tbody = document.getElementById(tbodyId);
+      var rows = tbody.getElementsByTagName("tr");
+      var contador = 1;
+
+      for (var i = 0; i < rows.length; i++) {
+        var td = rows[i].getElementsByTagName("td")[0];
+        td.textContent = contador;
+        contador++;
+      }
+    }
+
+
   </script>
   <!--End Agregar y eliminar insumo-->
 
@@ -729,14 +1152,14 @@
   <script>
 
     function validarCampos() {
-      var cliente = document.getElementById("idCliente");
+      // var cliente = document.getElementById("idCliente");
       var total = document.getElementById("total");
       var fechaEntrega = document.getElementById("fechaEntrega");
 
-      if (cliente.value == "") {
+      /*if (cliente.value == "") {
         mensajeErrorCliente.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El cliente es un campo obligatorio';
         mensajeErrorCliente.style.display = 'block';
-      }
+      }*/
 
       if (total.value == "") {
         mensajeErrorTotal.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El total es un campo obligatorio';
@@ -753,11 +1176,11 @@
 
     function validarEnvio() {
       var list = document.getElementById('ListaArticulos');
-      var cliente = document.getElementById("idCliente");
+      //var cliente = document.getElementById("idCliente");
       var total = document.getElementById("total");
       var fechaEntrega = document.getElementById("fechaEntrega");
 
-      if (cliente.value == "" || total.value == "" || fechaEntrega.value == "") {
+      if (/*cliente.value == "" ||*/total.value == "" || fechaEntrega.value == "") {
         //alert('campos obligatorios');
         Swal.fire({
           position: 'top-end',
@@ -792,6 +1215,19 @@
   <!--Inicio footer-->
 
   <!--Fin footer-->
+  <!--Bootstrap-->
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    // Inicializar los popovers
+    var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+      return new bootstrap.Popover(popoverTriggerEl);
+    });
+  </script>
+
+
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
@@ -808,19 +1244,6 @@
   <script src="/assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-
-  <script>
-    //SOLO NUMEROS
-    $(function () {
-      $(".validar").keydown(function (event) {
-        //alert(event.keyCode);
-        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
-          return false;
-        }
-      });
-    });
-  </script>
-
 
 
   <!--Detalles de los detalles-->
@@ -930,3 +1353,87 @@
   </script>
 
   <!--End Detalles de los detalles-->
+
+
+
+
+  <script>
+    function solonumeros(e) {
+      key = e.keyCode || e.which;
+
+      teclado = String.fromCharCode(key);
+
+      letras = "1234567890";
+
+      especiales = "8-37-38-46";
+
+      teclado_especial = false;
+
+      for (var i in especiales) {
+        if (key == especiales[i]) {
+          teclado_especial = true; break
+        }
+      }
+
+      if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+        return false;
+      }
+
+    }
+
+    function solonumeros2(e) {
+      key = e.keyCode || e.which;
+
+      teclado = String.fromCharCode(key);
+
+      letras = "1234567890-";
+
+      especiales = "8-37-38-46";
+
+      teclado_especial = false;
+
+      for (var i in especiales) {
+        if (key == especiales[i]) {
+          teclado_especial = true; break
+        }
+      }
+
+      if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+        return false;
+      }
+
+    }
+
+
+    /*
+    function puntos(valor){
+      return(valor.toLocaleString('es-CO');)
+    }*/
+
+  </script>
+
+
+
+
+  <script>
+    //Actualizar valor
+    function updateValueInput(input) {
+      input.setAttribute("value", input.value);
+    }
+
+    function updateValueTextarea(textarea) {
+      textarea.textContent = textarea.value;
+    }
+
+    function updateValueSelect(select) {
+      var selectedOption = select.options[select.selectedIndex];
+
+      // Remover el atributo "selected" de todas las opciones
+      for (var i = 0; i < select.options.length; i++) {
+        select.options[i].removeAttribute("selected");
+      }
+
+      // Agregar el atributo "selected" a la opción seleccionada
+      selectedOption.setAttribute("selected", "selected");
+    }
+  </script>
