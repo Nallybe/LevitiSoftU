@@ -139,7 +139,6 @@
                   <label class="form-label" for="categoria">Categoria</label>
                   <select class="form-control form-control-sm" style="border-radius: 0;" id="categoria" onchange="val_categotia()"
                     name="categoria">
-                    <option value=""></option>
                     <option value="1">Accesorios</option>
                     <option value="2">Billeteras</option>
                     <option value="3">Bolsos</option>
@@ -196,7 +195,7 @@
                           <!--Input Insumo-->
                           <label class="form-label" for="idInsumo_R">Insumo</label>
                           <input type="text" class="form-control form-control-sm" list="list_insumos"
-                            style="border-radius: 0;" id="idInsumo_R" name="idInsumo_R" autocomplete="off"
+                            style="border-radius: 0;" id="idInsumo_R" autocomplete="off"
                             oninput="val_ins()">
                           <datalist id="list_insumos">
                             {{#each insumos}}
@@ -212,7 +211,7 @@
                           <!--Input Cantidad-->
                           <label for="cantidad_R">Cantidad</label>
                           <input type="number" class="form-control form-control-sm" style="border-radius: 0;"
-                            id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()">
+                            id="cantidad_R" autocomplete="off" oninput="val_cant()">
                           <div id="mensajeErrorCantidad"></div>
                           <!--End Input Cantidad-->
 

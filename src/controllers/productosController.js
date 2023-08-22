@@ -21,22 +21,22 @@ function productos_listar(req, res) {
                         }
 
                         switch (productos[index].idCategoria) {
-                            case 1:
+                            case '1':
                                 productos[index].categoria = "Accesorios";
                                 break;
-                            case 2:
+                            case '2':
                                 productos[index].categoria = "Billeteras";
                                 break;
-                            case 3:
+                            case '3':
                                 productos[index].categoria = "Bolsos";
                                 break;
-                            case 4:
+                            case '4':
                                 productos[index].categoria = "Chaquetas";
                                 break;
-                            case 5:
+                            case '5':
                                 productos[index].categoria = "Morrales";
                                 break;
-                            case 6:
+                            case '6':
                                 productos[index].categoria = "Zapatos";
                                 break;
                         }
@@ -68,22 +68,22 @@ function productos_detallar(req, res) {
                     }
 
                     switch (producto[index].idCategoria) {
-                        case 1:
+                        case '1':
                             producto[index].categoria = "Accesorios";
                             break;
-                        case 2:
+                        case '2':
                             producto[index].categoria = "Billeteras";
                             break;
-                        case 3:
+                        case '3':
                             producto[index].categoria = "Bolsos";
                             break;
-                        case 4:
+                        case '4':
                             producto[index].categoria = "Chaquetas";
                             break;
-                        case 5:
+                        case '5':
                             producto[index].categoria = "Morrales";
                             break;
-                        case 6:
+                        case '6':
                             producto[index].categoria = "Zapatos";
                             break;
                     }
@@ -157,6 +157,7 @@ function productos_registrar(req, res) {
     var data = req.body;
     var imagen = req.file// Aquí obtienes el archivo de imagen
     console.log(data)
+
 
     const RegistroProducto = {
         idCategoria: data.categoria,
@@ -310,22 +311,22 @@ function productos_editar(req, res) {
                             }
 
                             switch (producto[i].idCategoria) {
-                                case 1:
+                                case '1':
                                     producto[i].c_1 = true;
                                     break;
-                                case 2:
+                                case '2':
                                     producto[i].c_2 = true;
                                     break;
-                                case 3:
+                                case '3':
                                     producto[i].c_3 = true;
                                     break;
-                                case 4:
+                                case '4':
                                     producto[i].c_4 = true;
                                     break;
-                                case 5:
+                                case '5':
                                     producto[i].c_5 = true;
                                     break;
-                                case 6:
+                                case '6':
                                     producto[i].c_6 = true;
                                     break;
                             }
