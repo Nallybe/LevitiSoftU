@@ -91,7 +91,7 @@
     /* Add this style to your existing CSS */
     .table-container {
         max-height: 400px;
-        height: 400px;
+        height: auto;
         /* Adjust this value as per your requirement */
         overflow-y: auto;
         position: relative;
@@ -255,7 +255,7 @@
                             {{#each detallesreparacion}}
                             <tr class="clickable-row"><!---->
                                 <td class="py-2 px-6 text-center">{{cont}}</td>
-                                <td class="p-3 text-center">{{articulo}}</td>
+                                <td class="p-3 text-center"><input type="text" value="{{articulo}}"></td>
                                 {{#if estado1}}
                                 <td class="p-3 text-center">
                                     <button class="btn btn-primary btn-sm" disabled>Iniciado</button>
@@ -340,9 +340,15 @@
                     </table>
                 </div>
                 <!--End Table-->
-                <div class="pagination">
-                    <button class="prev-btn mt-3">Anterior</button>
-                    <button class="next-btn mt-3">Siguiente</button>
+                 <div class="row">
+                  <div class="col-md-5"></div>
+                  <div class="col-md-2">
+                    <div class="pagination">
+                      <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i class="fa-solid fa-arrow-left"></i></button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                  </div>
+                  <div class="col-md-5"></div>
                 </div>
             </div>
         </div>
@@ -502,7 +508,7 @@
 
 
 <script>
-    const itemsPerPage = 4; // Define el número de registros por página
+    const itemsPerPage = 5; // Define el número de registros por página
     let currentPage = 1;
 
     function showPage(page) {

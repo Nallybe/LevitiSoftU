@@ -64,12 +64,10 @@
       margin-right: 10px;
     }
 
-
     /* Add this style to your existing CSS */
     .table-container {
-      width: 100%;
       max-height: 400px;
-      height: 400px;
+      height: auto;
       /* Adjust this value as per your requirement */
       overflow-y: auto;
       position: relative;
@@ -135,12 +133,10 @@
               </div>
             </div>
             <!--End Card #1-->
-
           </div>
           <div class="col-9">
 
             <!--Start Card #2-->
-
             <div class="card" style="border-radius: 0; width: 100%;">
               <div class="card-body">
                 <div class="row">
@@ -208,29 +204,31 @@
                   </table>
                 </div>
                 <!--End Table-->
-                <div class="pagination">
-                  <button type="button" class="prev-btn mt-3">Anterior</button>
-                  <button type="button" class="next-btn mt-3">Siguiente</button>
+                <div class="row">
+                  <div class="col-md-5"></div>
+                  <div class="col-md-2">
+                    <div class="pagination">
+                      <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i
+                          class="fa-solid fa-arrow-left"></i></button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i
+                          class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                  </div>
+                  <div class="col-md-5"></div>
                 </div>
               </div>
             </div>
-
-
             <!--End Card #3-->
 
-            <div class="row">
-              <div class="col-8"></div>
-              <div class="col-4">
-                <!--Start Btn Cancelar-->
-                <a class="btn btn-danger btn-sm" href="/reparaciones" style="margin-top: 1px;"
-                  type="button">Cancelar</a>
-                <!--End Btn Cancelar-->
+            <div style="text-align: right;">
+              <!--Start Btn Cancelar-->
+              <a class="btn btn-danger btn-sm" href="/reparaciones" style="margin-top: 1px;" type="button">Cancelar</a>
+              <!--End Btn Cancelar-->
 
-                <!--Start Btn Registrar-->
-                <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
-                  Registrar Reparacion</button>
-                <!--End Btn Regiastrar-->
-              </div>
+              <!--Start Btn Registrar-->
+              <button type="submit" id="btnRegistrar" class="btn btn-success btn-sm" style="margin-bottom: 1px; ">
+                Registrar Reparacion</button>
+              <!--End Btn Regiastrar-->
             </div>
           </div>
         </div>
@@ -245,6 +243,8 @@
 
   <!--End Form&Card-->
 </body>
+
+
 
 <!--Validacion nav bar-->
 {{#if asignacion}}
@@ -268,6 +268,36 @@
 </script>
 {{/if}}
 
+
+
+
+<!--Rango de fecha-->
+<script>
+  function capturarFechaActualR() {
+    var fechaEntrega = document.getElementById("fechaEntrega");
+
+    var fechaActual = new Date();
+    var fechaMinima = new Date(fechaActual.getTime() + (1 * 24 * 60 * 60 * 1000)); // 1 día en milisegundos
+    var fechaMaxima = new Date(fechaMinima.getTime() + (3 * 30 * 24 * 60 * 60 * 1000)); // 3 meses en milisegundos
+    //Preguntar cuánto tiempo maximo se puede demorar una reparación
+
+    var fechaMinimaString = fechaMinima.toISOString().split("T")[0];
+    var fechaMaximaString = fechaMaxima.toISOString().split("T")[0];
+
+    fechaEntrega.min = fechaMinimaString;
+    fechaEntrega.max = fechaMaximaString;
+
+    console.log("Fecha mínima establecida: " + fechaMinimaString);
+    console.log("Fecha máxima establecida: " + fechaMaximaString);
+  }
+
+  capturarFechaActualR();
+</script>
+<!--End Rango de fecha-->
+
+
+
+<!--Mensajes Error-->
 <script>
   var lastValueI = ""; // Variable para almacenar el último valor válido
 
@@ -347,13 +377,18 @@
     }
   }
 </script>
+<!--End Mensajes Error-->
 
 
 
-<!--Agregar y eliminar insumo-->
+<!--Agregar, Eliminar Artículos y Insumos-->
 <script>
+  //Contadores
   var cont = 0;
   var contGeneral = 0;
+  var contPar = 0;
+
+  //Artículos
   function agregarArticulo() {
     const articulo = {
       articulo: document.getElementById('articulo_R').value,
@@ -368,7 +403,8 @@
           <tr class="clickable-row" id="${cont}">
               <td class="text-center">${cont}</td>
               <td class="text-center">
-                  <input name="articulo" id="articulo_${cont}" value="${articulo.articulo}" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
+                  <input type="hidden" name="articulo" id="articulo_${cont}" value="${articulo.articulo}">
+                  <input name="articulo_a" id="articulo_a_${cont}" oninput="updateValueInput(this)" value="${articulo.articulo}" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
               </td>
               <td class="text-center">
 
@@ -392,8 +428,8 @@
                                 
                         <label class="form-label mt-1" for="descripcion_${cont}">Descripción</label>
                         <textarea class="form-control form-control-sm des" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;" 
-                          id="descripcion_${cont}" name="descripcion"> ${articulo.descripcion}</textarea>
-                                
+                          id="descripcion_${cont}" name="descripcion" oninput="updateValueTextarea(this)">${articulo.descripcion}</textarea>
+              
                       </div>
 
                       <div class="col-md-3">
@@ -412,7 +448,7 @@
                       <div class="col-md-9">
                                 
                         <label class="form-label mt-2" for="observacion_${cont}">Observaciones</label>
-                          <textarea class="form-control form-control-sm ob mb-2"
+                          <textarea class="form-control form-control-sm ob mb-2" oninput="updateValueTextarea(this)"
                             style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 60px;" id="observacion_${cont}"
                             name="observacion">${articulo.observacion}</textarea>
                                 
@@ -425,7 +461,6 @@
         `;
 
       document.getElementById('modales').innerHTML += `
-        <!--Modal Insumos-->
         <div class="modal fade modalP" id="insumos_${cont}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -449,7 +484,7 @@
 
                                   <!--Input Insumo-->
                               <label class="form-label" for="idInsumo">Insumo</label>
-                              <input type="text" class="form-control form-control-sm" list="lis_Insumos" style="border-radius: 0;"
+                              <input type="text" class="form-control form-control-sm" list="lis_Insumos" style="border-radius: 0; width: 100%;"
                                 id="idInsumo_${cont}" autocomplete="off" >
                               <datalist id="lis_Insumos">
                                 {{#each insumos}}
@@ -465,15 +500,13 @@
 
                           <!--Input Cantidad-->
                               <label class="form-label" for="cantidad">Cantidad</label>
-                              <input type="number" class="form-control form-control-sm" style="border-radius: 0;"
-                                id="cantidad_${cont}" autocomplete="off" >
+                              <input type="text" class="form-control form-control-sm" style="border-radius: 0;"
+                                id="cantidad_${cont}" onkeypress="return solonumeros(event)" autocomplete="off" >
                               <!--<div id="mensajeErrorCantidad"></div> oninput="val_cantidad()"-->
                               <!--End Input Cantidad-->
 
                                 </div>
                               </div>
-
-                              
                     
                             </div>
                             <div class="col-md-2">
@@ -506,9 +539,7 @@
                 </div>
             </div>
         </div>
-        <!--End Modal-->
         `;
-
 
       Swal.fire({
         position: 'top-end',
@@ -517,6 +548,7 @@
         showConfirmButton: false,
         timer: 1000
       });
+
 
       // Después de agregar el evento, actualiza la paginación y muestra la última página
       currentPage = Math.ceil(contGeneral / itemsPerPage);
@@ -533,13 +565,13 @@
       //alert("Insumo Agregado");
     } else {
       //alert("Campos obligatorios");
-      Swal.fire({
+      /*Swal.fire({
         position: 'top-end',
         icon: 'warning',
         title: 'Campos Obligatorios',
         showConfirmButton: false,
         timer: 1000
-      });
+      });*/
 
       if (articulo.articulo == "") {
         mensajeErrorArticulo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El artículo es un campo requerido';
@@ -559,7 +591,144 @@
     }
   }
 
+  function eliminarArticulo(id) {
+    const articulo = document.getElementById(id);
+    const idM = "insumos_" + id;
+    const modal = document.getElementById(idM);
+    if (!articulo || !modal) {
+      alert("Error");
+    } else {
+      const padre = articulo.parentNode;
+      const siguienteFila = articulo.nextElementSibling;
 
+      padre.removeChild(articulo);
+
+      if (siguienteFila && siguienteFila.classList.contains("extra-row")) {
+        padre.removeChild(siguienteFila);
+      }
+
+      const padre2 = modal.parentNode;
+      padre2.removeChild(modal);
+
+      contGeneral--;
+      // Después de eliminar el artículo, actualiza la paginación y muestra la página actual
+      currentPage = Math.ceil(contGeneral / itemsPerPage);
+      showPage(currentPage);
+      updatePagination();
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Artículo Eliminado',
+        showConfirmButton: false,
+        timer: 1000
+      });
+    }
+  }
+  //End Artículos
+
+  //Insumos
+  function agregarInsumo(idP) {
+    let part = "idInsumo_" + idP;
+    let part2 = "cantidad_" + idP;
+
+    let arr = "articulo_" + idP;
+
+    let requerido = {
+      idInsumo: document.getElementById(part).value,
+      cantidad: document.getElementById(part2).value,
+      articulo: document.getElementById(arr).value
+    };
+
+    if (requerido.idInsumo != "" && requerido.cantidad != "" && requerido.articulo != "") {
+      const repetido = document.getElementById(requerido.articulo + '_' + requerido.idInsumo + '_cant');
+      let listP = "listaInsumos_" + idP;
+
+      if (repetido != null) {
+        //var total = parseInt(repetido.value) + parseInt(requerido.cantidad);
+        //repetido.value = total;
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'El insumo ya está en la lista',
+          showConfirmButton: false,
+          timer: 2000
+        });
+
+      } else {
+
+        contPar++;
+        let tbTabla = document.getElementById(listP);
+        //alert(tbTabla);
+        tbTabla.innerHTML += `
+         <tr id="insumo_${idP}_${contPar}">
+               <td class="p-3 text-center"></td>
+               <td class="p-3 text-center">
+                   <input name="${requerido.articulo}_idInsumo" style="width: 100%; border: none; text-align: center;" value="${requerido.idInsumo}" readonly>
+               </td>
+               <td class="p-3 text-center">
+                   <input onkeypress="return solonumeros(event)" type="text" name="${requerido.articulo}_cantidad" style="width: 100%; text-align: center;" id="${requerido.articulo}_${requerido.idInsumo}_cant" value="${requerido.cantidad}">
+               </td>
+               <td class="p-3 text-center">
+                 <a class="boton-reparacion" type="button" onclick="eliminarInsumo('${idP}_${contPar}', '${listP}')" style="color: #292b2c;">
+                   <i class="fas fa-trash"></i>
+                 </a>
+               </td>
+             </tr>
+         `;
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'success',
+          title: 'Insumo Agregado',
+          showConfirmButton: false,
+          timer: 1000
+        });
+      }
+
+      //llamar función calcularContTDTable
+      ContTr(listP);
+
+      document.getElementById(part).value = "";
+      document.getElementById(part2).value = "";
+
+    } else {
+      alert('Vacío');
+    }
+  }
+
+  function eliminarInsumo(idEP, TP) {
+    var insE = "insumo_" + idEP;
+    const insumoE = document.getElementById(insE);
+
+    if (!insumoE) {
+      alert("Error");
+    } else {
+      const padre = insumoE.parentNode;
+      padre.removeChild(insumoE);
+
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: 'Insumo Eliminado',
+        showConfirmButton: false,
+        timer: 1000
+      });
+
+      //llamar función calcularContTDTable
+      ContTr(TP);
+    }
+  }
+  //End Insumos
+
+</script>
+<!--End Agregar, Eliminar Artículos y Insumos-->
+
+
+
+<!--ContTr & ExpandButtons-->
+<script>
   // Agrega los Event Listeners para los botones de expansión después de agregar una nueva fila
   function setupExpandButtons() {
     var expandButtons = document.getElementsByClassName("expand-button");
@@ -588,108 +757,6 @@
     }
   }
 
-  function eliminarArticulo(id) {
-    const articulo = document.getElementById(id);
-    if (!articulo) {
-      alert("Error");
-    } else {
-      const padre = articulo.parentNode;
-      const siguienteFila = articulo.nextElementSibling;
-
-      padre.removeChild(articulo);
-      if (siguienteFila && siguienteFila.classList.contains("extra-row")) {
-        padre.removeChild(siguienteFila);
-      }
-
-      contGeneral--;
-      // Después de eliminar el evento, actualiza la paginación y muestra la página actual
-      currentPage = Math.ceil(contGeneral / itemsPerPage);
-      showPage(currentPage);
-      updatePagination();
-
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Artículo Eliminado',
-        showConfirmButton: false,
-        timer: 1000
-      });
-    }
-  }
-
-  var contPar = 0;
-  function agregarInsumo(idP) {
-    let part = "idInsumo_" + idP;
-    let part2 = "cantidad_" + idP;
-
-    let requerido = {
-      idInsumo: document.getElementById(part).value,
-      cantidad: document.getElementById(part2).value
-    };
-
-    if (requerido.participante != "") {
-      let listP = "listaInsumos_" + idP;
-      contPar++;
-      let tbTabla = document.getElementById(listP);
-      //alert(tbTabla);
-      tbTabla.innerHTML += `
-         <tr id="insumo_${idP}_${contPar}">
-               <td class="p-3 text-center"></td>
-               <td class="p-3 text-center">
-                   <input type="hidden" name="articulo_par" value="${idP}">
-                   <input name="idInsumo" style="width: 100%; border: none; text-align: center;" value="${requerido.idInsumo}" readonly>
-               </td>
-               <td class="p-3 text-center">
-                   <input type="number" name="cantidad" style="width: 100%; border: none; text-align: center;" value="${requerido.cantidad}" readonly>
-               </td>
-               <td class="p-3 text-center">
-                 <a class="boton-reparacion" type="button" onclick="eliminarInsumo('${idP}_${contPar}', '${listP}')" style="color: #292b2c;">
-                   <i class="fas fa-trash"></i>
-                 </a>
-               </td>
-             </tr>
-         `;
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Insumo Agregado',
-        showConfirmButton: false,
-        timer: 1000
-      });
-
-      //llamar función calcularContTDTable
-      ContTr(listP);
-
-      document.getElementById(part).value = "";
-      document.getElementById(part2).value = "";
-    } else {
-      alert('Vacío');
-    }
-  }
-
-  function eliminarInsumo(idEP, TP) {
-    var partE = "insumo_" + idEP;
-    const insumoE = document.getElementById(partE);
-
-    if (!insumoE) {
-      alert("Error");
-    } else {
-      const padre = insumoE.parentNode;
-      padre.removeChild(insumoE);
-
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: 'Insumo Eliminado',
-        showConfirmButton: false,
-        timer: 1000
-      });
-
-      //llamar función calcularContTDTable
-      ContTr(TP);
-    }
-  }
-
   //Calcular cont td table
   function ContTr(tbodyId) {
     var tbody = document.getElementById(tbodyId);
@@ -702,37 +769,13 @@
       contador++;
     }
   }
-
 </script>
-<!--End Agregar y eliminar insumo-->
+<!--End ContTr & ExpandButtons-->
 
-<!--Rango de fecha-->
-<script>
-  function capturarFechaActualR() {
-    var fechaEntrega = document.getElementById("fechaEntrega");
 
-    var fechaActual = new Date();
-    var fechaMinima = new Date(fechaActual.getTime() + (1 * 24 * 60 * 60 * 1000)); // 1 día en milisegundos
-    var fechaMaxima = new Date(fechaMinima.getTime() + (3 * 30 * 24 * 60 * 60 * 1000)); // 3 meses en milisegundos
-    //Preguntar cuánto tiempo maximo se puede demorar una reparación
-
-    var fechaMinimaString = fechaMinima.toISOString().split("T")[0];
-    var fechaMaximaString = fechaMaxima.toISOString().split("T")[0];
-
-    fechaEntrega.min = fechaMinimaString;
-    fechaEntrega.max = fechaMaximaString;
-
-    console.log("Fecha mínima establecida: " + fechaMinimaString);
-    console.log("Fecha máxima establecida: " + fechaMaximaString);
-  }
-
-  capturarFechaActualR();
-</script>
-<!--End Rango de fecha-->
 
 <!--Validar Envio-->
 <script>
-
   function validarCampos() {
     var cliente = document.getElementById("idCliente");
     var total = document.getElementById("total");
@@ -755,7 +798,6 @@
 
   }
 
-
   function validarEnvio() {
     var list = document.getElementById('ListaArticulos');
     var cliente = document.getElementById("idCliente");
@@ -764,13 +806,13 @@
 
     if (cliente.value == "" || total.value == "" || fechaEntrega.value == "") {
       //alert('campos obligatorios');
-      Swal.fire({
+      /*Swal.fire({
         position: 'top-end',
         icon: 'warning',
         title: 'Campos Obligatorios',
         showConfirmButton: false,
         timer: 1500
-      });
+      });*/
       validarCampos();
       return false; // Detener el envío del formulario
     }
@@ -794,11 +836,10 @@
 <!--End Validar Envio-->
 
 
-<!--Inicio footer-->
 
+<!--Inicio footer-->
 <!--Fin footer-->
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="assets/js/ValidacionInsumo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
 <!--   Core JS Files   -->
@@ -813,9 +854,11 @@
 <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
 
+
+
 <!--Detalles de los detalles-->
+<!--Desplegar detalle del detalle-->
 <script>
-  // Desplegar detalle del detalle
   document.addEventListener("DOMContentLoaded", function () {
     var expandButtons = document.getElementsByClassName("expand-button");
 
@@ -842,12 +885,14 @@
       });
     }
   });
+  
 
 </script>
+<!--End Desplegar detalle del detalle-->
 
-
+<!--Paginación-->
 <script>
-  const itemsPerPage = 4; // Define el número de registros por página
+  const itemsPerPage = 5; // Define el número de registros por página
   let currentPage = 1;
 
   function showPage(page) {
@@ -917,5 +962,76 @@
   showPage(currentPage);
   updatePagination();
 </script>
-
+<!--End Paginación-->
 <!--End Detalles de los detalles-->
+
+
+
+<!--Validación sólo números-->
+<script>
+  function solonumeros(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "1234567890";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+  function solonumeros2(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "1234567890-";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+</script>
+<!--End validación sólo números-->
+
+
+
+<!--Actualizar Valores-->
+<script>
+  function updateValueInput(input) {
+    input.setAttribute("value", input.value);
+  }
+
+  function updateValueTextarea(textarea) {
+    textarea.textContent = textarea.value;
+  }
+
+  function updateValueSelect(select) {
+    const selectedOption = select.options[select.selectedIndex];
+    select.value = selectedOption.value;
+  }
+</script>
+<!--End Actualizar Valores-->

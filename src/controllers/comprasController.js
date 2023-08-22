@@ -33,8 +33,7 @@ function compras_listar(req, res) {
               compras[index].total = "$ " + compras[index].total.toLocaleString('es-CO');
             }
 
-            let numC = compras.length;
-            res.status(200).render("compras/listar", { compras, numC });
+            res.status(200).render("compras/listar", { compras });
           }
         });
       }
