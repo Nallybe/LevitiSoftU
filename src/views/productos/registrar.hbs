@@ -39,8 +39,8 @@
 
     /* Add this style to your existing CSS */
     .table-container {
-      max-height: 250px;
-      height: 250px;
+      max-height: 300px;
+      height: auto;
       /* Adjust this value as per your requirement */
       overflow-y: auto;
       position: relative;
@@ -84,6 +84,10 @@
       margin-right: 5px;
       width: 15px;
       height: 15px;
+    }
+
+    .btn {
+      border-radius: 8px;
     }
   </style>
 
@@ -137,9 +141,8 @@
 
                   <!--Input Categoria-->
                   <label class="form-label" for="categoria">Categoria</label>
-                  <select class="form-control form-control-sm" style="border-radius: 0;" id="categoria" onchange="val_categotia()"
-                    name="categoria">
-                    <option value=""></option>
+                  <select class="form-control form-control-sm" style="border-radius: 0;" id="categoria"
+                    onchange="val_categotia()" name="categoria">
                     <option value="1">Accesorios</option>
                     <option value="2">Billeteras</option>
                     <option value="3">Bolsos</option>
@@ -162,8 +165,7 @@
                     <img id="imagenMostrada" src="" alt="Imagen del producto">
 
                     <!-- Agregar un botón para permitir seleccionar una nueva imagen -->
-                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning btn-sm"
-                      style="border-radius: 0%;">Seleccionar
+                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning btn-sm">Seleccionar
                       Imagen</button>
 
                   </center>
@@ -196,8 +198,7 @@
                           <!--Input Insumo-->
                           <label class="form-label" for="idInsumo_R">Insumo</label>
                           <input type="text" class="form-control form-control-sm" list="list_insumos"
-                            style="border-radius: 0;" id="idInsumo_R" name="idInsumo_R" autocomplete="off"
-                            oninput="val_ins()">
+                            style="border-radius: 0;" id="idInsumo_R" autocomplete="off" oninput="val_ins()">
                           <datalist id="list_insumos">
                             {{#each insumos}}
                             <option value="{{nombre}}">nombre({{nombre}}) medida({{medida}}) stock({{stock}})</option>
@@ -212,7 +213,7 @@
                           <!--Input Cantidad-->
                           <label for="cantidad_R">Cantidad</label>
                           <input type="number" class="form-control form-control-sm" style="border-radius: 0;"
-                            id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()">
+                            id="cantidad_R" autocomplete="off" oninput="val_cant()">
                           <div id="mensajeErrorCantidad"></div>
                           <!--End Input Cantidad-->
 
@@ -222,7 +223,7 @@
                     <div class="col-md-2">
                       <!--Start Btn Agregar-->
                       <i class="fa-solid fa-circle-plus fa-2x mt-4" style="margin-left: 18%;" type="button"
-                        onclick="agregarInsumo()"></i>
+                        onclick="agregarInsumo()" id="btnAgregarInsumo"></i>
                       <!--End Btn Agregar-->
                     </div>
                   </div>
@@ -244,7 +245,7 @@
                         <tr style="text-align: center;">
                           <th>#</th>
                           <th> Insumo</th>
-                          <th> Cantidad Requerida</th>
+                          <th> Cantidad</th>
                           <th> Funciones </th>
                         </tr>
                       </thead>
@@ -253,26 +254,39 @@
                     </table>
                   </div>
                   <!--End Table-->
+
+                  <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2">
+                      <div class="pagination">
+                        <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i
+                            class="fa-solid fa-arrow-left"></i></button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i
+                            class="fa-solid fa-arrow-right"></i></button>
+                      </div>
+                    </div>
+                    <div class="col-md-5"></div>
+                  </div>
+
+
                 </div>
               </div>
 
 
               <!--End Card #3-->
 
-              <div class="row">
-                <div class="col-7"></div>
-                <div class="col-5">
-                  <!--Start Btn Cancelar-->
-                  <a class="btn btn-danger btn-sm" href="/productos" style="border-radius: 0; margin-top: 1px;"
-                    type="button">Cancelar</a>
-                  <!--End Btn Cancelar-->
-                  <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-                  <button type="submit" class="btn btn-success btn-sm" style="border-radius: 0; margin-bottom: 1px;"
-                    id="btnRegistrar">
-                    Registrar Producto</button>
-                  <!--End Btn Regiastrar-->
-                </div>
+              <div style="text-align: right;">
+                <!--Start Btn Cancelar-->
+                <a class="btn btn-danger btn-sm" href="/productos"
+                  type="button">Cancelar</a>
+                <!--End Btn Cancelar-->
+                <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+                <button type="submit" class="btn btn-success btn-sm"
+                  id="btnRegistrar">
+                  Registrar Producto</button>
+                <!--End Btn Regiastrar-->
               </div>
+
             </div>
           </div>
         </div>
@@ -429,6 +443,7 @@
   <!--Agregar y eliminar insumo-->
   <script>
     var cont = 0;
+    var contGeneral = 0;
     function agregarInsumo() {
       const insumo = {
         idInsumo: document.getElementById('idInsumo_R').value,
@@ -440,6 +455,8 @@
         if (repetido != null) {
           repetido.value = parseInt(repetido.value) + parseInt(insumo.cantidad);
 
+          repetido.setAttribute("value", repetido.value);
+
           Swal.fire({
             position: 'top-end',
             icon: 'success',
@@ -447,17 +464,21 @@
             showConfirmButton: false,
             timer: 1000
           });
+
+          document.getElementById('idInsumo_R').value = null;
+          document.getElementById('cantidad_R').value = null;
         } else {
           cont++;
+          contGeneral++;
 
           document.getElementById('ListaInsumosReq').innerHTML += `
-          <tr id="${cont}"style="text-align: center">
+          <tr id="${cont}" class="insumo_tr" style="text-align: center">
               <td class="text-center">${cont}</td>
               <td class="text-center">
-                  <input id="Id_${insumo.idInsumo}" name="idInsumo" value="${insumo.idInsumo}" style="text-align: center; width: 100px;  border: none;" readonly>
+                  <input id="Id_${insumo.idInsumo}" name="idInsumo" value="${insumo.idInsumo}" style="text-align: center; width: auto;  border: none;" readonly>
               </td>
               <td class="text-center">
-                  <input class="w-4/5" style="text-align: center; width: 100px;  border: none;" id="cant_${insumo.idInsumo}" name="cantidad_n" value="${insumo.cantidad}" readonly>
+                  <input style="text-align: center; width: 100px;" id="cant_${insumo.idInsumo}" name="cantidad_n" value="${insumo.cantidad}" oninput="updateValueInput(this)">
               </td>
               <td class="text-center">
                   <a href="#" onclick="eliminarInsumo(${cont})" style="color: #292b2c;">
@@ -474,9 +495,16 @@
             timer: 1000
           });
 
+          // Después de agregar el evento, actualiza la paginación y muestra la última página
+          currentPage = Math.ceil(contGeneral / itemsPerPage);
+          showPage(currentPage);
+          updatePagination();
+
+
+          document.getElementById('idInsumo_R').value = null;
+          document.getElementById('cantidad_R').value = null;
+
         }
-        document.getElementById('idInsumo_R').value = null;
-        document.getElementById('cantidad_R').value = null;
 
         //alert("Insumo Agregado");
       } else {
@@ -517,6 +545,12 @@
           showConfirmButton: false,
           timer: 1000
         });
+
+        contGeneral--;
+        // Después de eliminar el artículo, actualiza la paginación y muestra la página actual
+        currentPage = Math.ceil(contGeneral / itemsPerPage);
+        showPage(currentPage);
+        updatePagination();
       }
     }
   </script>
@@ -639,7 +673,6 @@
 
   <!--Fin footer-->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  <script src="assets/js/ValidacionInsumo.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
     crossorigin="anonymous"></script>
@@ -658,14 +691,85 @@
   <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
 
 
+  <!--Paginación-->
   <script>
-    //SOLO NUMEROS
-    $(function () {
-      $(".validar").keydown(function (event) {
-        //alert(event.keyCode);
-        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
-          return false;
+    const itemsPerPage = 4; // Define el número de registros por página
+    let currentPage = 1;
+
+    function showPage(page) {
+      const rows = document.querySelectorAll('.insumo_tr');
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      rows.forEach((row, index) => {
+        if (index >= startIndex && index < endIndex) {
+          row.style.display = 'table-row';
+          row.setAttribute('data-visible', 'true');
+        } else {
+          row.style.display = 'none';
+          row.setAttribute('data-visible', 'false');
         }
       });
+    }
+
+    function updatePagination() {
+      const rows = document.querySelectorAll('.insumo_tr');
+      const totalRows = rows.length;
+      const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+      if (currentPage === 1) {
+        document.querySelector('.prev-btn').disabled = true;
+      } else {
+        document.querySelector('.prev-btn').disabled = false;
+      }
+
+      if (currentPage === totalPages) {
+        document.querySelector('.next-btn').disabled = true;
+      } else {
+        document.querySelector('.next-btn').disabled = false;
+      }
+    }
+
+    document.querySelector('.prev-btn').addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+        updatePagination();
+      }
     });
+
+    document.querySelector('.next-btn').addEventListener('click', () => {
+      const rows = document.querySelectorAll('.insumo_tr');
+      const totalRows = rows.length;
+      const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+      if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+        updatePagination();
+      }
+    });
+
+    // Mostrar la primera página al cargar la tabla
+    showPage(currentPage);
+    updatePagination();
   </script>
+  <!--End Paginación-->
+
+
+  <!--Actualizar Valores-->
+  <script>
+    function updateValueInput(input) {
+      input.setAttribute("value", input.value);
+    }
+
+    function updateValueTextarea(textarea) {
+      textarea.textContent = textarea.value;
+    }
+
+    function updateValueSelect(select) {
+      const selectedOption = select.options[select.selectedIndex];
+      select.value = selectedOption.value;
+    }
+  </script>
+  <!--End Actualizar Valores-->

@@ -24,7 +24,7 @@ function usuarios_listar(req, res) {
               }
               cont += 1;
             }
-            conn.query('SELECT * FROM users_info', (err, info) => {
+            conn.query('SELECT * FROM users_info', async (err, info) => {
               if (err) {
                 return res.status(500).json(err);
               } else {
@@ -32,15 +32,96 @@ function usuarios_listar(req, res) {
                   usuarios[index].documento;
                   usuarios[index].nombre;
                   usuarios[index].telefono;
+                  usuarios[index].idInfo;
 
                   for (i in info) {
                     if (usuarios[index].idAccess == info[i].idAccess) {
                       usuarios[index].documento = info[i].documento;
                       usuarios[index].nombre = info[i].nombre;
                       usuarios[index].telefono = info[i].telefono;
+                      usuarios[index].idInfo = info[i].idInfo;
                     }
                   }
                 }
+
+
+
+                //Determinar si el usuario se puede eliminar
+                const ventas = await new Promise((resolve, reject) => {
+                  conn.query("SELECT * FROM tbl_ventas", (err, result) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve(result);
+                    }
+                  });
+                });
+                const reparaciones = await new Promise((resolve, reject) => {
+                  conn.query("SELECT * FROM tbl_reparaciones", (err, result) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve(result);
+                    }
+                  });
+                });
+
+                const ordenes = await new Promise((resolve, reject) => {
+                  conn.query("SELECT * FROM tbl_ordenes_produccion", (err, result) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve(result);
+                    }
+                  });
+                });
+
+                const ordenes_p = await new Promise((resolve, reject) => {
+                  conn.query("SELECT * FROM tbl_ordenes_produccion_detalles_participes", (err, result) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve(result);
+                    }
+                  });
+                });
+
+
+                for(index in usuarios){
+                  var eliminar = true;
+
+                  for (i1 in ventas) {
+                    if (usuarios[index].idInfo == ventas[i1].idInfo) {
+                      eliminar = false;
+                    }
+                  }
+
+                  for (i2 in reparaciones) {
+                    if (usuarios[index].idInfo == reparaciones[i2].idInfo) {
+                      eliminar = false;
+                    }
+                  }
+
+                  for (i3 in ordenes) {
+                    if (usuarios[index].idInfo == ordenes[i3].idInfo) {
+                      eliminar = false;
+                    }
+                  }
+
+                  for (i4 in ordenes_p) {
+                    if (usuarios[index].idInfo == ordenes_p[i4].idInfo) {
+                      eliminar = false;
+                    }
+                  }
+
+                  if (eliminar == true) {
+                    usuarios[index].eliminar = true;
+                  }
+
+                }
+
+                console.log(usuarios)
+
                 res.render('usuarios/listar', { usuarios });
               }
             });
@@ -145,7 +226,7 @@ function usuarios_editar(req, res) {
                   if (err) {
                     return res.status(500).json(err);
                   } else {
-                    conn.query('SELECT * FROM tbl_roles WHERE estado = "Activo"', (err, roles) => {
+                    conn.query('SELECT * FROM tbl_roles WHERE estado = "A"', (err, roles) => {
                       if (err) {
                         return res.status(500).json(err);
                       } else {
