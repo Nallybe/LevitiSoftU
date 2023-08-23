@@ -54,6 +54,10 @@
         margin-right: 10px;
     }
 
+    .pen-2:hover {
+        color: white;
+    }
+
     .btn {
         border-radius: 8px;
     }
@@ -110,9 +114,8 @@
                 <tr>
                     <td class="py-3 px-6 text-center">{{cont}}</td>
                     <td class="p-3 text-center">
-                        <button type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus"
-                            data-bs-custom-class="custom-popover" title="<b>Cliente Reparación {{cont}}</b>"
-                            data-bs-content="
+                        <button type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus" 
+                            data-bs-custom-class="custom-popover" title="<b>Cliente Reparación {{cont}}</b>" data-bs-content="
                             <div class='row'>
                                 <div class='col-md-3'>
                                     <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
@@ -123,8 +126,7 @@
                                     <b>Correo:</b> {{userEmail}}<br>
                                 </div>
                             </div>
-                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user"
-                                    style="color:black"></i></span>
+                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user"                               style="color:black"></i></span>
                         </button>
                     </td>
                     <td class="p-3 text-center">{{numPR}}</td>
@@ -174,54 +176,25 @@
 
                     {{#if estado3}}
                     <td class="p-3 text-center">
-                        <button class="btn btn-secondary btn-sm" data-toggle="modal" data-toggle="modal"
-                            data-bs-target="#id{{idReparacion}}">
+                        <!--<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                            data-bs-target="#id_{{idReparacion}}">
+                            
+                        </button>-->
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal_{{idReparacion}}">
                             Terminado <i class="fas fa-pen pen-2"></i>
                         </button>
+
+
                     </td>
-
-                    <!-- Modal -->
-                    <div class="modal fade" id="id{{idReparacion}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog">
-                            <form action="/reparaciones_estadoTyE" method="POST" class="mx-2">
-                                <input type="hidden" name="idReparacion" value="{{idReparacion}}">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Cambiar Estado
-                                            Reparación {{idReparacion}}</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <div class="row">
-                                            <div class="col-mb-2"></div>
-                                            <div class="col-mb-8">
-                                                <p>¿Ya le entregaste el/los artículo/s a su respectivo
-                                                    cliente?<br><br>
-                                                    ¡Cámbia el estado de la reparación <br>a "Terminado y
-                                                    Entregado"!</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Cancelar</button>
-                                        <button type="submit" class="btn btn-primary">Cambiar Estado</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                    <!--End Modal-->
 
                     <td class="p-3 px-1 ">
                         <a href="/reparaciones/{{idReparacion}}" style="color: #292b2c; " class="boton-reparacion">
                             <i type="button" class="fa-sharp fa-solid fa-eye"></i>
                         </a>
                     </td>
+
                     {{/if}}
 
                     {{#if estado4}}
@@ -240,6 +213,98 @@
         </table>
     </div>
 </center>
+
+
+
+
+<div id="modales">
+    {{#each reparaciones}}
+    {{#if estado3}}
+
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal_{{idReparacion}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="/reparaciones_estadoTyE" method="POST" class="mx-2">
+                <input type="hidden" name="idReparacion" value="{{idReparacion}}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="d{{idReparacion}}">Cambiar Estado a Terminado y Entregado</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10">
+                               <p style="text-align: center;">
+                                ¡Cámbia el estado de la reparación a<br> "Terminado y
+                                    Entregado"!</p>
+                                
+                            </div>
+                            <div class="col md-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Cambiar Estado</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--End Modal-->
+    {{/if}}
+    {{/each}}
+</div>
+
+
+
+<!--
+<div id="modales">
+    {{#each reparaciones}}
+    {{#if estado3}}
+    <!-- Modal --
+    <div class="modal fade" id="id_{{idReparacion}}" tabindex="-1" aria-labelledby="d{{idReparacion}}"
+        aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="/reparaciones_estadoTyE" method="POST" class="mx-2">
+                <input type="hidden" name="idReparacion" value="{{idReparacion}}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="d{{idReparacion}}">Cambiar Estado
+                            Reparación {{idReparacion}}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-mb-2"></div>
+                            <div class="col-mb-8">
+                                <p>¿Ya le entregaste el/los artículo/s a su respectivo
+                                    cliente?<br><br>
+                                    ¡Cámbia el estado de la reparación <br>a "Terminado y
+                                    Entregado"!</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Cambiar Estado</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <!--End Modal--
+    {{/if}}
+    {{/each}}
+</div>
+-->
 
 </body>
 <!--Validacion nav bar-->

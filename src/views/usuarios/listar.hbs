@@ -85,13 +85,13 @@
 
                     {{#if estado1}}
                     <td class="p-3 text-center">
-                        <button class="btn btn-primary" disabled>Activo</button>
+                        <button class="btn btn-primary btn-sm" disabled>Activo</button>
                     </td>
                     <!--Activo-->
                     {{/if}}
                     {{#if estado2}}
                     <td class="p-3 text-center">
-                        <button class="btn btn-secondary" disabled>Inactivo</button>
+                        <button class="btn btn-secondary btn-sm" disabled>Inactivo</button>
                     </td>
                     <!--Inactivo-->
                     {{/if}}
@@ -99,13 +99,18 @@
                         <a href="/usuarios_editar/{{idAccess}}" style="color: #292b2c; " class="boton-user">
                             <i type="button" class="fa-sharp fa-solid fa-pen"></i>
                         </a>
-                        {{!-- <form action="/usuarios_eliminar" method="POST" class="boton-user"
+
+{{!--
+                        {{#if eliminar}}
+                        <form action="/usuarios_eliminar" method="POST" class="boton-user"
                             id="FormEliminarUsario{{idAccess}}">
                             <input type="hidden" value="{{idAccess}}" name="idAccess">
                             <a type="button" onclick="Eliminar({{idAccess}})"><i class="fa fa-trash"></i></a>
-                        </form> --}}
+                        </form>
+                        {{/if}}
+
                     </td>
-                </tr>
+                </tr>--}}
                 {{/each}}
             </tbody>
         </table>

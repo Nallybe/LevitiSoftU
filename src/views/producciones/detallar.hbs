@@ -94,7 +94,7 @@
     /* Add this style to your existing CSS */
     .table-container {
         max-height: 400px;
-        height: 400px;
+        height: auto;
         /* Adjust this value as per your requirement */
         overflow-y: auto;
         position: relative;
@@ -370,9 +370,17 @@
                     </table>
                 </div>
                 <!--End Table-->
-                <div class="pagination">
-                    <button class="prev-btn mt-3">Anterior</button>
-                    <button class="next-btn mt-3">Siguiente</button>
+                <div class="row">
+                  <div class="col-md-5"></div>
+                  <div class="col-md-2">
+                    <div class="pagination">
+                      <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i
+                          class="fa-solid fa-arrow-left"></i></button>
+                      <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i
+                          class="fa-solid fa-arrow-right"></i></button>
+                    </div>
+                  </div>
+                  <div class="col-md-5"></div>
                 </div>
             </div>
         </div>
@@ -415,7 +423,7 @@
                                         </div>
                                         <div class='col-md-8'>
                                             <b>Nombre:</b> {{this.userName}}<br>
-                                            <b>Teléfono:</b> {{this.userTel}}<br>
+                                            <b>Teléfono:</b> {{this.userTell}}<br>
                                             <b>Correo:</b> {{this.userEmail}}<br>
                                         </div>
                                     </div>
