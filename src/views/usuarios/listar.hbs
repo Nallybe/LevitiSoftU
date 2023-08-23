@@ -52,8 +52,7 @@
             </div>
             <div class="col-md-5"></div>
             <div class="col-md-3">
-                <a href="/usuarios_registrar" class="btn btn-success"><i
-                        class="fa-solid fa-circle-plus"></i>
+                <a href="/usuarios_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
                     Registrar Usuario</a>
             </div>
         </div>
@@ -108,11 +107,15 @@
                         <a href="/usuarios_editar/{{idAccess}}" style="color: #292b2c; " class="boton-user">
                             <i type="button" class="fa-sharp fa-solid fa-pen"></i>
                         </a>
-                        {{!-- <form action="/usuarios_eliminar" method="POST" class="boton-user"
+
+                        {{#if eliminar}}
+                        <form action="/usuarios_eliminar" method="POST" class="boton-user"
                             id="FormEliminarUsario{{idAccess}}">
                             <input type="hidden" value="{{idAccess}}" name="idAccess">
                             <a type="button" onclick="Eliminar({{idAccess}})"><i class="fa fa-trash"></i></a>
-                        </form> --}}
+                        </form>
+                        {{/if}}
+
                     </td>
                 </tr>
                 {{/each}}

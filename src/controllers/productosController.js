@@ -7,7 +7,7 @@ function productos_listar(req, res) {
             return res.status(500).json(err);
         } else {
             // Consultar los productos en la base de datos
-            conn.query('SELECT * FROM tbl_productos', (err, productos) => {
+            conn.query('SELECT * FROM tbl_productos', async (err, productos) => {
                 if (err) {
                     // Si hay un error al consultar las productos, enviar una respuesta con el error
                     return res.status(500).json(err);
@@ -21,28 +21,56 @@ function productos_listar(req, res) {
                         }
 
                         switch (productos[index].idCategoria) {
-                            case '1':
-                                productos[index].categoria = "Accesorios";
+                            case 1:
+                                productos[index].idCategoria = "Accesorios";
                                 break;
-                            case '2':
-                                productos[index].categoria = "Billeteras";
+                            case 2:
+                                productos[index].idCategoria = "Billeteras";
                                 break;
-                            case '3':
-                                productos[index].categoria = "Bolsos";
+                            case 3:
+                                productos[index].idCategoria = "Bolsos";
                                 break;
-                            case '4':
-                                productos[index].categoria = "Chaquetas";
+                            case 4:
+                                productos[index].idCategoria = "Chaquetas";
                                 break;
-                            case '5':
-                                productos[index].categoria = "Morrales";
+                            case 5:
+                                productos[index].idCategoria = "Morrales";
                                 break;
-                            case '6':
-                                productos[index].categoria = "Zapatos";
+                            case 6:
+                                productos[index].idCategoria = "Zapatos";
                                 break;
                         }
                         // Parsear precio
                         productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
                     }
+
+
+                    const ordenes = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_ordenes_produccion", (err, result) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(result);
+                            }
+                        });
+                    });
+
+
+                    for (index in productos) {
+                        var eliminar = true;
+
+                        for (i in ordenes) {
+                            if (productos[index].idProducto == ordenes[i].idProducto) {
+                                eliminar = false;
+                            }
+                        }
+
+                        if (eliminar == true) {
+                            productos[index].eliminar = true;
+                        }
+                    }
+
+
                     res.render('productos/listar', { productos });
                 }
             });
@@ -68,22 +96,22 @@ function productos_detallar(req, res) {
                     }
 
                     switch (producto[index].idCategoria) {
-                        case '1':
+                        case 1:
                             producto[index].categoria = "Accesorios";
                             break;
-                        case '2':
+                        case 2:
                             producto[index].categoria = "Billeteras";
                             break;
-                        case '3':
+                        case 3:
                             producto[index].categoria = "Bolsos";
                             break;
-                        case '4':
+                        case 4:
                             producto[index].categoria = "Chaquetas";
                             break;
-                        case '5':
+                        case 5:
                             producto[index].categoria = "Morrales";
                             break;
-                        case '6':
+                        case 6:
                             producto[index].categoria = "Zapatos";
                             break;
                     }
@@ -107,7 +135,7 @@ function productos_detallar(req, res) {
                                         if (insumos[i].idInsumo == detallesproducto[index].idInsumo) {
                                             detallesproducto[index].nombreI = insumos[i].nombre;
                                             detallesproducto[index].medidaI = insumos[i].medida;
-                                            detallesproducto[index].cantidadI = insumos[i].cantidad;
+                                            detallesproducto[index].cantidadI = insumos[i].stock;
                                             detallesproducto[index].estadoI = insumos[i].estado;
                                         }
                                     }
@@ -311,22 +339,22 @@ function productos_editar(req, res) {
                             }
 
                             switch (producto[i].idCategoria) {
-                                case '1':
+                                case 1:
                                     producto[i].c_1 = true;
                                     break;
-                                case '2':
+                                case 2:
                                     producto[i].c_2 = true;
                                     break;
-                                case '3':
+                                case 3:
                                     producto[i].c_3 = true;
                                     break;
-                                case '4':
+                                case 4:
                                     producto[i].c_4 = true;
                                     break;
-                                case '5':
+                                case 5:
                                     producto[i].c_5 = true;
                                     break;
-                                case '6':
+                                case 6:
                                     producto[i].c_6 = true;
                                     break;
                             }

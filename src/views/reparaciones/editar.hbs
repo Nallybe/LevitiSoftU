@@ -891,13 +891,13 @@
         //alert("Insumo Agregado");
       } else {
         //alert("Campos obligatorios");
-        Swal.fire({
+       /* Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Campos Obligatorios',
           showConfirmButton: false,
           timer: 1000
-        });
+        });*/
 
         if (articulo.articulo == "") {
           mensajeErrorArticulo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El artículo es un campo requerido';
@@ -1185,13 +1185,13 @@
 
       if (/*cliente.value == "" ||*/total.value == "" || fechaEntrega.value == "") {
         //alert('campos obligatorios');
-        Swal.fire({
+        /*Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Campos Obligatorios',
           showConfirmButton: false,
           timer: 1500
-        });
+        });*/
         validarCampos();
         return false; // Detener el envío del formulario
       }
