@@ -32,11 +32,22 @@ app.use(bodyParser.json());
 const helpers = {
     toJson: function (obj) {
         return JSON.stringify(obj);
+    },
+    range: function (start, end) {
+        const result = [];
+        for (let i = start; i <= end; i++) {
+            result.push(i);
+        }
+        return result;
+    },
+    equals: function (val1, val2) {
+        return val1 === val2;
     }
 };
 
+
 // Motor de plantilla
-hbs.registerPartials(__dirname + '/views/partials', function (err) {});
+hbs.registerPartials(__dirname + '/views/partials', function (err) { });
 app.set('view engine', 'hbs');
 app.engine('.hbs', engine({
     extname: '.hbs',
@@ -82,6 +93,7 @@ const checkSession = (req, res, next) => {
         // Si hay una sesión activa, continuar con la siguiente ruta
         res.locals.name = req.session.name;
         res.locals.asignacion = req.session.asignacion;
+        res.locals.roles = req.session.roles;
         next();
     } else {
         // Si no hay una sesión activa, redireccionar al login
@@ -101,8 +113,53 @@ const tienePermisos = (session) => {
 };
 
 app.get('/dashboard', checkSession, (req, res) => {
-    res.render('dashboard');
+    req.getConnection((err, conn) => {
+        if (err) {
+            return res.status(500).json(err);
+        } else {
+            // Obtener datos de ventas
+            conn.query(`SELECT MONTH(fecha) AS mes, COUNT(*) AS cantidad_registros
+                        FROM tbl_ventas
+                        GROUP BY MONTH(fecha)
+                        ORDER BY mes;
+            `, (err, ventas) => {
+                if (err) {
+                    return res.status(500).json(err);
+                } else {
+                    // Obtener datos de compras
+                    conn.query(`SELECT MONTH(fechaRegistro) AS mes, COUNT(*) AS cantidad_registros
+                    FROM tbl_compras
+                    WHERE estado = 'A'
+                    GROUP BY MONTH(fechaRegistro)
+                    ORDER BY mes;
+                    
+                    `, (err, compras) => {
+                        if (err) {
+                            return res.status(500).json(err);
+                        } else {
+                            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                            const currentDate = new Date();
+                            const currentMonth = currentDate.getMonth();
+
+                            const ventasData = Array.from({ length: currentMonth + 1 }, (_, i) => {
+                                const ventaMes = ventas.find(venta => venta.mes === (i + 1));
+                                return ventaMes ? ventaMes.cantidad_registros : 0;
+                            });
+
+                            const comprasData = Array.from({ length: currentMonth + 1 }, (_, i) => {
+                                const compraMes = compras.find(compra => compra.mes === (i + 1));
+                                return compraMes ? compraMes.cantidad_registros : 0;
+                            }); 
+
+                            res.render('dashboard', { labels: months.slice(0, currentMonth + 1), ventasData, comprasData });
+                        }
+                    });
+                }
+            });
+        }
+    });
 });
+
 
 app.get('/home', (req, res) => {
     // Obtener la conexión a la base de datos
@@ -138,38 +195,52 @@ app.get('/home', (req, res) => {
 })
 
 app.get('/ProductosH', (req, res) => {
-
     // Obtener la conexión a la base de datos
     req.getConnection((err, conn) => {
         if (err) {
             // Si hay un error al obtener la conexión, enviar una respuesta con el error
             return res.status(500).json(err);
         } else {
-            // Consultar los productos en la base de datos
-            conn.query('SELECT p.nombre, p.descripcion, p.imagen, p.precio, p.stock, c.nombre AS nombre_categoria FROM tbl_productos p INNER JOIN tbl_categoria c ON p.idCategoria = c.idCategoria;', (err, productos) => {
+            // Obtener la página actual desde la URL o de alguna otra forma
+            const currentPage = req.query.page || 1;
+            const productsPerPage = 6; // Número de productos por página
+
+            // Calcular el desplazamiento para la consulta LIMIT
+            const offset = (currentPage - 1) * productsPerPage;
+
+            // Consultar el total de productos para calcular el número total de páginas
+            conn.query('SELECT COUNT(*) AS total FROM tbl_productos', (err, totalResult) => {
                 if (err) {
-                    // Si hay un error al consultar las productos, enviar una respuesta con el error
+                    // Si hay un error al consultar el total de productos, enviar una respuesta con el error
                     return res.status(500).json(err);
                 } else {
-                    for (let index in productos) {
-                        // Parsear estado
-                        if (productos[index].estado == 'A') {
-                            productos[index].estado1 = true;
+                    const totalProducts = totalResult[0].total;
+
+                    // Consultar los productos en la base de datos con paginación
+                    conn.query(`
+                        SELECT p.nombre, p.descripcion, p.imagen, p.precio, p.stock, c.nombre AS nombre_categoria
+                        FROM tbl_productos p
+                        INNER JOIN tbl_categoria c ON p.idCategoria = c.idCategoria
+                        LIMIT ${offset}, ${productsPerPage}
+                    `, (err, productos) => {
+                        if (err) {
+                            // Si hay un error al consultar los productos, enviar una respuesta con el error
+                            return res.status(500).json(err);
                         } else {
-                            productos[index].estado2 = true;
+                            // Renderizar la plantilla 'ProductosH' y enviar los datos a la vista
+                            res.render('ProductosH', {
+                                productos: productos,
+                                currentPage: currentPage,
+                                totalPages: Math.ceil(totalProducts / productsPerPage)
+                            });
                         }
-
-                        // Parsear precio
-                        productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
-
-                    }
-                    // Renderizar la plantilla 'productos/listar' y enviar los datos a la vista
-                    res.render('ProductosH', { productos });
+                    });
                 }
             });
         }
     });
-})
+});
+
 
 app.get('/ProduZapatos', (req, res) => {
 

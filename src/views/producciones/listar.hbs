@@ -73,22 +73,16 @@
 <!--Barra de navegación-->
 <br><br><br>
 <center>
-    <div class="container-fluid mb-5">
+    <div class="container mb-5">
         <div class="row">
             <div class="col-md-4">
-                <div class="row" style="margin-left: 8px;">
-                    <div class="col-md-8 col-9">
-                        <input id="buscar-input"
-                            style="height: 100%; border-radius: 0; margin-top: 4px; width: 100%; margin-right: 0;"
-                            class="form-control me-2" type="search" placeholder="Buscar Producción" aria-label="Search"
-                            oninput="filtrarTabla()">
-                    </div>
-                    <div class="col-md-2 col-3 pt-2">
-                        <button class="btn btn-outline-success" type="submit"
-                            style="height: 100%; border-radius: 0; width: 100%; padding: 0;" onclick="filtrarTabla()">
-                            <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
-                        </button>
-                    </div>
+                <div class="input-group">
+                    <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
+                        placeholder="Buscar producción" aria-label="Search" oninput="filtrarTabla()">
+                    <button type="submit" class="btn"
+                        style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
+                        <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
+                    </button>
                 </div>
             </div>
             <div class="col-md-5"></div>
@@ -97,8 +91,6 @@
                     Registrar Producción</a>
             </div>
         </div>
-
-        <br>
         <table class="table table-hover" style="text-align:center;" id="tabla-producciones">
             <thead style="background-color: #282d32; color:white;">
                 <tr>
@@ -183,7 +175,8 @@
                     {{/if}}
                     {{#if estado2}}
                     <td class="p-3 text-center">
-                        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#Proceso" disabled>En
+                        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#Proceso"
+                            disabled>En
                             Proceso</button>
                     </td>
                     <td class="p-3 px-1 flex">
@@ -204,7 +197,8 @@
                     {{/if}}
                     {{#if estado3}}
                     <td class="p-3 text-center">
-                        <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#Terminado" disabled>
+                        <button class="btn btn-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#Terminado"
+                            disabled>
                             Terminado
                         </button>
                     </td>

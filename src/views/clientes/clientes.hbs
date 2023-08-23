@@ -39,17 +39,13 @@
       <!--Start Botones sobre la tabla-->
       <div class="row">
         <div class="col-md-4">
-          <div class="row">
-            <div class="col-9">
-              <input id="buscar-input" style=" border-radius: 0; " class="form-control " type="search"
-                placeholder="Buscar Documento" aria-label="Search" oninput="filtrarTabla()">
-            </div>
-            <div class="col-3 ">
-              <button class="btn btn-outline-success" type="submit" style=" border-radius: 0; "
-                onclick="filtrarTabla()">
-                <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
-              </button>
-            </div>
+          <div class="input-group">
+            <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
+              placeholder="Buscar cliente" aria-label="Search" oninput="filtrarTabla()">
+            <button type="submit" class="btn"
+              style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
+              <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
+            </button>
           </div>
         </div>
         <div class="col-md-5">
@@ -63,7 +59,6 @@
         </div>
       </div>
       <!--End Botones sobre la tabla-->
-      <br>
       <!--Start Table-->
       <table class="table" id="tabla-clientes">
         <thead class="table" style="background-color: #282d32; color:white;">

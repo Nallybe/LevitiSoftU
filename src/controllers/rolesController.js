@@ -6,10 +6,10 @@ function listar(req, res) {
         res.json(err);
       }
 
-       // Reemplazar los valores 'A' por 'Activo' y 'I' por 'Inactivo' en los resultados
-       roles.forEach(rol => {
+      // Reemplazar los valores 'A' por 'Activo' y 'I' por 'Inactivo' en los resultados
+      roles.forEach(rol => {
         rol.estado = rol.estado === 'A' ? 'Activo' : 'Inactivo';
-    });
+      });
       res.render('roles/roles', { roles });
     });
   });
@@ -79,22 +79,21 @@ function registrar(req, res) {
                     return;
                   } else {
                     console.log("Asignacion guardada");
-                    var mensaje = "Registro éxitoso"
-                    res.redirect("/roles?alert=success");
+
                   }
 
                 }
               );
             });
           }
+          res.redirect("/roles?alert=success");
         }
 
       }
     );
   });
-
-  
 }
+
 function editar(req, res) {
   const idRoles = req.params.idRoles;
 
@@ -112,20 +111,20 @@ function editar(req, res) {
         if (err) {
           res.json(err);
         }
-        
-        for (index in permisos){
-          if(permisos[index].asignado==1){
+
+        for (index in permisos) {
+          if (permisos[index].asignado == 1) {
             permisos[index].idRoles = idRoles;
           }
-          
+
         }
-        
+
 
         res.render('roles/EditarRol', { roles, permisos });
         //console.log(permisos);
       });
-      
-      
+
+
     });
   });
 }
@@ -137,7 +136,7 @@ function actualizar(req, res) {
   const idRoles = req.params.idRoles;
   const data = req.body;
   console.log(data);
-    const roles = {
+  const roles = {
     nombreRoles: data.nombreRol,
     estado: data.estadoRol,
   }
@@ -154,7 +153,7 @@ function actualizar(req, res) {
         console.log("Se actualizaron los datos de rol")
         console.log()
         if (data.idSeleccionado) {
-          
+
           const idPermisos = data.idSeleccionado.split(','); // Convierte la cadena de entrada en un array de valores
           const estado = "Activo";
           for (let i = 0; i < idPermisos.length; i++) {
@@ -188,7 +187,7 @@ function actualizar(req, res) {
       res.redirect('/roles');
     });
 
-  }); 
+  });
 }
 
 
@@ -210,19 +209,19 @@ function eliminarAsignacion(req, res) {
   const idRoles = req.body.idRoles;
   const idPermisos = req.body.idPermisos;
   console.log(idRoles)
-  
-    req.getConnection((err, conn) => {
-      conn.query('DELETE FROM tbl_asignacion WHERE idRoles = ? AND idPermisos = ?', [idRoles, idPermisos], (err, rows) => {
-        if (err) {
-            console.error('Error al eliminar los datos: ', err);
-            return;
-          }else
-          console.log("Se eliminaron los datos")
-          
-          res.redirect('/EditarRol/' + idRoles);
-      });
-    })
-} 
+
+  req.getConnection((err, conn) => {
+    conn.query('DELETE FROM tbl_asignacion WHERE idRoles = ? AND idPermisos = ?', [idRoles, idPermisos], (err, rows) => {
+      if (err) {
+        console.error('Error al eliminar los datos: ', err);
+        return;
+      } else
+        console.log("Se eliminaron los datos")
+
+      res.redirect('/EditarRol/' + idRoles);
+    });
+  })
+}
 
 
 

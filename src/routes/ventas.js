@@ -9,6 +9,7 @@ const checkSession = (req, res, next) => {
         // Si hay una sesión activa, continuar con la siguiente ruta
         res.locals.name = req.session.name;
         res.locals.asignacion = req.session.asignacion;
+        res.locals.rol = req.session.roles;
         next();
     } else {
         // Si no hay una sesión activa, redireccionar al login

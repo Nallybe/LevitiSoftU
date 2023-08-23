@@ -32,6 +32,5 @@ router.get('/insumos', checkSession, insumosController.listar);
 router.post('/insumos', checkSession, insumosController.registrar);
 router.get('/EditarInsumo/:idInsumo', checkSession, insumosController.editar);
 router.post('/EditarInsumo/:idInsumo', checkSession, insumosController.actualizar);
-router.post('/EliminarInsumo', checkSession, insumosController.eliminar);
 
 module.exports = router;

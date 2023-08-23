@@ -30,6 +30,17 @@
         a {
             text-decoration: none;
         }
+
+        /* Estilo para el botón de la página activa */
+        .page-link.active {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .selected-category {
+            background-color: black;
+            color: white;
+        }
     </style>
 
     <section class="py-3">
@@ -45,14 +56,14 @@
         <div class="container p-0">
             <div class="row">
                 <!-- TEXTO ADICIONAL -->
-                <div class="col-lg-4 col-md-4">
+                <div class="col-lg-4 col-md-4 categoria">
                     <h5 class="text-uppercase mb-4">Categorias</h5>
-                    <ul class="list-unstyled small text-muted ps-lg-4 font-weight-normal">
+                    <ul class="list-unstyled small ps-lg-4 font-weight-normal">
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="todos">Todos</a></li>
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Chaquetas">Chaquetas</a></li>
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Billeteras">Billeteras</a></li>
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Accesorios">Accesorios</a></li>
-                        <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Zapatos">Zapatos</a></li>
+                        <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Calzado">Calzado</a></li>
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Bolsos">Bolsos</a></li>
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Morrales">Morrales</a></li>
                     </ul>
@@ -69,7 +80,7 @@
                                 <img class="" width="200" height="200" src="assets/img/Productos/{{imagen}}" alt="...">
                             </a>
                         </div>
-                        <h6><a class="reset-anchor" href="#">{{nombre}}</a></h6>
+                        <h6>{{nombre}}</h6>
                         <p class="small text-muted">
                             <strong>Precio:</strong> {{precio}}<br>
                             <strong>Stock:</strong> {{stock}}
@@ -78,6 +89,18 @@
                     </div>
                 </div>
                 {{/each}}
+                <!-- PAGINACIÓN -->
+                <div class="pagination">
+                    {{#each (range 1 totalPages)}}
+                    {{#if (equals this ../currentPage)}}
+                    <a class="page-link active" href="?page={{this}}">{{this}}</a>
+                    {{else}}
+                    <a class="page-link" href="?page={{this}}">{{this}}</a>
+                    {{/if}}
+                    {{/each}}
+                </div>
+
+
             </div>
         </div>
     </section>
@@ -93,7 +116,6 @@
     {{>footer}}
     <!-- JavaScript files-->
     <!-- PRIMER SCRIPT -->
-    <!-- PRIMER SCRIPT -->
     <script>
         function filtrarProductosPorCategoria(categoriaSeleccionada) {
             const productos = document.querySelectorAll('.product');
@@ -107,6 +129,18 @@
                     producto.style.display = 'none';
                 }
             });
+
+            // Remover la clase de selección de todas las categorías
+            const categorias = document.querySelectorAll('.reset-anchor');
+            categorias.forEach((categoria) => {
+                categoria.classList.remove('selected-category');
+            });
+
+            // Agregar la clase de selección a la categoría actual
+            if (categoriaSeleccionada !== 'todos') {
+                const categoriaSeleccionadaElemento = document.querySelector(`[data-nombre_categoria="${categoriaSeleccionada}"]`);
+                categoriaSeleccionadaElemento.classList.add('selected-category');
+            }
         }
 
         document.addEventListener('DOMContentLoaded', function () {
@@ -121,6 +155,7 @@
             // Mostrar todos los productos al cargar la página
             filtrarProductosPorCategoria('todos');
         });
+
     </script>
 
 

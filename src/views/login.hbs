@@ -25,10 +25,11 @@
             <div class="group">
               <label for="correo" class="label">Correo</label>
               <input id="correo" type="email" class="input" name="correol" onblur="validateEmail()" required>
-              <span id="emailError" style="color: red; display: none;">Correo electrónico inválido. Por favor, ingresa un correo válido.</span>
+              <span id="emailError" style="color: red; display: none;">Correo electrónico inválido. Por favor, ingresa
+                un correo válido.</span>
             </div>
             <div class="group">
-              <label for="pass" class="label">Password</label>
+              <label for="pass" class="label">Contraseña</label>
               <div class="password-input">
                 <input id="pass" type="password" class="input" data-type="password" name="passswordl" required>
                 <span class="toggle-password">
@@ -39,11 +40,11 @@
             {{#if errorl}}
             <p class="errorl" style="color: rgb(255, 0, 0);"><i class="fa fa-xmark"></i>* {{errorl}}</p>
             {{/if}}
-            <div class="group">
+            <div class="group pt-2">
               <input type="submit" class="button" value="Iniciar sesión">
             </div>
           </form>
-
+          <hr>
           <div class="foot-lnk pt-2">
             <a href="olvidar_contrase">Olvidaste tu contraseña?</a>
           </div>
@@ -53,7 +54,8 @@
           <form action="/register" method="post">
             <div class="group">
               <label for="documento" class="label">Documento</label>
-              <input id="documento" type="number" class="input" name="documento" oninput="validarNumeros(event); autocompletarContrasena();">
+              <input id="documento" type="number" class="input" name="documento"
+                oninput="validarNumeros(event); autocompletarContrasena();">
             </div>
             <div class="group">
               <label for="nombre" class="label">Nombre Completo</label>
@@ -66,7 +68,8 @@
             <div class="group">
               <label for="pass" class="label">Correo</label>
               <input id="correo" type="email" class="input" name="correo" onblur="validateEmail()" required>
-              <span id="emailError" style="color: red; display: none;">Correo electrónico inválido. Por favor, ingresa un correo válido.</span>
+              <span id="emailError" style="color: red; display: none;">Correo electrónico inválido. Por favor, ingresa
+                un correo válido.</span>
             </div>
             <div class="group">
               <label for="pass" class="label">Contraseña</label>
@@ -77,8 +80,8 @@
                 </span>
               </div>
               <div id="mensaje-contrasena" style="display: none; color: rgb(112, 255, 112);">
-                  Tu contraseña es tu número de documento.
-                </div>
+                Tu contraseña es tu número de documento.
+              </div>
             </div>
 
             <div class="group">
@@ -96,7 +99,7 @@
     </div>
   </div>
 
-
+  <br><br><br><br>
 
 </body>
 
@@ -121,36 +124,36 @@
     input.value = valor;
   }
   function validateEmail() {
-            const emailInput = document.getElementById('correo');
-            const email = emailInput.value.trim();
-            const emailError = document.getElementById('emailError');
+    const emailInput = document.getElementById('correo');
+    const email = emailInput.value.trim();
+    const emailError = document.getElementById('emailError');
 
-            // Expresión regular para validar el correo electrónico
-            const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Expresión regular para validar el correo electrónico
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-            if (!emailPattern.test(email)) {
-                emailError.style.display = 'inline'; // Mostrar el mensaje de error
-                emailInput.classList.add('error'); // Opcional: Agregar una clase para resaltar el error visualmente
-            } else {
-                emailError.style.display = 'none'; // Ocultar el mensaje de error si el correo es válido
-                emailInput.classList.remove('error'); // Opcional: Remover la clase de error si existía
-            }
-        }
+    if (!emailPattern.test(email)) {
+      emailError.style.display = 'inline'; // Mostrar el mensaje de error
+      emailInput.classList.add('error'); // Opcional: Agregar una clase para resaltar el error visualmente
+    } else {
+      emailError.style.display = 'none'; // Ocultar el mensaje de error si el correo es válido
+      emailInput.classList.remove('error'); // Opcional: Remover la clase de error si existía
+    }
+  }
 </script>
 <!--Función de autocompletar la contraseña-->
 <script>
-function autocompletarContrasena() {
-  var documentoInput = document.getElementById('documento');
-  var contrasenaInput = document.getElementById('password');
-  var mensajeContrasena = document.getElementById('mensaje-contrasena');
+  function autocompletarContrasena() {
+    var documentoInput = document.getElementById('documento');
+    var contrasenaInput = document.getElementById('password');
+    var mensajeContrasena = document.getElementById('mensaje-contrasena');
 
-  // Obtener el valor del documento y asignarlo a la contraseña
- var documento = documentoInput.value;
-  contrasenaInput.value = documento;
+    // Obtener el valor del documento y asignarlo a la contraseña
+    var documento = documentoInput.value;
+    contrasenaInput.value = documento;
 
-  // Mostrar el mensaje de contraseña
-  mensajeContrasena.style.display = 'block';
-}
+    // Mostrar el mensaje de contraseña
+    mensajeContrasena.style.display = 'block';
+  }
 </script>
 
 <!-- JavaScript files-->

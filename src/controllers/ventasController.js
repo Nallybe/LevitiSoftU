@@ -6,32 +6,66 @@ const path = require('path');
 
 
 function listar(req, res) {
+    usuarioRoles = req.session.roles;
     req.getConnection((err, conn) => {
-        conn.query(`SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont
-        FROM tbl_ventas
-        JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo;
-        `, (err, ventas) => {
-            if (err) {
-                res.json(err);
-            }
-            const ventasFormateadas = ventas.map(venta => {
-                const fecha = new Date(venta.fecha);
-                const dia = fecha.getDate();
-                const mes = fecha.toLocaleString('default', { month: 'long' });
-                const anio = fecha.getFullYear();
-                const fechaFormateada = `${dia} de ${mes} de ${anio}`;
-                return {
-                    idVentas: venta.idVentas,
-                    nombre: venta.nombre,
-                    total: venta.total,
-                    fecha: fechaFormateada,
-                    descripcion: venta.descripcion,
-                    estado: venta.estado,
-                    cont: venta.cont
-                };
+
+        if (usuarioRoles.includes('Cliente')) {
+            const nombreCliente = req.session.name;
+            console.log(nombreCliente)
+            conn.query(`SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont
+                FROM tbl_ventas
+                JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo
+                WHERE users_info.nombre = ?;
+            `, [nombreCliente], (err, ventas) => {
+                if (err) {
+                    res.json(err);
+                }
+                const ventasFormateadas = ventas.map(venta => {
+                    const fecha = new Date(venta.fecha);
+                    const dia = fecha.getDate();
+                    const mes = fecha.toLocaleString('default', { month: 'long' });
+                    const anio = fecha.getFullYear();
+                    const fechaFormateada = `${dia} de ${mes} de ${anio}`;
+                    return {
+                        idVentas: venta.idVentas,
+                        nombre: venta.nombre,
+                        total: venta.total,
+                        fecha: fechaFormateada,
+                        descripcion: venta.descripcion,
+                        estado: venta.estado,
+                        cont: venta.cont
+                    };
+                });
+                res.render('ventas/ventas', { ventas: ventasFormateadas });
             });
-            res.render('ventas/ventas', { ventas: ventasFormateadas });
-        });
+        } else {
+            conn.query(`
+                SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont
+                FROM tbl_ventas
+                JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo;
+            `, (err, ventas) => {
+                if (err) {
+                    return res.json(err);
+                }
+                const ventasFormateadas = ventas.map(venta => {
+                    const fecha = new Date(venta.fecha);
+                    const dia = fecha.getDate();
+                    const mes = fecha.toLocaleString('default', { month: 'long' });
+                    const anio = fecha.getFullYear();
+                    const fechaFormateada = `${dia} de ${mes} de ${anio}`;
+                    return {
+                        idVentas: venta.idVentas,
+                        nombre: venta.nombre,
+                        total: venta.total,
+                        fecha: fechaFormateada,
+                        descripcion: venta.descripcion,
+                        estado: venta.estado,
+                        cont: venta.cont
+                    };
+                });
+                res.render('ventas/ventas', { ventas: ventasFormateadas });
+            })
+        }
     });
 }
 
@@ -59,6 +93,7 @@ function crear(req, res) {
 function registrar(req, res) {
     const data = req.body;
     //console.log(data);
+
     let idProducto = data.idProducto;
     let unidadesArray = data.cantidadProducto;
 
@@ -159,7 +194,7 @@ function registrar(req, res) {
 
                         crearFacturaPDF(RegistroVenta, productoResults, unidadesArray, nombre, correo, (facturaPath, nombreUsuario, correo) => {
                             enviarFacturaPorCorreo(correo, facturaPath, nombreUsuario);
-                            res.redirect('/ventas')
+                            res.redirect('/ventas?alert=success')
                         });
                     }
                 });

@@ -818,7 +818,7 @@
          <tr id="participante_${idP}_${contPar}">
                <td class="p-3 text-center"></td>
                <td class="p-3 text-center">
-                   <input name="${participacion.titulo}_idParticipante" style="width: 100%; border: none; text-align: center;" value="${participacion.participante}" readonly>
+                   <input name="${participacion.titulo}_idParticipante" style="width: 100%; border: none; text-align: center;" id="${participacion.titulo}_${participacion.participante}"  value="${participacion.participante}" readonly>
                </td>
                <td class="p-3 text-center">
                  <a class="boton-produccion" type="button" onclick="eliminarParticipante('${idP}_${contPar}', '${listP}')" style="color: #292b2c;">

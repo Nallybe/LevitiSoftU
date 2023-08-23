@@ -3,24 +3,20 @@
   background-color: #282d32;
 }
 
-.footer1 img{
-  width:55%;
-  margin-right: 100px;
-}
-.footer1 p{
+
+.footer1 p {
   font-size: 14px;
 }
 
 .footer1 {
   width: 320px;
   height: 110px;
-  
+
 }
 
-.footerprincipal{
+.footerprincipal {
   justify-content: space-between;
   display: flex;
-
 }
 
 .footer-dark h3 {
@@ -46,6 +42,122 @@
 
 .footer-dark ul a:hover {
   opacity: 0.8;
+}
+
+.whatsapp-container {
+  position: relative;
+}
+
+.whatsapp {
+  position: fixed;
+  width: 55px;
+  height: 55px;
+  bottom: 20px;
+  right: 18px;
+  background-color: #25d366;
+  color: #FFF;
+  border-radius: 50px;
+  text-align: center;
+  font-size: 30px;
+  z-index: 100;
+}
+
+.whatsapp-icon {
+  margin-top: 13px;
+  color: white;
+}
+
+.whatsapp-tooltip {
+  position: relative;
+  display: none;
+  background-color: #333;
+  color: #FFF;
+  font-size: small;
+  right: 150px;
+  bottom: 35px;
+  width: 150px;
+  height: 25px;
+  border-radius: 5px;
+}
+
+.whatsapp-container:hover .whatsapp-tooltip {
+  display: block;
+}
+
+
+
+.iconos {
+  color: #fff;
+  padding-bottom: 10px;
+}
+
+.iconSoci {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconLogo {
+  display: flex;
+  justify-content: center;
+  /* Centrar horizontalmente */
+  align-items: center;
+  /* Centrar verticalmente */
+}
+
+
+.iconLogo img {
+  width: 55%;
+  height: 55%;
+  margin: 0;
+}
+
+.social-icons {
+  display: flex;
+  column-gap: 25px;
+  color: #fff;
+}
+
+
+.social-icon {
+  display: inline-flex;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  transition-property: outline-offset, outline-color, background-color;
+  transition-duration: 01.25s;
+  margin-right: 10px;
+  color: #dcb14a;
+}
+
+.social-icon:hover {
+  outline-offset: 3px;
+}
+
+.social-icon i {
+  margin: auto;
+}
+
+.social-icon:hover i {
+  animation: shake 0.28s;
+}
+
+.social-icon:nth-child(1):hover {
+  background-color: #005eff;
+  color: #fff;
+  /* Color para el primer icono */
+}
+
+.social-icon:nth-child(2):hover {
+  background-color: #ffff;
+  color: #1c9730;
+  /* Color para el segundo icono */
+}
+
+.social-icon:nth-child(3):hover {
+  background: linear-gradient(to right, rgb(56, 59, 255), rgb(170, 57, 245), rgb(255, 72, 0), yellow);
+  color: #fff;
+  /* Color para el tercer icono */
 }
 
 @media (max-width:767px) {

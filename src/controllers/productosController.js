@@ -7,7 +7,7 @@ function productos_listar(req, res) {
             return res.status(500).json(err);
         } else {
             // Consultar los productos en la base de datos
-            conn.query('SELECT * FROM tbl_productos', (err, productos) => {
+            conn.query('SELECT * FROM tbl_productos', async (err, productos) => {
                 if (err) {
                     // Si hay un error al consultar las productos, enviar una respuesta con el error
                     return res.status(500).json(err);
@@ -22,27 +22,55 @@ function productos_listar(req, res) {
 
                         switch (productos[index].idCategoria) {
                             case 1:
-                                productos[index].categoria = "Accesorios";
+                                productos[index].idCategoria = "Accesorios";
                                 break;
                             case 2:
-                                productos[index].categoria = "Billeteras";
+                                productos[index].idCategoria = "Billeteras";
                                 break;
                             case 3:
-                                productos[index].categoria = "Bolsos";
+                                productos[index].idCategoria = "Bolsos";
                                 break;
                             case 4:
-                                productos[index].categoria = "Chaquetas";
+                                productos[index].idCategoria = "Chaquetas";
                                 break;
                             case 5:
-                                productos[index].categoria = "Morrales";
+                                productos[index].idCategoria = "Morrales";
                                 break;
                             case 6:
-                                productos[index].categoria = "Zapatos";
+                                productos[index].idCategoria = "Zapatos";
                                 break;
                         }
                         // Parsear precio
                         productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
                     }
+
+
+                    const ordenes = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_ordenes_produccion", (err, result) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(result);
+                            }
+                        });
+                    });
+
+
+                    for (index in productos) {
+                        var eliminar = true;
+
+                        for (i in ordenes) {
+                            if (productos[index].idProducto == ordenes[i].idProducto) {
+                                eliminar = false;
+                            }
+                        }
+
+                        if (eliminar == true) {
+                            productos[index].eliminar = true;
+                        }
+                    }
+
+
                     res.render('productos/listar', { productos });
                 }
             });
@@ -107,7 +135,7 @@ function productos_detallar(req, res) {
                                         if (insumos[i].idInsumo == detallesproducto[index].idInsumo) {
                                             detallesproducto[index].nombreI = insumos[i].nombre;
                                             detallesproducto[index].medidaI = insumos[i].medida;
-                                            detallesproducto[index].cantidadI = insumos[i].cantidad;
+                                            detallesproducto[index].cantidadI = insumos[i].stock;
                                             detallesproducto[index].estadoI = insumos[i].estado;
                                         }
                                     }
@@ -157,6 +185,7 @@ function productos_registrar(req, res) {
     var data = req.body;
     var imagen = req.file// Aquí obtienes el archivo de imagen
     console.log(data)
+
 
     const RegistroProducto = {
         idCategoria: data.categoria,

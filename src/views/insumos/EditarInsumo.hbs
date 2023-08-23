@@ -59,7 +59,7 @@
                                 <div class="form-group">
                                     <label for="floatingInput" style="float: left; padding-right: 10px;">Stock</label>
                                     <input type="number" class="form-control" id="stockInsumo" style="border-radius: 0;"
-                                        name="stock" value="{{stock}}" min="1">
+                                        name="stock" value="{{stock}}" min="1" onkeypress="return solonumeros(event)">
                                     <div id="mensajeErrorStock"></div>
                                 </div>
                             </div>
@@ -130,8 +130,8 @@
 {{/if}}
 <script>
     let formulario = document.querySelector('#formulario');
-    let nombreInputs = document.querySelectorAll('input[name="nombreInsumo"]');
-    let stockInputs = document.querySelectorAll('input[name="stockInsumo"]');
+    let nombreInputs = document.querySelectorAll('input[name="nombre"]');
+    let stockInputs = document.querySelectorAll('input[name="stock"]');
     let mensajeErrorNombre = document.querySelector('#mensajeErrorNombre');
     let mensajeErrorStock = document.querySelector('#mensajeErrorStock');
 
@@ -170,7 +170,7 @@
         if (stock === "") {
             mostrarError(mensajeErrorStock, 'Campo Obligatorio');
             return false;
-        } else {
+        }else {
             ocultarError(mensajeErrorStock);
             return true;
         }
@@ -216,7 +216,7 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="/assets/js/ValidacionEditarInsumo.js"></script>
+<script src="/assets/js/Validaciones.js"></script>
 <!--Fin footer-->
 <!--   Core JS Files   -->
 <script src="/assets/js/core/jquery.min.js"></script>

@@ -25,38 +25,38 @@
         margin-right: 10px;
     }
 </style>
-
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.6/css/jquery.dataTables.min.css">
+<script type="text/javascript" charset="utf8"
+    src="https://cdn.datatables.net/1.11.6/js/jquery.dataTables.min.js"></script>
 <!--Barra de navegación-->
 {{>bar}}
 <!--Barra de navegación-->
 <br><br><br>
 <center>
     <div class="container">
+        <!--Start Botones sobre la tabla-->
         <div class="row">
             <div class="col-md-4">
-                <div class="row" style="margin-left: 8px;">
-                    <div class="col-9">
-                        <input id="buscar-input" style=" border-radius: 0;" class="form-control" type="search"
-                            placeholder="Buscar Rol" aria-label="Search" oninput="filtrarTabla()">
-                    </div>
-                    <div class="col-3">
-                        <button class="btn btn-outline-success" type="submit" style=" border-radius: 0; "
-                            onclick="filtrarTabla()">
-                            <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
-                        </button>
-                    </div>
+                <div class="input-group">
+                    <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
+                        placeholder="Buscar rol" aria-label="Search" oninput="filtrarTabla()">
+                    <button type="submit" class="btn"
+                        style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
+                        <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
+                    </button>
                 </div>
             </div>
-
-
-            <div class="col-md-5"></div>
+            <div class="col-md-5">
+                <!--Espacio entre botón buscar y registrar-->
+            </div>
             <div class="col-md-3">
+                <!--Start Botón registrar-->
                 <a href="AgregarRol" class="btn btn-success" style="border-radius: 2;"><i
-                        class="fa-solid fa-circle-plus"></i>
-                    Agregar Rol</a>
+                        class="fa-solid fa-circle-plus"></i> Registrar rol</a>
+                <!--End Botón registrar-->
             </div>
         </div>
-        <br>
+        <!--End Botones sobre la tabla-->
         <table id="tabla-roles" class="table" style="text-align:center;">
             <thead style="background-color: #282d32; color:white;">
                 <tr>
@@ -83,12 +83,16 @@
                         <button class="btn estado-boton btn-sm" style="border-radius:8px;" disabled
                             data-estado="{{estado}}">{{estado}}</button>
                     </td>
+                    {{#if (equals nombreRoles "Administrador")}}
+
+                    {{else}}
                     <td>
                         <a href="EditarRol/{{idRoles}}" style="color: #292b2c;" class="boton-enviar"><i type="button"
                                 class="fa-sharp fa-solid fa-pen"></i></a>
 
 
                     </td>
+                    {{/if}}
                 </tr>
                 <script>
                     // Seleccionamos todos los botones de clase 'estado-boton'
@@ -115,8 +119,7 @@
         </table>
     </div>
 </center>
-
-
+<br>
 {{#if asignacion}}
 <script>
     var permisosInput = document.querySelector('#permisosInput');
@@ -165,6 +168,9 @@
     // Verificar si hay un mensaje de éxito en el query parameter
     const urlParams = new URLSearchParams(window.location.search);
     const alertParam = urlParams.get("alert");
+    alert("Url: "+ urlParams+ "Alert: "+alertParam)
+    /* Verificar si la alerta ya se mostró en esta sesión
+    const alertShown = sessionStorage.getItem("alertShown");*/
 
     if (alertParam === "success") {
         // Mostrar el Sweet Alert
@@ -173,8 +179,12 @@
             title: "Éxito",
             text: "La operación se realizó correctamente.",
         });
+
+        /* Marcar que la alerta ya se mostró en esta sesión
+        sessionStorage.setItem("alertShown", "true");*/
     }
 </script>
+
 <script>
     // Obtiene todos los botones de alternancia en la página
     var navbarTogglers = document.querySelectorAll('[data-bs-toggle="collapse"]');
@@ -188,7 +198,6 @@
     });
 </script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="assets/js/ValidacionEliminarRol.js"></script>
 <!--   Core JS Files   -->
 <script src="assets/js/core/jquery.min.js"></script>
 <script src="assets/js/core/popper.min.js"></script>
@@ -246,5 +255,6 @@
         });
     });
 </script>
+
 
 </html>

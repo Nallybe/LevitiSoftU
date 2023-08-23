@@ -77,22 +77,16 @@
 <!--Barra de navegación-->
 <br><br><br>
 <center>
-    <div class="container-fluid mb-5">
+    <div class="container mb-5">
         <div class="row">
             <div class="col-md-4">
-                <div class="row" style="margin-left: 8px;">
-                    <div class="col-md-8 col-9">
-                        <input id="buscar-input"
-                            style="height: 100%; border-radius: 0; margin-top: 4px; width: 100%; margin-right: 0;"
-                            class="form-control me-2" type="search" placeholder="Buscar Reparación" aria-label="Search"
-                            oninput="filtrarTabla()">
-                    </div>
-                    <div class="col-md-2 col-3 pt-2">
-                        <button class="btn btn-outline-success" type="submit"
-                            style="height: 100%; border-radius: 0; width: 100%; padding: 0;" onclick="filtrarTabla()">
-                            <i class="fa-sharp fa-solid fa-magnifying-glass" style="width: 100%;"></i>
-                        </button>
-                    </div>
+                <div class="input-group">
+                    <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
+                        placeholder="Buscar reparación" aria-label="Search" oninput="filtrarTabla()">
+                    <button type="submit" class="btn"
+                        style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
+                        <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
+                    </button>
                 </div>
             </div>
             <div class="col-md-5"></div>
@@ -101,8 +95,6 @@
                     Registrar Reparación</a>
             </div>
         </div>
-
-        <br>
         <table class="table table-hover" style="text-align:center;" id="tabla-reparaciones">
             <thead style="background-color: #282d32; color:white;">
                 <tr>
@@ -122,9 +114,8 @@
                 <tr>
                     <td class="py-3 px-6 text-center">{{cont}}</td>
                     <td class="p-3 text-center">
-                        <button type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="hover"
-                            data-bs-custom-class="custom-popover" title="<b>Cliente Reparación {{cont}}</b>"
-                            data-bs-content="
+                        <button type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus" 
+                            data-bs-custom-class="custom-popover" title="<b>Cliente Reparación {{cont}}</b>" data-bs-content="
                             <div class='row'>
                                 <div class='col-md-3'>
                                     <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
@@ -135,8 +126,7 @@
                                     <b>Correo:</b> {{userEmail}}<br>
                                 </div>
                             </div>
-                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user"
-                                    style="color:black"></i></span>
+                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user"                               style="color:black"></i></span>
                         </button>
                     </td>
                     <td class="p-3 text-center">{{numPR}}</td>
@@ -186,10 +176,17 @@
 
                     {{#if estado3}}
                     <td class="p-3 text-center">
-                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
-                            data-bs-target="#id{{idReparacion}}">
+                        <!--<button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                            data-bs-target="#id_{{idReparacion}}">
+                            
+                        </button>-->
+
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal_{{idReparacion}}">
                             Terminado <i class="fas fa-pen pen-2"></i>
                         </button>
+
+
                     </td>
 
                     <td class="p-3 px-1 ">
@@ -197,6 +194,7 @@
                             <i type="button" class="fa-sharp fa-solid fa-eye"></i>
                         </a>
                     </td>
+
                     {{/if}}
 
                     {{#if estado4}}
@@ -218,39 +216,59 @@
 
 
 
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-
 
 <div id="modales">
     {{#each reparaciones}}
     {{#if estado3}}
+
     <!-- Modal -->
-    <div class="modal fade" id="id{{idReparacion}}" tabindex="-1" aria-labelledby="d{{idReparacion}}" aria-hidden="true">
+    <div class="modal fade" id="exampleModal_{{idReparacion}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="/reparaciones_estadoTyE" method="POST" class="mx-2">
+                <input type="hidden" name="idReparacion" value="{{idReparacion}}">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="d{{idReparacion}}">Cambiar Estado a Terminado y Entregado</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-1"></div>
+                            <div class="col-md-10">
+                               <p style="text-align: center;">
+                                ¡Cámbia el estado de la reparación a<br> "Terminado y
+                                    Entregado"!</p>
+                                
+                            </div>
+                            <div class="col md-1"></div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Cambiar Estado</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--End Modal-->
+    {{/if}}
+    {{/each}}
+</div>
+
+
+
+<!--
+<div id="modales">
+    {{#each reparaciones}}
+    {{#if estado3}}
+    <!-- Modal --
+    <div class="modal fade" id="id_{{idReparacion}}" tabindex="-1" aria-labelledby="d{{idReparacion}}"
+        aria-hidden="true">
         <div class="modal-dialog">
             <form action="/reparaciones_estadoTyE" method="POST" class="mx-2">
                 <input type="hidden" name="idReparacion" value="{{idReparacion}}">
@@ -282,10 +300,11 @@
             </form>
         </div>
     </div>
-    <!--End Modal-->
+    <!--End Modal--
     {{/if}}
     {{/each}}
 </div>
+-->
 
 </body>
 <!--Validacion nav bar-->

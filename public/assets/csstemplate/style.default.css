@@ -196,14 +196,7 @@ small,
   font-size: 0.875em;
 }
 
-a {
-  color: #dcb14a;
-  text-decoration: underline;
-}
 
-a:hover {
-  color: #b68b23;
-}
 
 a:not([href]):not([class]),
 a:not([href]):not([class]):hover {
@@ -240,11 +233,6 @@ button {
   display: none;
 }
 
-button,
-[type="button"],
-[type="submit"] {
-  -webkit-appearance: button;
-}
 
 button:not(:disabled),
 [type="button"]:not(:disabled),
@@ -322,6 +310,7 @@ button:not(:disabled),
   max-width: 100%;
   height: auto;
 }
+
 
 .container {
   width: 100%;
@@ -436,6 +425,10 @@ button:not(:disabled),
     flex: 0 0 auto;
     width: 25%;
   }
+}
+
+.reset-anchor{
+  color: #000;
 }
 
 .form-control {
@@ -774,6 +767,83 @@ button:not(:disabled),
   font-size: 0.875rem;
   border-radius: 0;
 }
+/*Recomendaciones*/
+.recomendaciones{
+  font-size: 15px;
+}
+/*Recomendaciones*/
+/* Sobre nosotros */
+.leviticoSobre{
+  padding-bottom: 15px;
+}
+.empresa img{
+  width: 75%;
+  padding-bottom: 9px;
+}
+
+.imgSobre {
+  width: 100%;
+}
+
+.SobreNos {
+  display: flex;
+  gap: 4px;
+  height: 85%;
+  box-shadow: 2px 4px 13px rgba(0, 0, 0, 0.383);
+}
+
+.card_section_1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 8px;
+  margin-bottom: 10px;
+}
+.card_section_2{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-right: 8px ;
+}
+
+.imgSobre {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  object-position: center center;
+}
+
+@media screen and (max-width: 500px) {
+  .SobreNos {
+    flex-direction: column;
+    gap: 10px; /* Aumentar el espacio entre tarjetas en dispositivos pequeños */
+  }
+
+  .card_section_1,
+  .card_section_2 {
+    justify-content: flex-start; /* Alinear contenido arriba en dispositivos pequeños */
+    padding: 8px; /* Agregar espacio de relleno alrededor del contenido */
+    align-items: center;
+  }
+  .columnaSobre{
+    padding-bottom: 18px;
+  }
+  
+}
+
+@media screen and (max-width: 500px) {
+  .imgSobre {
+    width: 100px;
+    height: 100px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .SobreNos {
+    height: auto;
+  }
+}
+
+/* Sobre nosotros */
 
 .fade {
   transition: opacity 0.15s linear;
@@ -1495,6 +1565,7 @@ button:not(:disabled),
   text-transform: uppercase !important;
 }
 
+
 /* rtl:begin:remove */
 
 /* rtl:end:remove */
@@ -1697,6 +1768,10 @@ button:active {
 
 .categorias {
   margin-left: 80px;
+  ;
+}
+.categorias a{
+  color: #dcb14a;
 }
 
 .category-item {
@@ -1742,7 +1817,8 @@ button:active {
 /* Agrega la siguiente regla para el contenedor principal */
 .flip-card {
   perspective: 1000px;
-  width: 279px; /* Ancho de la tarjeta, ajustar según tus necesidades */
+  width: 279px;
+  /* Ancho de la tarjeta, ajustar según tus necesidades */
 }
 
 /* Estilo del contenedor interior que permite la rotación */
@@ -1761,7 +1837,8 @@ button:active {
   backface-visibility: hidden;
   top: 0;
   left: 0;
-  background-color: white; /* Color de fondo del frente de la tarjeta */
+  background-color: white;
+  /* Color de fondo del frente de la tarjeta */
 }
 
 /* Estilo de la parte posterior de la tarjeta */
@@ -1769,7 +1846,8 @@ button:active {
   width: 100%;
   height: 255px;
   backface-visibility: hidden;
-  background-color: #dcb14a; /* Color de fondo de la parte posterior de la tarjeta */
+  background-color: #f2c96cde;
+  /* Color de fondo de la parte posterior de la tarjeta */
   position: absolute;
   top: 0;
   left: 0;
@@ -1777,7 +1855,8 @@ button:active {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;
-  padding: 1rem; /* Ajustar el padding según sea necesario */
+  padding: 1rem;
+  /* Ajustar el padding según sea necesario */
   box-sizing: border-box;
 }
 
@@ -1845,7 +1924,7 @@ button:active {
 .redes .btn-color {
   border: 2px solid #000000;
 }
- 
+
 .redes #btn-facebook:hover {
   background-color: #3b5998;
   /* Color de fondo para Facebook */
@@ -1861,7 +1940,7 @@ button:active {
 }
 
 .redes #btn-instagram:hover {
-  background: linear-gradient(to right, #005eff,#e300ba, #ff0000, #ffe100);
+  background: linear-gradient(to right, #005eff, #e300ba, #ff0000, #ffe100);
   /* Fondo con degradado de colores */
   color: #fff;
   /* Color del texto para Instagram */
@@ -1875,100 +1954,7 @@ button:active {
 * ==========================================
 *
 */
-.whatsapp-container {
-  position: relative;
-}
 
-.whatsapp {
-  position: fixed;
-  width: 55px;
-  height: 55px;
-  bottom: 20px;
-  right: 18px;
-  background-color: #25d366;
-  color: #FFF;
-  border-radius: 50px;
-  text-align: center;
-  font-size: 30px;
-  z-index: 100;
-}
-
-.whatsapp-icon {
-  margin-top: 13px;
-  color: white;
-}
-
-.whatsapp-tooltip {
-  position: relative;
-  display: none;
-  background-color: #333;
-  color: #FFF;
-  font-size: small;
-  right:  150px;
-  bottom: 35px;
-  width: 150px;
-  height: 25px;
-  border-radius: 5px;
-}
-
-.whatsapp-container:hover .whatsapp-tooltip {
-  display: block;
-}
-
-
-
-.iconos {
-  color: #fff;
-  padding-bottom: 10px;
-}
-
-.social-icons {
-  display: flex;
-  column-gap: 25px;
-  color: #fff;
-}
-
-
-.social-icon {
-  display: inline-flex;
-  width: 45px;
-  height: 45px;
-  border-radius: 50%;
-  outline: 2px solid #dcb14a;
-  transition-property: outline-offset, outline-color, background-color;
-  transition-duration: 01.25s;
-  margin-right: 10px;
-}
-
-.social-icon:hover {
-  outline-offset: 3px;
-}
-
-.social-icon i {
-  margin: auto;
-}
-
-.social-icon:hover i {
-  animation: shake 0.28s;
-}
-
-.social-icon:nth-child(1):hover {
-  background-color: #005eff;
-  color: #fff;
-  /* Color para el primer icono */
-}
-
-.social-icon:nth-child(2):hover {
-  background-color: #ffff;
-  color: #1c9730;
-  /* Color para el segundo icono */
-}
-
-.social-icon:nth-child(3):hover {
-  background: linear-gradient(to right, rgb(56, 59, 255), rgb(170, 57, 245), rgb(255, 72, 0), yellow);
-  color: #fff;
-  /* Color para el tercer icono */
-}
 
 
 @keyframes shake {

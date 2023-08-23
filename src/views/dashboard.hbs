@@ -65,8 +65,9 @@
     </div>
 
     <!--Fin cuerpo-->
-
-
+<input hidden type="text" id="labels" value="{{labels}}">
+<input hidden type="text" id="ventas" value="{{ventasData}}">
+<input hidden type="text" id="compras" value="{{comprasData}}">
 </body>
 <!--   Core JS Files   -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -123,9 +124,24 @@
 
 
 <script>
+  var label = document.getElementById("labels");
+  var labels = label.value;
+  var labelsArray = labels.split(',');
+
+  var venta = document.getElementById("ventas");
+  var ventas = venta.value;
+  var ventasArray = ventas.split(',');
+
+  var compra = document.getElementById("compras");
+  var compras = compra.value;
+  var comprasArray = compras.split(',');
+  console.log("Label: "+labelsArray)
+  console.log("ventas: "+compras)
+  console.log("compras: "+ventas)
+
   $(function () {
     var areaChartData = {
-      labels: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio'],
+      labels: labelsArray,
       datasets: [
         {
           label: 'Ventas',
@@ -136,7 +152,7 @@
           pointStrokeColor: 'black',
           pointHighlightFill: '#fff',
           pointHighlightStroke: 'black',
-          data: [28, 48, 40, 19, 86, 27, 90]
+          data: ventasArray
         },
         {
           label: 'Compras',
@@ -147,7 +163,7 @@
           pointStrokeColor: '#c1c7d1',
           pointHighlightFill: '#fff',
           pointHighlightStroke: 'rgba(220,220,220,1)',
-          data: [65, 59, 80, 81, 56, 55, 40]
+          data: comprasArray
         },
       ]
     }

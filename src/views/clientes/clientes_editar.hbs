@@ -92,7 +92,7 @@
               <div class="col-5">
                 <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Nombre</label>
-                  <input type="text" class="form-control" id="nombre" style="border-radius: 0;" value="{{nombre}}"
+                  <input onkeypress="return sololetras(event)" type="text" class="form-control" id="nombre" style="border-radius: 0;" value="{{nombre}}"
                     name="nombre">
                   <div id="mensajeErrorNombre"></div>
                 </div>
@@ -100,8 +100,8 @@
               <div class="col-5">
                 <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Documento</label>
-                  <input type="text" class="form-control" id="documento" style="border-radius: 0;" value="{{documento}}"
-                    name="documento">
+                  <input onkeypress="return solonumeros(event)" type="number" class="form-control" id="documento" style="border-radius: 0;"
+                    value="{{documento}}" name="documento">
                   <div id="mensajeErrorDocumento"></div>
 
                 </div>
@@ -111,8 +111,8 @@
               <div class="col-5">
                 <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Telefono</label>
-                  <input type="text" class="form-control" id="telefono" style="border-radius: 0;" value="{{telefono}}"
-                    name="telefono">
+                  <input type="number" class="form-control" id="telefono" style="border-radius: 0;" value="{{telefono}}"
+                    name="telefono" onkeypress="return solonumeros(event)">
                   <div id="mensajeErrorTelefono"></div>
                 </div>
               </div>
@@ -145,7 +145,7 @@
       </form>
       {{/each}}
 
-    <!--End Form&Card-->
+      <!--End Form&Card-->
 
 
 
@@ -232,6 +232,9 @@
     if (documento === "") {
       mostrarError(mensajeErrorDocumento, 'Campo Obligatorio');
       return false;
+    }if(documento.toString().length > 10){
+      mostrarError(mensajeErrorDocumento, 'El documento ingresado excede la cantidad de dígitos permitidos');
+      return false;
     } else {
       ocultarError(mensajeErrorDocumento);
       return true;
@@ -241,7 +244,10 @@
     if (telefono === "") {
       mostrarError(mensajeErrorTelefono, 'Campo Obligatorio');
       return false;
-    } else {
+    }if(telefono.toString().length > 10){
+      mostrarError(mensajeErrorTelefono, 'El teléfono ingresado excede la cantidad de dígitos permitidos');
+      return false;
+    }else {
       ocultarError(mensajeErrorTelefono);
       return true;
     }
@@ -261,7 +267,9 @@
 
 
 </script>
+<script>
 
+</script>
 <!--JS Para el mensajito al pasar el mouse sobre el usuario-->
 <script src="js/bootstrap.bunle.min.js" type="text/javascript"></script>
 <script>

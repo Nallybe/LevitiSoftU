@@ -645,8 +645,10 @@
       let listP = "listaInsumos_" + idP;
 
       if (repetido != null) {
-        //var total = parseInt(repetido.value) + parseInt(requerido.cantidad);
-        //repetido.value = total;
+        var total = parseInt(repetido.value) + parseInt(requerido.cantidad);
+        repetido.value = total;
+
+        repetido.setAttribute("value", repetido.value);
 
         Swal.fire({
           position: 'top-end',
@@ -668,7 +670,7 @@
                    <input name="${requerido.articulo}_idInsumo" style="width: 100%; border: none; text-align: center;" value="${requerido.idInsumo}" readonly>
                </td>
                <td class="p-3 text-center">
-                   <input onkeypress="return solonumeros(event)" type="text" name="${requerido.articulo}_cantidad" style="width: 100%; text-align: center;" id="${requerido.articulo}_${requerido.idInsumo}_cant" value="${requerido.cantidad}">
+                   <input onkeypress="return solonumeros(event)" oninput="updateValueInput(this)" type="text" name="${requerido.articulo}_cantidad" style="width: 100%; text-align: center;" id="${requerido.articulo}_${requerido.idInsumo}_cant" value="${requerido.cantidad}">
                </td>
                <td class="p-3 text-center">
                  <a class="boton-reparacion" type="button" onclick="eliminarInsumo('${idP}_${contPar}', '${listP}')" style="color: #292b2c;">

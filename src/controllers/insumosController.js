@@ -1,6 +1,6 @@
 function listar(req, res) {
   req.getConnection((err, conn) => {
-    conn.query('SELECT ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont,tbl_insumos. * FROM tbl_insumos;', (err, insumos) => {
+    conn.query('SELECT ROW_NUMBER() OVER (ORDER BY stock ASC) AS cont, tbl_insumos. * FROM tbl_insumos;', (err, insumos) => {
       if (err) {
         res.json(err);
       }
@@ -93,22 +93,7 @@ function actualizar(req, res) {
 }
 
 
-function eliminar(req, res) {
-  const idInsumo = req.body.idInsumo;
-  console.log("Eliminar: ",idInsumo)
-  req.getConnection((err, conn) => {
-    conn.query('DELETE FROM tbl_insumos WHERE idInsumo = ?', [idInsumo], (err, rows) => {
-      if (err) {
-        console.error('Error al eliminar los datos: ', err);
-        return;
-      }
 
-
-      console.log("Se eliminaron los datos")
-      res.redirect('/insumos');
-    });
-  })
-}
 
 
 module.exports = {
@@ -117,6 +102,5 @@ module.exports = {
   registrar: registrar,
   editar: editar,
   actualizar: actualizar,
-  eliminar: eliminar
 
 }

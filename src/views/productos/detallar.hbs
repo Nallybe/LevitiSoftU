@@ -4,6 +4,15 @@
 {{>headerId}}
 
 <style>
+    .btn {
+        border-radius: 8px;
+    }
+
+    button {
+        border-radius: 8px;
+        border: 1px gray solid;
+    }
+    
     p {
         margin-bottom: 1%;
     }
@@ -43,6 +52,8 @@
 <br>
 <br>
 <br>
+<a href="/productos" style="color:black; text-decoration:none; margin-left: 1%"><i class="fa fa-arrow-left fa-2x"></i></a>
+
 
 <div class="row">
     <div class="col-md-7">
@@ -109,7 +120,7 @@
                             <tr>
                                 <td class="py-2 px-6 text-center">{{cont}}</td>
                                 <td class="p-2 text-center">
-                                    <a href="/insumos/{{idInsumo}}" data-bs-toggle="popover" data-bs-trigger="hover"
+                                    <button type="button"  data-bs-toggle="popover" data-bs-trigger="hover"
                                         data-bs-title="<b>Insumo {{idInsumo}}</b>" data-bs-html="true" data-bs-content="
                                     <div class='row'>
                                         <div class='col-md-4'>
@@ -121,7 +132,7 @@
                                             <b>Stock:</b> {{cantidadI}}<br>
                                         </div>
                                     </div>
-                                ">{{nombreI}} <i class="fas fa-box-open" style="color: black"></i></a>
+                                ">{{nombreI}} <i class="fas fa-box-open" style="color: black"></i></button>
                                 </td>
                                 <td class="p-3 text-center">{{cantidad_n}}</td>
                             </tr>

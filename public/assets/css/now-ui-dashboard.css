@@ -288,7 +288,7 @@ button,
 input,
 select,
 textarea {
-  font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  font-family:sans-serif;
 }
 
 h1,
@@ -370,7 +370,7 @@ a.text-success:hover {
 body {
   color: #2c2c2c;
   font-size: 14px;
-  font-family: "Montserrat", "Helvetica Neue", Arial, sans-serif;
+  font-family:sans-serif;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
 }
@@ -391,6 +391,7 @@ body {
   min-height: 53px;
   margin-bottom: 20px;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.15);
+  font-family: sans-serif;
 }
 
 /*.navbar a {
@@ -571,13 +572,7 @@ License - nucleoapp.com/license/
 Created using IcoMoon - icomoon.io
 
 -------------------------------- */
-@font-face {
-  font-family: 'Nucleo Outline';
-  src: url("../fonts/nucleo-outline.eot");
-  src: url("../fonts/nucleo-outline.eot") format("embedded-opentype"), url("../fonts/nucleo-outline.woff2") format("woff2"), url("../fonts/nucleo-outline.woff") format("woff"), url("../fonts/nucleo-outline.ttf") format("truetype");
-  font-weight: normal;
-  font-style: normal;
-}
+
 
 /*------------------------
 	base class definition
@@ -647,9 +642,12 @@ Created using IcoMoon - icomoon.io
   margin: 0;
 }
 
+.btn{
+  font-family: sans-serif;
+}
 .table>thead>tr>th {
   border-bottom-width: 1px;
-  font-size: 18px;
+  font-size: 15px;
   font-weight: 300;
   border: 0;
 }
@@ -685,7 +683,7 @@ Created using IcoMoon - icomoon.io
 }
 
 .table>tbody>tr>td {
-  font-size: 15px;
+  font-size: 14px;
 }
 
 .table>tbody>tr {
@@ -716,6 +714,7 @@ Created using IcoMoon - icomoon.io
   position: relative;
   top: 0;
   height: 100vh;
+  font-family: sans-serif;
 }
 
 .sidebar {
@@ -726,23 +725,26 @@ Created using IcoMoon - icomoon.io
   width: 260px;
   left: 0;
   z-index: 1030;
-
+  font-family: sans-serif;
 }
 
 .sidebar .sidebar-wrapper li {
-  font-size: 15px;
+  font-size: 13px;
   padding: 0px 0px;
   height: 35px;
+  
+  
 }
 
 
 .sidebar .sidebar-wrapper {
   position: relative;
   max-height: 540px;
-  overflow-y: auto;
   width: 260px;
   z-index: 4;
-  padding-bottom: 100px;
+  padding-bottom: 55px;
+  padding-top: 0px;
+  margin-top: 0px;
 }
 
 
@@ -800,7 +802,7 @@ Created using IcoMoon - icomoon.io
 }
 
 .sidebar .nav i {
-  font-size: 20px;
+  font-size: 14px;
   float: left;
   margin-right: 12px;
   line-height: 30px;
@@ -814,6 +816,7 @@ Created using IcoMoon - icomoon.io
   position: relative;
   padding: 0.5rem 0.7rem;
   z-index: 4;
+  
 }
  
 .sidebar .logo:after {
@@ -826,26 +829,13 @@ Created using IcoMoon - icomoon.io
   background-color: rgba(255, 255, 255, 0.5);
 }
 
-.sidebar .logo p {
-  float: left;
-  font-size: 20px;
-  margin: 10px 10px;
-  color: #FFFFFF;
-  line-height: 20px;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+
 
 .sidebar .logo .simple-text {
   text-transform: uppercase;
-  padding: 0.5rem 0;
-  display: block;
-  white-space: nowrap;
-  font-size: 1em;
-  color: #FFFFFF;
+  font-size: 18px;
+  font-family: sans-serif;
   text-decoration: none;
-  font-weight: 400;
-  line-height: 30px;
-  overflow: hidden;
 }
 
 .sidebar:before,
@@ -938,6 +928,8 @@ Created using IcoMoon - icomoon.io
   -o-transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
   -ms-transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
   transition: all 0.5s cubic-bezier(0.685, 0.0473, 0.346, 1);
+
+  font-family: sans-serif;
 }
 
 .main-panel>.content {
@@ -967,7 +959,6 @@ Created using IcoMoon - icomoon.io
 
 .footer nav {
   display: inline-block;
-  float: left;
   padding-left: 7px;
 }
 
