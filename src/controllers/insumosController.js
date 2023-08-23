@@ -47,7 +47,7 @@ function registrar(req, res) {
         } else {
           console.log("Insumo guardado");
         }
-        res.redirect("/insumos?alert=success");
+        res.redirect("/insumos");
       }
     );
   });

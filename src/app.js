@@ -93,6 +93,7 @@ const checkSession = (req, res, next) => {
         // Si hay una sesión activa, continuar con la siguiente ruta
         res.locals.name = req.session.name;
         res.locals.asignacion = req.session.asignacion;
+        res.locals.roles = req.session.roles;
         next();
     } else {
         // Si no hay una sesión activa, redireccionar al login
@@ -112,8 +113,53 @@ const tienePermisos = (session) => {
 };
 
 app.get('/dashboard', checkSession, (req, res) => {
-    res.render('dashboard');
+    req.getConnection((err, conn) => {
+        if (err) {
+            return res.status(500).json(err);
+        } else {
+            // Obtener datos de ventas
+            conn.query(`SELECT MONTH(fecha) AS mes, COUNT(*) AS cantidad_registros
+                        FROM tbl_ventas
+                        GROUP BY MONTH(fecha)
+                        ORDER BY mes;
+            `, (err, ventas) => {
+                if (err) {
+                    return res.status(500).json(err);
+                } else {
+                    // Obtener datos de compras
+                    conn.query(`SELECT MONTH(fechaRegistro) AS mes, COUNT(*) AS cantidad_registros
+                    FROM tbl_compras
+                    WHERE estado = 'A'
+                    GROUP BY MONTH(fechaRegistro)
+                    ORDER BY mes;
+                    
+                    `, (err, compras) => {
+                        if (err) {
+                            return res.status(500).json(err);
+                        } else {
+                            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                            const currentDate = new Date();
+                            const currentMonth = currentDate.getMonth();
+
+                            const ventasData = Array.from({ length: currentMonth + 1 }, (_, i) => {
+                                const ventaMes = ventas.find(venta => venta.mes === (i + 1));
+                                return ventaMes ? ventaMes.cantidad_registros : 0;
+                            });
+
+                            const comprasData = Array.from({ length: currentMonth + 1 }, (_, i) => {
+                                const compraMes = compras.find(compra => compra.mes === (i + 1));
+                                return compraMes ? compraMes.cantidad_registros : 0;
+                            }); 
+
+                            res.render('dashboard', { labels: months.slice(0, currentMonth + 1), ventasData, comprasData });
+                        }
+                    });
+                }
+            });
+        }
+    });
 });
+
 
 app.get('/home', (req, res) => {
     // Obtener la conexión a la base de datos

@@ -6,32 +6,66 @@ const path = require('path');
 
 
 function listar(req, res) {
+    usuarioRoles = req.session.roles;
     req.getConnection((err, conn) => {
-        conn.query(`SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont
-        FROM tbl_ventas
-        JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo;
-        `, (err, ventas) => {
-            if (err) {
-                res.json(err);
-            }
-            const ventasFormateadas = ventas.map(venta => {
-                const fecha = new Date(venta.fecha);
-                const dia = fecha.getDate();
-                const mes = fecha.toLocaleString('default', { month: 'long' });
-                const anio = fecha.getFullYear();
-                const fechaFormateada = `${dia} de ${mes} de ${anio}`;
-                return {
-                    idVentas: venta.idVentas,
-                    nombre: venta.nombre,
-                    total: venta.total,
-                    fecha: fechaFormateada,
-                    descripcion: venta.descripcion,
-                    estado: venta.estado,
-                    cont: venta.cont
-                };
+
+        if (usuarioRoles.includes('Cliente')) {
+            const nombreCliente = req.session.name;
+            console.log(nombreCliente)
+            conn.query(`SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont
+                FROM tbl_ventas
+                JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo
+                WHERE users_info.nombre = ?;
+            `, [nombreCliente], (err, ventas) => {
+                if (err) {
+                    res.json(err);
+                }
+                const ventasFormateadas = ventas.map(venta => {
+                    const fecha = new Date(venta.fecha);
+                    const dia = fecha.getDate();
+                    const mes = fecha.toLocaleString('default', { month: 'long' });
+                    const anio = fecha.getFullYear();
+                    const fechaFormateada = `${dia} de ${mes} de ${anio}`;
+                    return {
+                        idVentas: venta.idVentas,
+                        nombre: venta.nombre,
+                        total: venta.total,
+                        fecha: fechaFormateada,
+                        descripcion: venta.descripcion,
+                        estado: venta.estado,
+                        cont: venta.cont
+                    };
+                });
+                res.render('ventas/ventas', { ventas: ventasFormateadas });
             });
-            res.render('ventas/ventas', { ventas: ventasFormateadas });
-        });
+        } else {
+            conn.query(`
+                SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont
+                FROM tbl_ventas
+                JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo;
+            `, (err, ventas) => {
+                if (err) {
+                    return res.json(err);
+                }
+                const ventasFormateadas = ventas.map(venta => {
+                    const fecha = new Date(venta.fecha);
+                    const dia = fecha.getDate();
+                    const mes = fecha.toLocaleString('default', { month: 'long' });
+                    const anio = fecha.getFullYear();
+                    const fechaFormateada = `${dia} de ${mes} de ${anio}`;
+                    return {
+                        idVentas: venta.idVentas,
+                        nombre: venta.nombre,
+                        total: venta.total,
+                        fecha: fechaFormateada,
+                        descripcion: venta.descripcion,
+                        estado: venta.estado,
+                        cont: venta.cont
+                    };
+                });
+                res.render('ventas/ventas', { ventas: ventasFormateadas });
+            })
+        }
     });
 }
 
@@ -84,7 +118,7 @@ function registrar(req, res) {
             return;
         }
 
-        conn.query('SELECT ui.idInfo, ui.telefono FROM users_info ui JOIN users_access ua ON ui.idAccess = ua.idAccess WHERE ui.nombre = ? ', [data.nombre], (error, results) => {
+        conn.query('SELECT ui.idInfo, ua.correo FROM users_info ui JOIN users_access ua ON ui.idAccess = ua.idAccess WHERE ui.nombre = ? ', [data.nombre], (error, results) => {
             if (error) {
                 console.error('Error al obtener el idInfo:', error);
                 res.status(500).json({ error: 'Error al obtener el idInfo' });
@@ -93,7 +127,7 @@ function registrar(req, res) {
                 res.status(404).json({ error: 'No se encontró el nombre en la tabla users_info' });
             } else {
                 const idInfo = results[0].idInfo;
-                const telefono = results[0].telefono;
+                const correo = results[0].correo;
                 const RegistroVenta = {
                     idInfo: idInfo,
                     total: data.total,
@@ -158,13 +192,10 @@ function registrar(req, res) {
                         res.status(500).json({ error: 'Error al obtener la información de los productos' });
                     } else {
 
-                        // Llamada a tu función crearFacturaPDF
-                        crearFacturaPDF(RegistroVenta, productoResults, unidadesArray, nombre, telefono, (tempFilePath, nombre, telefono) => {
-                            // Llamar a la función de envío de WhatsApp con el archivo adjunto
-                            enviarWhatsAppConArchivo(tempFilePath, nombre, telefono);
+                        crearFacturaPDF(RegistroVenta, productoResults, unidadesArray, nombre, correo, (facturaPath, nombreUsuario, correo) => {
+                            enviarFacturaPorCorreo(correo, facturaPath, nombreUsuario);
                             res.redirect('/ventas?alert=success')
-
-                        })
+                        });
                     }
                 });
             }
@@ -172,22 +203,8 @@ function registrar(req, res) {
     });
 }
 
-const { Client } = require('whatsapp-web.js');
-// Crear una instancia del cliente de WhatsApp
-const client = new Client();
-
-// Evento cuando el cliente esté listo
-client.on('ready', () => {
-    console.log('Cliente de WhatsApp listo');
-
-    // Llamada a tu función crearFacturaPDF
-    crearFacturaPDF(RegistroVenta, productoResults, unidadesArray, nombre, telefono, (tempFilePath, nombre, telefono) => {
-        // Llamar a la función de envío de WhatsApp con el archivo adjunto
-        enviarWhatsAppConArchivo(tempFilePath, nombre, telefono);
-    });
-});
 // Función para crear la factura PDF
-function crearFacturaPDF(venta, productos, unidades, nombre, telefono, callback) {
+function crearFacturaPDF(venta, productos, unidades, nombre, correo, callback) {
     const doc = new PDFDocument();
 
     // Configurar las cabeceras del PDF
@@ -253,27 +270,56 @@ function crearFacturaPDF(venta, productos, unidades, nombre, telefono, callback)
     doc.pipe(fs.createWriteStream(tempFilePath));
 
     // Llamar a la función de envío de correo electrónico con el archivo adjunto
-    callback(tempFilePath, nombre, telefono);
+    callback(tempFilePath, nombre, correo);
 }
 
-// Función para enviar el archivo PDF a través de WhatsApp
-function enviarWhatsAppConArchivo(filePath, nombre, telefono) {
-    // Reemplaza 'Número o ID de WhatsApp aquí' con el número correcto
-    const destinatario = telefono;
-
-    // Enviar el archivo utilizando la función sendFile
-    client.sendMessage(destinatario, {
-        file: fs.readFileSync(filePath), // Leer el archivo
-        mimetype: 'application/pdf', // Tipo de archivo
-        caption: `Factura para ${nombre}`, // Pie de foto opcional
-    }).then(() => {
-        console.log('Archivo PDF enviado exitosamente');
-        // Puedes eliminar el archivo temporal después de enviarlo
-        fs.unlinkSync(filePath);
-    }).catch((error) => {
-        console.error('Error al enviar el archivo PDF:', error);
+//Funcion para enviar el correo
+function enviarFacturaPorCorreo(correo, facturaPath) {
+    const transporter = nodemailer.createTransport({
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
+        auth: {
+            user: 'levitisoft2021@gmail.com',
+            pass: 'omqseuasqhquwqbp'
+        },
     });
+
+    let info = transporter.sendMail({
+        from: '"Factura de venta Levitico" <levitisoft2021@gmail.com>',
+        to: correo,
+        subject: "Factura de Venta Levitico",
+        text: "Adjuntamos la factura de su compra.",
+        attachments: [
+            {
+                filename: 'factura.pdf',
+                path: facturaPath
+            }
+        ]
+    }, (err, info) => {
+        if (err) {
+            console.error(err);
+        } else {
+            //console.log('Correo enviado: ' + info.response);
+        }
+    });
+
+    // Verificar si el archivo temporal existe antes de intentar eliminarlo
+    if (fs.existsSync(facturaPath)) {
+        // Eliminar el archivo temporal después de enviar el correo
+        fs.unlink(facturaPath, (err) => {
+            if (err) {
+                console.error('Error al eliminar el archivo temporal:', err);
+            } else {
+                console.log('Archivo temporal eliminado:', facturaPath);
+
+            }
+        });
+    }
+
 }
+
+
 
 
 

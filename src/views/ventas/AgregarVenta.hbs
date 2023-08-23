@@ -54,7 +54,7 @@
                                         <div class="form-group">
                                             <label for="floatingInput"
                                                 style="float: left; padding-right: 10px;">Fecha</label>
-                                            <input type="date" class="form-control" id=" floatingInput"
+                                            <input type="date" class="form-control" id=" fecha"
                                                 style="border-radius: 0;" name="fecha" required>
                                         </div>
                                     </div>
@@ -62,7 +62,7 @@
                                         <div class="form-group">
                                             <label for="floatingInput"
                                                 style="float: left; padding-right: 10px;">Estado</label>
-                                            <select class="form-control" id="floatingInput" style="border-radius: 0;"
+                                            <select class="form-control" id="estado" style="border-radius: 0;"
                                                 name="estado" required>
                                                 <option value="Contado">Contado</option>
                                                 <option value="Plan separe">Plan separe</option>
@@ -81,7 +81,8 @@
                                         type="button">Cancelar</a>
                                 </div>
                                 <div class="col-6">
-                                    <button type="submit" class=" btn btn-success" style="border-radius: 2;" id="boton">
+                                    <button type="submit" class=" btn btn-success" style="border-radius: 2;" id="boton"
+                                        onclick="Validarcampos(event)">
                                         Agregar venta</a>
                                 </div>
                             </div>
@@ -118,7 +119,8 @@
                                                     </div>
                                                     <div class="col-7">
                                                         <input type="number" class="form-control w-90"
-                                                            name="cantidadProducto" id="cantidadProducto">
+                                                            name="cantidadProducto" id="cantidadProducto"
+                                                            onkeypress="return solonumeros(event)">
                                                     </div>
                                                 </div>
                                             </td>
@@ -138,241 +140,170 @@
         </div>
         <br>
     </center>
-</body>
-
-{{#if asignacion}}
-<script>
-    var permisosInput = document.querySelector('#permisosInput');
-    var permisosValue = permisosInput.value;
-
-    var palabras = permisosValue.split(',');
-
-    var menuItems = document.querySelectorAll('.nav li');
-
-    menuItems.forEach(function (item) {
-        var items = item.querySelector('p').textContent.trim().toLowerCase();
-
-        if (palabras.includes(items)) {
-            item.style.display = 'block';
-        } else {
-            item.style.display = 'none';
-        }
-    });
-</script>
-{{/if}}
-{{!-- Validación campos vacios --}}
-<script>
-    
-</script>
 
 
-{{!-- Checkbox productos --}}
-<script>
-    // Obtener todos los elementos de tipo checkbox dentro de la tabla
-    const checkboxes = document.querySelectorAll('#tabla-productos input[type="checkbox"]');
+    {{#if asignacion}}
+    <script>
+        var permisosInput = document.querySelector('#permisosInput');
+        var permisosValue = permisosInput.value;
 
-    // Función para verificar si todos los checkboxes están desactivados
-    function verificarCheckboxes() {
-        let todosDesactivados = true;
+        var palabras = permisosValue.split(',');
 
-        checkboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                todosDesactivados = false;
-                return; // Si encontramos uno activado, salimos del bucle forEach
+        var menuItems = document.querySelectorAll('.nav li');
+
+        menuItems.forEach(function (item) {
+            var items = item.querySelector('p').textContent.trim().toLowerCase();
+
+            if (palabras.includes(items)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
             }
         });
+    </script>
+    {{/if}}
 
-        if (todosDesactivados) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Seleccione al menos un producto',
-            })
-            return;
-        }
-    }
 
-    // Agregar un event listener al botón para el evento 'click'
-    const validarBoton = document.getElementById('boton');
-    validarBoton.addEventListener('click', function (event) {
-        verificarCheckboxes(); // Verificar los checkboxes antes del envío
-        if (!event.defaultPrevented) {
-            document.getElementById('formulario').submit(); // Enviar el formulario si no hay errores
-        }
-    });
-</script>
-{{!-- Calcular total productos --}}
-<script>
-    let total = 0; // Declare the 'total' variable outside the function
+    {{!-- Calcular total productos --}}
+    <script>
+        let total = 0; // Declare the 'total' variable outside the function
 
-    function calcularTotal() {
-        const checkbox = $("#check")[0]; // Use jQuery to select the checkbox
-        const checkboxes = document.querySelectorAll('#tabla-productos input[type="checkbox"]');
+        function calcularTotal() {
+            const checkboxes = document.querySelectorAll('#tabla-productos input[type="checkbox"]:checked');
 
-        // Obtener todos los elementos con la clase cantidadProducto
-        const cantidadInputs = $("input[name='cantidadProducto']");
+            // Obtener todos los elementos con la clase cantidadProducto
+            const cantidadInputs = $("input[name='cantidadProducto']");
 
-        // Calcular el total para cada producto
-        let newTotal = 0; // Initialize a new total variable
+            // Calcular el total para los productos seleccionados
+            let newTotal = 0;
 
-        cantidadInputs.each(function (index, input) {
-            const cantidad = parseInt($(input).val(), 10);
-            const precio = parseFloat($(input).closest("tr").find("td:eq(2)").text());
-            const subtotal = cantidad * precio;
-            newTotal += subtotal; // Accumulate the subtotal for each product
-        });
+            checkboxes.forEach(checkbox => {
+                const cantidadInput = $(checkbox).closest("tr").find("input[name='cantidadProducto']");
+                const cantidad = parseInt(cantidadInput.val(), 10);
+                const precio = parseFloat($(checkbox).closest("tr").find("td:eq(2)").text());
 
-        // Calculate the change in total based on the previous and new total
-        const totalChange = newTotal - total;
+                if (isNaN(cantidad)) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Digite una cantidad valida',
+                    });
+                    return;
+                }
+                const subtotal = cantidad * precio;
+                newTotal += subtotal;
 
-        if (checkbox.checked) {
-            //alert('El checkbox está activado.');
-            const cantidad = document.getElementById('cantidadProducto');
-            if (cantidad.value == "") {
+
+            });
+            if (newTotal === 0) {
                 Swal.fire({
                     icon: 'error',
-                    title: 'Cantidad Obligatoria',
-                })
-            } else {
-                total = newTotal; // Update the total with the new value
+                    title: 'Seleccione al menos un producto/Ingrese cantidad válida',
+                });
+                return;
             }
-
-        } else {
-            //alert('El checkbox no está activado.');
-            // Here you can do something related to the checkbox not being checked
-            total -= totalChange; // Subtract the change in total from the total
-        }
-
-        let todosDesactivados = true;
-
-        checkboxes.forEach(checkbox => {
-            if (checkbox.checked) {
-                todosDesactivados = false;
-                return; // Si encontramos uno activado, salimos del bucle forEach
-            }
-        });
-
-        if (todosDesactivados) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Seleccione al menos un producto',
-            })
-            return;
-        }
-
-        $("#totalInput").val(total.toFixed(2));
-    }
-
-    $(document).ready(function () {
-        // Evento de escucha para el botón "Agregar venta"
-        $("#boton").on("click", function () {
-            calcularTotal();
-        });
-    });
-
-
-</script>
-
-
-{{!--
-<script>
-    const urlParams = new URLSearchParams(window.location.search);
-    const productosSeleccionados = JSON.parse(urlParams.get('productos'));
-    const total = urlParams.get('total');
-    const cantidades = JSON.parse(urlParams.get('UND'));
-
-    const IdProductos = document.getElementById('IdProductos');
-    IdProductos.value = productosSeleccionados;
-
-    const cantidadProductos = document.getElementById('cantidadProductos');
-    cantidadProductos.value = cantidades;
-
-    const totalInput = document.getElementById('totalInput');
-    totalInput.value = total;
-
-    const formulario = document.getElementById('formulario');
-    formulario.addEventListener('submit', function (event) {
-        if (IdProductos.value === "") {
-            event.preventDefault();
-            Swal.fire({
-                icon: 'error',
-                title: 'Error',
-                text: 'Debe de ingresar por lo menos 1 producto'
+            // Formatear el total con puntos y coma
+            const formattedTotal = newTotal.toLocaleString('es-CO', {
+                style: 'currency',
+                currency: 'COP',
+                minimumFractionDigits: 0
             });
+
+
+            $("#totalInput").val(formattedTotal);
         }
 
-
-    });
-</script> --}}
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="assets/js/ValidacionVentas.js"></script>
-<!--   Core JS Files   -->
-<script src="assets/js/core/jquery.min.js"></script>
-<script src="assets/js/core/popper.min.js"></script>
-<script src="assets/js/core/bootstrap.min.js"></script>
-<script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-<!--  Google Maps Plugin    -->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
-<!-- Chart JS -->
-<script src="assets/js/plugins/chartjs.min.js"></script>
-<!--  Notifications Plugin    -->
-<script src="assets/js/plugins/bootstrap-notify.js"></script>
-<!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
-<script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-
-
-<script>
-    //SOLO NUMEROS
-    $(function () {
-        $(".validar").keydown(function (event) {
-            //alert(event.keyCode);
-            if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
-                return false;
-            }
-        });
-    });
-</script>
-<!--Paginacion-->
-<!-- JQUERY -->
-<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous">
     </script>
-<!-- DATATABLES -->
-<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
-</script>
-<!-- BOOTSTRAP -->
-<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
-</script>
-<script>
-    $(document).ready(function () {
-        $('#tabla-productos').DataTable({ //se debe seleccionar el id de la tabla $('#id..
-            language: { //Como el original esta en inglés, aqui se traducen los textos
-                processing: "Tratamiento en curso...",
-                search: "Buscar&nbsp;:",
-                lengthMenu: "Agrupar de _MENU_",
-                info: "_START_ al _END_ de _TOTAL_",
-                infoEmpty: "No existen datos.",
-                infoFiltered: "(filtrado de _MAX_ elementos en total)",
-                infoPostFix: "",
-                loadingRecords: "Cargando...",
-                zeroRecords: "No se encontraron datos con tu busqueda",
-                emptyTable: "No hay datos disponibles en la tabla.",
-                paginate: {
-                    first: "Primero",
-                    previous: "Anterior",
-                    next: "Siguiente",
-                    last: "Ultimo"
-                },
-                aria: {
-                    sortAscending: ": active para ordenar la columna en orden ascendente",
-                    sortDescending: ": active para ordenar la columna en orden descendente"
+
+    {{!-- Todos lo campos vacios --}}
+    <script>
+        function Validarcampos(event) {
+            var nombre = document.getElementById("nombre").value;
+            var total = document.getElementById("totalInput").value;
+            var descripcion = document.getElementById("descripcion").value;
+            var fecha = document.getElementById("fecha");
+            if (descripcion === "" || total === "" || nombre === "" || fecha === null) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Campos Obligatorios',
+                })
+            }
+        }
+    </script>
+
+
+
+    <script src="/assets/js/Validaciones.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--   Core JS Files   -->
+    <script src="assets/js/core/jquery.min.js"></script>
+    <script src="assets/js/core/popper.min.js"></script>
+    <script src="assets/js/core/bootstrap.min.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
+    <!--  Google Maps Plugin    -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+    <!-- Chart JS -->
+    <script src="assets/js/plugins/chartjs.min.js"></script>
+    <!--  Notifications Plugin    -->
+    <script src="assets/js/plugins/bootstrap-notify.js"></script>
+    <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
+    <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+
+
+    <script>
+        //SOLO NUMEROS
+        $(function () {
+            $(".validar").keydown(function (event) {
+                //alert(event.keyCode);
+                if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
+                    return false;
                 }
-            },
-            lengthMenu: [[5], [5]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
-            searching: false, //Ocultar buscador
-            lengthChange: false,//Ocultar filtro de cantidad de filas
-            ordering: false //Ocultar filtro de ordenación por columnas
+            });
         });
-    });
-</script>
+    </script>
+    <!--Paginacion-->
+    <!-- JQUERY -->
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous">
+        </script>
+    <!-- DATATABLES -->
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+    </script>
+    <!-- BOOTSTRAP -->
+    <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#tabla-productos').DataTable({ //se debe seleccionar el id de la tabla $('#id..
+                language: { //Como el original esta en inglés, aqui se traducen los textos
+                    processing: "Tratamiento en curso...",
+                    search: "Buscar&nbsp;:",
+                    lengthMenu: "Agrupar de _MENU_",
+                    info: "_START_ al _END_ de _TOTAL_",
+                    infoEmpty: "No existen datos.",
+                    infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron datos con tu busqueda",
+                    emptyTable: "No hay datos disponibles en la tabla.",
+                    paginate: {
+                        first: "Primero",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Ultimo"
+                    },
+                    aria: {
+                        sortAscending: ": active para ordenar la columna en orden ascendente",
+                        sortDescending: ": active para ordenar la columna en orden descendente"
+                    }
+                },
+                lengthMenu: [[5], [5]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
+                searching: false, //Ocultar buscador
+                lengthChange: false,//Ocultar filtro de cantidad de filas
+                ordering: false //Ocultar filtro de ordenación por columnas
+            });
+        });
+    </script>
+</body>
+
+</html>

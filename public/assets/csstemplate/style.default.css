@@ -797,6 +797,7 @@ button:not(:disabled),
   flex-direction: column;
   justify-content: center;
   padding-left: 8px;
+  margin-bottom: 10px;
 }
 .card_section_2{
   display: flex;
