@@ -20,7 +20,7 @@ function productos_listar(req, res) {
                             productos[index].estado2 = true;
                         }
 
-                        switch (productos[index].idCategoria) {
+                        switch (parseInt(productos[index].idCategoria)) {
                             case 1:
                                 productos[index].idCategoria = "Accesorios";
                                 break;
@@ -41,7 +41,7 @@ function productos_listar(req, res) {
                                 break;
                         }
                         // Parsear precio
-                        productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
+                        productos[index].precio = "$" + productos[index].precio.toLocaleString('es-CO');
                     }
 
 
@@ -95,7 +95,7 @@ function productos_detallar(req, res) {
                         producto[index].estado2 = true;
                     }
 
-                    switch (producto[index].idCategoria) {
+                    switch (parseInt(producto[index].idCategoria)) {
                         case 1:
                             producto[index].categoria = "Accesorios";
                             break;
@@ -338,7 +338,7 @@ function productos_editar(req, res) {
                                     break;
                             }
 
-                            switch (producto[i].idCategoria) {
+                            switch (parseInt(producto[i].idCategoria)) {
                                 case 1:
                                     producto[i].c_1 = true;
                                     break;

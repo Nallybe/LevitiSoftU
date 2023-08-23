@@ -90,9 +90,10 @@
   {{> bar}}
   <!--Barra de navegación-->
 
+
   <form action="/reparaciones_registrar" method="post" onsubmit="return validarEnvio()" id="FormRegistrarReparacion">
     <!--Start Card&Form-->
-    <div class="card" style="width: 98%; border-radius: 0; margin-left:1%; margin-top: 60px;">
+    <div class="card" style="width: 70%; border-radius: 0; margin-left:1%; margin-top: 60px;">
       <div class="card-body">
         <h6 class="card-title" style="margin-bottom: 1%;">Registrar Reparación</h6>
 
@@ -404,7 +405,7 @@
               <td class="text-center">${cont}</td>
               <td class="text-center">
                   <input type="hidden" name="articulo" id="articulo_${cont}" value="${articulo.articulo}">
-                  <input name="articulo_a" id="articulo_a_${cont}" oninput="updateValueInput(this)" value="${articulo.articulo}" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
+                  <input name="articulo_a" id="articulo_a_${cont}" oninput="updateValueInput(this)" value="${articulo.articulo}" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; width:100%">
               </td>
               <td class="text-center">
 
