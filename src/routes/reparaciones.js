@@ -26,17 +26,17 @@ const tienePermisos = (session) => {
 };
 const router = express.Router();
 
-router.get('/reparaciones',/*checkSession,*/ReparacionesController.reparaciones_listar);
-router.get('/reparaciones/:idReparacion',/*checkSession,*/ReparacionesController.reparaciones_detallar);
+router.get('/reparaciones',checkSession,ReparacionesController.reparaciones_listar);
+router.get('/reparaciones/:idReparacion',checkSession,ReparacionesController.reparaciones_detallar);
 
-router.get('/reparaciones_registrar',/*checkSession,*/ReparacionesController.reparaciones_crear);
-router.post('/reparaciones_registrar',/*checkSession,*/ReparacionesController.reparaciones_registrar);
+router.get('/reparaciones_registrar',checkSession,ReparacionesController.reparaciones_crear);
+router.post('/reparaciones_registrar',checkSession,ReparacionesController.reparaciones_registrar);
 
-router.get('/reparaciones_editar/:idReparacion',/*checkSession,*/ReparacionesController.reparaciones_editar);
-router.post('/reparaciones_editar/:idReparacion',/*checkSession,*/ReparacionesController.reparaciones_modificar);
+router.get('/reparaciones_editar/:idReparacion',checkSession,ReparacionesController.reparaciones_editar);
+router.post('/reparaciones_editar/:idReparacion',checkSession,ReparacionesController.reparaciones_modificar);
 
-router.post('/reparaciones_eliminar',/*checkSession,*/ReparacionesController.reparaciones_eliminar);
+router.post('/reparaciones_eliminar',checkSession,ReparacionesController.reparaciones_eliminar);
 
-router.post('/reparaciones_estadoTyE',/*checkSession,*/ReparacionesController.reparaciones_estadoTyE);
+router.post('/reparaciones_estadoTyE',checkSession,ReparacionesController.reparaciones_estadoTyE);
 
 module.exports = router;
