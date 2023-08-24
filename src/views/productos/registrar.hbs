@@ -96,19 +96,19 @@
   <!--Barra de navegación-->
   <form action="/productos_registrar" method="post" onsubmit="return validarEnvio()" id="FormRegistrarProducto"
     enctype="multipart/form-data">
-    <div class="container" style="margin-top: 60px;">
+    <div class="container-fluid" style="margin-top: 60px;">
 
       <!--Start Card&Form-->
       <div class="card" style="width: 100%; border-radius: 0;">
         <div class="card-body">
-          <h6 class="card-title" style="margin-bottom: 1%;">Registrar Producto</h6>
+          <h4 class="card-title" style="margin-bottom: 1%;">Registrar producto</h4>
 
           <div class="row">
             <div class="col-5">
               <!--Start Card #1-->
               <div class="card" style="border-radius: 0; width: 100%; margin-bottom: 1%;">
                 <div class="card-body">
-                  <h6 class="card-title" style="margin-bottom: 2%;">Producto</h6>
+                  <h5 class="card-title" style="margin-bottom: 2%;">Producto</h5>
                   <!--Input Nombre-->
                   <label class="form-label" for="nombre">Nombre</label>
                   <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="nombre"
@@ -166,7 +166,7 @@
 
                     <!-- Agregar un botón para permitir seleccionar una nueva imagen -->
                     <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning btn-sm">Seleccionar
-                      Imagen</button>
+                      imagen</button>
 
                   </center>
 
@@ -190,7 +190,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-10">
-                      <h6 class="card-title">Agregar insumo</h6>
+                      <h5 class="card-title">Agregar insumo</h5>
 
                       <div class="row">
                         <div class="col-md-7">
@@ -237,7 +237,7 @@
               <!--Start Card #3-->
               <div class="card mt-3" style="width: 100%; border-radius: 0;">
                 <div class="card-body">
-                  <h6 class="card-title">Insumos Requeridos</h6>
+                  <h5 class="card-title">Insumos requeridos</h5>
                   <!--Start Table-->
                   <div class="table-container">
                     <table class="table table-sm">
@@ -283,7 +283,7 @@
                 <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
                 <button type="submit" class="btn btn-success btn-sm"
                   id="btnRegistrar">
-                  Registrar Producto</button>
+                  Registrar producto</button>
                 <!--End Btn Regiastrar-->
               </div>
 

@@ -6,7 +6,7 @@
 <body>
   <style>
     .btn {
-        border-radius: 8px;
+      border-radius: 8px;
     }
 
     .fa-trash:hover {
@@ -47,7 +47,7 @@
       <!--Start Card&Form-->
       <div class="card" style="width: 50%; border-radius: 0;">
         <div class="card-body">
-          <h4 class="card-title" style="margin-bottom: 2%;">Registrar Usuario</h4>
+          <h4 class="card-title" style="margin-bottom: 2%;">Registrar usuario</h4>
           <div class="row">
             <div class="col-6">
               <!--Input Rol-->
@@ -83,8 +83,9 @@
 
               <!--Input Documento-->
               <label class="form-label" for="documento">Documento</label>
-              <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="documento"
-                name="documento" oninput="val_documento()" autocomplete="off">
+              <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="documento"
+                name="documento" onkeypress="return solonumeros(event)"
+                oninput="val_documento();" autocomplete="off" maxlength="10">
               <div id="mensajeErrorDocumento"></div>
               <!--End Input Documento-->
 
@@ -97,27 +98,23 @@
 
               <!--Input Telefono-->
               <label class="form-label mt-2" for="telefono">Teléfono</label>
-              <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="telefono"
-                name="telefono" oninput="val_telefono()" autocomplete="off">
+              <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="telefono"
+                name="telefono" onkeypress="return solonumeros(event)" oninput="val_telefono()" autocomplete="off" maxlength="10">
               <div id="mensajeErrorTelefono"></div>
               <!--End Input Telefono-->
             </div>
           </div>
-          <div class="row">
-            <div class="col-md-6"></div>
-            <div class="col-md-6">
+          <div style="text-align: right;">
               <div class="mt-3">
                 <!--Start Btn Cancelar-->
-              <a class="btn btn-danger btn-sm" href="/usuarios" style="margin-top: 1px;"
-                type="button">Cancelar</a>
-              <!--End Btn Cancelar-->
+                <a class="btn btn-danger btn-sm" href="/usuarios" style="margin-top: 1px;" type="button">Cancelar</a>
+                <!--End Btn Cancelar-->
 
-              <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-              <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;"
-                id="btnRegistrar">
-                Registrar Usuario</button>
-              <!--End Btn Regiastrar-->
-              </div>
+                <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+                <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;" id="btnRegistrar">
+                  Registrar usuario</button>
+                <!--End Btn Regiastrar-->
+                
             </div>
           </div>
 
@@ -345,6 +342,34 @@
   </script>
   <!--End Validar Envio-->
 
+
+  <script>
+    function solonumeros(e) {
+      key = e.keyCode || e.which;
+
+      teclado = String.fromCharCode(key);
+
+      letras = "1234567890";
+
+      especiales = "8-37-38-46";
+
+      teclado_especial = false;
+
+      for (var i in especiales) {
+        if (key == especiales[i]) {
+          teclado_especial = true; break
+        }
+      }
+
+      if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+        return false;
+      }
+
+    }
+  </script>
+
+
+
   <!--Inicio footer-->
 
   <!--Fin footer-->
@@ -365,16 +390,3 @@
   <script src="assets/js/plugins/bootstrap-notify.js"></script>
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
-
-
-  <script>
-    //SOLO NUMEROS
-    $(function () {
-      $(".validar").keydown(function (event) {
-        //alert(event.keyCode);
-        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
-          return false;
-        }
-      });
-    });
-  </script>

@@ -57,7 +57,7 @@
 
 
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-8 container-fluid">
         {{#each producto}}
 
         <div class="card md-4" style="max-width: 100%; border-radius: 0; margin-left: 1%">
@@ -79,7 +79,7 @@
                 <div class="col-md-10">
 
                     <div class="card-body m-3" style="text-align: left;">
-                            <h5 class="card-title">PRODUCTO</h5>
+                            <h4 class="card-title">Producto</h4>
 
                             <div class="card-text ml-1">
                                 <p><b>Nombre: </b>{{nombre}}<br></p>
@@ -117,11 +117,11 @@
     </div>
 
 
-    <div class="col-md-4">
+    <div class="col-md-4 container-fluid">
         <!--Start Card #3-->
         <div class="card" style="width: 98%; border-radius: 0;">
             <div class="card-body">
-                <h6 class="card-title">Insumos Requeridos</h6>
+                <h5 class="card-title">Insumos requeridos</h5>
                 <!--Start Table-->
                 <div class="table-container">
                     <table class="table table-sm">
@@ -138,7 +138,7 @@
                                 <td class="py-2 px-6 text-center">{{cont}}</td>
                                 <td class="p-2 text-center">
                                     <button type="button" data-bs-toggle="popover" data-bs-trigger="hover"
-                                        data-bs-title="<b>Insumo {{idInsumo}}</b>" data-bs-html="true" data-bs-content="
+                                        data-bs-title="<b>Insumo {{cont}}</b>" data-bs-html="true" data-bs-content="
                                     <div class='row'>
                                         <div class='col-md-4'>
                                             <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Box-Open-icon.png' width='100' />
