@@ -319,7 +319,7 @@ async function producciones_detallar(req, res) {
             }
 
             var evento = {
-                title: 'Evento #' + d_produccion[i].cont + ' ' + d_produccion[i].titulo,
+                title: 'Tarea #' + d_produccion[i].cont + ' ' + d_produccion[i].titulo,
                 start: d_produccion[i].fechaInicio,
                 end: d_produccion[i].fechaFin,
                 color: color

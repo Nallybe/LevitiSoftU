@@ -79,7 +79,7 @@
               <!--End Input Correo-->
 
               <!--Input Password-->
-              <label class="form-label mt-2" for="password">Password</label>
+              <label class="form-label mt-2" for="password">Contraseña</label>
               <input type="password" class="form-control form-control-sm" style="border-radius: 0;" id="password"
                 name="password" oninput="val_password()" autocomplete="off" value="{{passsword}}">
               <div id="mensajeErrorPassword"></div>
@@ -307,12 +307,12 @@
       }
 
       if (password.value == "") {
-        mensajeErrorPassword.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El password es un campo obligatorio';
+        mensajeErrorPassword.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La contraseña es un campo obligatorio';
         mensajeErrorPassword.style.display = 'block';
       }
 
       if (documento.value == "") {
-        mensajeErrorDocumento.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El password es un campo obligatorio';
+        mensajeErrorDocumento.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El documento es un campo obligatorio';
         mensajeErrorDocumento.style.display = 'block';
       }
 
