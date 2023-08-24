@@ -42,15 +42,15 @@ const tienePermisos = (session) => {
 };
 const router = express.Router();
 
-router.get('/productos', checkSession,ProductosController.productos_listar);
-router.get('/productos/:idProducto', checkSession,ProductosController.productos_detallar);
+router.get('/productos', /*checkSession,*/ProductosController.productos_listar);
+router.get('/productos/:idProducto', /*checkSession,*/ProductosController.productos_detallar);
 
-router.get('/productos_registrar', checkSession,ProductosController.productos_crear);
-router.post('/productos_registrar', upload.single('imagen'), checkSession,ProductosController.productos_registrar);
+router.get('/productos_registrar', /*checkSession,*/ProductosController.productos_crear);
+router.post('/productos_registrar', upload.single('imagen'), /*checkSession,*/ProductosController.productos_registrar);
 
-router.get('/productos_editar/:idProducto', checkSession,ProductosController.productos_editar);
-router.post('/productos_editar/:idProducto', upload.single('imagen'),  checkSession,ProductosController.productos_modificar);
+router.get('/productos_editar/:idProducto', /*checkSession,*/ProductosController.productos_editar);
+router.post('/productos_editar/:idProducto', upload.single('imagen'),  /*checkSession,*/ProductosController.productos_modificar);
 
-router.post('/productos_eliminar', checkSession,ProductosController.productos_eliminar);
+router.post('/productos_eliminar', /*checkSession,*/ProductosController.productos_eliminar);
 
 module.exports = router;

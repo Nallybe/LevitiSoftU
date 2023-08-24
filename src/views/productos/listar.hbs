@@ -64,10 +64,10 @@
                     <th class="w-1/4 ...">#</th>
                     <th class="w-1/4 ...">Imagen</th>
                     <th class="w-1/4 ...">Nombre</th>
-                    <th class="w-4/4 ..." style="width: auto; text-align:left" >Descripción</th>
+                    <th class="w-1/4 ..." style="width: auto; text-align:left" >Descripción</th>
                     <th class="w-1/4 ...">Categoría</th>
                     <th class="w-1/4 ...">Stock</th>
-                    <th class="w-1/4 ...">Precio</th>
+                    <th class="w-1/4 ..." style="width: auto">Precio</th>
                     <th class="w-1/4 ...">Estado</th>
                     <th class="w-2/4 ...">Funciones</th>
                 </tr>
@@ -105,8 +105,8 @@
                         </center>
                     </td>
                     <td class="p-3 text-center">{{nombre}}</td>
-                    <td class="p-3 text-left"  style="width: auto; max-width:50%; max-height:50px; height:auto; max-length: 100;" maxlength="50"> {{descripcion}} Lorem ipsum dolor sit amet consectetur adipisicing elit. Maxime debitis quod repellendus tempore fugiat rerum impedit a consequatur animi vitae alias molestias, quo placeat, quos maiores provident iure deleniti sunt sequi facere. Repellat veniam ab, et veritatis consequatur magnam dolore dolores assumenda enim eveniet sed unde at ut exercitationem possimus. Commodi quis, qui ab tempora aliquam, optio atque dolorem laboriosam accusamus possimus illo fuga in facilis explicabo voluptatum. Voluptatem, porro nesciunt esse facilis ex assumenda natus sequi nam fuga est rem architecto temporibus excepturi soluta accusantium at labore sint! Velit, totam eveniet. Exercitationem, sed itaque voluptatibus quod nam sequi deleniti! </td>                    
-                    <td class="p-3 text-center">{{idCategoria}}</td>
+                    <td class="p-3 text-left"  style="width: auto;"> <p class="limited-paragraph">{{descripcion}} Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda libero rem quibusdam sapiente. Esse corporis dignissimos expedita assumenda odit placeat nulla alias aperiam dolore reprehenderit, voluptatibus magnam cumque rerum hic, debitis totam eaque. Velit officiis reiciendis amet mollitia ullam beatae ea voluptate omnis vitae nesciunt. Ratione pariatur porro autem itaque aliquid natus, ex, optio, esse dolor blanditiis quas vel! Voluptas modi error ut obcaecati, quasi ipsam iste voluptatem, pariatur fugit tempore, fuga aliquam asperiores nesciunt doloribus corrupti dolor. Labore culpa vero laborum aliquid quae omnis, aliquam quibusdam laboriosam soluta tempora nemo dolore saepe libero. Laborum id saepe nesciunt rem earum.</p></td>                    
+                    <td class="p-3 text-center" >{{idCategoria}}</td>
                     <td class="p-3 text-center">{{stock}}</td>
                     <td class="p-3 text-center">{{precio}}</td>
                     {{#if estado1}}
@@ -125,7 +125,7 @@
                     </td>
                     <!--Inactivo-->
                     {{/if}}
-                    <td class="p-1 text-center">
+                    <td class="p-1 text-center" style="width: auto;">
                         <a href="/productos/{{idProducto}}" style="color: #292b2c; " class="boton-producto">
                             <i type="button" class="fa-sharp fa-solid fa-eye"></i>
                         </a>
@@ -147,6 +147,22 @@
         </table>
     </div>
 </center>
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    var maxLength = 45; // Ajusta el número máximo de caracteres
+    var paragraphs = document.querySelectorAll(".limited-paragraph");
+    
+    paragraphs.forEach(function(paragraph) {
+        var content = paragraph.textContent.trim();
+        
+        if (content.length > maxLength) {
+            paragraph.textContent = content.substring(0, maxLength) + "...";
+        }
+    });
+});
+</script>
 
 </body>
 <!--Validacion nav bar-->

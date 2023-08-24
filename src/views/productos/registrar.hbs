@@ -156,8 +156,8 @@
                   <!--Input Descripción-->
                   <label class="form-label mt-2" for="descripcion_R">Descripción</label>
                   <textarea class="form-control form-control-sm" id="descripcion" name="descripcion" autocomplete="off"
-                    maxlength="250" onchange="val_descripcion()"></textarea>
-                  <!--End Input Descripción-->
+                     onchange="val_descripcion()"></textarea>
+                  <!--End Input Descripción maxlength="250"-->
 
                   <center>
 
@@ -454,7 +454,6 @@
         const repetido = document.getElementById('cant_' + insumo.idInsumo)
         if (repetido != null) {
           repetido.value = parseInt(repetido.value) + parseInt(insumo.cantidad);
-
           repetido.setAttribute("value", repetido.value);
 
           Swal.fire({
