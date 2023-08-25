@@ -626,7 +626,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Participantes Tarea #${cont}</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Participantes tarea #${cont}</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -636,7 +636,7 @@
                       <!--Start Card-->
                       <div class="card" style="border-radius: 0; width: 100%;">
                         <div class="card-body">
-                          <h6 class="card-title">Agregar Participante</h6>
+                          <h5 class="card-title">Agregar participante</h5>
                           <div class="row">
                             <div class="col-md-10">
 
@@ -674,7 +674,7 @@
                             <th>Funciones</th>
                           </tr>
                         </thead>
-                        <tbody id="listaParticipantes_${cont}" class="TablaParticipantes" style="text-align: center;">
+                        <tbody id="listaParticipantes_${cont}" class="TablaParticipantes" style="text-align:center">
                         </tbody>
                       </table>
 
@@ -959,9 +959,68 @@
       }
     }
 
+    /*function validarEnvio() {
+       var list = document.getElementById('ListaTareas');
+       var participantes = document.querySelectorAll('TablaParticipantes');
+ 
+       var producto = document.getElementById("idProducto");
+       var encargado = document.getElementById("idEncargado");
+       var cantidad = document.getElementById("cantidad");
+       var fechaInicio = document.getElementById("fechaInicio");
+       var fechaFin = document.getElementById("fechaFin");
+ 
+       if (encargado.value == "" || producto.value == "" || cantidad.value == "" || fechaInicio.value == "" || fechaFin.value == "") {
+         //alert('campos obligatorios');
+         /*Swal.fire({
+           position: 'top-end',
+           icon: 'warning',
+           title: 'Campos Obligatorios',
+           showConfirmButton: false,
+           timer: 1500
+         });*/
+    /*  validarCampos();
+      return false; // Detener el envío del formulario
+    }
+
+    // Verificar si la lista tiene al menos un elemento
+    if (list.childElementCount === 0) {
+      //alert("No se puede enviar el formulario porque aún no se ha agregado nungún ");
+      Swal.fire({
+        position: 'top-end',
+        icon: 'info',
+        title: 'No hay nunguna tarea a realizar',
+        showConfirmButton: false,
+        timer: 6000
+      });
+      return false; // Detener el envío del formulario
+    }
+
+    alert(participantes)
+
+    // Verificar cada elemento de participantes
+    for (var i = 0; i < participantes.length; i++) {
+      alert("Se ingresó al ciclo");
+      if (participantes[i].childElementCount == 0) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'No hay participantes en almenos una tarea',
+          showConfirmButton: false,
+          timer: 3000
+        });
+        return false; // Detener el envío del formulario
+      }
+    }
+
+
+    // Permite el envío del formulario
+    return true;
+  }
+*/
+
     function validarEnvio() {
       var list = document.getElementById('ListaTareas');
-      var participantes = document.querySelectorAll('TablaParticipantes');
+      var participantes = document.querySelectorAll('.TablaParticipantes'); // Agregar un punto antes de 'TablaParticipantes'
 
       var producto = document.getElementById("idProducto");
       var encargado = document.getElementById("idEncargado");
@@ -970,51 +1029,41 @@
       var fechaFin = document.getElementById("fechaFin");
 
       if (encargado.value == "" || producto.value == "" || cantidad.value == "" || fechaInicio.value == "" || fechaFin.value == "") {
-        //alert('campos obligatorios');
-        /*Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'Campos Obligatorios',
-          showConfirmButton: false,
-          timer: 1500
-        });*/
         validarCampos();
         return false; // Detener el envío del formulario
       }
 
       // Verificar si la lista tiene al menos un elemento
       if (list.childElementCount === 0) {
-        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún ");
         Swal.fire({
           position: 'top-end',
           icon: 'info',
-          title: 'No hay nunguna tarea a realizar',
+          title: 'No hay ninguna tarea a realizar',
           showConfirmButton: false,
           timer: 6000
         });
         return false; // Detener el envío del formulario
       }
 
-      alert(participantes)
-
       // Verificar cada elemento de participantes
       for (var i = 0; i < participantes.length; i++) {
-        if (participantes[i].childElementCount == 0) {
+        var tarea = participantes[i];
+        if (tarea.childElementCount === 0) {
           Swal.fire({
             position: 'top-end',
             icon: 'info',
-            title: 'No se puede enviar el formulario porque algunos participantes no tienen tareas.',
+            title: 'No hay participantes en al menos una tarea',
             showConfirmButton: false,
-            timer: 6000
+            timer: 3000
           });
           return false; // Detener el envío del formulario
         }
       }
 
-
       // Permite el envío del formulario
       return true;
     }
+
   </script>
   <!--End Validar Envio-->
 
