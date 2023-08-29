@@ -183,11 +183,12 @@
     function Anular(id) {
         Swal.fire({
             title: '¿Estás seguro de esto?',
-            text: "¡Se anulará la compra y disminuirán los insumos de esta!",
+            text: "¡Se anulará la compra y disminuirá el stock de los insumos relacionados con la compra!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
+            cancelButtonText: 'Cancelar',
             confirmButtonText: 'Sí, anular compra!'
         }).then((result) => {
             if (result.isConfirmed) {
