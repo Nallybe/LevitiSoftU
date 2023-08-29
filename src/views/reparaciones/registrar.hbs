@@ -189,7 +189,7 @@
               <!--Start Card #3-->
               <div class="card mt-3" style="width: 100%; border-radius: 0;">
                 <div class="card-body">
-                  <h5 class="card-title">artículos a reparar</h5>
+                  <h5 class="card-title">Artículos a reparar</h5>
                   <!--Start Table-->
                   <div class="table-container">
                     <table class="table table-sm">
@@ -239,7 +239,15 @@
       </div>
       <!--End Card&Form-->
 
-      <div id="modales"></div>
+      <div id="modales">
+        <datalist id="lis_Insumos">
+          {{#each insumos}}
+          <option value="{{nombre}}">nombre({{nombre}}) medida({{medida}}) stock({{stock}})</option>
+          {{/each}}
+        </datalist>
+      </div>
+
+
     </div>
 
   </form>
@@ -469,11 +477,29 @@
         `;
 
       document.getElementById('modales').innerHTML += `
+      <!--<style>
+        #mensajeErrorIns_${cont},
+        #mensajeErrorInsC_${cont} {
+          display: none;
+          color: red;
+          margin-top: 5px;
+        }
+
+        #mensajeErrorIns_${cont} .icono,
+        #mensajeErrorInsC_${cont} .icono {
+         display: inline-block;
+          vertical-align: middle;
+          margin-right: 5px;
+          width: 15px;
+          height: 15px;
+        }
+      </style>-->
+
         <div class="modal fade modalP" id="insumos_${cont}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Insumos Requeridos Artículo #${cont}</h5>
+                      <h4 class="modal-title" id="exampleModalLabel">Insumos requeridos artículo #${cont}</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -483,7 +509,7 @@
                       <!--Start Card-->
                       <div class="card" style="border-radius: 0; width: 100%;">
                         <div class="card-body">
-                          <h6 class="card-title">Agregar Inusmo</h6>
+                          <h5 class="card-title">Agregar insumo</h5>
                           <div class="row">
                             <div class="col-md-10">
 
@@ -494,11 +520,7 @@
                               <label class="form-label" for="idInsumo">Insumo</label>
                               <input type="text" class="form-control form-control-sm" list="lis_Insumos" style="border-radius: 0; width: 100%;"
                                 id="idInsumo_${cont}" autocomplete="off" >
-                              <datalist id="lis_Insumos">
-                                {{#each insumos}}
-                                <option value="{{nombre}}">nombre({{nombre}}) medida({{medida}}) stock({{stock}})</option>
-                                {{/each}}
-                              </datalist>
+                                <div id="mensajeErrorIns_${cont}"></div>
                               <!--<div id="mensajeErrorInsumo"></div> oninput="val_Insumo()"-->
                               <!--End Input Insumo-->
 
@@ -510,6 +532,7 @@
                               <label class="form-label" for="cantidad">Cantidad</label>
                               <input type="text" class="form-control form-control-sm" style="border-radius: 0;"
                                 id="cantidad_${cont}" onkeypress="return solonumeros(event)" autocomplete="off" >
+                                <div id="mensajeErrorInsC_${cont}"></div>
                               <!--<div id="mensajeErrorCantidad"></div> oninput="val_cantidad()"-->
                               <!--End Input Cantidad-->
 
@@ -539,7 +562,7 @@
                             <th>Funciones</th>
                           </tr>
                         </thead>
-                        <tbody id="listaInsumos_${cont}" style="text-align: center;">
+                        <tbody class="TablaInsumos" id="listaInsumos_${cont}" style="text-align: center;">
                         </tbody>
                       </table>
 
@@ -649,30 +672,33 @@
     };
 
     if (requerido.idInsumo != "" && requerido.cantidad != "" && requerido.articulo != "") {
-      const repetido = document.getElementById(requerido.articulo + '_' + requerido.idInsumo + '_cant');
-      let listP = "listaInsumos_" + idP;
+      var selectedOption = document.querySelector('#lis_Insumos option[value="' + requerido.idInsumo + '"]');
+      if (selectedOption) {
 
-      if (repetido != null) {
-        var total = parseInt(repetido.value) + parseInt(requerido.cantidad);
-        repetido.value = total;
+        const repetido = document.getElementById(requerido.articulo + '_' + requerido.idInsumo + '_cant');
+        let listP = "listaInsumos_" + idP;
 
-        repetido.setAttribute("value", repetido.value);
+        if (repetido != null) {
+          var total = parseInt(repetido.value) + parseInt(requerido.cantidad);
+          repetido.value = total;
 
-        Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'El insumo ya está en la lista',
-          showConfirmButton: false,
-          timer: 2000
-        });
+          repetido.setAttribute("value", repetido.value);
 
-      } else {
+          /*Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: 'El insumo ya está en la lista',
+            showConfirmButton: false,
+            timer: 2000
+          });*/
 
-        contPar++;
-        let tbTabla = document.getElementById(listP);
-        //alert(tbTabla);
-        tbTabla.innerHTML += `
-         <tr id="insumo_${idP}_${contPar}">
+        } else {
+
+          contPar++;
+          let tbTabla = document.getElementById(listP);
+          //alert(tbTabla);
+          tbTabla.innerHTML += `
+          <tr id="insumo_${idP}_${contPar}">
                <td class="p-3 text-center"></td>
                <td class="p-3 text-center">
                    <input name="${requerido.articulo}_idInsumo" style="width: 100%; border: none; text-align: center;" value="${requerido.idInsumo}" readonly>
@@ -686,25 +712,55 @@
                  </a>
                </td>
              </tr>
-         `;
+          `;
 
+          Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Insumo Agregado',
+            showConfirmButton: false,
+            timer: 1000
+          });
+        }
+
+        //llamar función calcularContTDTable
+        ContTr(listP);
+
+        document.getElementById(part).value = "";
+        document.getElementById(part2).value = "";
+
+      } else {
         Swal.fire({
           position: 'top-end',
-          icon: 'success',
-          title: 'Insumo Agregado',
+          icon: 'warning',
+          title: 'El insumo no es válido',
           showConfirmButton: false,
-          timer: 1000
+          timer: 2000
         });
       }
-
-      //llamar función calcularContTDTable
-      ContTr(listP);
-
-      document.getElementById(part).value = "";
-      document.getElementById(part2).value = "";
-
     } else {
-      alert('Vacío');
+      /*let Ins = "mensajeErrorIns_" + idP;
+      let InsC = "mensajeErrorInsC_" + idP;
+
+      var mensajeErrorIns = document.getElementById(Ins).value;
+      var mensajeErrorInsC = document.getElementById(InsC).value;
+
+      if (requerido.idInsumo == "") {
+        mensajeErrorIns.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El insumo es un campo requerido';
+        mensajeErrorIns.style.display = 'block';
+      }
+
+      if (requerido.cantidad == "") {
+        mensajeErrorInsC.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La cantidad es un campo requerido';
+        mensajeErrorInsC.style.display = 'block';
+      }*/
+      Swal.fire({
+        position: 'top-end',
+        icon: 'warning',
+        title: 'Campos requeridos',
+        showConfirmButton: false,
+        timer: 3000
+      });
     }
   }
 
@@ -813,6 +869,8 @@
     var cliente = document.getElementById("idCliente");
     var total = document.getElementById("total");
     var fechaEntrega = document.getElementById("fechaEntrega");
+    var insumos = document.querySelectorAll('.TablaInsumos'); // Agregar un punto antes de 'TablaParticipantes'
+
 
     if (cliente.value == "" || total.value == "" || fechaEntrega.value == "") {
       //alert('campos obligatorios');
@@ -832,13 +890,33 @@
       //alert("No se puede enviar el formulario porque aún no se ha agregado nungún insumo");
       Swal.fire({
         position: 'top-end',
-        icon: 'info',
+        icon: 'warning',
         title: 'No hay artículos a reparar',
         showConfirmButton: false,
         timer: 3000
       });
       return false; // Detener el envío del formulario
     }
+
+
+    for (var i = 0; i < insumos.length; i++) {
+      var art = insumos[i];
+      if (art.childElementCount === 0) {
+        var id = art.id;
+        var match = id.match(/listaInsumos_(\d+)/);
+        var mensaje = match ? "No hay insumos en el artículo #" + match[1] : "No hay insumos en el artículo";
+
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: mensaje,
+          showConfirmButton: false,
+          timer: 3000
+        });
+        return false; // Detener el envío del formulario
+      }
+    }
+
     // Permite el envío del formulario
     return true;
   }

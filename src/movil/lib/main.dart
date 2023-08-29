@@ -25,6 +25,113 @@ class MyApp extends StatelessWidget {
   }
 }
 
+
+
+class LoginPage extends StatelessWidget {
+  final _formKey = GlobalKey<FormState>();
+  String? _correo =
+      ''; // Añade el signo de interrogación para indicar que puede ser nulo
+  String? _passsword =
+      ''; // Añade el signo de interrogación para indicar que puede ser nulo
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Inicio de Sesión'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                keyboardType: TextInputType.emailAddress,
+                decoration:
+                    const InputDecoration(labelText: 'Correo Electrónico'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    // Asegúrate de manejar el caso cuando value sea nulo
+                    return 'Por favor ingresa un correo electrónico';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _correo = value;
+                },
+              ),
+              TextFormField(
+                obscureText: true,
+                decoration: const InputDecoration(labelText: 'Contraseña'),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    // Asegúrate de manejar el caso cuando value sea nulo
+                    return 'Por favor ingresa una contraseña';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  _passsword = value;
+                },
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState?.validate() == true) {
+                    _formKey.currentState?.save();
+
+                    // Captura el contexto en una variable local
+                    final currentContext = context;
+
+                    // Utiliza Future.delayed para esperar un ciclo de actualización de widgets
+                    await Future.delayed(Duration.zero);
+
+                    final response = await http.post(
+                      Uri.parse('http://10.0.2.2:8181/loginApi'),
+                      body: {
+                        'correo': _correo,
+                        'passsword': _passsword,
+                      },
+                    );
+
+                    if (response.statusCode == 200) {
+                      // Autenticación exitosa, redirigir a HomePage
+                      Navigator.pushReplacement(
+                        currentContext,
+                        MaterialPageRoute(builder: (context) => HomePage()),
+                      );
+                    } else {
+                      final errorMessage =
+                          "Error"; // Obtén el mensaje de error del JSON de respuesta
+                      showDialog(
+                        context: currentContext,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Error de inicio de sesión'),
+                            content: Text(errorMessage),
+                            actions: [
+                              ElevatedButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Aceptar'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    }
+                  }
+                },
+                child: const Text('Iniciar Sesión'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class Producto {
   final String imagen;
   final String nombre;
@@ -189,128 +296,19 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class LoginPage extends StatelessWidget {
-  final _formKey = GlobalKey<FormState>();
-  String? _correo =
-      ''; // Añade el signo de interrogación para indicar que puede ser nulo
-  String? _passsword =
-      ''; // Añade el signo de interrogación para indicar que puede ser nulo
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Inicio de Sesión'),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            children: [
-              TextFormField(
-                keyboardType: TextInputType.emailAddress,
-                decoration:
-                    const InputDecoration(labelText: 'Correo Electrónico'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    // Asegúrate de manejar el caso cuando value sea nulo
-                    return 'Por favor ingresa un correo electrónico';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _correo = value;
-                },
-              ),
-              TextFormField(
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'Contraseña'),
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    // Asegúrate de manejar el caso cuando value sea nulo
-                    return 'Por favor ingresa una contraseña';
-                  }
-                  return null;
-                },
-                onSaved: (value) {
-                  _passsword = value;
-                },
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () async {
-                  if (_formKey.currentState?.validate() == true) {
-                    _formKey.currentState?.save();
-
-                    // Captura el contexto en una variable local
-                    final currentContext = context;
-
-                    // Utiliza Future.delayed para esperar un ciclo de actualización de widgets
-                    await Future.delayed(Duration.zero);
-
-                    final response = await http.post(
-                      Uri.parse('http://10.0.2.2:8181/loginApi'),
-                      body: {
-                        'correo': _correo,
-                        'passsword': _passsword,
-                      },
-                    );
-
-                    if (response.statusCode == 200) {
-                      // Autenticación exitosa, redirigir a HomePage
-                      Navigator.pushReplacement(
-                        currentContext,
-                        MaterialPageRoute(builder: (context) => HomePage()),
-                      );
-                    } else {
-                      final errorMessage =
-                          "Error"; // Obtén el mensaje de error del JSON de respuesta
-                      showDialog(
-                        context: currentContext,
-                        builder: (context) {
-                          return AlertDialog(
-                            title: const Text('Error de inicio de sesión'),
-                            content: Text(errorMessage),
-                            actions: [
-                              ElevatedButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Aceptar'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    }
-                  }
-                },
-                child: const Text('Iniciar Sesión'),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class AgregarProductoPage extends StatefulWidget {
   @override
   _AgregarProductoPageState createState() => _AgregarProductoPageState();
 }
 
 class _AgregarProductoPageState extends State<AgregarProductoPage> {
-  late File? selectedImage;
+  File? selectedImage;
+  final TextEditingController nombreController = TextEditingController();
+  final TextEditingController precioController = TextEditingController();
+  final TextEditingController stockController = TextEditingController();
+  final TextEditingController descripcionController = TextEditingController();
+  final TextEditingController categoriaController = TextEditingController(text: 'Accesorios');
 
-  Future<void> _pickImage() async {
-    final imagePicker = ImagePicker();
-    final image = await imagePicker.pickImage(source: ImageSource.gallery);
-
-    if (image != null) {
-      selectedImage = File(image.path); // Convertir XFile a File
-      setState(() {});
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -325,22 +323,66 @@ class _AgregarProductoPageState extends State<AgregarProductoPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // ... otros campos y elementos de la vista
-              Center(
-                child: Column(
-                  children: [
-                    Image.file(
-                      selectedImage,
-                      height: 100,
-                    ),
-                    Container(),
-                    SizedBox(height: 8.0),
-                    ElevatedButton(
-                      onPressed: _pickImage,
-                      child: Text('Seleccionar Imagen'),
-                    ),
-                  ],
+              TextField(
+                controller: nombreController,
+                decoration: InputDecoration(
+                  labelText: 'Nombre',
                 ),
               ),
+              TextField(
+                controller: precioController,
+                decoration: InputDecoration(
+                  labelText: 'Precio',
+                ),
+              ),
+              TextField(
+                controller: stockController,
+                decoration: InputDecoration(
+                  labelText: 'Stock',
+                ),
+              ),
+              DropdownButtonFormField(
+                value: categoriaController.text,
+                items: [
+                  DropdownMenuItem(
+                      value: 'Accesorios', child: Text('Accesorios')),
+                  DropdownMenuItem(
+                      value: 'Billeteras', child: Text('Billeteras')),
+                  DropdownMenuItem(value: 'Bolsos', child: Text('Bolsos')),
+                  DropdownMenuItem(
+                      value: 'Chaquetas', child: Text('Chaquetas')),
+                  DropdownMenuItem(value: 'Morrales', child: Text('Morrales')),
+                  DropdownMenuItem(value: 'Zapatos', child: Text('Zapatos')),
+                ], // Agrega aquí los items de categoría
+                onChanged: (value) {
+                  categoriaController.text = value.toString();
+                },
+                decoration: InputDecoration(
+                  labelText: 'Categoría',
+                ),
+              ),
+
+              TextField(
+                controller: descripcionController,
+                maxLines: null,
+                decoration: InputDecoration(
+                  labelText: 'Descripción',
+                ),
+              ),
+              ElevatedButton(
+                onPressed: () async {
+                  final imagePicker = ImagePicker();
+                  final image =
+                      await imagePicker.pickImage(source: ImageSource.gallery);
+
+                  if (image != null) {
+                    selectedImage = File(image.path);
+                    setState(() {});
+                  }
+                },
+                child: Text('Seleccionar Imagen'),
+              ),
+
               // ... otros elementos de la vista
               SizedBox(height: 16.0),
               Center(
@@ -351,10 +393,84 @@ class _AgregarProductoPageState extends State<AgregarProductoPage> {
                   child: Text('Registrar Producto'),
                 ),
               ),
+
+              SizedBox(height: 16.0),
+
+              Center(
+                child: ElevatedButton(
+                  onPressed: () {
+                    _mostrarModal(context);
+                  },
+                  child: Text('Mostrar Modal'),
+                ),
+              ),
             ],
           ),
         ),
       ),
     );
+  }
+
+  void _mostrarModal(BuildContext context) async {
+    final response = await http
+        .get(Uri.parse('http://10.0.2.2:8181/productos_registrarApi'));
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+
+      final insumos = jsonData['insumos'];
+
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Insumos requeridos'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Table(
+                  columnWidths: {
+                    0: FlexColumnWidth(1),
+                    1: FlexColumnWidth(2),
+                    2: FlexColumnWidth(1),
+                    3: FlexColumnWidth(2),
+                  },
+                  children: [
+                    TableRow(
+                      children: [
+                        TableCell(child: Text('Insumo')),
+                        TableCell(child: Text('Cantidad')),
+                        TableCell(child: Text('Funciones')),
+                      ],
+                    ),
+                    for (var insumo in insumos)
+                      TableRow(
+                        children: [
+                          TableCell(child: Text(insumo['nombre'])),
+                          TableCell(child: Text(insumo['stock'].toString())),
+                          TableCell(
+                              child: Text(
+                                  '')), // Agrega la función según corresponda
+                        ],
+                      ),
+                  ],
+                ),
+                // ... Paginación y otras partes
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text('Cerrar'),
+              ),
+            ],
+          );
+        },
+      );
+    } else {
+      // Manejo de error si la llamada a la API falla
+    }
   }
 }

@@ -559,7 +559,11 @@
               <td class="p-3 text-center">${cont}</td>
               <td class="p-3 text-center">
                   <input type="hidden" name="titulo" id="titulo_${cont}" value="${tarea.titulo}">
-                  <input name="titulo_a" id="titulo_a_${cont}" oninput="updateValueInput(this)" value="${tarea.titulo}" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
+                  
+                 
+                      <input name="titulo_a" id="titulo_a_${cont}" oninput="updateValueInput(this)" value="${tarea.titulo}" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;" class="form-control form-control-sm">
+                    
+                  
               </td>
               <td class="p-3 text-center">
                   <input type="date" name="fechaInicio_detalle" id="fechaInicio_${cont}" value="${tarea.fechaInicio}" oninput="updateValueInput(this)">
@@ -851,7 +855,13 @@
           });
         }
       } else {
-        alert('Vacío');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Campos requeridos',
+          showConfirmButton: false,
+          timer: 3000
+        });
       }
     }
 
@@ -1048,7 +1058,7 @@
           icon: 'warning',
           title: 'No hay ninguna tarea a realizar',
           showConfirmButton: false,
-          timer: 6000
+          timer: 3000
         });
         return false; // Detener el envío del formulario
       }
