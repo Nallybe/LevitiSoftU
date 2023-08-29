@@ -82,7 +82,7 @@ function productos_listar(req, res) {
 //ListarApi
 function productos_listarApi(req, res) {
     // Obtener la conexión a la base de datos
-    console.log("Holii")
+    //console.log("Holii")
     req.getConnection((err, conn) => {
         if (err) {
             // Si hay un error al obtener la conexión, enviar una respuesta con el error
@@ -255,6 +255,22 @@ function productos_crear(req, res) {
 }
 //End Crear
 
+/*CrearApi*/
+//Crear (Función para redireccionar al hbs donde se encuentra el formulario)
+function productos_crearApi(req, res) {
+    //console.log("Holii")
+    req.getConnection((err, conn) => {
+        conn.query("SELECT * FROM tbl_insumos WHERE estado ='A'", (err, insumos) => {
+            if (err) {
+                return res.status(500).json(err);
+            } else {
+                res.status(200).json({ insumos });
+            }
+        });
+    });
+}
+//End Crear
+/*CrearApi*/
 
 const fs = require('fs');
 const path = require('path');
@@ -394,7 +410,68 @@ function productos_registrar(req, res) {
 }
 //End Registrar Producto
 
+/*Registrar Api */
+//Registrar Producto
+function productos_registrar(req, res) {
 
+    var data = req.body;
+    var imagen = req.file// Aquí obtienes el archivo de imagen
+    console.log(data)
+
+
+    const RegistroProducto = {
+        idCategoria: data.categoria,
+        nombre: data.nombre,
+        descripcion: data.descripcion,
+        precio: data.precio,
+        stock: data.stock,
+        imagen: 'img.jpg' // Guarda el nombre de la imagen en el objeto de registro
+        //imagen: req.file
+        //imagen: imagen.filename
+    };
+
+    req.getConnection((err, conn) => {
+        //Registrar Producto
+        conn.query("INSERT INTO tbl_productos SET ?", [RegistroProducto], (err, result) => {
+            if (err) {
+                return res.status(500).json(err);
+            } else {
+                console.log("Producto Registrado");
+                //End Registrar Producto 
+
+                //Captura idProducto
+                const idProducto = result.insertId;
+                img = 'img_' + idProducto + '.jpg';
+                // Mueve el archivo a la nueva ubicación con el nuevo nombre y extensión
+                fs.rename(imagen.path, path.join('./public/assets/img/Productos/', img), function (err) {
+                    if (err) {
+                        console.log('Error al guardar la imagen con otro nombre y extensión: ', err);
+                    }
+                });
+
+                const ImgProducto = {
+                    imagen: img
+                };
+
+                //Registrar Producto
+                conn.query("UPDATE tbl_productos SET ? WHERE idProducto = ?", [ImgProducto, idProducto], (err, rows) => {
+                    if (err) {
+                        return res.status(500).json(err);
+                    } else {
+                        console.log("Imagen guardada");
+                        //End Registrar Producto 
+
+                        
+                        //Redireccionar
+                        res.redirect("/productos");
+                    }
+                });
+            }
+        });
+    });
+}
+//End Registrar Producto
+/*Registrar Api */
 //Editar
 function productos_editar(req, res) {
     const idProducto = req.params.idProducto;
@@ -742,6 +819,7 @@ module.exports = {
     productos_detallar: productos_detallar,
     productos_eliminar: productos_eliminar,
     productos_crear: productos_crear,
+    productos_crearApi,
     productos_registrar: productos_registrar,
     productos_editar: productos_editar,
     productos_modificar: productos_modificar

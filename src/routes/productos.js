@@ -47,6 +47,7 @@ router.get('/productosApi',ProductosController.productos_listarApi);
 router.get('/productos/:idProducto', checkSession,ProductosController.productos_detallar);
 
 router.get('/productos_registrar', checkSession,ProductosController.productos_crear);
+router.get('/productos_registrarApi', ProductosController.productos_crearApi);
 router.post('/productos_registrar', upload.single('imagen'), checkSession,ProductosController.productos_registrar);
 
 router.get('/productos_editar/:idProducto', checkSession,ProductosController.productos_editar);
