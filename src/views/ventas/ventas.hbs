@@ -18,9 +18,9 @@
   <!--Barra de navegación-->
   <br><br><br>
   <center>
-    <div class="container">
+    <div class="container-fluid">
       <div class="row">
-        <div class="col-md-4">
+        <div class="col-md-3">
           <div class="input-group">
             <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
               placeholder="Buscar venta" aria-label="Search" oninput="filtrarTabla()">
@@ -30,7 +30,7 @@
             </button>
           </div>
         </div>
-        <div class="col-md-5"></div>
+        <div class="col-md-6"></div>
         <div class="col-md-3">
           {{#if (equals rol "Cliente")}}
           <!-- No renderizar el botón si el rol es "cliente" -->
@@ -213,7 +213,7 @@
           sortDescending: ": active para ordenar la columna en orden descendente"
         }
       },
-      lengthMenu: [[4], [4]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
+      lengthMenu: [[5], [5]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
       searching: false, //Ocultar buscador
       lengthChange: false,//Ocultar filtro de cantidad de filas
       ordering: false //Ocultar filtro de ordenación por columnas

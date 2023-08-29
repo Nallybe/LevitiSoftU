@@ -4,11 +4,21 @@
 {{>headerD}}
 
 <body>
+    <style>
+        #descripcion {
+            border-radius: 0;
+            border: 1px rgb(206, 212, 218) solid;
+            line-height: 1.5;
+            max-height: 200px;
+            padding-top: 0;
+            height: 60px;
+        }
+    </style>
     <!--Barra de navegación-->
     {{> bar}}
     <!--Barra de navegación-->
     <center>
-        <div class="container" style="margin-top: 80px;">
+        <div class="container-fluid" style="margin-top: 80px;">
             <form action="" method="post" id="formulario">
                 <div class="row">
                     <div class="col-6">
@@ -83,7 +93,7 @@
                                 <div class="col-6">
                                     <button type="submit" class=" btn btn-success" style="border-radius: 2;" id="boton"
                                         onclick="Validarcampos(event)">
-                                        Agregar venta</a>
+                                        Agregar venta</button>
                                 </div>
                             </div>
                             <br>
@@ -112,10 +122,18 @@
                                             <td>{{precio}}</td>
                                             <td>{{stock}}</td>
                                             <td>
-                                                <input type="hidden" value="{{idProducto}}" name="idProducto">
+                                                {{!-- <input type="" value="{{idProducto}}" name="idProducto"> --}}
                                                 <div class="row justify-content-center">
                                                     <div class="col-3">
-                                                        <input type="checkbox" class="form-control" id="check">
+                                                        {{!-- Agrega la condición para deshabilitar el checkbox si el
+                                                        stock es 0 --}}
+                                                        {{#if (equals stock 0)}}
+                                                        <input type="checkbox" class="form-control" id="check"
+                                                            value="{{idProducto}}" name="idProducto" disabled>
+                                                        {{else}}
+                                                        <input type="checkbox" class="form-control" id="check"
+                                                            value="{{idProducto}}" name="idProducto">
+                                                        {{/if}}
                                                     </div>
                                                     <div class="col-7">
                                                         <input type="number" class="form-control w-90"
@@ -163,55 +181,77 @@
     </script>
     {{/if}}
 
-
     {{!-- Calcular total productos --}}
     <script>
         let total = 0; // Declare the 'total' variable outside the function
 
         function calcularTotal() {
             const checkboxes = document.querySelectorAll('#tabla-productos input[type="checkbox"]:checked');
-
-            // Obtener todos los elementos con la clase cantidadProducto
             const cantidadInputs = $("input[name='cantidadProducto']");
-
-            // Calcular el total para los productos seleccionados
-            let newTotal = 0;
-
-            checkboxes.forEach(checkbox => {
-                const cantidadInput = $(checkbox).closest("tr").find("input[name='cantidadProducto']");
+            var err = 0;
+            if (checkboxes.length === 1) {
+                const cantidadInput = $(checkboxes[0]).closest("tr").find("input[name='cantidadProducto']");
                 const cantidad = parseInt(cantidadInput.val(), 10);
-                const precio = parseFloat($(checkbox).closest("tr").find("td:eq(2)").text());
+                const precio = parseFloat($(checkboxes[0]).closest("tr").find("td:eq(2)").text());
+                const stockDisponible = parseInt($(checkboxes[0]).closest("tr").find("td:eq(3)").text());
 
-                if (isNaN(cantidad)) {
+                if (isNaN(cantidad) || cantidad > stockDisponible) {
                     Swal.fire({
                         icon: 'error',
-                        title: 'Digite una cantidad valida',
+                        title: 'Ingrese una cantidad válida',
                     });
                     return;
                 }
-                const subtotal = cantidad * precio;
-                newTotal += subtotal;
 
 
-            });
-            if (newTotal === 0) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Seleccione al menos un producto/Ingrese cantidad válida',
+                const totalSoloUnaCantidad = cantidad * precio;
+                const formattedTotal = totalSoloUnaCantidad.toLocaleString('es-CO', {
+                    style: 'currency',
+                    currency: 'COP',
+                    minimumFractionDigits: 0
                 });
-                return;
+
+                $("#totalInput").val(formattedTotal);
+            } else {
+                let newTotal = 0;
+
+                checkboxes.forEach(checkbox => {
+                    const cantidadInput = $(checkbox).closest("tr").find("input[name='cantidadProducto']");
+                    const cantidad = parseInt(cantidadInput.val(), 10);
+                    const precio = parseFloat($(checkbox).closest("tr").find("td:eq(2)").text());
+                    const stockDisponible = parseInt($(checkbox).closest("tr").find("td:eq(3)").text());
+                    console.log("Stock: ", stockDisponible)
+
+                    if (isNaN(cantidad) || cantidad > stockDisponible) {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Ingrese una cantidad válida',
+                        });
+                        return;
+                    }
+
+                    const subtotal = checkbox.checked ? cantidad * precio : 0; // Only calculate subtotal if checkbox is checked
+                    newTotal += subtotal;
+                });
+
+                if (newTotal === 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Seleccione al menos un producto/Ingrese cantidad válida',
+                    });
+                    $("#totalInput").val(err);
+                    return;
+                }
+
+                const formattedTotal = newTotal.toLocaleString('es-CO', {
+                    style: 'currency',
+                    currency: 'COP',
+                    minimumFractionDigits: 0
+                });
+
+                $("#totalInput").val(formattedTotal);
             }
-            // Formatear el total con puntos y coma
-            const formattedTotal = newTotal.toLocaleString('es-CO', {
-                style: 'currency',
-                currency: 'COP',
-                minimumFractionDigits: 0
-            });
-
-
-            $("#totalInput").val(formattedTotal);
         }
-
     </script>
 
     {{!-- Todos lo campos vacios --}}
@@ -220,12 +260,31 @@
             var nombre = document.getElementById("nombre").value;
             var total = document.getElementById("totalInput").value;
             var descripcion = document.getElementById("descripcion").value;
-            var fecha = document.getElementById("fecha");
-            if (descripcion === "" || total === "" || nombre === "" || fecha === null) {
+            console.log("Total: ", total)
+            if (descripcion === "" || total === "" || nombre === "" || total === "0") {
                 Swal.fire({
                     icon: 'error',
                     title: 'Campos Obligatorios',
                 })
+                event.preventDefault(); // Evitar el envío del formulario
+                return;
+            }
+
+            const checkboxes = document.querySelectorAll('#tabla-productos input[type="checkbox"]:checked');
+
+            for (const checkbox of checkboxes) {
+                const cantidadInput = $(checkbox).closest("tr").find("input[name='cantidadProducto']");
+                const cantidad = parseInt(cantidadInput.val(), 10);
+                const stockDisponible = parseInt($(checkbox).closest("tr").find("td:eq(3)").text());
+
+                if (isNaN(cantidad) || cantidad > stockDisponible) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Ingrese una cantidad válida',
+                    });
+                    event.preventDefault(); // Evitar el envío del formulario
+                    return;
+                }
             }
         }
     </script>

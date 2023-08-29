@@ -94,6 +94,10 @@ function registrar(req, res) {
   });
 }
 
+function resgistrarApi(req,res){
+  
+}
+
 function editar(req, res) {
   const idRoles = req.params.idRoles;
 

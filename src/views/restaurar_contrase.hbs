@@ -4,12 +4,11 @@
 {{>header}}
 <link rel="stylesheet" href="assets/css/login.css">
 
-    <!-- navbar-->
-<header class="header bg-white">
-  <div class="container px-lg-3">
-    {{> navbar}}
-  </div>
-</header>
+<!-- navbar-->
+<div class="barranav">
+      {{> navbar}}
+    </div>
+
 <body>
     <br>
     <div class="login-wrap">
@@ -19,23 +18,27 @@
 
             <div class="login-form mt-4">
                 <div class="sign-up-htm">
-                    <form action="" method="post">
+                    <form action="" method="post" id="registration-form">
                         <div class="group">
                             <label for="pass" class="label">Contraseña</label>
                             <div class="password-input">
-                                <input id="pass" type="password" name="passsword" class="input" data-type="password" required>
+                                <input id="pass" type="password" name="password" class="input" data-type="password"
+                                    required>
                                 <span class="toggle-password">
                                     <i class="fas fa-eye"></i>
                                 </span>
                             </div>
                         </div>
                         <div class="group">
-                            <label for="pass" class="label">Repetir contraseña</label>
+                            <label for="pass2" class="label">Repetir contraseña</label>
                             <div class="password-input">
-                                <input id="pass" type="password" class="input" data-type="password" required>
+                                <input id="pass2" type="password" class="input" data-type="password" required>
                                 <span class="toggle-password">
                                     <i class="fas fa-eye"></i>
                                 </span>
+                            </div>
+                            <div id="error-message" class="error-message" style="display: none; color: red;">
+                                Las contraseñas no coinciden.
                             </div>
                         </div>
                         <div class="group">
@@ -45,10 +48,33 @@
                             <a href="login" class="buttonC text-center" value="Cancelar"
                                 style="text-decoration: none;">CANCELAR</a>
                         </div>
-
                     </form>
                 </div>
             </div>
+
+            <script>
+                const passwordField = document.getElementById('pass');
+                const confirmPasswordField = document.getElementById('pass2');
+                const errorMessage = document.getElementById('error-message');
+                const registrationForm = document.getElementById('registration-form');
+
+                confirmPasswordField.addEventListener('input', function () {
+                    if (passwordField.value !== confirmPasswordField.value) {
+                        errorMessage.style.display = 'block';
+                    } else {
+                        errorMessage.style.display = 'none';
+                    }
+                });
+
+                registrationForm.addEventListener('submit', function (event) {
+                    if (passwordField.value !== confirmPasswordField.value) {
+                        event.preventDefault(); // Prevent the form from submitting
+                        errorMessage.style.display = 'block';
+                        
+                    }
+                });
+            </script>
+
         </div>
     </div>
     <script>

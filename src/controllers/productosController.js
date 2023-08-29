@@ -79,6 +79,86 @@ function productos_listar(req, res) {
 }
 //End Listar
 
+//ListarApi
+function productos_listarApi(req, res) {
+    // Obtener la conexión a la base de datos
+    console.log("Holii")
+    req.getConnection((err, conn) => {
+        if (err) {
+            // Si hay un error al obtener la conexión, enviar una respuesta con el error
+            return res.status(500).json({ error: 'Error en la conexión a la base de datos' });
+        } else {
+            // Consultar los productos en la base de datos
+            conn.query('SELECT * FROM tbl_productos', async (err, productos) => {
+                if (err) {
+                    // Si hay un error al consultar las productos, enviar una respuesta con el error
+                    return res.status(500).json({ error: 'Error al consultar los productos' });
+                } else {
+                    for (let index in productos) {
+                        // Parsear estado
+                        if (productos[index].estado == 'A') {
+                            productos[index].estado1 = true;
+                        } else {
+                            productos[index].estado2 = true;
+                        }
+
+                        switch (productos[index].idCategoria) {
+                            case 1:
+                                productos[index].idCategoria = "Accesorios";
+                                break;
+                            case 2:
+                                productos[index].idCategoria = "Billeteras";
+                                break;
+                            case 3:
+                                productos[index].idCategoria = "Bolsos";
+                                break;
+                            case 4:
+                                productos[index].idCategoria = "Chaquetas";
+                                break;
+                            case 5:
+                                productos[index].idCategoria = "Morrales";
+                                break;
+                            case 6:
+                                productos[index].idCategoria = "Zapatos";
+                                break;
+                        }
+                        // Parsear precio
+                        productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
+                    }
+
+                    const ordenes = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_ordenes_produccion", (err, result) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(result);
+                            }
+                        });
+                    });
+
+                    for (index in productos) {
+                        var eliminar = true;
+
+                        for (i in ordenes) {
+                            if (productos[index].idProducto == ordenes[i].idProducto) {
+                                eliminar = false;
+                            }
+                        }
+
+                        if (eliminar == true) {
+                            productos[index].eliminar = true;
+                        }
+                    }
+
+                    // Enviar la respuesta como JSON
+                    res.json({ productos });
+                }
+            });
+        }
+    });
+}
+// End ListarApi
+
 
 //Detallar
 function productos_detallar(req, res) {
@@ -658,6 +738,7 @@ function productos_eliminar(req, res) {
 //Cambiar Estado Producto
 module.exports = {
     productos_listar: productos_listar,
+    productos_listarApi,
     productos_detallar: productos_detallar,
     productos_eliminar: productos_eliminar,
     productos_crear: productos_crear,

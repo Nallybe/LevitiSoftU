@@ -4,17 +4,16 @@
 {{>header}}
 <link rel="stylesheet" href="assets/css/login.css">
 
-    <!-- navbar-->
-<header class="header bg-white">
-  <div class="container px-lg-3">
-    {{> navbar}}
-  </div>
-</header>
+<!-- navbar-->
+<div class="barranav">
+      {{> navbar}}
+    </div>
+
 <body>
 
     <br>
     <div class="login-wrap">
-        <div class="login-html">
+        <div class="login-html" style="height:65%;">
             <input id="tab-2" type="radio" name="tab" class="sign-up" checked><label for="tab-2" class="tab">Olvidaste
                 tu contraseña?</label>
 
@@ -30,13 +29,22 @@
                             {{error}}
                         </div>
                         {{/if}}
-                        <div class="group">
-                            <input type="submit" class="button" value="Enviar">
+                        <div class="row" >
+                            <div class="col-md-6" >
+                                <div class="group">
+                                    <a href="login" class="buttonC text-center" value="Cancelar"
+                                        style="text-decoration: none; ">CANCELAR</a>
+                                </div>
+                                
+                            </div>
+                            <div class="col-md-6" >
+                                <div class="group">
+                                    <input type="submit" class="button" value="Enviar" >
+                                </div>
+                            </div>
                         </div>
-                        <div class="group">
-                            <a href="login" class="buttonC text-center" value="Cancelar"
-                                style="text-decoration: none;">CANCELAR</a>
-                        </div>
+
+
 
                     </form>
                 </div>

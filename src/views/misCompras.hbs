@@ -1,0 +1,166 @@
+{{> header }}
+
+<div class="page-holder">
+    <!-- navbar-->
+    <div class="barranav">
+        {{> navbar}}
+    </div>
+    <body style="font-size: 15px;">
+        <center>
+            <div class="container-fluid py-3">
+                <div class="row">
+                    <div class="col-md-4" style="left: 0;">
+                        <div class="input-group" style="width:55%;">
+                            <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control"
+                                type="search" placeholder="Buscar venta" aria-label="Search" oninput="filtrarTabla()">
+                            <button type="submit" class="btn"
+                                style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
+                                <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
+                            </button>
+                        </div>
+                    </div>
+                
+                </div>
+                <br>
+                <table class="table" style="text-align:center;" id="tabla-ventas">
+                    <thead style="background-color: #282d32; color:white;">
+                        <tr>
+                            <th>#</th>
+                            <th>Nombre Cliente</th>
+                            <th>Producto</th>
+                            <th>Total</th>
+                            <th>Descripción</th>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each ventas}}
+                        <tr>
+                            <td class="py-3 px-6 text-center">{{cont}}</td>
+                            <td class="p-3 text-center">{{nombre}}</td>
+                            <td> <a href="misComprasProductos/{{idVentas}}" style="color: #292b2c;"><i type="button"
+                                        class="fa-sharp fa-solid fa-eye"></i></a></td>
+                            <td class="p-3 text-center">{{total}}</td>
+                            <td class="p-3 text-center">{{descripcion}}</td>
+                            <td class="p-3 text-center">{{fecha}}</td>
+                            <td class="p-3 text-center">
+                                <!-- Utilizamos una clase común para el botón 'estado' y asignamos el valor del estado actual del cliente como un atributo de datos -->
+                                <button class="btn estado-boton btn-sm" style="border-radius:8px;" disabled
+                                    data-estado="{{estado}}">{{estado}}</button>
+                            </td>
+                        </tr>
+                        <script>
+                            // Seleccionamos todos los botones de clase 'estado-boton'
+                            var botonesEstado = document.querySelectorAll(".estado-boton");
+
+                            // Iteramos a través de cada botón y cambiamos la clase según el valor del atributo de datos 'data-estado'
+                            botonesEstado.forEach(function (boton) {
+                                var estado = boton.getAttribute("data-estado");
+
+                                if (estado === "Contado") {
+                                    boton.classList.add("btn-success");
+                                    boton.classList.remove("btn-warning");
+                                } else if (estado === "Plan separe") {
+                                    boton.classList.add("btn-warning");
+                                    boton.classList.remove("btn-success");
+                                } else {
+                                    // Si el estado no coincide con 'Activo' ni 'Inactivo', podemos manejar otras situaciones o no hacer ningún cambio en la clase del botón.
+                                }
+                            });
+                        </script>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </center>
+    </body>
+</div>
+{{> footer}}
+<script>
+    function filtrarTabla() {
+        var input = document.getElementById("buscar-input");
+        var filtro = input.value.toUpperCase();
+        var tabla = document.getElementById("tabla-ventas");
+        var filas = tabla.getElementsByTagName("tr");
+
+        for (var i = 0; i < filas.length; i++) {
+            var celdaNombre = filas[i].getElementsByTagName("td")[1];
+            var celdaFecha = filas[i].getElementsByTagName("td")[5];
+            var celdaTotal = filas[i].getElementsByTagName("td")[3];
+
+            if (celdaNombre && celdaFecha && celdaTotal) {
+                var textoNombre = celdaNombre.textContent || celdaNombre.innerText;
+                var textoFecha = celdaFecha.textContent || celdaFecha.innerText;
+                var textoTotal = celdaTotal.textContent || celdaTotal.innerText;
+
+                if (textoNombre.toUpperCase().indexOf(filtro) > -1 ||
+                    textoFecha.toUpperCase().indexOf(filtro) > -1 ||
+                    textoTotal.toUpperCase().indexOf(filtro) > -1) {
+                    filas[i].style.display = "";
+                } else {
+                    filas[i].style.display = "none";
+                }
+            }
+        }
+    }
+</script>
+
+<!-- JavaScript files-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.1/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+<script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="vendor/glightbox/js/glightbox.min.js"></script>
+<script src="vendor/nouislider/nouislider.min.js"></script>
+<script src="vendor/swiper/swiper-bundle.min.js"></script>
+<script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="js/front.js"></script>
+<!-- DATATABLES -->
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
+</script>
+<!-- BOOTSTRAP -->
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
+</script>
+<script>
+        $(document).ready(function () {
+            $('#tabla-ventas').DataTable({ //se debe seleccionar el id de la tabla $('#id..
+                language: { //Como el original esta en inglés, aqui se traducen los textos
+                    processing: "Tratamiento en curso...",
+                    search: "Buscar&nbsp;:",
+                    lengthMenu: "Agrupar de _MENU_",
+                    info: "_START_ al _END_ de _TOTAL_",
+                    infoEmpty: "No existen datos.",
+                    infoFiltered: "(filtrado de _MAX_ elementos en total)",
+                    infoPostFix: "",
+                    loadingRecords: "Cargando...",
+                    zeroRecords: "No se encontraron datos con tu busqueda",
+                    emptyTable: "No hay datos disponibles en la tabla.",
+                    paginate: {
+                        first: "Primero",
+                        previous: "Anterior",
+                        next: "Siguiente",
+                        last: "Ultimo"
+                    },
+                    aria: {
+                        sortAscending: ": active para ordenar la columna en orden ascendente",
+                        sortDescending: ": active para ordenar la columna en orden descendente"
+                    }
+                },
+                lengthMenu: [[4], [4]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
+                searching: false, //Ocultar buscador
+                lengthChange: false,//Ocultar filtro de cantidad de filas
+                ordering: false //Ocultar filtro de ordenación por columnas
+            });
+  });
+</script>
+
+</html>

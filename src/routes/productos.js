@@ -43,6 +43,7 @@ const tienePermisos = (session) => {
 const router = express.Router();
 
 router.get('/productos', checkSession,ProductosController.productos_listar);
+router.get('/productosApi',ProductosController.productos_listarApi);
 router.get('/productos/:idProducto', checkSession,ProductosController.productos_detallar);
 
 router.get('/productos_registrar', checkSession,ProductosController.productos_crear);
