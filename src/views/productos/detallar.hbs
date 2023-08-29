@@ -12,7 +12,7 @@
         border-radius: 8px;
         border: 1px gray solid;
     }
-    
+
     p {
         margin-bottom: 1%;
     }
@@ -52,45 +52,62 @@
 <br>
 <br>
 <br>
-<a href="/productos" style="color:black; text-decoration:none; margin-left: 1%"><i class="fa fa-arrow-left fa-2x"></i></a>
+<a href="/productos" style="color:black; text-decoration:none; margin-left: 1%"><i
+        class="fa fa-arrow-left fa-2x"></i></a>
 
 
 <div class="row">
-    <div class="col-md-7">
+    <div class="col-md-8 container-fluid">
         {{#each producto}}
 
-        <div class="card mb-3" style="max-width: 100%; border-radius: 0; margin-left: 1%">
+        <div class="card md-4" style="max-width: 100%; border-radius: 0; margin-left: 1%">
             <div class="row no-gutters">
-                <div class="col-md-5">
-                    <img src="/assets/img/Productos/{{imagen}}" alt="...">
-                </div>
-                <div class="col-md-7">
+
+                <div class="col-md-2">
+
                     <div class="card-body">
-
-                        <h5 class="card-title">PRODUCTO</h5>
-                        <div class="row">
-                            <div class="card-text ml-1">
-                            <p><b>Nombre: </b>{{nombre}}<br></p>
-                            <p><b>Descripcion: </b>{{descripcion}}<br></p>
-                            <p><b>Categoría: </b>{{categoria}}<br></p>
-
-                            <p><b>Precio: </b>{{precio}}<br></p>
-                            <p><b>Stock: </b>{{stock}}<br></p>
-                            <p><b>Estado: </b>
-                                {{#if estado1}}
-                                <button class="btn btn-primary btn-sm" style="border-radius:20px;"
-                                    disabled>Activo</button>
-                                <!--Activo-->
-                                {{/if}}
-                                {{#if estado2}}
-                                <button class="btn btn-secondary btn-sm" style="border-radius:20px;"
-                                    disabled>Inactivo</button>
-                                <!--Inactivo-->
-                                {{/if}}
-                            </p>
-                            </div>
-                        </div>
+                        <center>
+                            <img src="/assets/img/Productos/{{imagen}}" alt="..."
+                                style="max-width:100%; border: solid 1px gray;" width="auto" height="auto">
+                        </center>
                     </div>
+
+
+
+                </div>
+
+                <div class="col-md-10">
+
+                    <div class="card-body m-3" style="text-align: left;">
+                            <h4 class="card-title">Producto</h4>
+
+                            <div class="card-text ml-1">
+                                <p><b>Nombre: </b>{{nombre}}<br></p>
+                                <p><b>Descripcion: </b>{{descripcion}} Lorem, ipsum dolor sit amet consectetur
+                                    adipisicing elit. Suscipit molestiae cupiditate iure assumenda pariatur aspernatur
+                                    eaque, earum velit fuga nemo.<br></p>
+                                <p><b>Categoría: </b>{{categoria}}<br></p>
+
+                                <p><b>Precio: </b>{{precio}}<br></p>
+                                <p><b>Stock: </b>{{stock}}<br></p>
+                                <p><b>Estado: </b>
+                                    {{#if estado1}}
+                                    <button class="btn btn-primary btn-sm" style="border-radius:20px;"
+                                        disabled>Activo</button>
+                                    <!--Activo-->
+                                    {{/if}}
+                                    {{#if estado2}}
+                                    <button class="btn btn-secondary btn-sm" style="border-radius:20px;"
+                                        disabled>Inactivo</button>
+                                    <!--Inactivo-->
+                                    {{/if}}
+                                </p>
+                        </div>
+
+                    </div>
+
+
+
                 </div>
             </div>
         </div>
@@ -100,11 +117,11 @@
     </div>
 
 
-    <div class="col-md-5">
+    <div class="col-md-4 container-fluid">
         <!--Start Card #3-->
         <div class="card" style="width: 98%; border-radius: 0;">
             <div class="card-body">
-                <h6 class="card-title">Insumos Requeridos</h6>
+                <h5 class="card-title">Insumos requeridos</h5>
                 <!--Start Table-->
                 <div class="table-container">
                     <table class="table table-sm">
@@ -120,8 +137,8 @@
                             <tr>
                                 <td class="py-2 px-6 text-center">{{cont}}</td>
                                 <td class="p-2 text-center">
-                                    <button type="button"  data-bs-toggle="popover" data-bs-trigger="hover"
-                                        data-bs-title="<b>Insumo {{idInsumo}}</b>" data-bs-html="true" data-bs-content="
+                                    <button type="button" data-bs-toggle="popover" data-bs-trigger="hover"
+                                        data-bs-title="<b>Insumo {{cont}}</b>" data-bs-html="true" data-bs-content="
                                     <div class='row'>
                                         <div class='col-md-4'>
                                             <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Box-Open-icon.png' width='100' />

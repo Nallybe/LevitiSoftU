@@ -1,3 +1,8 @@
+const nodemailer = require('nodemailer')
+const jwt = require("jsonwebtoken")
+//const salt = 10
+const bcrypt = require('bcrypt');
+
 function usuarios_listar(req, res) {
   req.getConnection((err, conn) => {
     conn.query('SELECT * FROM users_access ORDER BY idRoles', (err, usuarios) => {
@@ -87,7 +92,7 @@ function usuarios_listar(req, res) {
                 });
 
 
-                for(index in usuarios){
+                for (index in usuarios) {
                   var eliminar = true;
 
                   for (i1 in ventas) {
@@ -168,39 +173,49 @@ function usuarios_crear(req, res) {
 function usuarios_registrar(req, res) {
   const data = req.body;
 
-  let RegistroAccess = {
-    idRoles: data.idRol,
-    correo: data.correo,
-    passsword: data.password
-  };
 
   //Registrar Usuario 
   req.getConnection((err, conn) => {
-    conn.query("INSERT INTO users_access SET ?", [RegistroAccess], (err, result) => {
+
+    const salt = 10;
+    bcrypt.hash(data.password, salt, (err, hash) => {
       if (err) {
-        return res.status(500).json(err);
-      } else {
-        //console.log("Usuario Registrado");
-        //Captura idAccess
-        const idAccess = result.insertId;
-
-        let RegistroInfo = {
-          idAccess: idAccess,
-          documento: data.documento,
-          nombre: data.nombre,
-          telefono: data.telefono,
-        }
-
-        conn.query("INSERT INTO users_info SET ?", [RegistroInfo], (err, result2) => {
-          if (err) {
-            return res.status(500).json(err);
-          } else {
-            console.log("Usuario Registrado");
-            //End Usuario 
-            res.redirect('/usuarios');
-          }
-        });
+        console.log(err);
+        return res.status(500).json({ error: 'Error en la encriptación de la contraseña' });
       }
+
+      let RegistroAccess = {
+        idRoles: data.idRol,
+        correo: data.correo,
+        passsword: hash
+      };
+
+      conn.query("INSERT INTO users_access SET ?", [RegistroAccess], (err, result) => {
+        if (err) {
+          return res.status(500).json(err);
+        } else {
+          //console.log("Usuario Registrado");
+          //Captura idAccess
+          const idAccess = result.insertId;
+  
+          let RegistroInfo = {
+            idAccess: idAccess,
+            documento: data.documento,
+            nombre: data.nombre,
+            telefono: data.telefono,
+          }
+  
+          conn.query("INSERT INTO users_info SET ?", [RegistroInfo], (err, result2) => {
+            if (err) {
+              return res.status(500).json(err);
+            } else {
+              console.log("Usuario Registrado");
+              //End Usuario 
+              res.redirect('/usuarios');
+            }
+          });
+        }
+      });
     });
   });
 }

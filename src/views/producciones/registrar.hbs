@@ -123,14 +123,14 @@
     <!--Start Card&Form-->
     <div class="card" style="width: 98%; border-radius: 0; margin-left:1%; margin-top: 60px;">
       <div class="card-body">
-        <h6 class="card-title" style="margin-bottom: 1%;">Registrar Orden de Producción</h6>
+        <h4 class="card-title" style="margin-bottom: 1%;">Registrar orden de producción</h4>
 
         <div class="row">
           <div class="col-3">
             <!--Start Card #1-->
             <div class="card" style="border-radius: 0; width: 100%; margin-bottom: 3%;">
               <div class="card-body">
-                <h6 class="card-title" style="margin-bottom: 2%;">Producción</h6>
+                <h5 class="card-title" style="margin-bottom: 2%;">Producción</h5>
 
                 <!--Input Encargado-->
                 <label class="form-label" for="idEncargado">Encargado</label>
@@ -170,7 +170,8 @@
                 <!--Input Cantidad-->
                 <label class="form-label mt-2" for="cantidad">Cantidad Producir</label>
                 <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="cantidad"
-                  name="cantidad" oninput="val_cantidad()" autocomplete="off">
+                  name="cantidad" onkeypress="return solonumeros(event)" oninput="val_cantidad()" autocomplete="off"
+                  maxlength="13.">
                 <div id="mensajeErrorCantidad"></div>
                 <!--End Input Cantidad-->
 
@@ -213,7 +214,7 @@
             <!--Start Card #2-->
             <div class="card" style="border-radius: 0; width: 100%;">
               <div class="card-body">
-                <h6 class="card-title">Agregar Tarea</h6>
+                <h5 class="card-title">Agregar tarea</h5>
                 <div class="row">
                   <div class="col-md-4">
 
@@ -302,7 +303,7 @@
             <!--Start Card #3-->
             <div class="card mt-3" style="width: 100%; max-width: 100%; border-radius: 0;">
               <div class="card-body">
-                <h6 class="card-title">Tareas</h6>
+                <h5 class="card-title">Tareas</h5>
                 <!--Start Table-->
                 <div class="table-container">
                   <table class="table table-sm">
@@ -310,8 +311,8 @@
                       <tr style="text-align: center;">
                         <th>#</th>
                         <th> Titulo</th>
-                        <th> Fecha Inicio</th>
-                        <th> Fecha Fin</th>
+                        <th> FechaInicio</th>
+                        <th> FechaFin</th>
                         <th> Funciones </th>
                       </tr>
                     </thead>
@@ -345,7 +346,7 @@
 
               <!--Start Btn Registrar-->
               <button id="btnRegistrar" type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
-                Registrar Producción</button>
+                Registrar</button>
               <!--End Btn Regiastrar-->
             </div>
 
@@ -625,7 +626,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Participantes Tarea #${cont}</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">Participantes tarea #${cont}</h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -635,19 +636,19 @@
                       <!--Start Card-->
                       <div class="card" style="border-radius: 0; width: 100%;">
                         <div class="card-body">
-                          <h6 class="card-title">Agregar Participante</h6>
+                          <h5 class="card-title">Agregar participante</h5>
                           <div class="row">
                             <div class="col-md-10">
 
                               <!--Input Participante-->
                               <label class="form-label" for="idParticipante">Participante</label>
-                              <input type="text" class="form-control form-control-sm" list="lis_Participantes" style="border-radius: 0;"
+                              <input type="text" class="form-control form-control-sm" list="lis_encargados" style="border-radius: 0;"
                                 id="idParticipante_${cont}" autocomplete="off" >
-                              <datalist id="lis_Participantes">
+                              <!--<datalist id="lis_Participantes">
                                 {{#each usuarios}}
                                 <option value="{{correo}}">Nombre({{nombre}}) Teléfono({{telefono}}) Correo({{correo}})</option>
                                 {{/each}}
-                              </datalist>
+                              </datalist>-->
                               <!--<div id="mensajeErrorParticipante"></div> oninput="val_participante()"-->
                               <!--End Input Participante-->
                     
@@ -673,7 +674,7 @@
                             <th>Funciones</th>
                           </tr>
                         </thead>
-                        <tbody id="listaParticipantes_${cont}" style="text-align: center;">
+                        <tbody id="listaParticipantes_${cont}" class="TablaParticipantes" style="text-align:center">
                         </tbody>
                       </table>
 
@@ -796,56 +797,64 @@
       };
 
       if (participacion.participante != "" && participacion.titulo != "") {
-        const repetido = document.getElementById(participacion.titulo + '_' + participacion.participante);
-        let listP = "listaParticipantes_" + idP;
+        var selectedOption = document.querySelector('#lis_encargados option[value="' + participacion.participante + '"]');
+        if (selectedOption) {
+          const repetido = document.getElementById(participacion.titulo + '_' + participacion.participante);
+          let listP = "listaParticipantes_" + idP;
 
-        if (repetido != null) {
+          if (repetido != null) {
+            Swal.fire({
+              position: 'top-end',
+              icon: 'warning',
+              title: 'El usuario ya está en la lista',
+              showConfirmButton: false,
+              timer: 2000
+            });
+          } else {
+            contPar++;
+            let tbTabla = document.getElementById(listP);
+            //alert(tbTabla);
+
+            tbTabla.innerHTML += `
+              <tr id="participante_${idP}_${contPar}">
+                <td class="p-3 text-center"></td>
+                <td class="p-3 text-center">
+                  <input name="${participacion.titulo}_idParticipante" style="width: 100%; border: none; text-align: center;" id="${participacion.titulo}_${participacion.participante}"  value="${participacion.participante}" readonly>
+                </td>
+                <td class="p-3 text-center">
+                  <a class="boton-produccion" type="button" onclick="eliminarParticipante('${idP}_${contPar}', '${listP}')" style="color: #292b2c;">
+                   <i class="fas fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+            `;
+
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Participante Agregado',
+              showConfirmButton: false,
+              timer: 1000
+            });
+
+            //llamar función calcularContTDTable
+            ContTr(listP);
+            document.getElementById(part).value = "";
+          }
+        } else {
           Swal.fire({
             position: 'top-end',
             icon: 'warning',
-            title: 'El usuario ya está en la lista',
+            title: 'El usuario no es válido',
             showConfirmButton: false,
             timer: 2000
           });
-
-        } else {
-          contPar++;
-
-          let tbTabla = document.getElementById(listP);
-          //alert(tbTabla);
-
-          tbTabla.innerHTML += `
-         <tr id="participante_${idP}_${contPar}">
-               <td class="p-3 text-center"></td>
-               <td class="p-3 text-center">
-                   <input name="${participacion.titulo}_idParticipante" style="width: 100%; border: none; text-align: center;" id="${participacion.titulo}_${participacion.participante}"  value="${participacion.participante}" readonly>
-               </td>
-               <td class="p-3 text-center">
-                 <a class="boton-produccion" type="button" onclick="eliminarParticipante('${idP}_${contPar}', '${listP}')" style="color: #292b2c;">
-                   <i class="fas fa-trash"></i>
-                 </a>
-               </td>
-             </tr>
-         `;
-
-          Swal.fire({
-            position: 'top-end',
-            icon: 'success',
-            title: 'Participante Agregado',
-            showConfirmButton: false,
-            timer: 1000
-          });
-
         }
-
-        //llamar función calcularContTDTable
-        ContTr(listP);
-
-        document.getElementById(part).value = "";
       } else {
         alert('Vacío');
       }
     }
+
 
     function eliminarParticipante(idEP, TP) {
       var partE = "participante_" + idEP;
@@ -958,8 +967,68 @@
       }
     }
 
+    /*function validarEnvio() {
+       var list = document.getElementById('ListaTareas');
+       var participantes = document.querySelectorAll('TablaParticipantes');
+ 
+       var producto = document.getElementById("idProducto");
+       var encargado = document.getElementById("idEncargado");
+       var cantidad = document.getElementById("cantidad");
+       var fechaInicio = document.getElementById("fechaInicio");
+       var fechaFin = document.getElementById("fechaFin");
+ 
+       if (encargado.value == "" || producto.value == "" || cantidad.value == "" || fechaInicio.value == "" || fechaFin.value == "") {
+         //alert('campos obligatorios');
+         /*Swal.fire({
+           position: 'top-end',
+           icon: 'warning',
+           title: 'Campos Obligatorios',
+           showConfirmButton: false,
+           timer: 1500
+         });*/
+    /*  validarCampos();
+      return false; // Detener el envío del formulario
+    }
+
+    // Verificar si la lista tiene al menos un elemento
+    if (list.childElementCount === 0) {
+      //alert("No se puede enviar el formulario porque aún no se ha agregado nungún ");
+      Swal.fire({
+        position: 'top-end',
+        icon: 'info',
+        title: 'No hay nunguna tarea a realizar',
+        showConfirmButton: false,
+        timer: 6000
+      });
+      return false; // Detener el envío del formulario
+    }
+
+    alert(participantes)
+
+    // Verificar cada elemento de participantes
+    for (var i = 0; i < participantes.length; i++) {
+      alert("Se ingresó al ciclo");
+      if (participantes[i].childElementCount == 0) {
+        Swal.fire({
+          position: 'top-end',
+          icon: 'info',
+          title: 'No hay participantes en almenos una tarea',
+          showConfirmButton: false,
+          timer: 3000
+        });
+        return false; // Detener el envío del formulario
+      }
+    }
+
+
+    // Permite el envío del formulario
+    return true;
+  }
+*/
+
     function validarEnvio() {
       var list = document.getElementById('ListaTareas');
+      var participantes = document.querySelectorAll('.TablaParticipantes'); // Agregar un punto antes de 'TablaParticipantes'
 
       var producto = document.getElementById("idProducto");
       var encargado = document.getElementById("idEncargado");
@@ -968,33 +1037,60 @@
       var fechaFin = document.getElementById("fechaFin");
 
       if (encargado.value == "" || producto.value == "" || cantidad.value == "" || fechaInicio.value == "" || fechaFin.value == "") {
-        //alert('campos obligatorios');
-        /*Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'Campos Obligatorios',
-          showConfirmButton: false,
-          timer: 1500
-        });*/
         validarCampos();
         return false; // Detener el envío del formulario
       }
 
       // Verificar si la lista tiene al menos un elemento
       if (list.childElementCount === 0) {
-        //alert("No se puede enviar el formulario porque aún no se ha agregado nungún ");
         Swal.fire({
           position: 'top-end',
-          icon: 'info',
-          title: 'No se puede enviar el formulario porque aún no se ha agregado nunguna tarea',
+          icon: 'warning',
+          title: 'No hay ninguna tarea a realizar',
           showConfirmButton: false,
           timer: 6000
         });
         return false; // Detener el envío del formulario
       }
+
+      // Verificar cada elemento de participantes
+      /*for (var i = 0; i < participantes.length; i++) {
+        var tarea = participantes[i];
+        if (tarea.childElementCount === 0) {
+          var valor;
+          Swal.fire({
+            position: 'top-end',
+            icon: 'info',
+            title: 'No hay participantes en en la tarea'+valor,
+            showConfirmButton: false,
+            timer: 3000
+          });
+          return false; // Detener el envío del formulario
+        }
+      }*/
+      for (var i = 0; i < participantes.length; i++) {
+        var tarea = participantes[i];
+        if (tarea.childElementCount === 0) {
+          var id = tarea.id;
+          var match = id.match(/listaParticipantes_(\d+)/);
+          var mensaje = match ? "No hay participantes en la tarea #" + match[1] : "No hay participantes en la tarea";
+
+          Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: mensaje,
+            showConfirmButton: false,
+            timer: 3000
+          });
+          return false; // Detener el envío del formulario
+        }
+      }
+
+
       // Permite el envío del formulario
       return true;
     }
+
   </script>
   <!--End Validar Envio-->
 

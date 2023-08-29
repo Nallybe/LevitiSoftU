@@ -14,8 +14,8 @@
 
     /* Add this style to your existing CSS */
     .table-container {
-        max-height: 280px;
-        height: 280px;
+        max-height: 300px;
+        height: auto;
         /* Adjust this value as per your requirement */
         overflow-y: auto;
         position: relative;
@@ -42,6 +42,43 @@
         background-color: #282d32;
         color: white;
     }
+
+    button {
+        border-radius: 8px;
+        border: 1px gray solid;
+    }
+
+    /* Estilos para el popover */
+    .custom-popover {
+        position: relative;
+        max-width: 330px;
+        border: 3px gray solid;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        background-color: white;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
+        color: black;
+        /* Reemplaza esto con el color hexadecimal que corresponda a --bs-white */
+        padding-left: 0;
+        padding-right: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    /* Estilos para la flecha del popover */
+    .custom-popover::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: -16px;
+        /* Ubica la flecha justo a la izquierda del popover */
+        border-width: 8px;
+        border-style: solid;
+        border-color: transparent black transparent transparent;
+        /* Utiliza el color correspondiente a --bd-violet-bg */
+        transform: translateY(-50%);
+        border-right-color: gray;
+        /* Agrega un borde negro de 1px a la derecha de la flecha */
+    }
 </style>
 
 <!--Barra de navegación-->
@@ -58,7 +95,7 @@
         {{#each compra}}
         <div class="card mb-3" style="max-width: 100%; border-radius: 0; margin-left: 1%">
             <div class="card-body">
-                <h5 class="card-title">COMPRA</h5>
+                <h5 class="card-title">Compra</h5>
                 <p class="card-text"><b>Proveedor: </b>{{proveedor}}</p>
                 <p class="card-text"><b>Recibo: </b>{{recibo}}</p>
                 <p class="card-text"><b>Fecha recibo: </b>{{fechaRecibo}}</p>
@@ -73,7 +110,7 @@
         <!--Start Card #3-->
         <div class="card" style="width: 98%; border-radius: 0;">
             <div class="card-body">
-                <h6 class="card-title">Insumos adquiridos</h6>
+                <h5 class="card-title">Insumos adquiridos</h5>
                 <!--Start Table-->
                 <div class="table-container">
                     <table class="table table-sm">
@@ -94,8 +131,8 @@
                             <tr class="table">
                                 <td class="py-2 px-6 text-center">{{cont}}</td>
                                 <td class="p-2 text-center">
-                                    <a href="/insumos/{{idInsumo}}" data-bs-toggle="popover" data-bs-trigger="hover"
-                                        data-bs-title="<b>Insumo {{idInsumo}}</b>" data-bs-html="true" data-bs-content="
+                                    <button type="button" data-bs-toggle="popover" data-bs-trigger="hover"
+                                        data-bs-custom-class="custom-popover" data-bs-title="<b>Insumo {{cont}}</b>" data-bs-html="true" data-bs-content="
                                     <div class='row'>
                                         <div class='col-md-4'>
                                             <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Box-Open-icon.png' width='100' />
@@ -106,7 +143,7 @@
                                             <b>Stock:</b> {{cantidadI}}<br>
                                         </div>
                                     </div>
-                                ">{{nombreI}} <i class="fas fa-box-open" style="color: black"></i></a>
+                                ">{{nombreI}} <i class="fas fa-box-open" style="color: black"></i></button>
                                 </td>
                                 <td class="p-3 text-center">{{precio}}</td>
                                 <td class="p-3 text-center">{{cantidad}}</td>

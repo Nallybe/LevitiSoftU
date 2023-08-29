@@ -125,7 +125,7 @@
 
         <div class="card mb-3" style="max-width: 100%; border-radius: 0;">
             <div class="card-body">
-                <h5 class="card-title">REPARACIÓN</h5>
+                <h4 class="card-title">Reparación</h4>
                 <div class="card-text">
                     <p><b>Cliente:</b>
                         <button type="button" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
@@ -145,8 +145,8 @@
                         </button>
                         <br>
                     </p>
-                    <p><b>Fecha_Registro: </b>{{fechaRegistro}}<br></p>
-                    <p><b>Feha_Entrega: </b>{{fechaEntrega}}<br></p>
+                    <p><b>FechaRegistro: </b>{{fechaRegistro}}<br></p>
+                    <p><b>FehaEntrega: </b>{{fechaEntrega}}<br></p>
                     <p><b>Total: </b>{{total}}<br></p>
                     <p><b>Estado: </b>
                         {{#if estado1}}
@@ -174,7 +174,7 @@
 
         <center>
             <button class="btn-insumos mb-4" type="button" data-toggle="modal" data-target="#Insumos">
-                Insumos Requeridos <i class="fa-solid fa-dolly"></i>
+                Insumos requeridos <i class="fa-solid fa-dolly"></i>
             </button>
         </center>
 
@@ -184,7 +184,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Insumos Requeridos
+                        <h5 class="modal-title" id="exampleModalLabel">Insumos requeridos
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -238,7 +238,7 @@
         <!--Start Card #3-->
         <div class="card" style="width: 98%; border-radius: 0;">
             <div class="card-body">
-                <h6 class="card-title">Articulos a reparar</h6>
+                <h5 class="card-title">Articulos a reparar</h5>
                 <!--Start Table-->
                 <div class="table-container">
                     <table class="table table-sm">
@@ -247,7 +247,7 @@
                                 <th>#</th>
                                 <th>Artículo</th>
                                 <th>Estado</th>
-                                <th>Última Actualización</th>
+                                <th>ÚltimaActualización</th>
                                 <th>Funciones</th>
                             </tr>
                         </thead>
@@ -305,7 +305,7 @@
                                                             data-toggle="modal" data-target="#id{{cont}}">
 
                                                             <i class="fa-solid fa-dolly fa-2x"></i> <br>
-                                                            <p>Insumos <br>Requeridos</p>
+                                                            <p>Insumos <br>requeridos</p>
 
                                                         </button>
                                                     </center>
@@ -325,7 +325,7 @@
 
                                                 <div class="col-md-4">
                                                     <label class="form-label mt-4"
-                                                        for="observacion_R">Última_Actualización</label>
+                                                        for="observacion_R">Última Actualización</label>
                                                     <input class="form-control form-control-sm"
                                                         style="border-radius: 0;" type="text" value="{{fechaEstado}}"
                                                         readonly>
@@ -363,7 +363,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Insumos Requeridos Artículo #{{cont}}</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Insumos requeridos artículo #{{cont}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
