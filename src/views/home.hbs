@@ -2,11 +2,10 @@
 
 <div class="page-holder">
   <!-- navbar-->
-  <header class="header bg-white">
-    <div class="container px-lg-3">
+    <div class="barranav">
       {{> navbar}}
     </div>
-  </header>
+  
   <!-- HERO SECTION-->
   <section class="hero pb-3 bg-cover w-100" style="background: url(assets/img/carrusel2.jpeg) ">
 
@@ -18,7 +17,8 @@
   <p>{{precio}}</p>
   <p>{{stock}}</p>
   {{/each}} --}}
-  <div class="container">
+  <div class="container-fluid">
+
 
     <!-- CATEGORIES SECTION-->
     <section class="pt-5">
@@ -28,25 +28,23 @@
       <div class="row  categorias">
         <div class="col-md-4 ">
           <a class="category-item mb-4" href="ProductosH"><img class=""
-              src="assets/img//productosChaquetas/Chaquetas5.jpg" alt=""width="240" height="240" /><strong
+              src="assets/img//productosChaquetas/Chaquetas5.jpg" alt="" width="240" height="240" /><strong
               class="category-item-title">Chaquetas</strong></a>
-          <a class="category-item " href="ProductosH"><img class=""
-              src="assets/img/productosBilletera/Billeteras1.jpg" alt=""width="240" height="240" /><strong
-              class="category-item-title">Billeteras</strong></a>
+          <a class="category-item " href="ProductosH"><img class="" src="assets/img/productosBilletera/Billeteras1.jpg"
+              alt="" width="240" height="240" /><strong class="category-item-title">Billeteras</strong></a>
         </div>
         <div class="col-md-4">
           <a class="category-item mb-4" href="ProductosH">
-            <img class="" src="assets/img/productosZapat/Zapatos2.jpg" alt=""width="240" height="240" /><strong
+            <img class="" src="assets/img/productosZapat/Zapatos2.jpg" alt="" width="240" height="240" /><strong
               class="category-item-title">Calzado</strong></a>
-          <a class="category-item" href="ProductosH"><img src="assets/img/productosBolsos/Bolsos2.jpg"
-              alt="" width="240" height="240"/><strong class="category-item-title">Bolsos</strong></a>
+          <a class="category-item" href="ProductosH"><img src="assets/img/productosBolsos/Bolsos2.jpg" alt=""
+              width="240" height="240" /><strong class="category-item-title">Bolsos</strong></a>
         </div>
         <div class="col-md-4"><a class="category-item mb-4" href="ProductosH"><img class=""
               src="assets/img/productosCorrea/Correas1.jpg" alt="" width="240" height="240" /><strong
               class="category-item-title">Accesorios</strong></a>
-          <a class="category-item " href="ProductosH"><img class=""
-              src="assets/img/productosMorral/Morral1.jpg" alt="" width="240" height="240"/><strong
-              class="category-item-title">Morrales</strong></a>
+          <a class="category-item " href="ProductosH"><img class="" src="assets/img/productosMorral/Morral1.jpg" alt=""
+              width="240" height="240" /><strong class="category-item-title">Morrales</strong></a>
         </div>
 
       </div>
@@ -67,14 +65,16 @@
               <!-- Contenido del frente de la tarjeta -->
               <div class="position-relative mb-3 front">
                 <div class="badge text-white bg-"></div>
-                <a class="d-block"><img class="" width="240" height="240" src="assets/img/Productos/{{imagen}}" alt="..."></a>
+                <a class="d-block"><img class="" width="240" height="240" src="assets/img/Productos/{{imagen}}"
+                    alt="..."></a>
                 <h6 class="text-center pt-1">{{nombre}}</h6>
                 <p class="text-center">{{precio}}</p>
               </div>
             </div>
             <div class="back">
               <p><strong>Descripción: </strong>{{descripcion}}<br><br>
-              <strong>Stock disponible:</strong> {{stock}}</p>
+                <strong>Stock disponible:</strong> {{stock}}
+              </p>
             </div>
 
           </div>
@@ -89,14 +89,18 @@
         <i class="fab fa-whatsapp whatsapp-icon"></i>
         <div class="whatsapp-tooltip p-1">Chatea con nosotros</div>
       </a>
-      
+
     </div>
   </div>
-  
+
   {{> footer}}
   <!-- JavaScript files-->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+  <script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="vendor/glightbox/js/glightbox.min.js"></script>
   <script src="vendor/nouislider/nouislider.min.js"></script>
@@ -106,45 +110,45 @@
   <script>
     var products = {
       1: {
-        title: 'Producto 1',
-        image: 'img/product-1.jpg',
-        price: '$100',
-        description: 'Lorem ipsum dolor sit amet...'
+      title: 'Producto 1',
+    image: 'img/product-1.jpg',
+    price: '$100',
+    description: 'Lorem ipsum dolor sit amet...'
       },
-      2: {
-        title: 'Producto 2',
-        image: 'img/product-2.jpg',
-        price: '$200',
-        description: 'Lorem ipsum dolor sit amet...'
+    2: {
+      title: 'Producto 2',
+    image: 'img/product-2.jpg',
+    price: '$200',
+    description: 'Lorem ipsum dolor sit amet...'
       },
-      3: {
-        title: 'Producto 3',
-        image: 'img/product-3.jpg',
-        price: '$300',
-        description: 'Lorem ipsum dolor sit amet...'
+    3: {
+      title: 'Producto 3',
+    image: 'img/product-3.jpg',
+    price: '$300',
+    description: 'Lorem ipsum dolor sit amet...'
       }
     };
     document.addEventListener('DOMContentLoaded', function () {
       var productLinks = document.querySelectorAll('.product-link');
-      var modalTitle = document.querySelector('.modal-title');
-      var modalImage = document.querySelector('.modal-image');
-      var modalPrice = document.querySelector('.modal-price');
-      var modalDescription = document.querySelector('.modal-description');
+    var modalTitle = document.querySelector('.modal-title');
+    var modalImage = document.querySelector('.modal-image');
+    var modalPrice = document.querySelector('.modal-price');
+    var modalDescription = document.querySelector('.modal-description');
 
-      productLinks.forEach(function (link) {
-        link.addEventListener('click', function (e) {
-          e.preventDefault();
-          var productId = this.getAttribute('data-product-id');
-          var product = products[productId];
+    productLinks.forEach(function (link) {
+      link.addEventListener('click', function (e) {
+        e.preventDefault();
+        var productId = this.getAttribute('data-product-id');
+        var product = products[productId];
 
-          modalTitle.textContent = product.title;
-          modalImage.setAttribute('src', product.image);
-          modalPrice.textContent = product.price;
-          modalDescription.textContent = product.description;
+        modalTitle.textContent = product.title;
+        modalImage.setAttribute('src', product.image);
+        modalPrice.textContent = product.price;
+        modalDescription.textContent = product.description;
 
-          // Abre la modal
-          myModal.show();
-        });
+        // Abre la modal
+        myModal.show();
+      });
       });
     });
 
@@ -158,13 +162,13 @@
     function injectSvgSprite(path) {
 
       var ajax = new XMLHttpRequest();
-      ajax.open("GET", path, true);
-      ajax.send();
-      ajax.onload = function (e) {
+    ajax.open("GET", path, true);
+    ajax.send();
+    ajax.onload = function (e) {
         var div = document.createElement("div");
-        div.className = 'd-none';
-        div.innerHTML = ajax.responseText;
-        document.body.insertBefore(div, document.body.childNodes[0]);
+    div.className = 'd-none';
+    div.innerHTML = ajax.responseText;
+    document.body.insertBefore(div, document.body.childNodes[0]);
       }
     }
     // this is set to BootstrapTemple website as you cannot 

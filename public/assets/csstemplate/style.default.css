@@ -844,6 +844,21 @@ button:not(:disabled),
 }
 
 /* Sobre nosotros */
+/*Mis compras*/
+.producCliente{
+  width: 28%;
+  
+}
+.producCliente img{
+  width: 25%;
+  height: 25%;
+  border: 2px solid black;
+}
+.producCliente p{
+  /*border: 2px solid blue;*/
+  padding: 0;
+}
+/*Mis compras*/
 
 .fade {
   transition: opacity 0.15s linear;
@@ -944,7 +959,15 @@ button:not(:disabled),
   margin-bottom: 0;
   list-style: none;
 }
-
+.barranav{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.list{
+  list-style: none;
+  padding-left: 0; 
+  padding-right: 0;
+}
 .nav-link.active {
   color: #dcb14a;
 }
@@ -953,7 +976,7 @@ button:not(:disabled),
   display: block;
   padding: 0.5rem 1rem;
   font-weight: 700;
-  color: #dcb14a;
+  color: black;
   text-decoration: none;
   transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
 }
@@ -977,8 +1000,6 @@ button:not(:disabled),
   justify-content: center;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-
-
 }
 
 .navbar>.container {

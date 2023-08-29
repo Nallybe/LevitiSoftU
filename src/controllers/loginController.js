@@ -3,6 +3,7 @@ const nodemailer = require('nodemailer')
 const jwt = require("jsonwebtoken")
 const salt = 10
 const bcrypt = require('bcrypt');
+const { use } = require('../routes/login');
 
 function login(req, res) {
   // Verificar si el usuario ha iniciado sesión
@@ -45,7 +46,8 @@ function auth(req, res) {
 
             if (isMatch) {
               req.session.loggedin = true;
-
+              var sesion = true
+              
               // Obtener el nombre correspondiente al correo electrónico en users_info
               conn.query(
                 'SELECT nombre FROM users_info WHERE idAccess = ?',
@@ -75,49 +77,99 @@ function auth(req, res) {
                         // Extraemos la parte de la cadena que se encuentra después del espacio
                         const nombreroles = nombreRoles.substring(posicionSeparador + 1);
                         req.session.roles = nombreroles;
-                        conn.query(
-                          `SELECT DISTINCT p.nombrePermisos 
+                        //console.log(req.session.roles)
+                        //console.log(sesion)
+                        if (nombreRoles === 'Cliente') {
+                          res.redirect("/home")
+                        } else {
+                          conn.query(
+                            `SELECT DISTINCT p.nombrePermisos 
                           FROM tbl_roles AS r 
                           JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles 
                           JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos 
                           WHERE r.nombreRoles = ?
                           ORDER BY p.idPermisos ASC;
                           `, [nombreroles]
-                          ,
-                          (error, permissionResults) => {
-                            if (error) {
-                              console.log(error);
-                              return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
-                            }
-                            const permisos = permissionResults.map((row) => row.nombrePermisos);
-                            //console.log('Permisos: ', permissionResults)
-                            req.session.asignacion = permisos;
-                            
-                            // Redireccionar al primer permiso que coincida
-                            var firstMatchingPermission = permisos.find((permiso) => true);
+                            ,
+                            (error, permissionResults) => {
+                              if (error) {
+                                console.log(error);
+                                return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+                              }
+                              const permisos = permissionResults.map((row) => row.nombrePermisos);
+                              //console.log('Permisos: ', permissionResults)
+                              req.session.asignacion = permisos;
 
-                            //console.log("Primer " + firstMatchingPermission)
-                            if (firstMatchingPermission) {
-                              res.redirect('/' + firstMatchingPermission);
-                            } else {
-                              // Si no hay permisos coincidentes, redireccionar a una página predeterminada
-                              res.redirect('/dashboard');
+                              // Redireccionar al primer permiso que coincida
+                              var firstMatchingPermission = permisos.find((permiso) => true);
+
+                              //console.log("Primer " + firstMatchingPermission)
+                              if (firstMatchingPermission) {
+                                res.redirect('/' + firstMatchingPermission);
+                              } else {
+                                // Si no hay permisos coincidentes, redireccionar a una página predeterminada
+                                res.redirect('/dashboard');
+                              }
                             }
-                          }
-                        );
+                          );
+                        }
+
                       }
                     );
                   }
                 }
               );
             } else {
+              sesion= false
               res.render('login', { errorl: 'Error, contraseña incorrecta' });
-              // Aquí puedes redirigir al usuario a otra página o enviar una respuesta de éxito
-              // res.redirect('/dashboard');
             }
           });
         } else {
+          sesion= false
           res.render('login', { errorl: 'Error, el correo no existe' });
+        }
+      }
+    );
+  });
+}
+////////////////////////////
+
+function authAPI(req, res) {
+  const data = req.body;
+  console.log(data)
+  req.getConnection((err, conn) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: 'Error en la conexión a la base de datos' });
+    }
+
+    conn.query(
+      'SELECT * FROM users_access WHERE correo = ?',
+      [data.correo],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+        }
+        //console.log("resultados: ", results)
+        if (results.length > 0) {
+          const user = results[0];
+          //console.log("User: ", user, " Password: ", user.passsword)
+          bcrypt.compare(data.passsword.toString(), user.passsword, (err, isMatch) => {
+            if (err) {
+              console.log(err);
+              return res.status(500).json({ error: 'Error al comparar contraseñas' });
+            }
+          
+            if (isMatch) {
+              res.status(200).json({ Exito: 'Éxito' });
+            } else {
+              res.status(401).json({ error: 'Error, contraseña incorrecta' });
+            }
+          });
+          
+        } else {
+          res.status(404).json({ error: 'Error, el correo no existe' });
         }
       }
     );
@@ -365,5 +417,6 @@ module.exports = {
   recuperar,
   restablecer,
   restablecerContraseña,
-  dashboard
+  dashboard,
+  authAPI
 };

@@ -1,3 +1,6 @@
+.footer{
+  position: sticky;
+}
 .footer-dark {
   color: #f0f9ff;
   background-color: #282d32;
@@ -6,7 +9,7 @@
 
 .footer1 p {
   font-size: 14px;
-}
+} 
 
 .footer1 {
   width: 320px;

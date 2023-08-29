@@ -129,9 +129,9 @@ a {
   padding: 15px 20px;
   border-radius: 25px;
   background: rgb(22, 57, 255);
-  color: black;
+  color: white;
   width: 100%;
-  color: #000000;
+
   display: block;
 }
 
@@ -186,7 +186,7 @@ a {
 }
 
 .login-form .group .button {
-  background: #f8ff27;
+  background: #DCB14A;
   color: rgb(0, 0, 0);
 }
 

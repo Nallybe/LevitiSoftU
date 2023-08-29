@@ -62,6 +62,7 @@ app.use(myconnection(mysql, {
     port: '', //Aquí se coloca el puerto del MySQL en el panel del xampp, si usas wampserver dejarlo vacio 
     database: 'crudnodejs'
 }, 'single'));
+
 app.use(session({
     secret: 'secret',
     resave: true,
@@ -86,7 +87,19 @@ app.get('/', (req, res) => {
         nombre: 'home'
     })
 })
-
+// Middleware de verificación de sesión
+const sesion = (req, res, next) => {
+    if (req.session.loggedin) {
+        // Si hay una sesión activa, continuar con la siguiente ruta
+        res.locals.name = req.session.name;
+        res.locals.asignacion = req.session.asignacion;
+        res.locals.roles = req.session.roles;
+        next();
+    } else {
+        // Si no hay una sesión activa, redireccionar al login
+        res.redirect('/login');
+    }
+};
 // Middleware de verificación de sesión
 const checkSession = (req, res, next) => {
     if (req.session.loggedin && tienePermisos(req.session)) {
@@ -100,7 +113,6 @@ const checkSession = (req, res, next) => {
         res.redirect('/login');
     }
 };
-
 // Función para verificar los permisos
 const tienePermisos = (session) => {
     const asignacion = session.asignacion;
@@ -111,6 +123,7 @@ const tienePermisos = (session) => {
 
     return false;
 };
+
 
 app.get('/dashboard', checkSession, (req, res) => {
     req.getConnection((err, conn) => {
@@ -149,7 +162,7 @@ app.get('/dashboard', checkSession, (req, res) => {
                             const comprasData = Array.from({ length: currentMonth + 1 }, (_, i) => {
                                 const compraMes = compras.find(compra => compra.mes === (i + 1));
                                 return compraMes ? compraMes.cantidad_registros : 0;
-                            }); 
+                            });
 
                             res.render('dashboard', { labels: months.slice(0, currentMonth + 1), ventasData, comprasData });
                         }
@@ -160,41 +173,37 @@ app.get('/dashboard', checkSession, (req, res) => {
     });
 });
 
-
 app.get('/home', (req, res) => {
-    // Obtener la conexión a la base de datos
+    const loggedIn = req.session.loggedin || false;
+    const name = req.session.name
     req.getConnection((err, conn) => {
         if (err) {
-            // Si hay un error al obtener la conexión, enviar una respuesta con el error
-            return res.status(500).json(err);
-        } else {
-            // Consultar los productos en la base de datos
-            conn.query('SELECT * FROM tbl_productos', (err, productos) => {
-                if (err) {
-                    // Si hay un error al consultar las productos, enviar una respuesta con el error
-                    return res.status(500).json(err);
-                } else {
-                    for (let index in productos) {
-                        // Parsear estado
-                        if (productos[index].estado == 'A') {
-                            productos[index].estado1 = true;
-                        } else {
-                            productos[index].estado2 = true;
-                        }
-
-                        // Parsear precio
-                        productos[index].precio = "$ " + productos[index].precio.toLocaleString('es-CO');
-
-                    }
-                    // Renderizar la plantilla 'productos/listar' y enviar los datos a la vista
-                    res.render('home', { productos });
-                }
-            });
+            console.error('Error connecting to database:', err);
+            return res.status(500).send('Internal Server Error');
         }
+
+        conn.query('SELECT p.nombre, p.descripcion, p.imagen, p.precio, p.stock, c.nombre AS nombre_categoria, SUM(dv.Unidad) AS total_vendido FROM tbl_productos p INNER JOIN tbl_categoria c ON p.idCategoria = c.idCategoria INNER JOIN tbl_detalleventas dv ON p.idProducto = dv.idProducto GROUP BY p.idProducto ORDER BY total_vendido ASC LIMIT 8;;', (err, productos) => {
+            if (err) {
+                console.error('Error querying database:', err);
+                return res.status(500).send('Internal Server Error');
+            }
+
+            productos.forEach(producto => {
+                producto.estado1 = producto.estado === 'A';
+                producto.estado2 = !producto.estado1;
+                producto.precio = "$ " + producto.precio.toLocaleString('es-CO');
+            });
+
+            const data = { productos, sesion: loggedIn, name };
+            res.render('home', data);
+        });
     });
-})
+});
+
 
 app.get('/ProductosH', (req, res) => {
+    const loggedIn = req.session.loggedin || false;
+    const name = req.session.name
     // Obtener la conexión a la base de datos
     req.getConnection((err, conn) => {
         if (err) {
@@ -231,7 +240,7 @@ app.get('/ProductosH', (req, res) => {
                             res.render('ProductosH', {
                                 productos: productos,
                                 currentPage: currentPage,
-                                totalPages: Math.ceil(totalProducts / productsPerPage)
+                                totalPages: Math.ceil(totalProducts / productsPerPage), sesion: loggedIn, name
                             });
                         }
                     });
@@ -242,90 +251,86 @@ app.get('/ProductosH', (req, res) => {
 });
 
 
-app.get('/ProduZapatos', (req, res) => {
 
-    res.render('ProduZapatos', {
-        nombre: 'ProduZapatos'
-    })
-})
-
-app.get('/ProduBolsos', (req, res) => {
-
-    res.render('ProduBolsos', {
-        nombre: 'ProduBolsos'
-    })
-})
-
-app.get('/ProduRino', (req, res) => {
-
-    res.render('ProduRino', {
-        nombre: 'ProduRino'
-    })
-})
-
-app.get('/ProduMorral', (req, res) => {
-
-    res.render('ProduMorral', {
-        nombre: 'ProduMorral'
-    })
-})
-
-app.get('/ProduBilletera', (req, res) => {
-
-    res.render('ProduBilletera', {
-        nombre: 'ProduBilletera'
-    })
-})
-
-app.get('/ProduChaquetas', (req, res) => {
-
-    res.render('ProduChaquetas', {
-        nombre: 'ProduChaquetas'
-    })
-})
-
-app.get('/ProduCorreas', (req, res) => {
-
-    res.render('ProduCorreas', {
-        nombre: 'ProduCorreas'
-    })
-})
 
 app.get('/recomendaciones', (req, res) => {
-
+    const loggedIn = req.session.loggedin || false;
+    const name = req.session.name
     res.render('recomendaciones', {
-        nombre: 'Recomendaciones'
+        nombre: 'Recomendaciones', sesion: loggedIn, name
+    })
+})
+
+app.get('/misCompras', sesion, (req, res) => {
+    const loggedIn = req.session.loggedin || false;
+    const name = req.session.name
+    req.getConnection((err, conn) => {
+        conn.query(`SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont FROM tbl_ventas JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo WHERE users_info.nombre = ?;`, [name], (err, ventas) => {
+            if (err) {
+                res.json(err);
+            }
+            const ventasFormateadas = ventas.map(venta => {
+                const fecha = new Date(venta.fecha);
+                const dia = fecha.getDate();
+                const mes = fecha.toLocaleString('default', { month: 'long' });
+                const anio = fecha.getFullYear();
+                const fechaFormateada = `${dia} de ${mes} de ${anio}`;
+                return {
+                    idVentas: venta.idVentas,
+                    nombre: venta.nombre,
+                    total: venta.total,
+                    fecha: fechaFormateada,
+                    descripcion: venta.descripcion,
+                    estado: venta.estado,
+                    cont: venta.cont
+                };
+            });
+
+            res.render('misCompras', {
+                nombre: 'Mis compras', sesion: loggedIn, name, ventas: ventasFormateadas
+            })
+        })
+    })
+})
+app.get('/misComprasProductos/:idVentas', sesion, (req, res) =>{
+    const idVentas = req.params.idVentas;
+    const loggedIn = req.session.loggedin || false;
+    const name = req.session.name
+    //console.log("IdVentas: ", idVentas)
+    const baseUrl = 'http://localhost:8181'
+    req.getConnection((err, conn) => {
+        conn.query('SELECT p.imagen, p.nombre, p.precio, dv.Unidad FROM tbl_productos p INNER JOIN tbl_detalleventas dv ON p.idProducto = dv.idProducto WHERE dv.idVentas = ?', [idVentas], (err, productos) => {
+            if (err) {
+                res.json(err);
+            }
+            //console.log(productos)
+            res.render('misComprasProductos', { productos, baseUrl, sesion: loggedIn });
+        })
+    })
+})
+app.get('/misRepara', sesion, (req, res) => {
+    const loggedIn = req.session.loggedin || false;
+    const name = req.session.name
+    res.render('misRepara', {
+        nombre: 'Mis reparaciones', sesion: loggedIn, name
     })
 })
 
 app.get('/sobre_nosotros', (req, res) => {
-
+    const loggedIn = req.session.loggedin || false;
+    const name = req.session.name
     res.render('sobre_nosotros', {
-        nombre: 'sobre_nosotros'
+        nombre: 'sobre_nosotros', sesion: loggedIn, name
     })
 })
 
 app.get('/contactanos', (req, res) => {
-
+    const loggedIn = req.session.loggedin || false;
+    const name = req.session.name
     res.render('contactanos', {
-        nombre: 'contactanos'
+        nombre: 'contactanos', sesion: loggedIn, name
     })
 })
-
-app.get('/homeDash', (req, res) => {
-    if (req.session.loggedin) {
-
-        res.render('homeDash', { name: req.session.name, asignacion: req.session.asignacion });
-    } else {
-        res.redirect('/login');
-    }
-});
-
-
-
-
-
-
 
 app.get('*', (req, res) => {
     res.render('404', {
