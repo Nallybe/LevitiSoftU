@@ -1348,12 +1348,13 @@ async function producciones_modificar(req, res) {
                 // End Eliminar Detalles
             }
         }
+        console.log('termina la edicion de los ya existentes')
 
 
         //Registrar Detalles
         //Verificar si se enviaron nuevos detalles
         if (data.titulo_2) {
-
+            console.log("Se ingresan nuevas tareas");
             // Registrar Detalles y Reconocer si se manda 1 o más detalles
             if (data.titulo_2[0].length > 1) {
                 // Más de un detalle
@@ -1553,6 +1554,7 @@ async function producciones_modificar(req, res) {
             }
             //End Registrar Detalles
         }
+        console.log("Pasa de largo");
 
 
         // Redireccionar
