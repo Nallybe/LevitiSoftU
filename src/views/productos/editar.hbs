@@ -39,8 +39,8 @@
 
     /* Add this style to your existing CSS */
     .table-container {
-      max-height: 250px;
-      height: 250px;
+      max-height: 300px;
+      height: auto;
       /* Adjust this value as per your requirement */
       overflow-y: auto;
       position: relative;
@@ -83,6 +83,10 @@
       width: 15px;
       height: 15px;
     }
+
+    .btn {
+      border-radius: 8px;
+    }
   </style>
   <!--Barra de navegación-->
   {{>barId}}
@@ -90,19 +94,19 @@
   {{#each producto}}
   <form action="/productos_editar/{{idProducto}}" method="post" onsubmit="return validarEnvio()" id="FormEditarProducto">
 
-    <div class="container" style="margin-top: 60px;  margin-bottom: 10px;">
+    <div class="container-fluid" style="margin-top: 60px;  margin-bottom: 10px;">
 
       <!--Start Card&Form-->
       <div class="card" style="width: 100%; border-radius: 0; margin-bottom: 5px;">
         <div class="card-body">
-          <h6 class="card-title" style="margin-bottom: 1%;">Editar Producto</h6>
+          <h4 class="card-title" style="margin-bottom: 1%;">Editar producto</h4>
 
           <div class="row">
             <div class="col-5">
               <!--Start Card #1-->
               <div class="card" style="border-radius: 0; width: 100%; margin-bottom: 1%;">
                 <div class="card-body">
-                  <h6 class="card-title" style="margin-bottom: 2%;">Producto</h6>
+                  <h5 class="card-title" style="margin-bottom: 2%;">Producto</h5>
                   <!--Input Nombre-->
                   <label class="form-label" for="nombre">Nombre</label>
                   <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="nombre"
@@ -166,20 +170,19 @@
                     </div>
                   </div>
                   <!--Input Descripción-->
-                  <label class="form-label mt-2" for="descripcion_R">Descripción</label>
+                  <label class="form-label mt-2" for="descripcion">Descripción</label>
                   <textarea class="form-control form-control-sm" id="descripcion" name="descripcion" autocomplete="off"
-                    maxlength="250" oninput="val_descripcion()">{{descripcion}}</textarea>
-                  <!--End Input Descripción-->
-
+                    oninput="val_descripcion()">{{descripcion}}</textarea>
+                  <!--End Input Descripción   maxlength="250" -->
+                  <div id="mensajeErrorDescripcion"></div>
                   <center>
 
                     <!-- Mostrar la imagen seleccionada -->
                     <img id="imagenMostrada" src="/assets/img/Productos/{{imagen}}" alt="Imagen del producto">
 
                     <!-- Agregar un botón para permitir seleccionar una nueva imagen -->
-                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning btn-sm"
-                      style="border-radius: 0%;">Seleccionar nueva
-                      Imagen</button>
+                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning btn-sm">Seleccionar nueva
+                      imagen</button>
 
                   </center>
 
@@ -204,7 +207,7 @@
                 <div class="card-body">
                   <div class="row">
                     <div class="col-md-10">
-                      <h6 class="card-title">Agregar insumo</h6>
+                      <h5 class="card-title">Agregar insumo</h5>
 
                       <div class="row">
                         <div class="col-md-7">
@@ -252,7 +255,7 @@
               <!--Start Card #3-->
               <div class="card mt-3" style="width: 100%; border-radius: 0;">
                 <div class="card-body">
-                  <h6 class="card-title">Insumos Requeridos</h6>
+                  <h5 class="card-title">Insumos requeridos</h5>
                   <!--Start Table-->
                   <div class="table-container">
                     <table class="table table-sm">
@@ -260,13 +263,13 @@
                         <tr style="text-align: center;">
                           <th>#</th>
                           <th> Insumo</th>
-                          <th> Cantidad Requerida</th>
+                          <th> CantidadRequerida</th>
                           <th> Funciones </th>
                         </tr>
                       </thead>
                       <tbody id="lista-insumos-req" style="text-align: center;">
                         {{#each detallesproducto}}
-                        <tr id="{{idDetalleProducto}}" style="text-align: center">
+                        <tr id="{{idDetalleProducto}}" class="insumo_tr" style="text-align: center">
                           <td class="text-center"></td>
                           <td class="text-center">
                             <input type="hidden" name="idDetalleProducto_1" value="{{idDetalleProducto}}">
@@ -275,8 +278,8 @@
                           </td>
 
                           <td class="text-center">
-                            <input class="w-4/5" style="text-align: center; width: 100px;  border: 1 black;"
-                              id="cant_{{idInsumo}}" name="cantidad_n_1" value="{{cantidad_n}}">
+                            <input style="text-align: center; width: 100px;  border: 1 black;"
+                              id="cant_{{idInsumo}}" name="cantidad_n_1" value="{{cantidad_n}}" oninput="updateValueInput(this)">
                           </td>
                           <td class="text-center">
                             <a href="#" onclick="eliminarInsumo({{idDetalleProducto}})" style="color: #292b2c;">
@@ -289,27 +292,36 @@
                     </table>
                   </div>
                   <!--End Table-->
+                  <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2">
+                      <div class="pagination">
+                        <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i
+                            class="fa-solid fa-arrow-left"></i></button>
+                        <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i
+                            class="fa-solid fa-arrow-right"></i></button>
+                      </div>
+                    </div>
+                    <div class="col-md-5"></div>
+                  </div>
                 </div>
               </div>
 
 
               <!--End Card #3-->
 
-              <div class="row">
-                <div class="col-7"></div>
-                <div class="col-5">
+              <div style="text-align: right;">
                     <!--Start Btn Cancelar-->
-                    <a class="btn btn-danger btn-sm" href="/productos" style="border-radius: 0; margin-top: 1px;"
+                    <a class="btn btn-danger btn-sm" href="/productos"
                       type="button">Cancelar</a>
                     <!--End Btn Cancelar-->
 
                     <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-                    <button type="submit" class="btn btn-success btn-sm" style="border-radius: 0; margin-bottom: 1px;"
+                    <button type="submit" class="btn btn-success btn-sm"
                       id="btnEditar">
-                      Guardar Cambios</button>
+                      Guardar cambios</button>
                     <!--End Btn Regiastrar-->
                 </div>
-              </div>
 
             </div>
           </div>
@@ -491,9 +503,10 @@
       };
 
       if (insumo.idInsumo != "" && insumo.cantidad != "") {
-        const repetido = document.getElementById('cant_' + insumo.idInsumo)
+        const repetido = document.getElementById('cant_' + insumo.idInsumo);
         if (repetido != null) {
           repetido.value = parseInt(repetido.value) + parseInt(insumo.cantidad);
+          repetido.setAttribute("value", repetido.value);
 
           Swal.fire({
             position: 'top-end',
@@ -506,16 +519,16 @@
 
           cont = cont - 1;
           document.getElementById('lista-insumos-req').innerHTML += `
-        <tr id="${cont}"style="text-align: center; background-color: whitesmoke;">
+        <tr id="${cont}" class="insumo_tr" style="text-align: center; background-color: whitesmoke;">
             <td class="text-center"></td>
             <td class="text-center">
                 <input id="Id_${insumo.idInsumo}" name="idInsumo_2" value="${insumo.idInsumo}" style="text-align: center; width: 100px;  border: none; background-color: whitesmoke;" readonly>
             </td>
             <td class="text-center">
-                <input class="w-4/5" style="text-align: center; width: 100px;  border: 1px grey solid; background-color: whitesmoke;" id="cant_${insumo.idInsumo}" name="cantidad_n_2" value="${insumo.cantidad}">
+                <input style="text-align: center; width: 100px;  border: 1px grey solid; background-color: whitesmoke;" id="cant_${insumo.idInsumo}" name="cantidad_n_2" value="${insumo.cantidad}" oninput="updateValueInput(this)">
             </td>
             <td class="text-center">
-                <a href="#" onclick="eliminarInsumo(${cont})" style="color: #292b2c;">
+                <a onclick="eliminarInsumo(${cont})" style="color: #292b2c;">
                     <i class="fas fa-trash"></i>
                 </a>
             </td>
@@ -529,8 +542,18 @@
             timer: 1000
           });
 
-          tablaIndex();
         }
+        
+        tablaIndex();
+
+         const totalVisibleRows = document.querySelectorAll('.insumo_tr[data-visible="true"]').length;
+
+        const totalPages = Math.ceil(totalVisibleRows / itemsPerPage);
+        currentPage = totalPages;
+        showPage(currentPage);
+        updatePagination();
+
+
 
         document.getElementById('idInsumo_R').value = null;
         document.getElementById('cantidad_R').value = null;
@@ -659,9 +682,9 @@
         Swal.fire({
           position: 'top-end',
           icon: 'info',
-          title: 'No se puede enviar el formulario porque aún no se ha agregado nungún insumo',
+          title: 'No hay insumos requeridos',
           showConfirmButton: false,
-          timer: 6000
+          timer: 3000
         });
         return false; // Detener el envío del formulario
       }
@@ -712,9 +735,6 @@
       }
     });
   </script>
-
-
-
   <!--Inicio footer-->
 
   <!--Fin footer-->
@@ -739,13 +759,84 @@
 
 
   <script>
-    //SOLO NUMEROS
-    $(function () {
-      $(".validar").keydown(function (event) {
-        //alert(event.keyCode);
-        if ((event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105) && event.keyCode !== 190 && event.keyCode !== 110 && event.keyCode !== 8 && event.keyCode !== 9) {
-          return false;
+    const itemsPerPage = 4; // Define el número de registros por página
+    let currentPage = 1;
+
+    function showPage(page) {
+      const rows = document.querySelectorAll('.insumo_tr');
+      const startIndex = (page - 1) * itemsPerPage;
+      const endIndex = startIndex + itemsPerPage;
+
+      rows.forEach((row, index) => {
+        if (index >= startIndex && index < endIndex) {
+          row.style.display = 'table-row';
+          row.setAttribute('data-visible', 'true');
+        } else {
+          row.style.display = 'none';
+          row.setAttribute('data-visible', 'false');
         }
+
       });
+    }
+
+    function updatePagination() {
+      const rows = document.querySelectorAll('.insumo_tr');
+      const totalRows = rows.length;
+      const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+      if (currentPage === 1) {
+        document.querySelector('.prev-btn').disabled = true;
+      } else {
+        document.querySelector('.prev-btn').disabled = false;
+      }
+
+      if (currentPage === totalPages) {
+        document.querySelector('.next-btn').disabled = true;
+      } else {
+        document.querySelector('.next-btn').disabled = false;
+      }
+    }
+
+    document.querySelector('.prev-btn').addEventListener('click', () => {
+      if (currentPage > 1) {
+        currentPage--;
+        showPage(currentPage);
+        updatePagination();
+      }
     });
+
+    document.querySelector('.next-btn').addEventListener('click', () => {
+      const rows = document.querySelectorAll('.insumo_tr');
+      const totalRows = rows.length;
+      const totalPages = Math.ceil(totalRows / itemsPerPage);
+
+      if (currentPage < totalPages) {
+        currentPage++;
+        showPage(currentPage);
+        updatePagination();
+      }
+    });
+
+    // Mostrar la primera página al cargar la tabla
+    showPage(currentPage);
+    updatePagination();
+
   </script>
+
+
+    <!--Actualizar Valores-->
+  <script>
+    function updateValueInput(input) {
+      input.setAttribute("value", input.value);
+    }
+
+    function updateValueTextarea(textarea) {
+      textarea.textContent = textarea.value;
+    }
+
+    function updateValueSelect(select) {
+      const selectedOption = select.options[select.selectedIndex];
+      select.value = selectedOption.value;
+    }
+  </script>
+  <!--End Actualizar Valores-->

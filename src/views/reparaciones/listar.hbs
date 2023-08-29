@@ -77,7 +77,7 @@
 <!--Barra de navegación-->
 <br><br><br>
 <center>
-    <div class="container mb-5">
+    <div class="container-fluid mb-5">
         <div class="row">
             <div class="col-md-4">
                 <div class="input-group">
@@ -92,7 +92,7 @@
             <div class="col-md-5"></div>
             <div class="col-md-3">
                 <a href="/reparaciones_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
-                    Registrar Reparación</a>
+                    Registrar reparación</a>
             </div>
         </div>
         <table class="table table-hover" style="text-align:center;" id="tabla-reparaciones">
@@ -114,7 +114,7 @@
                 <tr>
                     <td class="py-3 px-6 text-center">{{cont}}</td>
                     <td class="p-3 text-center">
-                        <button type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="focus" 
+                        <button type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="hover" 
                             data-bs-custom-class="custom-popover" title="<b>Cliente Reparación {{cont}}</b>" data-bs-content="
                             <div class='row'>
                                 <div class='col-md-3'>
@@ -247,8 +247,8 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-primary">Cambiar Estado</button>
+                        <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary btn-sm">Cambiar Estado</button>
                     </div>
                 </div>
             </form>

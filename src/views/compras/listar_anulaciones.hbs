@@ -24,7 +24,7 @@
         <!--Barra de navegación-->
         <br><br><br>
         <center>
-            <div class="container mb-5">
+            <div class="container-fluid mb-5">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="row" style="margin-left: 8px;">
@@ -56,9 +56,9 @@
                     <thead style="background-color: #282d32; color:white;">
                         <tr>
                             <th class="w-1/4 ..."># Anulación</th>
-                            <th class="w-1/4 ..."># Compra</th>
-                            <th class="w-2/4 ...">Motivo_Anulación</th>
-                            <th class="w-2/4 ...">Fecha_Anulación</th>
+                            <th class="w-1/4 ...">Recibo</th>
+                            <th class="w-2/4 ...">MotivoAnulación</th>
+                            <th class="w-1/4 ...">FechaAnulación</th>
                             <th class="w-1/4 ...">Funciones</th>
                         </tr>
                     </thead>
@@ -66,7 +66,7 @@
                         {{#each anulaciones}}
                         <tr>
                             <td class="py-3 px-6 text-center">{{idAnulacionCompra}}</td>
-                            <td class="p-3 text-center">{{idCompra}}</td>
+                            <td class="p-3 text-center">{{recibo}}</td>
                             <td class="p-3 text-center">{{motivoAnulacion}}</td>
                             <td class="p-3 text-center">{{fechaAnulacion}}</td>
                             <td class="p-3 px-1">

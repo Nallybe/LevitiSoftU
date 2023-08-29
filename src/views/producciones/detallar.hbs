@@ -128,7 +128,7 @@
 
         <div class="card mb-3" style="max-width: 100%; border-radius: 0;">
             <div class="card-body">
-                <h5 class="card-title">PRODUCCIÓN</h5>
+                <h5 class="card-title">Producción</h5>
                 <div class="card-text">
                     <p><b>Encargado:</b>
                         <button type="button" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
@@ -150,7 +150,7 @@
                     </p>
                     <p><b>Producto:</b>
                         <button type="button" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-html="true"
-                            data-bs-custom-class="custom-popover" title="<b>Producto Producción {{cont}}</b>"
+                            data-bs-custom-class="custom-popover" title="<b>Producto orden de producción</b>"
                             data-bs-content="
                             <div class='popover-content'>
                                 <div class='row'>
@@ -172,9 +172,9 @@
                         </button>
                         <br>
                     </p>
-                    <p><b>Cantidad_Producir: </b>{{cantidad}}<br></p>
-                    <p><b>Fecha_Inicio: </b>{{fechaInicio}}<br></p>
-                    <p><b>Fecha_Fin: </b>{{fechaFin}}<br></p>
+                    <p><b>CantidadProducir: </b>{{cantidad}}<br></p>
+                    <p><b>FechaInicio: </b>{{fechaInicio}}<br></p>
+                    <p><b>FechaFin: </b>{{fechaFin}}<br></p>
                     <p><b>Estado: </b>
                         {{#if estado1}}
                         <button class="btn btn-primary btn-sm" style="border-radius:20px;" disabled>Iniciado</button>
@@ -197,7 +197,7 @@
 
         <center>
             <button class="btn-insumos mb-4" type="button" data-toggle="modal" data-target="#Insumos">
-                Insumos Requeridos <i class="fa-solid fa-dolly"></i>
+                Insumos requeridos <i class="fa-solid fa-dolly"></i>
             </button>
         </center>
 
@@ -207,7 +207,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Insumos Requeridos
+                        <h5 class="modal-title" id="exampleModalLabel">Insumos requeridos
                         </h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -219,7 +219,7 @@
                                 <tr style="text-align: center;">
                                     <th class="w-1/4 py-4 ...">#</th>
                                     <th class="w-1/4 py-4 ...">Insumo</th>
-                                    <th class="w-1/4 py-4 ...">Cantidad Necesaria</th>
+                                    <th class="w-1/4 py-4 ...">Cantidad necesaria</th>
                                 </tr>
                             </thead>
                             <tbody style="text-align: center;">
@@ -263,16 +263,16 @@
         <!--Start Card #3-->
         <div class="card" style="width: 98%; border-radius: 0;">
             <div class="card-body">
-                <h6 class="card-title">Eventos</h6>
+                <h5 class="card-title">Tareas</h5>
                 <!--Start Table-->
                 <div class="table-container">
                     <table class="table table-sm">
                         <thead class="table" style="background-color: #282d32; color:white;">
                             <tr style="text-align: center;">
                                 <th>#</th>
-                                <th>Evento</th>
-                                <th>Fecha_Inicio</th>
-                                <th>Fecha_Fin</th>
+                                <th>Titulo</th>
+                                <th>FechaInicio</th>
+                                <th>FechaFin</th>
                                 <th>Estado</th>
                                 <th>Funciones</th>
                             </tr>
@@ -395,7 +395,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Participantes Evento #{{cont}}</h5>
+                <h5 class="modal-title" id="exampleModalLabel">Participantes tarea #{{cont}}</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

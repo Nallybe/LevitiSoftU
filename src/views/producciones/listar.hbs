@@ -73,7 +73,7 @@
 <!--Barra de navegación-->
 <br><br><br>
 <center>
-    <div class="container mb-5">
+    <div class="container-fluid mb-5">
         <div class="row">
             <div class="col-md-4">
                 <div class="input-group">
@@ -88,7 +88,7 @@
             <div class="col-md-5"></div>
             <div class="col-md-3">
                 <a href="/producciones_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
-                    Registrar Producción</a>
+                    Registrar orden de producción</a>
             </div>
         </div>
         <table class="table table-hover" style="text-align:center;" id="tabla-producciones">
@@ -97,9 +97,9 @@
                     <th class="w-1/4 ...">#</th>
                     <th class="w-1/5 ...">Encargado</th>
                     <th class="w-1/5 ...">Producto</th>
-                    <th class="w-1/4 ...">Cantidad_Producir</th>
-                    <th class="w-1/4 ...">Fecha_Inicio</th>
-                    <th class="w-1/4 ...">Fecha_Fin</th>
+                    <th class="w-1/4 ...">CantidadProducir</th>
+                    <th class="w-1/4 ...">FechaInicio</th>
+                    <th class="w-1/4 ...">FechaFin</th>
                     <th class="w-1/4 ...">Estado</th>
                     <th class="w-1/4 ...">Funciones</th>
                 </tr>
@@ -127,7 +127,7 @@
                     </td>
                     <td class="p-3 text-center">
                         <button type="button" data-bs-trigger="hover" data-bs-toggle="popover" data-bs-html="true"
-                            data-bs-custom-class="custom-popover" title="<b>Producto Producción {{cont}}</b>"
+                            data-bs-custom-class="custom-popover" title="<b>Producto orden de producción #{{cont}}</b>"
                             data-bs-content="
                                     <div class='popover-content'>
                                         <div class='row'>

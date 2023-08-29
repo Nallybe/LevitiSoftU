@@ -50,23 +50,21 @@ function compras_listar_anulaciones(req, res) {
       if (err) {
         return res.status(500).json(err);
       } else {
-        for (index in anulaciones) {
-          //Fecha Anulación
-          let day = anulaciones[index].fechaAnulacion.getDate();
-          let month = anulaciones[index].fechaAnulacion.getMonth() + 1;
-          let year = anulaciones[index].fechaAnulacion.getFullYear();
-          //Fecha Actual 
-          let fecha_actual = new Date()
-          let day_a = fecha_actual.getDate();
-          let month_a = fecha_actual.getMonth() + 1;
-          let year_a = fecha_actual.getFullYear();
-          if (day == day_a && month_a == month && year_a == year) {
-            anulaciones[index].recuperar = true;
+        conn.query("SELECT * FROM tbl_compras", (err, compras) => {
+          if (err) {
+            return res.status(500).json(err);
+          } else {
+            for (index in anulaciones) {
+              for (ix in compras) {
+                if (parseInt(anulaciones[index].idCompra) == parseInt(compras[ix].idCompra)) {
+                  anulaciones[index].recibo = compras[ix].recibo
+                }
+              }
+              anulaciones[index].fechaAnulacion = anulaciones[index].fechaAnulacion.toLocaleString();//.toLocaleString();
+            }
+            res.render("compras/listar_anulaciones", { anulaciones });
           }
-          anulaciones[index].fechaAnulacion = anulaciones[index].fechaAnulacion.toLocaleString();//.toLocaleString();
-        }
-        let numAC = anulaciones.length;
-        res.render("compras/listar_anulaciones", { anulaciones, numAC });
+        });
       }
     });
   });
