@@ -42,7 +42,7 @@
 <center>
     <div class="container-fluid mb-5">
         <div class="row" >
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="input-group">
                     <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
                         placeholder="Buscar producto" aria-label="Search" oninput="filtrarTabla()">
@@ -52,10 +52,11 @@
                     </button>
                 </div>
             </div>
-            <div class="col-md-6"></div>
-            <div class="col-md-3">
-                <a href="/productos_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
+            <div class="col-md-9">
+                <div style="text-align: right;">
+                    <a href="/productos_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
                     Registrar producto</a>
+                </div>
             </div>
         </div>
         <table class="table table-hover" style="text-align:center;" id="tabla-productos">
@@ -106,7 +107,7 @@
                     </td>
                     
                     <td class="p-3 text-center">{{nombre}}</td>
-                    <td class="p-3 text-center"  style="width: auto;"> <p class="limited-paragraph">{{descripcion}} Lorem ipsum dolor sit amet consectetur adipisicing elit. Assumenda libero rem quibusdam sapiente. Esse corporis dignissimos expedita assumenda odit placeat nulla alias aperiam dolore reprehenderit, voluptatibus magnam cumque rerum hic, debitis totam eaque. Velit officiis reiciendis amet mollitia ullam beatae ea voluptate omnis vitae nesciunt. Ratione pariatur porro autem itaque aliquid natus, ex, optio, esse dolor blanditiis quas vel! Voluptas modi error ut obcaecati, quasi ipsam iste voluptatem, pariatur fugit tempore, fuga aliquam asperiores nesciunt doloribus corrupti dolor. Labore culpa vero laborum aliquid quae omnis, aliquam quibusdam laboriosam soluta tempora nemo dolore saepe libero. Laborum id saepe nesciunt rem earum.</p></td>                    
+                    <td class="p-3 text-center"  style="width: auto;"> <p class="limited-paragraph">{{descripcion}}</p></td>                    
                     <td class="p-3 text-center" >{{idCategoria}}</td>
                     <td class="p-3 text-center">{{stock}}</td>
                     <td class="p-3 text-center">{{precio}}</td>

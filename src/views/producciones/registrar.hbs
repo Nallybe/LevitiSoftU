@@ -559,17 +559,13 @@
               <td class="p-3 text-center">${cont}</td>
               <td class="p-3 text-center">
                   <input type="hidden" name="titulo" id="titulo_${cont}" value="${tarea.titulo}">
-                  
-                 
                       <input name="titulo_a" id="titulo_a_${cont}" oninput="updateValueInput(this)" value="${tarea.titulo}" style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;" class="form-control form-control-sm">
-                    
-                  
               </td>
               <td class="p-3 text-center">
-                  <input type="date" name="fechaInicio_detalle" id="fechaInicio_${cont}" value="${tarea.fechaInicio}" oninput="updateValueInput(this)">
+                  <input class="form-control form-control-sm" type="date" name="fechaInicio_detalle" id="fechaInicio_${cont}" value="${tarea.fechaInicio}" oninput="updateValueInput(this)" style="border-radius: 0;">
               </td>
               <td class="p-3 text-center">
-                  <input type="date" name="fechaFin_detalle" id="fechaFin_${cont}" value="${tarea.fechaFin}" oninput="updateValueInput(this)">
+                  <input class="form-control form-control-sm" type="date" name="fechaFin_detalle" id="fechaFin_${cont}" value="${tarea.fechaFin}" oninput="updateValueInput(this)" style="border-radius: 0;">
               </td>
               <td class="p-3 text-center">
                 <a class="expand-button boton-produccion" type="button">
