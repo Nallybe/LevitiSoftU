@@ -504,13 +504,13 @@
         //alert("Insumo Agregado");
       } else {
         //alert("Campos obligatorios");
-        Swal.fire({
+       /* Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Campos Obligatorios',
           showConfirmButton: false,
           timer: 1000
-        });
+        });*/
 
         if (insumo.idInsumo == "") {
           mensajeErrorInsumo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El insumo es un campo requerido';
@@ -541,12 +541,12 @@
 
     function eliminarInsumo(id) {
       const insumoE = document.getElementById('I' + id); // Agregar 'I' al ID
-      alert('ID a eliminar:', id);
-      alert('Elemento a eliminar:', insumoE);
+      //alert('ID a eliminar:', id);
+      //alert('Elemento a eliminar:', insumoE);
       if (!insumoE) {
         alert("Error");
       } else {
-        alert("se encontró el insumo");
+       // alert("se encontró el insumo");
 
 
         let toT = "t" + id;
@@ -714,13 +714,13 @@
       if (proveedor.value == "" || recibo.value == "" || fechaRecibo.value == "") {
 
         //alert('campos obligatorios');
-        Swal.fire({
+        /*Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Campos Obligatorios',
           showConfirmButton: false,
           timer: 1500
-        });
+        });*/
         validarCampos();
         return false; // Detener el envío del formulario
       }
@@ -733,7 +733,7 @@
           icon: 'info',
           title: 'No hay nungún insumo en la compra',
           showConfirmButton: false,
-          timer: 6000
+          timer: 3000
         });
         return false; // Detener el envío del formulario
       }

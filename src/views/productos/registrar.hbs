@@ -639,13 +639,13 @@
 
       if (imagen.value == '' || nombre.value == '' || descripcion.value == '' || precio.value == '' || stock.value == '' || categoria.value == '') {
         //alert('campos obligatorios');
-        Swal.fire({
+        /*Swal.fire({
           position: 'top-end',
           icon: 'warning',
           title: 'Campos Obligatorios',
           showConfirmButton: false,
           timer: 1500
-        });
+        });*/
         validarCampos();
         return false; // Detener el envío del formulario
       }
