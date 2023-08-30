@@ -255,7 +255,7 @@
             <!--Start Card #3-->
             <div class="card" style="width: 100%; border-radius: 0;">
               <div class="card-body">
-                <h5 class="card-title">artículos a reparar</h5>
+                <h5 class="card-title">Artículos a reparar</h5>
                 <!--Start Table-->
                 <div class="table-container">
                   <table class="table table-sm">
@@ -267,7 +267,7 @@
                         <th> Funciones </th>
                       </tr>
                     </thead>
-                    <tbody id="ListaArticulos">
+                    <tbody class="TablaInsumos" id="ListaArticulos">
                       {{#each detallesreparacion}}
 
                       <tr class="clickable-row" id="{{cont}}">
@@ -276,14 +276,15 @@
                           <input type="hidden" name="idDetalleReparacion_1" value="{{idDetalleReparacion}}">
                           <input type="hidden" name="articulo_1" id="articulo_1_{{cont}}" value="{{articulo}}">
 
-                          <input name="articulo_1_a" value="{{articulo}}" oninput="updateValueInput(this)"
+                          <input class="form-control form-control-sm" name="articulo_1_a" value="{{articulo}}"
+                            oninput="updateValueInput(this)"
                             style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
                         </td>
 
                         {{#if estado1}}
                         <td class="p-3 text-center">
-                          <select name="estado_1" style="text-align: center; width: 100%;"
-                            onchange="updateValueSelect(this)">
+                          <select class="form-control form-control-sm" name="estado_1"
+                            style="text-align: center; width: 100%;" onchange="updateValueSelect(this)">
                             <option value="{{estado}}" selected>{{estado}}</option>
                             <option value="Proceso">En Proceso</option>
                             <option value="Terminado">Terminado</option>
@@ -303,8 +304,8 @@
                         {{/if}}
                         {{#if estado2}}
                         <td class="p-3 text-center">
-                          <select name="estado_1" style="text-align: center; width: 100%;"
-                            onchange="updateValueSelect(this)">
+                          <select class="form-control form-control-sm" name="estado_1"
+                            style="text-align: center; width: 100%;" onchange="updateValueSelect(this)">
                             <option value="{{estado}}" selected>En {{estado}}</option>
                             <option value="Terminado">Terminado</option>
                           </select>
@@ -324,8 +325,8 @@
                         {{/if}}
                         {{#if estado3}}
                         <td class="p-3 text-center">
-                          <select name="estado_1" style="text-align: center; width: 100%;"
-                            onchange="updateValueSelect(this)">
+                          <select class="form-control form-control-sm" name="estado_1"
+                            style="text-align: center; width: 100%;" onchange="updateValueSelect(this)">
                             <option value="{{estado}}" selected>{{estado}}</option>
                             <option value="Proceso">En Proceso</option>
                           </select>
@@ -391,7 +392,7 @@
                       </tr>
                       {{/each}}
 
-                    </tbody>
+                    </tbody class="TablaInsumos">
                   </table>
                 </div>
                 <!--End Table-->
@@ -412,16 +413,15 @@
             <!--End Card #3-->
 
             <div style="text-align: right;">
-              
-                <!--Start Btn Cancelar-->
-                <a class="btn btn-danger btn-sm" href="/reparaciones" style="margin-top: 1px;"
-                  type="button">Cancelar</a>
-                <!--End Btn Cancelar-->
 
-                <!--Start Btn Registrar-->
-                <button type="submit" id="btnRegistrar" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
-                  Guardar cambios</button>
-                <!--End Btn Regiastrar-->
+              <!--Start Btn Cancelar-->
+              <a class="btn btn-danger btn-sm" href="/reparaciones" style="margin-top: 1px;" type="button">Cancelar</a>
+              <!--End Btn Cancelar-->
+
+              <!--Start Btn Registrar-->
+              <button type="submit" id="btnRegistrar" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
+                Guardar cambios</button>
+              <!--End Btn Regiastrar-->
             </div>
           </div>
         </div>
@@ -443,7 +443,7 @@
         <div class="modal-dialog">
           <div class="modal-content">
             <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel">Insumos Requeridos Artículo (existente) #{{contMas}}</h5>
+              <h4 class="modal-title" id="exampleModalLabel">Insumos requeridos artículo #{{contMas}}</h4>
               <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
@@ -453,7 +453,7 @@
               <!--Start Card-->
               <div class="card" style="border-radius: 0; width: 100%;">
                 <div class="card-body">
-                  <h6 class="card-title">Agregar Inusmo</h6>
+                  <h5 class="card-title">Agregar Inusmo</h5>
                   <div class="row">
                     <div class="col-md-10">
 
@@ -504,7 +504,7 @@
                     <th>Funciones</th>
                   </tr>
                 </thead>
-                <tbody id="listaInsumos_{{cont}}" style="text-align: center;">
+                <tbody class="TablaInsumos" id="listaInsumos_{{cont}}" style="text-align: center;">
                   {{#each this.insumos_r}}
                   <tr id="insumo_{{../cont}}_{{cont_i}}">
                     <td class="p-3 text-center">{{cont_c}}</td>
@@ -692,12 +692,12 @@
           <td class="text-center">
             <input type="hidden" name="articulo_2" id="articulo_2_${cont}" value="${articulo.articulo}">
 
-            <input name="articulo_2_a" value="${articulo.articulo}" oninput="updateValueInput(this)"
+            <input class="form-control form-control-sm" name="articulo_2_a" value="${articulo.articulo}" oninput="updateValueInput(this)"
               style="border-radius: 0; border: 1px rgb(206, 212, 218) solid;">
           </td>
 
           <td class="p-3 text-center">
-            <select name="estado_2" style="text-align: center; width: 100%;">
+            <select class="form-control form-control-sm" name="estado_2" style="text-align: center; width: 100%;">
               <option value="Iniciado" selected>Iniciado</option>
             </select>
           </td>
@@ -763,7 +763,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Insumos Requeridos Artículo (añadido) #${cont}</h5>
+                      <h4 class="modal-title" id="exampleModalLabel">Insumos requeridos artículo #...</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -773,7 +773,7 @@
                       <!--Start Card-->
                       <div class="card" style="border-radius: 0; width: 100%;">
                         <div class="card-body">
-                          <h6 class="card-title">Agregar Inusmo</h6>
+                          <h5 class="card-title">Agregar Insumo</h5>
                           <div class="row">
                             <div class="col-md-10">
 
@@ -826,7 +826,7 @@
                             <th>Funciones</th>
                           </tr>
                         </thead>
-                        <tbody id="listaInsumos_${cont}" style="text-align: center;">
+                        <tbody class="TablaInsumos" id="listaInsumos_${cont}" style="text-align: center;">
                         </tbody>
                       </table>
 
@@ -889,13 +889,13 @@
         //alert("Insumo Agregado");
       } else {
         //alert("Campos obligatorios");
-       /* Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'Campos Obligatorios',
-          showConfirmButton: false,
-          timer: 1000
-        });*/
+        /* Swal.fire({
+           position: 'top-end',
+           icon: 'warning',
+           title: 'Campos Obligatorios',
+           showConfirmButton: false,
+           timer: 1000
+         });*/
 
         if (articulo.articulo == "") {
           mensajeErrorArticulo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El artículo es un campo requerido';
@@ -1020,30 +1020,34 @@
       };
 
       if (requerido.idInsumo != "" && requerido.cantidad != "" && requerido.articulo != "") {
-        const repetido = document.getElementById(requerido.articulo + '_' + requerido.idInsumo + '_cant');
-        let listP = "listaInsumos_" + idP;
+        var selectedOption = document.querySelector('#lis_Insumos option[value="' + requerido.idInsumo + '"]');
 
-        if (repetido != null) {
-          var total = parseInt(repetido.value) + parseInt(requerido.cantidad);
-          repetido.value = total;
+        if (selectedOption) {
 
-          repetido.setAttribute("value", repetido.value);
+          const repetido = document.getElementById(requerido.articulo + '_' + requerido.idInsumo + '_cant');
+          let listP = "listaInsumos_" + idP;
+
+          if (repetido != null) {
+            var total = parseInt(repetido.value) + parseInt(requerido.cantidad);
+            repetido.value = total;
+
+            repetido.setAttribute("value", repetido.value);
 
 
-          Swal.fire({
-            position: 'top-end',
-            icon: 'info',
-            title: 'El insumo ya está agregado',
-            showConfirmButton: false,
-            timer: 2000
-          });
+            Swal.fire({
+              position: 'top-end',
+              icon: 'info',
+              title: 'El insumo ya está agregado',
+              showConfirmButton: false,
+              timer: 2000
+            });
 
-        } else {
+          } else {
 
-          contPar++;
-          let tbTabla = document.getElementById(listP);
-          //alert(tbTabla);
-          tbTabla.innerHTML += `
+            contPar++;
+            let tbTabla = document.getElementById(listP);
+            //alert(tbTabla);
+            tbTabla.innerHTML += `
          <tr id="insumo_${idP}_${contPar}">
                <td class="p-3 text-center"></td>
                <td class="p-3 text-center">
@@ -1059,24 +1063,40 @@
                </td>
              </tr>
          `;
+            Swal.fire({
+              position: 'top-end',
+              icon: 'success',
+              title: 'Insumo Agregado',
+              showConfirmButton: false,
+              timer: 1000
+            });
+
+          }
+
+          //llamar función calcularContTDTable
+          ContTr(listP);
+
+          document.getElementById(part).value = "";
+          document.getElementById(part2).value = "";
+
+        } else {
           Swal.fire({
             position: 'top-end',
-            icon: 'success',
-            title: 'Insumo Agregado',
+            icon: 'warning',
+            title: 'El insumo no es válido',
             showConfirmButton: false,
-            timer: 1000
+            timer: 2000
           });
-
         }
 
-        //llamar función calcularContTDTable
-        ContTr(listP);
-
-        document.getElementById(part).value = "";
-        document.getElementById(part2).value = "";
-
       } else {
-        alert('Vacío');
+        Swal.fire({
+          position: 'top-end',
+          icon: 'warning',
+          title: 'Campos requeridos',
+          showConfirmButton: false,
+          timer: 3000
+        });
       }
     }
 
@@ -1174,12 +1194,12 @@
 
     }
 
-
     function validarEnvio() {
       var list = document.getElementById('ListaArticulos');
       //var cliente = document.getElementById("idCliente");
       var total = document.getElementById("total");
       var fechaEntrega = document.getElementById("fechaEntrega");
+      var insumos = document.querySelectorAll('.TablaInsumos'); // Agregar un punto antes de 'TablaParticipantes'
 
       if (/*cliente.value == "" ||*/total.value == "" || fechaEntrega.value == "") {
         //alert('campos obligatorios');
@@ -1199,13 +1219,32 @@
         //alert("No se puede enviar el formulario porque aún no se ha agregado nungún insumo");
         Swal.fire({
           position: 'top-end',
-          icon: 'info',
-          title: 'No se puede enviar el formulario porque aún no se ha agregado nungún artículo a reparar',
+          icon: 'warning',
+          title: 'No hay artículos a reparar',
           showConfirmButton: false,
-          timer: 6000
+          timer: 3000
         });
         return false; // Detener el envío del formulario
       }
+
+      for (var i = 0; i < insumos.length; i++) {
+        var art = insumos[i];
+        if (art.childElementCount === 0) {
+          var id = art.id;
+          var match = id.match(/listaInsumos_(\d+)/);
+          var mensaje = match ? "No hay insumos requeridos en el artículo #..." /*+ match[1] */ : "No hay insumos requeridos en el artículo #...";
+
+          Swal.fire({
+            position: 'top-end',
+            icon: 'warning',
+            title: mensaje,
+            showConfirmButton: false,
+            timer: 3000
+          });
+          return false; // Detener el envío del formulario
+        }
+      }
+
       // Permite el envío del formulario
       return true;
     }

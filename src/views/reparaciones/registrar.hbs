@@ -904,7 +904,7 @@
       if (art.childElementCount === 0) {
         var id = art.id;
         var match = id.match(/listaInsumos_(\d+)/);
-        var mensaje = match ? "No hay insumos en el artículo #" + match[1] : "No hay insumos en el artículo";
+        var mensaje = match ? "No hay insumos requeridos en el artículo #" + match[1] : "No hay insumos requeridos en el artículo";
 
         Swal.fire({
           position: 'top-end',
