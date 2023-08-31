@@ -1,5 +1,5 @@
 .footer{
-  position: sticky;
+  position: static;
 }
 .footer-dark {
   color: #f0f9ff;

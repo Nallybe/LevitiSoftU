@@ -87,7 +87,7 @@
             </div>
             <div class="col-md-9">
                 <div style="text-align: right;">
-                    <a href="/producciones_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
+                    <a href="/produccion_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
                         Registrar orden de producción</a>
                 </div>
             </div>
@@ -160,14 +160,14 @@
                             disabled>Iniciado</button>
                     </td>
                     <td class="p-3 px-1 flex">
-                        <a href="/producciones/{{idOrdenProduccion}}" style="color: #292b2c; " class="boton-produccion">
+                        <a href="/produccion/{{idOrdenProduccion}}" style="color: #292b2c; " class="boton-produccion">
                             <i type="button" class="fa-sharp fa-solid fa-eye"></i>
                         </a>
-                        <a href="/producciones_editar/{{idOrdenProduccion}}" style="color: #292b2c; "
+                        <a href="/produccion_editar/{{idOrdenProduccion}}" style="color: #292b2c; "
                             class="boton-produccion">
                             <i type="button" class="fa-sharp fa-solid fa-pen"></i>
                         </a>
-                        <form action="/producciones_eliminar" method="POST" class="boton-produccion"
+                        <form action="/produccion_eliminar" method="POST" class="boton-produccion"
                             id="FormEliminarProduccion{{idOrdenProduccion}}">
                             <input type="hidden" value="{{idOrdenProduccion}}" name="idOrdenProduccion">
                             <a type="button" onclick="Eliminar({{idOrdenProduccion}})"><i class="fa fa-trash"></i></a>
@@ -182,14 +182,14 @@
                             Proceso</button>
                     </td>
                     <td class="p-3 px-1 flex">
-                        <a href="/producciones/{{idOrdenProduccion}}" style="color: #292b2c; " class="boton-produccion">
+                        <a href="/produccion/{{idOrdenProduccion}}" style="color: #292b2c; " class="boton-produccion">
                             <i type="button" class="fa-sharp fa-solid fa-eye"></i>
                         </a>
-                        <a href="/producciones_editar/{{idOrdenProduccion}}" style="color: #292b2c; "
+                        <a href="/produccion_editar/{{idOrdenProduccion}}" style="color: #292b2c; "
                             class="boton-produccion">
                             <i type="button" class="fa-sharp fa-solid fa-pen"></i>
                         </a>
-                        <form action="/producciones_eliminar" method="POST" class="boton-produccion"
+                        <form action="/produccion_eliminar" method="POST" class="boton-produccion"
                             id="FormEliminarProduccion{{idOrdenProduccion}}">
                             <input type="hidden" value="{{idOrdenProduccion}}" name="idOrdenProduccion">
                             <a type="button" onclick="Eliminar({{idOrdenProduccion}})"><i class="fa fa-trash"></i></a>
@@ -206,7 +206,7 @@
                     </td>
 
                     <td class="p-3 px-1 ">
-                        <a href="/producciones/{{idOrdenProduccion}}" style="color: #292b2c; " class="boton-produccion">
+                        <a href="/produccion/{{idOrdenProduccion}}" style="color: #292b2c; " class="boton-produccion">
                             <i type="button" class="fa-sharp fa-solid fa-eye"></i>
                         </a>
                     </td>

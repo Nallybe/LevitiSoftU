@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken")
 const salt = 10
 const bcrypt = require('bcrypt');
 const { use } = require('../routes/login');
+const { ConsoleMessage } = require('puppeteer');
 
 function login(req, res) {
   // Verificar si el usuario ha iniciado sesión
@@ -256,6 +257,7 @@ function registrar(req, res) {
                     telefono: data.telefono,
                     estado: 'A'
                   };
+                  req.session.name= data.nombre
                   conn.query(
                     'INSERT INTO users_info SET ?',
                     registroUsuarioInfo, (error, result) => {
@@ -275,9 +277,12 @@ function registrar(req, res) {
                             return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
                           }
                           //console.log(req.session.roles)
-                          req.session.roles = roleResults;
-
-                          conn.query(
+                          req.session.roles = roleResults[0].nombreRoles;
+                          
+                          if(req.session.roles === "Cliente"){
+                            res.redirect("/home")
+                          }else{
+                            conn.query(
                             'SELECT DISTINCT p.nombrePermisos FROM tbl_roles AS r JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos;'
                             ,
                             (error, permissionResults) => {
@@ -299,6 +304,8 @@ function registrar(req, res) {
                               }
                             }
                           );
+                          }
+                          
                         }
                       );
                     }
