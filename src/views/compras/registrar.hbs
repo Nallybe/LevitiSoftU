@@ -139,8 +139,7 @@
                         <!--Input Insumo-->
                         <label class="form-label" for="idInsumo_R">Insumo</label>
                         <input type="text" class="form-control form-control-sm" list="list_insumos"
-                          style="border-radius: 0;" id="idInsumo_R" autocomplete="off"
-                          oninput="val_ins()">
+                          style="border-radius: 0;" id="idInsumo_R" autocomplete="off" oninput="val_ins()">
                         <datalist id="list_insumos">
                           {{#each insumos}}
                           <option value="{{nombre}}" medida="{{medida}}" id="{{idInsumo}}">nombre({{nombre}})
@@ -163,15 +162,16 @@
                         <!--Input Precio-->
                         <label class="form-label" for="precio_R">Precio</label>
                         <input type="number" class="form-control form-control-sm" style="border-radius: 0;"
-                          id="precio_R" autocomplete="off" oninput="val_precio()" hidden>
+                          id="precio_R" autocomplete="off" hidden>
 
                         <input type="text" class="form-control form-control-sm" style="border-radius: 0;"
-                          id="precio_R_V" autocomplete="off">
+                          id="precio_R_V" autocomplete="off" oninput="val_precio()">
+                        <div id="mensajeErrorPrecio"></div>
 
                         <script>
                           const visibleInput = document.getElementById("precio_R_V");
                           const hiddenInput = document.getElementById("precio_R");
-                         // const showValueButton = document.getElementById("showValueButton");
+                          // const showValueButton = document.getElementById("showValueButton");
 
                           visibleInput.addEventListener("input", () => {
                             const inputValue = visibleInput.value.replace(/\./g, ""); // Remover puntos
@@ -185,9 +185,6 @@
                             alert(`Valor Oculto: ${hiddenValue}`);
                           });*/
                         </script>
-
-
-                        <div id="mensajeErrorPrecio"></div>
                         <!--End Input Precio-->
                       </div>
                       <div class="col-md-2">
@@ -220,7 +217,7 @@
             <!--Start Card #3-->
             <div class="card mt-3" style="width: 100%; border-radius: 0;">
               <div class="card-body">
-                <h6 class="card-title">Insumos Adquiridos</h6>
+                <h5 class="card-title">Insumos adquiridos</h5>
                 <!--Start Table-->
                 <div class="table-container ">
                   <table class="table table-sm container-fluid">
@@ -247,15 +244,22 @@
                       <td class="p-3 text-center">
                         <!-- Input Monto-->
                         <input type="text" class="form-control form-control-sm"
-                          style="border-radius: 0; background-color: #282d32; color: white;" id="montoC1" name="montoC1"
+                          style="border-radius: 0; background-color: #282d32; color: white; width: 100px" id="montoC1"
+                          name="montoC1" value="0" hidden>
+                        <input type="text" class="form-control form-control-sm"
+                          style="border-radius: 0; background-color: #282d32; color: white; width: 100px" id="montoC1_V"
                           value="0" readonly>
+
                         <!-- End Input Monto-->
                       </td>
                       <td class="p-3 text-center"></td>
                       <td class="p-3 text-center">
                         <!-- Input IVA -->
                         <input type="text" class="form-control form-control-sm"
-                          style="border-radius: 0; background-color: #282d32; color: white;" id="ivaC1" name="ivaC1"
+                          style="border-radius: 0; background-color: #282d32; color: white; width: 100px" id="ivaC1"
+                          name="ivaC1" value="0" hidden>
+                        <input type="text" class="form-control form-control-sm"
+                          style="border-radius: 0; background-color: #282d32; color: white; width: 100px" id="ivaC1_V"
                           value="0" readonly>
                         <!-- End Input IVA -->
                       </td>
@@ -263,7 +267,10 @@
 
                         <!-- Input Total -->
                         <input type="text" class="form-control form-control-sm"
-                          style="border-radius: 0; background-color: #282d32; color: white;" id="totalC1" name="totalC1"
+                          style="border-radius: 0; background-color: #282d32; color: white; width: 100px" id="totalC1"
+                          name="totalC1" value="0" hidden>
+                        <input type="text" class="form-control form-control-sm"
+                          style="border-radius: 0; background-color: #282d32; color: white; width: 100px" id="totalC1_V"
                           value="0" readonly>
                         <!-- End Input Total -->
                       </td>
@@ -332,7 +339,7 @@
     }
 
     function val_precio() {
-      var precio = document.getElementById("precio_R");
+      var precio = document.getElementById("precio_R_V");
 
       if (precio.value != "") {
         mensajeErrorPrecio.innerHTML = '';
@@ -415,90 +422,104 @@
       var t = 0;
       const insumo = {
         idInsumo: document.getElementById('idInsumo_R').value,
-        precio: document.getElementById('precio_R').value,
-        cantidad: document.getElementById('cantidad_R').value,
-        monto: m = document.getElementById('cantidad_R').value * document.getElementById('precio_R').value,
+        precio: parseInt(document.getElementById('precio_R').value),
+        cantidad: parseInt(document.getElementById('cantidad_R').value) ,
+        monto: m =  parseInt(document.getElementById('cantidad_R').value) *  parseFloat(document.getElementById('precio_R').value),
         porcentajeIva: pI.value.replace(/\D/g, ''),
         iva: (m * pI.value.replace(/\D/g, '')) / 100,
         total: t = ((m * pI.value.replace(/\D/g, '')) / 100) + m
 
       };
 
-      //Acumular total
-      var inputNumber1 = document.getElementById("totalC1");
-      var valorActual = parseInt(inputNumber1.value);
-      if (valorActual) {
-        inputNumber1.value = valorActual + insumo.total;
-      } else {
-        inputNumber1.value = insumo.total;
-      }
-      //Acumular total 
-
-      //Acumular Monto
-      var inputNumber2 = document.getElementById("montoC1");
-      var valorActual = parseInt(inputNumber2.value);
-      if (valorActual) {
-        inputNumber2.value = valorActual + insumo.monto;
-      } else {
-        inputNumber2.value = insumo.monto;
-      }
-      //Acumular Monto
-
-      //Acumular Iva
-      var inputNumber3 = document.getElementById("ivaC1");
-      var valorActual = parseInt(inputNumber3.value);
-      if (valorActual) {
-        inputNumber3.value = valorActual + insumo.iva;
-      } else {
-        inputNumber3.value = insumo.iva;
-      }
-      //Acumular Iva 
-
-
       if (insumo.idInsumo != "" && m != 0 && t != 0 && insumo.porcentajeIva != "") {
         const repetido = document.getElementById('cant_' + insumo.idInsumo);
-        const totalA = document.getElementById('t' + insumo.idInsumo);
-        const ivaA = document.getElementById('iva' + insumo.idInsumo);
-        const montoA = document.getElementById('m' + insumo.idInsumo);
+        /* const totalA = document.getElementById('t' + insumo.idInsumo);
+         const ivaA = document.getElementById('iva' + insumo.idInsumo);
+         const montoA = document.getElementById('m' + insumo.idInsumo);*/
         if (repetido != null) {
-          repetido.value = parseInt(repetido.value) + parseInt(insumo.cantidad);
+          /*repetido.value = parseInt(repetido.value) + parseInt(insumo.cantidad);
           ivaA.value = parseInt(ivaA.value) + parseInt(insumo.iva);
           montoA.value = parseInt(montoA.value) + parseInt(insumo.monto);
-          totalA.value = parseInt(totalA.value) + parseInt(insumo.total);
-
+          totalA.value = parseInt(totalA.value) + parseInt(insumo.total);*/
           Swal.fire({
             position: 'top-end',
-            icon: 'success',
-            title: 'Cantidad modificada',
+            icon: 'warning',
+            title: 'El insumo ya se encuentra en la lista',
             showConfirmButton: false,
             timer: 1000
           });
         } else {
+
+          //Acumular total
+          var inputNumber1 = document.getElementById("totalC1");
+          var valorActual = parseInt(inputNumber1.value);
+          if (valorActual) {
+            inputNumber1.value = valorActual + insumo.total;
+            document.getElementById("totalC1_V").value = parseInt(inputNumber1.value).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+          } else {
+            inputNumber1.value = insumo.total;
+            document.getElementById("totalC1_V").value = parseInt(inputNumber1.value).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+          }
+          //Acumular total 
+
+          //Acumular Monto
+          var inputNumber2 = document.getElementById("montoC1");
+          var valorActual = parseInt(inputNumber2.value);
+          if (valorActual) {
+            inputNumber2.value = valorActual + insumo.monto;
+            document.getElementById("montoC1_V").value = parseInt(inputNumber2.value).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+        
+          } else {
+            inputNumber2.value = insumo.monto;
+            document.getElementById("montoC1_V").value = parseInt(inputNumber2.value).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+        
+          }
+          //Acumular Monto
+
+          //Acumular Iva
+          var inputNumber3 = document.getElementById("ivaC1");
+          var valorActual = parseInt(inputNumber3.value);
+          if (valorActual) {
+            inputNumber3.value = valorActual + insumo.iva;
+            document.getElementById("ivaC1_V").value = parseInt(inputNumber3.value).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+        
+          } else {
+            inputNumber3.value = insumo.iva;
+            document.getElementById("ivaC1_V").value = parseInt(inputNumber3.value).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+        
+          }
+          //Acumular Iva 
+
 
           cont++;
           document.getElementById('ListaInsumos').innerHTML += `
                 <tr id="I${insumo.idInsumo}" style="text-align: center">
                     <td class="text-center">${cont}</td>
                     <td class="text-center">
-                        <input id="Id_${insumo.idInsumo}" name="idInsumo" value="${insumo.idInsumo}" style="text-align: center; width: 100px;  border: none;" readonly>
+                        <input id="Id_${insumo.idInsumo}" name="idInsumo" value="${insumo.idInsumo}" style="text-align: center; width: auto;  border: none;" readonly>
                     </td>
                     <td class="text-center">
-                        <input name="precio" value="${insumo.precio}" style="text-align: center; width: 100px;  border: none;" readonly>
+                        <input name="precio" value="${insumo.precio}" style="text-align: center; width: 100px;  border: none;" hidden>
+                        <input value="${insumo.precio.toLocaleString("es-CO", { maximumFractionDigits: 2 })}" style="text-align: center; width: 100px;  border: none;" readonly>
                     </td>
                     <td class="text-center">
-                        <input class="w-4/5" style="text-align: center; width: 100px;  border: none;" id="cant_${insumo.idInsumo}" name="cantidad" value="${insumo.cantidad}" readonly>
+                        <input style="text-align: center; width: 100px;  border: none;" id="cant_${insumo.idInsumo}" name="cantidad" value="${insumo.cantidad}" hidden>
+                        <input style="text-align: center; width: 100px;  border: none;" value="${insumo.cantidad.toLocaleString("es-CO", { maximumFractionDigits: 2 })}" readonly>
                     </td>
                     <td class="text-center">
-                      <input id="m${insumo.idInsumo}" value="${insumo.monto}" style="text-align: center; width: 100px; border: none;" readonly>
+                      <input id="m${insumo.idInsumo}" value="${insumo.monto}" style="text-align: center; width: 100px; border: none;" hidden>
+                      <input value="${insumo.monto.toLocaleString("es-CO", { maximumFractionDigits: 2 })}" style="text-align: center; width: 100px; border: none;" readonly> 
                     </td>
                     <td class="text-center">
                         <input name="porcentajeIva" value="${insumo.porcentajeIva}" style="text-align: center; width: 100px;  border: none;" readonly>
                     </td>
                     <td class="text-center">
-                      <input id="iva${insumo.idInsumo}" value="${insumo.iva}" style="text-align: center; width: 100px; border: none;" readonly>
+                      <input id="iva${insumo.idInsumo}" value="${insumo.iva}" style="text-align: center; width: 100px; border: none;" hidden>
+                      <input value="${insumo.iva.toLocaleString("es-CO", { maximumFractionDigits: 2 })}" style="text-align: center; width: 100px; border: none;" readonly>
                     </td>
                     <td class="text-center">
-                        <input id="t${insumo.idInsumo}" value="${insumo.total}" style="text-align: center; width: 100px; border: none;" readonly>
+                        <input id="t${insumo.idInsumo}" value="${insumo.total}" style="text-align: center; width: 100px; border: none;" hidden>
+                        <input value="${insumo.total.toLocaleString("es-CO", { maximumFractionDigits: 2 })}" style="text-align: center; width: 100px; border: none;" readonly>
                     </td>
                     <td class="text-center">
                       <i class="fas fa-trash" onclick="eliminarInsumo('${insumo.idInsumo}')" type="button"></i> 
@@ -513,12 +534,14 @@
             timer: 1000
           });
 
+          document.getElementById('idInsumo_R').value = null;
+          document.getElementById('precio_R').value = null;
+          document.getElementById('precio_R_V').value = null;
+          document.getElementById('cantidad_R').value = null;
+          document.getElementById('medida_R').value = null;
         }
 
-        document.getElementById('idInsumo_R').value = null;
-        document.getElementById('precio_R').value = null;
-        document.getElementById('cantidad_R').value = null;
-        document.getElementById('medida_R').value = null;
+
 
         //let IoS = "I" + cont;
         //eliminarElemento(IoS);
@@ -586,6 +609,8 @@
         //alert("Valor restar " + valorRestar);
 
         inputNumberT1.value = valorActual1 - valorRestar1;
+        document.getElementById("totalC1_V").value = parseInt(inputNumberT1.value).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+        
         //decrementar total
 
 
@@ -601,6 +626,8 @@
         //alert("Valor restar " + valorRestar);
 
         inputNumberM1.value = valorActual2 - valorRestar2;
+        document.getElementById("montoC1_V").value = parseInt(inputNumberM1.value).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+        
         //decrementar monto
 
 
@@ -616,6 +643,8 @@
         //alert("Valor restar " + valorRestar);
 
         inputNumberI1.value = valorActual3 - valorRestar3;
+        document.getElementById("ivaC1_V").value = parseInt(inputNumberI1.value).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+        
         //decrementar iva
 
 
