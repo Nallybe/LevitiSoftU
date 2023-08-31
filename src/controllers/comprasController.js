@@ -1,7 +1,7 @@
 //Listar
 function compras_listar(req, res) {
   req.getConnection((err, conn) => {
-    conn.query("SELECT * FROM tbl_compras", (err, compras) => {
+    conn.query("SELECT * FROM tbl_compras ORDER BY fechaRegistro DESC", (err, compras) => {
       if (err) {
         return res.status(500).json(err);
       } else {
