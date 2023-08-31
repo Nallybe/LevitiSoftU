@@ -11,19 +11,22 @@
             <div class="row align-content-center align-items-center justify-content-betwen">
 
                 {{#each productos}}
-                <div class="card producCliente">
+                <div class="card container w-50">
                     <h4>{{nombre}}</h4>
-                    <div class="col-mb-6" style="border:2px solid pink;">
-                        <img src="/assets/img/Productos/{{imagen}}" alt="">
-                    </div>
-                    <div class="col-mb-6" style="border: 2px solid blueviolet;">
-                        <p>Precio: {{precio}}
-                            <br>Unidades: {{Unidad}}
-                        </p>
-                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <img src="/assets/img/Productos/{{imagen}}" alt="" class="w-100">
+                        </div>
 
+                        <div class="col-md-6">
+                            <p>Precio: {{precio}}
+                                <br>Unidades: {{Unidad}}
+                            </p>
+                        </div>
+                    </div>
 
                 </div>
+
                 <br>
                 {{/each}}
 
