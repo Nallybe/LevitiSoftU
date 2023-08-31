@@ -120,7 +120,7 @@
   <!--Barra de navegación-->
 
   {{#each produccion}}
-  <form action="/producciones_editar/{{idOrdenProduccion}}" method="post" onsubmit="return validarEnvio()"
+  <form action="/produccion_editar/{{idOrdenProduccion}}" method="post" onsubmit="return validarEnvio()"
     id="FormEditarProduccion">
     <!--Start Card&Form-->
     <div class="card" style="width: 98%; border-radius: 0; margin-left:1%; margin-top: 60px;">
@@ -475,7 +475,7 @@
 
             <div style="text-align: right;">
               <!--Start Btn Cancelar-->
-              <a class="btn btn-danger btn-sm" href="/producciones" style="margin-top: 1px;" type="button">Cancelar</a>
+              <a class="btn btn-danger btn-sm" href="/produccion" style="margin-top: 1px;" type="button">Cancelar</a>
               <!--End Btn Cancelar-->
 
               <!--Start Btn Registrar-->

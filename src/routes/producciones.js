@@ -27,11 +27,11 @@ const tienePermisos = (session) => {
 
 const router = express.Router();
 
-router.get('/producciones', checkSession, ProduccionesController.producciones_listar);
-router.get('/producciones/:idOrdenProduccion', checkSession, ProduccionesController.producciones_detallar);
-router.get('/producciones_registrar', checkSession, ProduccionesController.producciones_crear);
-router.post('/producciones_registrar', checkSession, ProduccionesController.producciones_registrar);
-router.get('/producciones_editar/:idOrden', checkSession, ProduccionesController.producciones_editar);
-router.post('/producciones_editar/:idOrden', checkSession, ProduccionesController.producciones_modificar);
+router.get('/produccion', checkSession, ProduccionesController.producciones_listar);
+router.get('/produccion/:idOrdenProduccion', checkSession, ProduccionesController.producciones_detallar);
+router.get('/produccion_registrar', checkSession, ProduccionesController.producciones_crear);
+router.post('/produccion_registrar', checkSession, ProduccionesController.producciones_registrar);
+router.get('/produccion_editar/:idOrden', checkSession, ProduccionesController.producciones_editar);
+router.post('/produccion_editar/:idOrden', checkSession, ProduccionesController.producciones_modificar);
 
 module.exports = router;
