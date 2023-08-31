@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Formulario con Valor Numérico</title>
+<style>
+  input {
+    margin: 10px;
+    padding: 5px;
+  }
+</style>
+</head>
+<body>
+  <label for="visibleInput">Input Visible:</label>
+  <input type="text" id="visibleInput">
+  <br>
+  <label for="hiddenInput">Input Oculto:</label>
+  <input type="hidden" id="hiddenInput">
+  <br>
+  <button id="showValueButton">Mostrar Valor Oculto</button>
+
+<script>
+  const visibleInput = document.getElementById("visibleInput");
+  const hiddenInput = document.getElementById("hiddenInput");
+  const showValueButton = document.getElementById("showValueButton");
+
+  visibleInput.addEventListener("input", () => {
+    const inputValue = visibleInput.value.replace(/\./g, ""); // Remover puntos
+    const formattedValue = Number(inputValue).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+    visibleInput.value = formattedValue;
+    hiddenInput.value = inputValue;
+  });
+
+  showValueButton.addEventListener("click", () => {
+    const hiddenValue = hiddenInput.value;
+    alert(`Valor Oculto: ${hiddenValue}`);
+  });
+</script>
+</body>
+</html>

@@ -1,7 +1,7 @@
 //Listar
 function compras_listar(req, res) {
   req.getConnection((err, conn) => {
-    conn.query("SELECT * FROM tbl_compras WHERE estado = 'A' ORDER BY fechaRegistro DESC", (err, compras) => {
+    conn.query("SELECT * FROM tbl_compras", (err, compras) => {
       if (err) {
         return res.status(500).json(err);
       } else {
@@ -9,31 +9,52 @@ function compras_listar(req, res) {
           if (err) {
             return res.status(500).json(err);
           } else {
-            var cont = 1;
-            for (index in compras) {
-              compras[index].cont = cont;
-              cont++;
-              compras[index].fechaRecibo = compras[index].fechaRecibo.toLocaleDateString();
-              compras[index].fechaRegistro = compras[index].fechaRegistro.toLocaleString();
-              compras[index].total = 0;
-              compras[index].monto = 0;
-              compras[index].iva = 0;
-              for (i in detallescompra) {
-                if (detallescompra[i].idCompra == compras[index].idCompra) {
-                  var monto = detallescompra[i].precio * detallescompra[i].cantidad;
-                  var iva = (monto * detallescompra[i].porcentajeIva) / 100;
-                  var total = iva + monto;
-                  compras[index].monto += monto;
-                  compras[index].iva += iva;
-                  compras[index].total += total;
-                }
-              }
-              compras[index].monto = "$ " + compras[index].monto.toLocaleString('es-CO');
-              compras[index].iva = "$ " + compras[index].iva.toLocaleString('es-CO');
-              compras[index].total = "$ " + compras[index].total.toLocaleString('es-CO');
-            }
+            conn.query("SELECT * FROM tbl_compras_anulaciones", (err, anulaciones) => {
+              if (err) {
+                return res.status(500).json(err);
+              } else {
 
-            res.status(200).render("compras/listar", { compras });
+                var cont = 1;
+                for (index in compras) {
+                  compras[index].cont = cont;
+                  cont++;
+                  compras[index].fechaRecibo = compras[index].fechaRecibo.toLocaleDateString();
+                  compras[index].fechaRegistro = compras[index].fechaRegistro.toLocaleString();
+                  compras[index].total = 0;
+                  compras[index].monto = 0;
+                  compras[index].iva = 0;
+
+                  if (compras[index].estado == "I") {
+                    compras[index].anulado = true;
+                  }
+
+                  for (ix in anulaciones) {
+                    if (anulaciones[ix].idCompra == compras[index].idCompra) {
+                      compras[index].motivo = anulaciones[ix].motivoAnulacion;
+                      compras[index].fecha = anulaciones[ix].fechaAnulacion.toLocaleString();
+                    }
+                  }
+
+
+                  for (i in detallescompra) {
+                    if (detallescompra[i].idCompra == compras[index].idCompra) {
+                      var monto = detallescompra[i].precio * detallescompra[i].cantidad;
+                      var iva = (monto * detallescompra[i].porcentajeIva) / 100;
+                      var total = iva + monto;
+                      compras[index].monto += monto;
+                      compras[index].iva += iva;
+                      compras[index].total += total;
+                    }
+                  }
+                  compras[index].monto = "$ " + compras[index].monto.toLocaleString('es-CO');
+                  compras[index].iva = "$ " + compras[index].iva.toLocaleString('es-CO');
+                  compras[index].total = "$ " + compras[index].total.toLocaleString('es-CO');
+                }
+
+                res.status(200).render("compras/listar", { compras });
+
+              }
+            })
           }
         });
       }

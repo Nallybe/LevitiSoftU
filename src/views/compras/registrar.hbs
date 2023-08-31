@@ -5,7 +5,7 @@
 
 <body>
   <style>
-    .btn{
+    .btn {
       border-radius: 8px;
     }
 
@@ -114,8 +114,8 @@
 
                 <!--Input Fecha Recibo-->
                 <label class="form-label mt-2" for="fechaRecibo">Fecha Recibo</label>
-                <input type="date" class="form-control form-control-sm mb-2" style="border-radius: 0;" id="fechaRecibo" name="fechaRecibo"
-                  oninput="val_f_recibo()" autocomplete="off">
+                <input type="date" class="form-control form-control-sm mb-2" style="border-radius: 0;" id="fechaRecibo"
+                  name="fechaRecibo" oninput="val_f_recibo()" autocomplete="off">
                 <div id="mensajeErrorFechaRecibo"></div>
                 <!--End Input Fecha Recibo-->
 
@@ -139,7 +139,7 @@
                         <!--Input Insumo-->
                         <label class="form-label" for="idInsumo_R">Insumo</label>
                         <input type="text" class="form-control form-control-sm" list="list_insumos"
-                          style="border-radius: 0;" id="idInsumo_R" name="idInsumo_R" autocomplete="off"
+                          style="border-radius: 0;" id="idInsumo_R" autocomplete="off"
                           oninput="val_ins()">
                         <datalist id="list_insumos">
                           {{#each insumos}}
@@ -155,7 +155,7 @@
                         <!--Input Cantidad-->
                         <label class="form-label" for="cantidad_R">Cantidad</label>
                         <input type="number" class="form-control form-control-sm" style="border-radius: 0;"
-                          id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()">
+                          id="cantidad_R" autocomplete="off" oninput="val_cant()">
                         <div id="mensajeErrorCantidad"></div>
                         <!--End Input Cantidad-->
                       </div>
@@ -163,7 +163,30 @@
                         <!--Input Precio-->
                         <label class="form-label" for="precio_R">Precio</label>
                         <input type="number" class="form-control form-control-sm" style="border-radius: 0;"
-                          id="precio_R" name="precio_R" autocomplete="off" oninput="val_precio()">
+                          id="precio_R" autocomplete="off" oninput="val_precio()" hidden>
+
+                        <input type="text" class="form-control form-control-sm" style="border-radius: 0;"
+                          id="precio_R_V" autocomplete="off">
+
+                        <script>
+                          const visibleInput = document.getElementById("precio_R_V");
+                          const hiddenInput = document.getElementById("precio_R");
+                         // const showValueButton = document.getElementById("showValueButton");
+
+                          visibleInput.addEventListener("input", () => {
+                            const inputValue = visibleInput.value.replace(/\./g, ""); // Remover puntos
+                            const formattedValue = Number(inputValue).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+                            visibleInput.value = formattedValue;
+                            hiddenInput.value = inputValue;
+                          });
+
+                          /*showValueButton.addEventListener("click", () => {
+                            const hiddenValue = hiddenInput.value;
+                            alert(`Valor Oculto: ${hiddenValue}`);
+                          });*/
+                        </script>
+
+
                         <div id="mensajeErrorPrecio"></div>
                         <!--End Input Precio-->
                       </div>
@@ -256,15 +279,14 @@
             <!--End Card #3-->
 
             <div style="text-align: right;">
-                <!--Start Btn Cancelar-->
-                <a class="btn btn-danger btn-sm" href="/compras" style="margin-top: 1px;"
-                  type="button">Cancelar</a>
-                <!--End Btn Cancelar-->
+              <!--Start Btn Cancelar-->
+              <a class="btn btn-danger btn-sm" href="/compras" style="margin-top: 1px;" type="button">Cancelar</a>
+              <!--End Btn Cancelar-->
 
-                <!--Start Btn Registrar-->
-                <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
-                  Registrar</button>
-                <!--End Btn Regiastrar-->
+              <!--Start Btn Registrar-->
+              <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;">
+                Registrar</button>
+              <!--End Btn Regiastrar-->
             </div>
           </div>
         </div>
@@ -504,13 +526,13 @@
         //alert("Insumo Agregado");
       } else {
         //alert("Campos obligatorios");
-       /* Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'Campos Obligatorios',
-          showConfirmButton: false,
-          timer: 1000
-        });*/
+        /* Swal.fire({
+           position: 'top-end',
+           icon: 'warning',
+           title: 'Campos Obligatorios',
+           showConfirmButton: false,
+           timer: 1000
+         });*/
 
         if (insumo.idInsumo == "") {
           mensajeErrorInsumo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El insumo es un campo requerido';
@@ -546,7 +568,7 @@
       if (!insumoE) {
         alert("Error");
       } else {
-       // alert("se encontró el insumo");
+        // alert("se encontró el insumo");
 
 
         let toT = "t" + id;

@@ -6,7 +6,7 @@
 <body>
   <style>
     .btn {
-        border-radius: 8px;
+      border-radius: 8px;
     }
 
     .fa-trash:hover {
@@ -78,13 +78,6 @@
               <div id="mensajeErrorCorreo"></div>
               <!--End Input Correo-->
 
-              <!--Input Password-->
-              <label class="form-label mt-2" for="password">Contraseña</label>
-              <input type="password" class="form-control form-control-sm" style="border-radius: 0;" id="password"
-                name="password" oninput="val_password()" autocomplete="off" value="{{passsword}}">
-              <div id="mensajeErrorPassword"></div>
-              <!--End Input Password-->
-
               <!--Input Estado-->
               <label class="form-label mt-2" for="estado">Estado</label>
               <select class="form-control form-control-sm" style="border-radius: 0;" id="estado" name="estado">
@@ -98,6 +91,29 @@
               </select>
               <div id="mensajeErrorEstado"></div>
               <!--End Input Estado-->
+
+
+              <!--Input Password
+              <label class="form-label mt-2" for="password">Contraseña</label>
+              <input type="password" class="form-control form-control-sm" style="border-radius: 0;" id="password"
+                name="password" oninput="val_password()" autocomplete="off" value="{{passsword}}">
+              <div id="mensajeErrorPassword"></div>
+              <p>
+                <button class="btn btn-primary mt-2" type="button" data-toggle="collapse" data-target="#collapseExample"
+                  aria-expanded="false" aria-controls="collapseExample">
+                  ingresar nueva contraseña
+                </button>
+              </p>
+              <div class="collapse" id="collapseExample">
+                <div class="card card-body">
+                  <label class="form-label" for="password">Contraseña</label>
+                  <input type="password" class="form-control form-control-sm" style="border-radius: 0;" id="password"
+                    name="password" oninput="val_password()" autocomplete="off" value="">
+                  <div id="mensajeErrorPassword"></div>
+                </div>
+              </div>-->
+              <!--End Input Password-->
+
               {{/each}}
 
             </div>
@@ -126,22 +142,29 @@
               <div id="mensajeErrorTelefono"></div>
               <!--End Input Telefono-->
             </div>
+
+
+          </div>
+
+          <div class="alert alert-info alert-dismissible fade show mt-2" role="alert">
+            Si quieres <strong>cambiar la contraseña</strong> debes recuperarla en el <strong>inicio de sesión</strong>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
           </div>
           {{/each}}
 
 
           <!--Start Btn R&C-->
           <div style="text-align: right;">
-              <div class="mt-3">
-                <!--Start Btn Cancelar-->
-                <a class="btn btn-danger btn-sm" href="/usuarios" style="margin-top: 1px;"
-                  type="button">Cancelar</a>
-                <!--End Btn Cancelar-->
-                <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-                <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;"
-                  id="btnRegistrar">
-                  Guardar cambios</button>
-                <!--End Btn Regiastrar-->
+            <div class="mt-3">
+              <!--Start Btn Cancelar-->
+              <a class="btn btn-danger btn-sm" href="/usuarios" style="margin-top: 1px;" type="button">Cancelar</a>
+              <!--End Btn Cancelar-->
+              <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+              <button type="submit" class="btn btn-success btn-sm" style="margin-bottom: 1px;" id="btnRegistrar">
+                Guardar cambios</button>
+              <!--End Btn Regiastrar-->
             </div>
 
           </div>
@@ -306,10 +329,10 @@
         mensajeErrorCorreo.style.display = 'block';
       }
 
-      if (password.value == "") {
+      /*if (password.value == "") {
         mensajeErrorPassword.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La contraseña es un campo obligatorio';
         mensajeErrorPassword.style.display = 'block';
-      }
+      }*/
 
       if (documento.value == "") {
         mensajeErrorDocumento.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El documento es un campo obligatorio';
@@ -336,7 +359,7 @@
       var nombre = document.getElementById("nombre");
       var documento = document.getElementById("documento");
 
-      if (correo.value == "" || password.value == "" || rol.value == "" || nombre.value == "" || documento.value == "" || telefono.value == "") {
+      if (correo.value == ""/* || password.value == "" */ || rol.value == "" || nombre.value == "" || documento.value == "" || telefono.value == "") {
 
         //alert('campos obligatorios');
         Swal.fire({
