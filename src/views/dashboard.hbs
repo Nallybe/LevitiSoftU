@@ -28,7 +28,7 @@
             <div class="row mb-2">
               <div class="col-sm-12">
                 <div class="d-grid gap-2 d-md-block" style="margin-left: 10px;">
-                  <input type="date" id="start" name="trip-start">
+                  <input type="month" id="start" name="trip-start">
                   <button class="btn btn-primary" type="button" onclick="downloadReport()">Descargar</button>
                 </div>
               </div>
@@ -53,22 +53,20 @@
               <div class="row mb-2">
                 <div class="col-sm-12">
                   <div class="d-grid gap-2 d-md-block" style="margin-left: 10px;">
-                     <input type="month" name="fecha" id="fecha" class="form-control">
+                    <input type="month" name="fecha" id="fecha" class="form-control">
                     <input type="date" id="start" name="trip-start">
                     <button class="btn btn-primary" type="button">Descargar</button>
                   </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
-    <!--Fin cuerpo-->
-<input hidden type="text" id="labels" value="{{labels}}">
-<input hidden type="text" id="ventas" value="{{ventasData}}">
-<input hidden type="text" id="compras" value="{{comprasData}}">
+  <!--Fin cuerpo-->
+  <input hidden type="text" id="labels" value="{{labels}}">
+  <input hidden type="text" id="ventas" value="{{ventasData}}">
+  <input hidden type="text" id="compras" value="{{comprasData}}">
 </body>
 <!--   Core JS Files   -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -84,12 +82,48 @@
 <script src="assets/js/core/jquery.min.js"></script>
 <script src="assets/js/core/popper.min.js"></script>
 <script src="assets/js/core/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
+  integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"
+  integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 
 <script src="assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
-<!--  Google Maps Plugin    -->
-<script src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"></script>
+<!-- Generar pdf -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+<script>
+  function downloadReport() {
+    var selectedMonth = document.getElementById('start').value;
+
+    var workbook = new ExcelJS.Workbook();
+    var worksheet = workbook.addWorksheet('Informe');
+
+    // Agregar el título
+    worksheet.addRow(['Informe Compras vs Ventas - ' + selectedMonth]);
+
+    // Agregar encabezados de columna
+    worksheet.addRow(['Mes', 'Ventas', 'Compras']);
+
+    // Agregar datos filtrados
+    for (var i = 0; i < labelsArray.length; i++) {
+      // Verificar si la fecha en labelsArray[i] contiene el mes seleccionado
+      if (labelsArray[i].includes(selectedMonth)) {
+        worksheet.addRow([labelsArray[i], ventasArray[i], comprasArray[i]]);
+      }
+    }
+
+    // Generar el archivo Excel y descargarlo
+    var fileName = 'informe_compras_ventas_' + selectedMonth + '.xlsx';
+    workbook.xlsx.writeBuffer().then(function (buffer) {
+      var blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      var link = document.createElement('a');
+      link.href = window.URL.createObjectURL(blob);
+      link.download = fileName;
+      link.click();
+    });
+  }
+</script>
+<!-- Generar pdf -->
+
 <!-- Chart JS -->
 <script src="assets/js/plugins/chartjs.min.js"></script>
 <!--  Notifications Plugin    -->
@@ -136,9 +170,9 @@
   var compra = document.getElementById("compras");
   var compras = compra.value;
   var comprasArray = compras.split(',');
-  console.log("Label: "+labelsArray)
-  console.log("ventas: "+compras)
-  console.log("compras: "+ventas)
+  console.log("Label: " + labelsArray)
+  console.log("ventas: " + compras)
+  console.log("compras: " + ventas)
 
   $(function () {
     var areaChartData = {

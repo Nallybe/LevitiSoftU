@@ -50,12 +50,12 @@
       </div>
     </section>
     <!-- PRODUCTS-->
-    <section class="py-5">
+    <section class="py-5 SeccionProduH">
       <header>
         <h2 class="h4 text-center text-uppercase mb-3" style="color: #dcb14a;">Algunos de nuestros productos</h2>
       </header>
 
-      <div class="row">
+      <div class="row card-container">
         {{#each productos}}
         <!-- PRODUCT-->
 
@@ -73,7 +73,7 @@
             </div>
             <div class="back">
               <p><strong>Descripción: </strong>{{descripcion}}<br><br>
-                <strong>Stock disponible:</strong> {{stock}}
+                <strong>Disponibilidad:</strong> {{stock}}
               </p>
             </div>
 

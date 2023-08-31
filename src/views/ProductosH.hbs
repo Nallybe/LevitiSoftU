@@ -3,7 +3,7 @@
 <body>
     <!-- navbar-->
     <div class="barranav">
-      {{> navbar}}
+        {{> navbar}}
     </div>
     <style>
         .carta {
@@ -44,17 +44,20 @@
     <section class="py-3">
         <header class="text-center mb-4">
             <h2>Productos</h2>
-            <div class="d-flex justify-content-end align-items-center" style="padding-right: 4px;">
-                <input id="searchInput" type="text" placeholder="Buscar productos..." oninput="buscarProductos()">
-                <button class="btn btn-outline-success buscarbtn" style="margin-left: 10px; height:32px;"><i
-                        class="fas fa-search fa-sm align-items-center"></i></button>
+            <div class="d-flex justify-content-end buscarProductos">
+                <div class="pr-2">
+                    <input id="searchInput" type="text" placeholder="Buscar productos..." oninput="buscarProductos()">
+                </div>
+                <button class="btn btn-outline-success buscarbtn" style="height: 32px;">
+                    <i class="fas fa-search fa-sm align-items-center"></i>
+                </button>
             </div>
 
         </header>
         <div class="container p-0 ">
             <div class="row">
                 <!-- TEXTO ADICIONAL -->
-                <div class="col-lg-4 col-md-4 categoria">
+                <div class="col-lg-3 col-md-4 col-sm-12 categoria">
                     <h5 class="text-uppercase mb-4">Categorías</h5>
                     <ul class="list-unstyled small ps-lg-4 font-weight-normal">
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="todos">Todos</a></li>
@@ -70,7 +73,7 @@
 
                 <!-- PRODUCTOS -->
                 {{#each productos}}
-                <div class="col-lg-4 col-md-4">
+                <div class="col-lg-3 col-md-4 col-sm-6">
                     <div class="product productosI text-center">
                         <div class="">
                             <div class="badge text-white"></div>
@@ -81,14 +84,14 @@
                         <h6>{{nombre}}</h6>
                         <p class="small text-muted">
                             <strong>Precio:</strong> {{precio}}<br>
-                            <strong>Stock:</strong> {{stock}}
+                            <strong>Disponibilidad:</strong> {{stock}}
                             <strong data-nombre_categoria="{{nombre_categoria}}" hidden>{{nombre_categoria}}</strong>
                         </p>
                     </div>
                 </div>
                 {{/each}}
                 <!-- PAGINACIÓN -->
-                <div class="pagination">
+                <div class="pagination Paginacion-product">
                     {{#each (range 1 totalPages)}}
                     {{#if (equals this ../currentPage)}}
                     <a class="page-link active" href="?page={{this}}">{{this}}</a>
