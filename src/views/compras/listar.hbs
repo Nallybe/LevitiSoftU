@@ -57,8 +57,8 @@
                 <div style="text-align: right;">
                     <a href="/compras_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
                         Registrar compra</a>
-                    <a href="/compras_anulaciones" class="btn btn-secondary"><i class="fa-solid fa-ban ban-2"></i>
-                        Compras anuladas</a>
+                    <!--<a href="/compras_anulaciones" class="btn btn-secondary"><i class="fa-solid fa-ban ban-2"></i>
+                        Compras anuladas</a>-->
                 </div>
             </div>
         </div>
@@ -107,12 +107,21 @@
                     <td class="p-3 text-center">{{monto}}</td>
                     <td class="p-3 text-center">{{iva}}</td>
                     <td class="p-3 text-center">{{total}}</td>
+
+
+
+
                     <td class="p-3 px-1 ">
                         <a href="/compras/{{idCompra}}" style="color: #292b2c; " class="boton-compra">
                             <i type="button" class="fa-sharp fa-solid fa-eye"></i>
                         </a>
-                        <a type="button" data-toggle="modal" data-target="#id{{idCompra}}"><i class="fa fa-ban"></i></a>
+                        <a type="button" data-toggle="modal" data-target="#id{{idCompra}}" {{#if anulado}}
+                            style="color: red;" {{/if}}><i class="fa fa-ban"></i></a>
                     </td>
+
+
+
+
                 </tr>
 
                 {{!-- Modal --}}
@@ -120,14 +129,24 @@
 
 
                 <!-- Modal -->
-                <div class="modal fade" id="id{{idCompra}}" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
+                <div class="modal fade" id="id{{idCompra}}" tabindex="-1"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <form id="FormAnularCompra{{idCompra}}" action="/compras_anular" method="POST" class="mx-2">
                             <div class="modal-content">
                                 <div class="modal-header">
+                                    {{#if anulado}}
+
+                                    <h5 class="modal-title" id="exampleModalLabel">Compra anulada</h5>
+
+                                    {{else}}
+
                                     <h5 class="modal-title" id="exampleModalLabel">Anular compra</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                                    {{/if}}
+
+                                    <button type="button" class="close" data-dismiss="id{{idCompra}}"
+                                        aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -139,24 +158,39 @@
                                                 value="{{idCompra}}" readonly>
                                         </div>
                                     </div>
+
                                     <div style="text-align: left;">
+                                        {{#if anulado}}
+
+                                        <p> <strong>Motivo de anulación: </strong> {{motivo}}</p>
+                                        <p> <strong>Fecha de anulación: </strong> {{fecha}} </p>
+
+                                        {{else}}
+
+
                                         <label for="motivoAnulacion" class="form-label">Motivo de anulación</label>
                                         <textarea class="form-control" name="motivoAnulacion" id="motivoAnulacion"
-                                            style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: 150px;"
-                                            required></textarea>
+                                            style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: auto;"
+                                            required> </textarea>
+
+
+                                        {{/if}}
                                     </div>
 
                                     <input type="hidden" name="tipoAnulacion" id="tipoAnulacion" value="General">
                                 </div>
 
+                                {{#if anulado}}
+                                {{else}}
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="id{{idCompra}}">
                                         Cancelar
                                     </button>
                                     <button type="button" class="btn btn-primary" onclick="Anular({{idCompra}})">
                                         Anular compra
                                     </button>
                                 </div>
+                                {{/if}}
                             </div>
                         </form>
                     </div>
@@ -237,10 +271,10 @@
         return new bootstrap.Popover(popoverTriggerEl);
     });
 
-    // Mostrar el toast
+  /*  // Mostrar el toast
     var toastEl = document.getElementById('myToast');
     var toast = new bootstrap.Toast(toastEl);
-    toast.show();
+    toast.show();*/
 </script>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

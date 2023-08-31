@@ -283,7 +283,6 @@ function usuarios_modificar(req, res) {
   let RegistroAccess = {
     idRoles: data.idRol,
     correo: data.correo,
-    passsword: data.password,
     estado: data.estado
   };
 

@@ -36,25 +36,26 @@
           </div>
         </div>
       </div>
-
-
-      <div class="col-6">
-        <div class="row container-fluid col-md-12">
-          <div class="card card-success">
-            <div class="card-header">
-              <h5 class="card-title">Informe Productos</h5>
-            </div>
-            <div class="card-body">
-              <div class="chart">
-                <canvas id="pieChart"
-                  style="min-height: 330px; height: 330px; max-height: 550px; max-width: 100%;"></canvas>
+        
+      
+        <div class="col-6">
+          <div class="row container-fluid col-md-12">
+            <div class="card card-success">
+              <div class="card-header">
+                <h5 class="card-title">Informe Productos</h5>
               </div>
-            </div>
-            <div class="row mb-2">
-              <div class="col-sm-12">
-                <div class="d-grid gap-2 d-md-block" style="margin-left: 10px;">
-                  <input type="date" id="start" name="trip-start">
-                  <button class="btn btn-primary" type="button">Descargar</button>
+              <div class="card-body">
+                <div class="chart">
+                  <canvas id="pieChart"
+                    style="min-height: 330px; height: 330px; max-height: 550px; max-width: 100%;"></canvas>
+                </div>
+              </div>
+              <div class="row mb-2">
+                <div class="col-sm-12">
+                  <div class="d-grid gap-2 d-md-block" style="margin-left: 10px;">
+                    <input type="date" id="start" name="trip-start">
+                    <button class="btn btn-primary" type="button">Descargar</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -62,7 +63,6 @@
         </div>
       </div>
     </div>
-  </div>
 
   <!--Fin cuerpo-->
   <input hidden type="text" id="labels" value="{{labels}}">
