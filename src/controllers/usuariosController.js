@@ -197,14 +197,14 @@ function usuarios_registrar(req, res) {
           //console.log("Usuario Registrado");
           //Captura idAccess
           const idAccess = result.insertId;
-  
+
           let RegistroInfo = {
             idAccess: idAccess,
             documento: data.documento,
             nombre: data.nombre,
             telefono: data.telefono,
           }
-  
+
           conn.query("INSERT INTO users_info SET ?", [RegistroInfo], (err, result2) => {
             if (err) {
               return res.status(500).json(err);
@@ -280,20 +280,40 @@ function usuarios_modificar(req, res) {
   const idAccess = req.params.idAccess;
   const data = req.body;
 
-  let RegistroAccess = {
-    idRoles: data.idRol,
-    correo: data.correo,
-    passsword: data.password,
-    estado: data.estado
-  };
-
-  let RegistroInfo = {
-    nombre: data.nombre,
-    documento: data.documento,
-    telefono: data.telefono
-  };
-
   req.getConnection((err, conn) => {
+
+    let RegistroAccess;
+
+    if (data.password) {
+      const salt = 10;
+      bcrypt.hash(data.password, salt, (err, hash) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ error: 'Error en la encriptación de la contraseña' });
+        }
+
+        RegistroAccess = {
+          idRoles: data.idRol,
+          correo: data.correo,
+          passsword: hash,
+          estado: data.estado
+        };
+      });
+
+    } else {
+      RegistroAccess = {
+        idRoles: data.idRol,
+        correo: data.correo,
+        estado: data.estado
+      };
+    }
+
+    let RegistroInfo = {
+      nombre: data.nombre,
+      documento: data.documento,
+      telefono: data.telefono
+    };
+
     conn.query("SELECT * FROM tbl_roles", (err, roles) => {
       if (err) {
         return res.status(500).json(err);
