@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken")
 const salt = 10
 const bcrypt = require('bcrypt');
 const { use } = require('../routes/login');
+const { ConsoleMessage } = require('puppeteer');
 
 function login(req, res) {
   // Verificar si el usuario ha iniciado sesión
@@ -47,7 +48,7 @@ function auth(req, res) {
             if (isMatch) {
               req.session.loggedin = true;
               var sesion = true
-              
+
               // Obtener el nombre correspondiente al correo electrónico en users_info
               conn.query(
                 'SELECT nombre FROM users_info WHERE idAccess = ?',
@@ -120,12 +121,12 @@ function auth(req, res) {
                 }
               );
             } else {
-              sesion= false
+              sesion = false
               res.render('login', { errorl: 'Error, contraseña incorrecta' });
             }
           });
         } else {
-          sesion= false
+          sesion = false
           res.render('login', { errorl: 'Error, el correo no existe' });
         }
       }
@@ -134,47 +135,47 @@ function auth(req, res) {
 }
 ////////////////////////////
 
-function authAPI(req, res) {
-  const data = req.body;
-  console.log(data)
-  req.getConnection((err, conn) => {
-    if (err) {
-      console.log(err);
-      return res.status(500).json({ error: 'Error en la conexión a la base de datos' });
-    }
+// function authAPI(req, res) {
+//   const data = req.body;
+//   console.log(data)
+//   req.getConnection((err, conn) => {
+//     if (err) {
+//       console.log(err);
+//       return res.status(500).json({ error: 'Error en la conexión a la base de datos' });
+//     }
 
-    conn.query(
-      'SELECT * FROM users_access WHERE correo = ?',
-      [data.correo],
-      (error, results) => {
-        if (error) {
-          console.log(error);
-          return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
-        }
-        //console.log("resultados: ", results)
-        if (results.length > 0) {
-          const user = results[0];
-          //console.log("User: ", user, " Password: ", user.passsword)
-          bcrypt.compare(data.passsword.toString(), user.passsword, (err, isMatch) => {
-            if (err) {
-              console.log(err);
-              return res.status(500).json({ error: 'Error al comparar contraseñas' });
-            }
-          
-            if (isMatch) {
-              res.status(200).json({ Exito: 'Éxito' });
-            } else {
-              res.status(401).json({ error: 'Error, contraseña incorrecta' });
-            }
-          });
-          
-        } else {
-          res.status(404).json({ error: 'Error, el correo no existe' });
-        }
-      }
-    );
-  });
-}
+//     conn.query(
+//       'SELECT * FROM users_access WHERE correo = ?',
+//       [data.correo],
+//       (error, results) => {
+//         if (error) {
+//           console.log(error);
+//           return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+//         }
+//         //console.log("resultados: ", results)
+//         if (results.length > 0) {
+//           const user = results[0];
+//           //console.log("User: ", user, " Password: ", user.passsword)
+//           bcrypt.compare(data.passsword.toString(), user.passsword, (err, isMatch) => {
+//             if (err) {
+//               console.log(err);
+//               return res.status(500).json({ error: 'Error al comparar contraseñas' });
+//             }
+
+//             if (isMatch) {
+//               res.status(200).json({ Exito: 'Éxito' });
+//             } else {
+//               res.status(401).json({ error: 'Error, contraseña incorrecta' });
+//             }
+//           });
+
+//         } else {
+//           res.status(404).json({ error: 'Error, el correo no existe' });
+//         }
+//       }
+//     );
+//   });
+// }
 
 
 
@@ -256,6 +257,7 @@ function registrar(req, res) {
                     telefono: data.telefono,
                     estado: 'A'
                   };
+                  req.session.name= data.nombre
                   conn.query(
                     'INSERT INTO users_info SET ?',
                     registroUsuarioInfo, (error, result) => {
@@ -275,9 +277,12 @@ function registrar(req, res) {
                             return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
                           }
                           //console.log(req.session.roles)
-                          req.session.roles = roleResults;
-
-                          conn.query(
+                          req.session.roles = roleResults[0].nombreRoles;
+                          
+                          if(req.session.roles === "Cliente"){
+                            res.redirect("/home")
+                          }else{
+                            conn.query(
                             'SELECT DISTINCT p.nombrePermisos FROM tbl_roles AS r JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos;'
                             ,
                             (error, permissionResults) => {
@@ -299,6 +304,8 @@ function registrar(req, res) {
                               }
                             }
                           );
+                          }
+                          
                         }
                       );
                     }
@@ -336,11 +343,10 @@ function recuperar(req, res) {
         console.error(err);
         return res.status(500).send('Error en el servidor');
       }
-
       if (results.length > 0) {
+
         const userId = results[0].idAccess;
         const token = jwt.sign({ userId: userId }, 'secretKey', { expiresIn: '10m' });
-
         const transporter = nodemailer.createTransport({
           host: "smtp.gmail.com",
           port: 465,
@@ -352,6 +358,58 @@ function recuperar(req, res) {
         });
 
         const resetPasswordLink = `http://localhost:8181/restaurar_contrase?token=${token}`;
+        const htmlContentSuccess = `
+        <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerta de Confirmación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .alert {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="alert">
+        <p>Correo enviado correctamente</p>
+        <button class="button" onclick="redirigirALogin()">Aceptar</button>
+    </div>
+
+    <script>
+        function redirigirALogin() {
+            // Redirigir a la página "login" después de hacer clic en "Aceptar"
+            window.location.href = 'login';
+        }
+    </script>
+</body>
+</html>
+
+      `;
 
         let info = await transporter.sendMail({
           from: '"Restauracion de contraseña" <levitisoft2021@gmail.com>', // sender address
@@ -360,9 +418,62 @@ function recuperar(req, res) {
           text: "Hello world?", // plain text body
           html: `<p>Hola, solicitaste un cambio de contraseña.</p><p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p><a href="${resetPasswordLink}">${resetPasswordLink}</a>`, // html body
         });
-        return res.status(200).json({ existe: true });
+        return res.send(htmlContentSuccess);
       } else {
-        return res.status(200).json({ existe: false });
+        const htmlContentError = `
+        <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerta de Confirmación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .alert {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="alert">
+        <p>El correo no existe, te invitamos a crear una cuenta nueva</p>
+        <button class="button" onclick="redirigirALogin()">Aceptar</button>
+    </div>
+
+    <script>
+        function redirigirALogin() {
+            // Redirigir a la página "login" después de hacer clic en "Aceptar"
+            window.location.href = 'olvidar_contrase';
+        }
+    </script>
+</body>
+</html>
+
+      `;
+        return res.send(htmlContentError);
+
       }
 
     });
@@ -377,12 +488,63 @@ function restablecerContraseña(req, res) {
   if (!token) {
     return res.status(400).json({ error: 'Token no proporcionado' });
   }
-
   try {
+    const htmlContent = `
+        <!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alerta de Confirmación</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .alert {
+            background-color: #ffffff;
+            border: 1px solid #ccc;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="alert">
+        <p>Se restableció la contraseña correctamente</p>
+        <button class="button" onclick="redirigirALogin()">Aceptar</button>
+    </div>
+
+    <script>
+        function redirigirALogin() {
+            // Redirigir a la página "login" después de hacer clic en "Aceptar"
+            window.location.href = 'login';
+        }
+    </script>
+</body>
+</html>
+
+      `;
     // Verificar y decodificar el token
     const decodedToken = jwt.verify(token, 'secretKey');
     const { userId } = decodedToken;
-    bcrypt.hash(req.body.passsword.toString(), salt, (err, hash) => {
+    bcrypt.hash(req.body.password.toString(), salt, (err, hash) => {
       if (err) return res.json({ Error: "Error for hassing password" });
       req.getConnection((err, conn) => {
         conn.query("UPDATE users_access SET passsword = ? WHERE idAccess = ?", [hash, userId], (err, result) => {
@@ -392,7 +554,7 @@ function restablecerContraseña(req, res) {
           if (result.affectedRows === 0) {
             return res.status(404).json({ error: "El usuario no existe" });
           }
-          return res.status(200).json({ Status: "Success" });
+          return res.send(htmlContent);
 
         })
       })
@@ -418,5 +580,5 @@ module.exports = {
   restablecer,
   restablecerContraseña,
   dashboard,
-  authAPI
+  //authAPI
 };

@@ -84,7 +84,7 @@ function producciones_listar(req, res) {
                                 }
 
                                 // Renderizar la plantilla 'producciones/listar' y enviar los datos a la vista
-                                res.render('producciones/listar', { producciones });
+                                res.render('produccion/listar', { producciones });
                             });
                         }
                     });
@@ -333,7 +333,7 @@ async function producciones_detallar(req, res) {
         }
         //console.log(eventosList)
 
-        res.render("producciones/detallar", { producciones, d_produccion, d_producto, eventosList });
+        res.render("produccion/detallar", { producciones, d_produccion, d_producto, eventosList });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -389,7 +389,7 @@ function producciones_crear(req, res) {
                                             break;
                                     }
                                 }
-                                res.render("producciones/registrar", { usuarios, productos });
+                                res.render("produccion/registrar", { usuarios, productos });
                             }
                         });
                     }
@@ -694,7 +694,7 @@ async function producciones_registrar(req, res) {
 
         // Redireccionar
         console.log("Registro de orden de producción exitoso");
-        res.redirect("/producciones");
+        res.redirect("/produccion");
     } catch (err) {
         res.status(500).json(err);
     }
@@ -960,7 +960,7 @@ function producciones_editar(req, res) {
 
                         }
 
-                        res.render('producciones/editar', { produccion, d_produccion, productos, usersA });
+                        res.render('produccion/editar', { produccion, d_produccion, productos, usersA });
                     }
                 });
             }
@@ -1559,7 +1559,7 @@ async function producciones_modificar(req, res) {
 
         // Redireccionar
         console.log("Orden de producción modificada correctamente");
-        res.redirect("/producciones");
+        res.redirect("/produccion");
     } catch (err) {
         res.status(500).json(err);
     }
