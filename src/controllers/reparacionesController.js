@@ -1037,35 +1037,152 @@ async function reparaciones_modificar(req, res) {
 
             } else {
                 // Un detalle
-                const RegistroDetalleReparacion = {
-                    articulo: data.articulo_1_a,
-                    descripcion: data.descripcion_1,
-                    observacion: data.observacion_1,
-                    estado: data.estado_1
-                }
-
-                await new Promise((resolve, reject) => {
-                    conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
-                        [
-                            RegistroDetalleReparacion,
-                            idReparacion,
-                            data.idDetalleReparacion_1,
-                        ],
-                        (err, detalle) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                console.log("Detalle Actualizado");
-                                resolve();
-                            }
-                        }
-                    );
-                });
 
                 // Capturar idDetalleReparación
                 const idDetalleReparacion = data.idDetalleReparacion_1;
                 const ins = data.articulo_1 + '_idInsumo';
                 const cant = data.articulo_1 + '_cantidad';
+
+
+                ////START ACTUALIZAR
+                if (data.estado_1 == "Terminado") {
+
+                    var editar = true;
+
+                    const DetallesDetalles = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?",[idDetalleReparacion], (err, DetallesDetalles) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(DetallesDetalles);
+                            }
+                        });
+                    });
+
+                    const insumoss = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_insumos", (err, insumoss) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(insumoss);
+                            }
+                        });
+                    });
+
+                    for(i1 in DetallesDetalles){
+                        for(i2 in insumoss){
+                            if(DetallesDetalles[i1].cantidad_n > insumoss[i2].stock){
+                                editar = false;
+                            }
+                        }
+                    }
+
+
+
+                    if(editar==true){
+
+                        const RegistroDetalleReparacion = {
+                            articulo: data.articulo_1_a,
+                            descripcion: data.descripcion_1,
+                            observacion: data.observacion_1,
+                            estado: data.estado_1
+                        }
+
+                        await new Promise((resolve, reject) => {
+                            conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
+                                [
+                                    RegistroDetalleReparacion,
+                                    idReparacion,
+                                    data.idDetalleReparacion_1,
+                                ],
+                                (err, detalle) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        console.log("Detalle Actualizado");
+                                        resolve();
+                                    }
+                                }
+                            );
+                        });
+
+                        for(i1 in DetallesDetalles){
+                            for(i2 in insumoss){
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`UPDATE tbl_insumos SET stock = stock - ? WHERE idInsumo = ?`,
+                                        [
+                                            DetallesDetalles[i1].cantidad_n,
+                                            insumoss[i2].idInsumo
+                                        ],
+                                        (err, ins_cant) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                console.log("Insumo Actualizado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+                            }
+                        }
+
+                    }else{
+                        const RegistroDetalleReparacion = {
+                            articulo: data.articulo_1_a,
+                            descripcion: data.descripcion_1,
+                            observacion: data.observacion_1
+                        }        
+
+                        await new Promise((resolve, reject) => {
+                            conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
+                                [
+                                    RegistroDetalleReparacion,
+                                    idReparacion,
+                                    data.idDetalleReparacion_1,
+                                ],
+                                (err, detalle) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        console.log("Detalle Actualizado");
+                                        resolve();
+                                    }
+                                }
+                            );
+                        });
+                        
+                        console.log("No hay insumos suficientes para actualizar el estado");
+                    }
+
+
+                } else {
+                    const RegistroDetalleReparacion = {
+                        articulo: data.articulo_1_a,
+                        descripcion: data.descripcion_1,
+                        observacion: data.observacion_1,
+                        estado: data.estado_1
+                    }
+    
+                    await new Promise((resolve, reject) => {
+                        conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
+                            [
+                                RegistroDetalleReparacion,
+                                idReparacion,
+                                data.idDetalleReparacion_1,
+                            ],
+                            (err, detalle) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    console.log("Detalle Actualizado");
+                                    resolve();
+                                }
+                            }
+                        );
+                    });
+                }
+                ////FIN ACTUALIZAR
 
 
                 // Eliminar detalles de los detalle
