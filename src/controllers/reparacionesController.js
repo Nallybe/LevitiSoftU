@@ -1,83 +1,183 @@
 //Listar
 function reparaciones_listar(req, res) {
     // Obtener la conexión a la base de datos
-    req.getConnection((err, conn) => {
+
+    usuarioRoles = req.session.roles;
+    req.getConnection(async (err, conn) => {
         if (err) {
             // Si hay un error al obtener la conexión, enviar una respuesta con el error
             return res.status(500).json(err);
         }
 
-        // Consultar las reparaciones en la base de datos   CASE WHEN estado = "Entregado" THEN 1 ELSE 0 END, estado ASC;
-        conn.query('SELECT * FROM tbl_reparaciones ORDER BY fechaRegistro DESC;', (err, reparaciones) => {
-            if (err) {
-                // Si hay un error al consultar las reparaciones, enviar una respuesta con el error
-                return res.status(500).json(err);
-            }
-            var cont = 1;
-
-            // Consultar los detalles de las reparaciones para cada reparación
-            for (let index in reparaciones) {
-                reparaciones[index].cont = cont;
-                cont++;
-                conn.query('SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion=?', [reparaciones[index].idReparacion], (err, d_reparaciones) => {
-                    if (err) {
-                        // Si hay un error al consultar los detalles de la reparación, enviar una respuesta con el error
-                        return res.status(500).json(err);
-                    }
-
-                    // Actualizar los campos de la reparación con la información obtenida
-                    reparaciones[index].numPR = d_reparaciones.length;
-                    reparaciones[index].fechaEntrega = reparaciones[index].fechaEntrega.toLocaleDateString();
-                    reparaciones[index].fechaRegistro = reparaciones[index].fechaRegistro.toLocaleString();
-                    reparaciones[index].total = "$ " + reparaciones[index].total.toLocaleString('es-CO');
-
-                    // Actualizar el estado de la reparación
-                    switch (reparaciones[index].estado) {
-                        case 'Iniciado':
-                            reparaciones[index].estado1 = true;
-                            break;
-                        case 'Proceso':
-                            reparaciones[index].estado2 = true;
-                            break;
-                        case 'Terminado':
-                            reparaciones[index].estado3 = true;
-                            break;
-                        case 'Entregado':
-                            reparaciones[index].estado4 = true;
-                            break;
-                    }
-                });
-            }
-
-            conn.query("SELECT * FROM users_access", (err, usersA) => {
+        const usersI = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM users_info", (err, usersI) => {
                 if (err) {
-                    return res.status(500).json(err);
+                    reject(err);
                 } else {
-                    conn.query("SELECT * FROM users_info", (err, usersI) => {
-                        if (err) {
-                            return res.status(500).json(err);
-                        } else {
-                            for (index in reparaciones) {
-                                reparaciones[index].userName;
-                                reparaciones[index].userTell;
-                                reparaciones[index].userEmail;
-                                for (iA in usersA) {
-                                    for (iI in usersI) {
-                                        if (usersI[iI].idInfo == reparaciones[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
-                                            reparaciones[index].userName = usersI[iI].nombre;
-                                            reparaciones[index].userTell = usersI[iI].telefono;
-                                            reparaciones[index].userEmail = usersA[iA].correo;
-                                        }
-                                    }
-                                }
-                            }
-                            res.status(200).render("reparaciones/listar", { reparaciones });
-                        }
-                    });
+                    resolve(usersI);
                 }
             });
         });
+
+        var IDInfo_user;
+        for (let iI in usersI) {
+            if (usersI[iI].nombre == req.session.name) {
+                IDInfo_user = usersI[iI].idInfo;
+            }
+        }
+
+        console.log(req.session)
+        if (usuarioRoles.includes('Cliente')) {
+
+            //console.log(req.session)
+
+            // Consultar las reparaciones en la base de datos   CASE WHEN estado = "Entregado" THEN 1 ELSE 0 END, estado ASC;
+            conn.query('SELECT * FROM tbl_reparaciones WHERE idInfo = ? ORDER BY fechaRegistro DESC;', [IDInfo_user], (err, reparaciones) => {
+                if (err) {
+                    // Si hay un error al consultar las reparaciones, enviar una respuesta con el error
+                    return res.status(500).json(err);
+                }
+                var cont = 1;
+
+                // Consultar los detalles de las reparaciones para cada reparación
+                for (let index in reparaciones) {
+                    reparaciones[index].cont = cont;
+                    cont++;
+                    conn.query('SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion=?', [reparaciones[index].idReparacion], (err, d_reparaciones) => {
+                        if (err) {
+                            // Si hay un error al consultar los detalles de la reparación, enviar una respuesta con el error
+                            return res.status(500).json(err);
+                        }
+
+                        // Actualizar los campos de la reparación con la información obtenida
+                        reparaciones[index].numPR = d_reparaciones.length;
+                        reparaciones[index].fechaEntrega = reparaciones[index].fechaEntrega.toLocaleDateString();
+                        reparaciones[index].fechaRegistro = reparaciones[index].fechaRegistro.toLocaleString();
+                        reparaciones[index].total = "$ " + reparaciones[index].total.toLocaleString('es-CO');
+
+                        // Actualizar el estado de la reparación
+                        switch (reparaciones[index].estado) {
+                            case 'Iniciado':
+                                reparaciones[index].estado1 = true;
+                                break;
+                            case 'Proceso':
+                                reparaciones[index].estado2 = true;
+                                break;
+                            case 'Terminado':
+                                reparaciones[index].estado3 = true;
+                                break;
+                            case 'Entregado':
+                                reparaciones[index].estado4 = true;
+                                break;
+                        }
+                    });
+                }
+
+                conn.query("SELECT * FROM users_access", (err, usersA) => {
+                    if (err) {
+                        return res.status(500).json(err);
+                    } else {
+                        conn.query("SELECT * FROM users_info", (err, usersI) => {
+                            if (err) {
+                                return res.status(500).json(err);
+                            } else {
+                                for (index in reparaciones) {
+                                    reparaciones[index].userName;
+                                    reparaciones[index].userTell;
+                                    reparaciones[index].userEmail;
+                                    for (iA in usersA) {
+                                        for (iI in usersI) {
+                                            if (usersI[iI].idInfo == reparaciones[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
+                                                reparaciones[index].userName = usersI[iI].nombre;
+                                                reparaciones[index].userTell = usersI[iI].telefono;
+                                                reparaciones[index].userEmail = usersA[iA].correo;
+                                            }
+                                        }
+                                    }
+                                }
+                                res.status(200).render("reparaciones/listar", { reparaciones });
+                            }
+                        });
+                    }
+                });
+            });
+
+        } else {
+            // Consultar las reparaciones en la base de datos   CASE WHEN estado = "Entregado" THEN 1 ELSE 0 END, estado ASC;
+            conn.query('SELECT * FROM tbl_reparaciones ORDER BY fechaRegistro DESC;', (err, reparaciones) => {
+                if (err) {
+                    // Si hay un error al consultar las reparaciones, enviar una respuesta con el error
+                    return res.status(500).json(err);
+                }
+                var cont = 1;
+
+                // Consultar los detalles de las reparaciones para cada reparación
+                for (let index in reparaciones) {
+                    reparaciones[index].cont = cont;
+                    cont++;
+                    conn.query('SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion=?', [reparaciones[index].idReparacion], (err, d_reparaciones) => {
+                        if (err) {
+                            // Si hay un error al consultar los detalles de la reparación, enviar una respuesta con el error
+                            return res.status(500).json(err);
+                        }
+
+                        // Actualizar los campos de la reparación con la información obtenida
+                        reparaciones[index].numPR = d_reparaciones.length;
+                        reparaciones[index].fechaEntrega = reparaciones[index].fechaEntrega.toLocaleDateString();
+                        reparaciones[index].fechaRegistro = reparaciones[index].fechaRegistro.toLocaleString();
+                        reparaciones[index].total = "$ " + reparaciones[index].total.toLocaleString('es-CO');
+
+                        // Actualizar el estado de la reparación
+                        switch (reparaciones[index].estado) {
+                            case 'Iniciado':
+                                reparaciones[index].estado1 = true;
+                                break;
+                            case 'Proceso':
+                                reparaciones[index].estado2 = true;
+                                break;
+                            case 'Terminado':
+                                reparaciones[index].estado3 = true;
+                                break;
+                            case 'Entregado':
+                                reparaciones[index].estado4 = true;
+                                break;
+                        }
+                    });
+                }
+
+                conn.query("SELECT * FROM users_access", (err, usersA) => {
+                    if (err) {
+                        return res.status(500).json(err);
+                    } else {
+                        conn.query("SELECT * FROM users_info", (err, usersI) => {
+                            if (err) {
+                                return res.status(500).json(err);
+                            } else {
+                                for (index in reparaciones) {
+                                    reparaciones[index].userName;
+                                    reparaciones[index].userTell;
+                                    reparaciones[index].userEmail;
+                                    for (iA in usersA) {
+                                        for (iI in usersI) {
+                                            if (usersI[iI].idInfo == reparaciones[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
+                                                reparaciones[index].userName = usersI[iI].nombre;
+                                                reparaciones[index].userTell = usersI[iI].telefono;
+                                                reparaciones[index].userEmail = usersA[iA].correo;
+                                            }
+                                        }
+                                    }
+                                }
+                                res.status(200).render("reparaciones/listar", { reparaciones });
+                            }
+                        });
+                    }
+                });
+            });
+
+        }
     });
+
+
 }
 //End Listar
 
