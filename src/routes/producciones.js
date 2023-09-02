@@ -33,5 +33,6 @@ router.get('/produccion_registrar', checkSession, ProduccionesController.producc
 router.post('/produccion_registrar', checkSession, ProduccionesController.producciones_registrar);
 router.get('/produccion_editar/:idOrden', checkSession, ProduccionesController.producciones_editar);
 router.post('/produccion_editar/:idOrden', checkSession, ProduccionesController.producciones_modificar);
+router.post('/produccion_eliminar', checkSession, ProduccionesController.producciones_eliminar);
 
 module.exports = router;

@@ -1554,8 +1554,6 @@ async function producciones_modificar(req, res) {
             }
             //End Registrar Detalles
         }
-        console.log("Pasa de largo");
-
 
         // Redireccionar
         console.log("Orden de producción modificada correctamente");
@@ -1567,11 +1565,82 @@ async function producciones_modificar(req, res) {
 //End Modificar
 
 
+//Eliminar Reparacion
+async function producciones_eliminar(req, res) {
+    try {
+        const idOrdenProduccion = req.body.idOrdenProduccion;
+
+        const conn = await new Promise((resolve, reject) => {
+            req.getConnection((err, conn) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(conn);
+                }
+            });
+        });
+
+        const d_orden = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_ordenes_produccion_detalles WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, d_orden) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(d_orden);
+                }
+            });
+        });
+
+        for(i in d_orden){ 
+            await new Promise((resolve, reject) => {
+                conn.query("DELETE FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [d_orden[i].idDetalleOrdenProduccion], (err, d_d_orden) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+        }
+        console.log("Participaciones Eliminadas");
+
+        await new Promise((resolve, reject) => {
+            conn.query("DELETE FROM tbl_ordenes_produccion_detalles WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, e_orden) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+        console.log("Tareas Eliminadas");
+
+
+        await new Promise((resolve, reject) => {
+            conn.query("DELETE FROM tbl_ordenes_produccion WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, orden_e) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+        console.log("Orden de produccion eliminada exitosamente");
+
+        res.redirect("/produccion");
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+//End Eliminar Reparacion
+
+
+
 module.exports = {
     producciones_listar: producciones_listar,
     producciones_detallar: producciones_detallar,
     producciones_crear: producciones_crear,
     producciones_registrar: producciones_registrar,
     producciones_editar: producciones_editar,
-    producciones_modificar: producciones_modificar
+    producciones_modificar: producciones_modificar,
+    producciones_eliminar: producciones_eliminar
 }
