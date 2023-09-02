@@ -907,246 +907,662 @@ async function reparaciones_modificar(req, res) {
         //Reconocer si se mandan detalles ya registrados 
         if (data.articulo_1) {
 
-            //Capturar detalles
-            const detalles_1 = await new Promise((resolve, reject) => {
-                conn.query("SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, detalles) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(detalles);
-                    }
-                });
-            });
-
             // Editar Detalles y Reconocer si se manda 1 o más detalles ya registrados 
             if (data.articulo_1[0].length > 1) {
                 // Más de un detalle
 
                 for (let index_d in data.articulo_1) {
-                    const RegistroDetalleReparacion = {
-                        articulo: data.articulo_1_a[index_d],
-                        descripcion: data.descripcion_1[index_d],
-                        observacion: data.observacion_1[index_d],
-                        estado: data.estado_1[index_d]
-                    }
-
-                    await new Promise((resolve, reject) => {
-                        conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
-                            [
-                                RegistroDetalleReparacion,
-                                idReparacion,
-                                data.idDetalleReparacion_1[index_d],
-                            ],
-                            (err, detalle) => {
-                                if (err) {
-                                    reject(err);
-                                } else {
-                                    console.log("Detalle Actualizado");
-                                    resolve();
-                                }
-                            }
-                        );
-                    });
 
                     // Capturar idDetalleReparación
                     const idDetalleReparacion = data.idDetalleReparacion_1[index_d];
                     const ins = data.articulo_1[index_d] + '_idInsumo';
                     const cant = data.articulo_1[index_d] + '_cantidad';
 
-
-                    // Eliminar detalles de los detalle
-                    await new Promise((resolve, reject) => {
-                        conn.query("DELETE FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [idDetalleReparacion], (err, result) => {
+                    //Capturar detalle
+                    const detalleR = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_reparaciones_detalles WHERE idDetalleReparacion = ?", [idDetalleReparacion], (err, detalle) => {
                             if (err) {
                                 reject(err);
                             } else {
-                                //console.log("Insumos Eliminados");
-                                resolve();
+                                resolve(detalle);
                             }
                         });
                     });
-                    // End Eliminar detalles de los detalle
 
+                    for (d in detalleR) {
 
-                    if (data[ins][0].length > 1) {
-                        // Más de un insumo
+                        ////START ACTUALIZAR
+                        if (data.estado_1[index_d] == "Terminado" && detalleR[d].estado != "Terminado") {
 
-                        //Capturar ids insumos
-                        for (let index in data[ins]) {
-                            for (let ix in insumos) {
-                                if (data[ins][index] == insumos[ix].nombre) {
-                                    data[ins][index] = insumos[ix].idInsumo;
-                                }
-                            }
-                            //End capturar ids insumos
-
+                            /////START Modificar los detalles de los detalles//////////
+                            // Eliminar detalles de los detalle
                             await new Promise((resolve, reject) => {
-                                conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
-                                    [
-                                        idDetalleReparacion,
-                                        data[ins][index],
-                                        data[cant][index]
-                                    ],
-                                    (err) => {
-                                        if (err) {
-                                            reject(err);
-                                        } else {
-                                            console.log("Insumo Registrado");
-                                            resolve();
-                                        }
-                                    }
-                                );
-                            });
-                        }
-
-                    } else {
-                        // Un insumo
-
-                        //Capturar id insumo
-                        for (let ix in insumos) {
-                            if (data[ins] == insumos[ix].nombre) {
-                                data[ins] = insumos[ix].idInsumo;
-                            }
-                        }
-                        //End capturar id insumo
-
-
-                        await new Promise((resolve, reject) => {
-                            conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
-                                [
-                                    idDetalleReparacion,
-                                    data[ins],
-                                    data[cant]
-                                ],
-                                (err) => {
+                                conn.query("DELETE FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [idDetalleReparacion], (err, result) => {
                                     if (err) {
                                         reject(err);
                                     } else {
-                                        console.log("Insumo Registrado");
+                                        //console.log("Insumos Eliminados");
                                         resolve();
                                     }
+                                });
+                            });
+                            // End Eliminar detalles de los detalle
+
+                            if (data[ins][0].length > 1) {
+                                // Más de un insumo
+
+                                //Capturar ids insumos
+                                for (let index in data[ins]) {
+                                    for (let ix in insumos) {
+                                        if (data[ins][index] == insumos[ix].nombre) {
+                                            data[ins][index] = insumos[ix].idInsumo;
+                                        }
+                                    }
+                                    //End capturar ids insumos
+
+                                    await new Promise((resolve, reject) => {
+                                        conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
+                                            [
+                                                idDetalleReparacion,
+                                                data[ins][index],
+                                                data[cant][index]
+                                            ],
+                                            (err) => {
+                                                if (err) {
+                                                    reject(err);
+                                                } else {
+                                                    //console.log("Insumo Registrado");
+                                                    resolve();
+                                                }
+                                            }
+                                        );
+                                    });
                                 }
-                            );
-                        });
+                                //console.log('Insumos actualizados')
+
+                            } else {
+                                // Un insumo
+
+                                //Capturar id insumo
+                                for (let ix in insumos) {
+                                    if (data[ins] == insumos[ix].nombre) {
+                                        data[ins] = insumos[ix].idInsumo;
+                                    }
+                                }
+                                //End capturar id insumo
+
+
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
+                                        [
+                                            idDetalleReparacion,
+                                            data[ins],
+                                            data[cant]
+                                        ],
+                                        (err) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                //console.log("Insumo Registrado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+                            }
+                            /////END Modificar los detalles d elos detalles///////////
+
+                            var editar = true;
+
+                            const DetallesDetalles = await new Promise((resolve, reject) => {
+                                conn.query("SELECT * FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [idDetalleReparacion], (err, DetallesDetalles) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        resolve(DetallesDetalles);
+                                    }
+                                });
+                            });
+
+                            const insumoss = await new Promise((resolve, reject) => {
+                                conn.query("SELECT * FROM tbl_insumos", (err, insumoss) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        resolve(insumoss);
+                                    }
+                                });
+                            });
+
+                            for (i1 in DetallesDetalles) {
+                                for (i2 in insumoss) {
+                                    if (DetallesDetalles[i1].idInsumo == insumoss[i2].idInsumo) {
+                                        if (DetallesDetalles[i1].cantidad_n > insumoss[i2].stock) {
+                                            editar = false;
+                                        }
+                                    }
+                                }
+                            }
+
+
+                            if (editar == true) {
+
+                                const RegistroDetalleReparacion = {
+                                    articulo: data.articulo_1_a[index_d],
+                                    descripcion: data.descripcion_1[index_d],
+                                    observacion: data.observacion_1[index_d],
+                                    estado: data.estado_1[index_d]
+                                }
+
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
+                                        [
+                                            RegistroDetalleReparacion,
+                                            idReparacion,
+                                            idDetalleReparacion,
+                                        ],
+                                        (err, detalle) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                console.log("Detalle Actualizado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+
+                                for (i1 in DetallesDetalles) {
+                                    for (i2 in insumoss) {
+                                        if (DetallesDetalles[i1].idInsumo == insumoss[i2].idInsumo) {
+                                            await new Promise((resolve, reject) => {
+                                                conn.query(`UPDATE tbl_insumos SET stock = stock - ? WHERE idInsumo = ?`,
+                                                    [
+                                                        DetallesDetalles[i1].cantidad_n,
+                                                        insumoss[i2].idInsumo
+                                                    ],
+                                                    (err, ins_cant) => {
+                                                        if (err) {
+                                                            reject(err);
+                                                        } else {
+                                                            console.log("Insumo Actualizado");
+                                                            resolve();
+                                                        }
+                                                    }
+                                                );
+                                            });
+                                        }
+                                    }
+                                }
+
+                            } else {
+                                const RegistroDetalleReparacion = {
+                                    articulo: data.articulo_1_a[index_d],
+                                    descripcion: data.descripcion_1[index_d],
+                                    observacion: data.observacion_1[index_d]
+                                }
+
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
+                                        [
+                                            RegistroDetalleReparacion,
+                                            idReparacion,
+                                            data.idDetalleReparacion_1,
+                                        ],
+                                        (err, detalle) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                console.log("Detalle Actualizado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+
+                                console.log("No hay insumos suficientes para actualizar el estado");
+                            }
+
+
+                        } else {
+                            if (data.estado_1[index_d] != "Terminado") {
+                                const RegistroDetalleReparacion = {
+                                    articulo: data.articulo_1_a[index_d],
+                                    descripcion: data.descripcion_1[index_d],
+                                    observacion: data.observacion_1[index_d],
+                                    estado: data.estado_1[index_d]
+                                }
+
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
+                                        [
+                                            RegistroDetalleReparacion,
+                                            idReparacion,
+                                            data.idDetalleReparacion_1[index_d],
+                                        ],
+                                        (err, detalle) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                console.log("Detalle Actualizado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+
+
+                                /////START Modificar los detalles de los detalles//////////
+                                // Eliminar detalles de los detalle
+                                await new Promise((resolve, reject) => {
+                                    conn.query("DELETE FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [idDetalleReparacion], (err, result) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            //console.log("Insumos Eliminados");
+                                            resolve();
+                                        }
+                                    });
+                                });
+                                // End Eliminar detalles de los detalle
+
+                                if (data[ins][0].length > 1) {
+                                    // Más de un insumo
+
+                                    //Capturar ids insumos
+                                    for (let index in data[ins]) {
+                                        for (let ix in insumos) {
+                                            if (data[ins][index] == insumos[ix].nombre) {
+                                                data[ins][index] = insumos[ix].idInsumo;
+                                            }
+                                        }
+                                        //End capturar ids insumos
+
+                                        await new Promise((resolve, reject) => {
+                                            conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
+                                                [
+                                                    idDetalleReparacion,
+                                                    data[ins][index],
+                                                    data[cant][index]
+                                                ],
+                                                (err) => {
+                                                    if (err) {
+                                                        reject(err);
+                                                    } else {
+                                                        //console.log("Insumo Registrado");
+                                                        resolve();
+                                                    }
+                                                }
+                                            );
+                                        });
+                                    }
+
+                                    console.log('Insumos actualizados');
+
+                                } else {
+                                    // Un insumo
+
+                                    //Capturar id insumo
+                                    for (let ix in insumos) {
+                                        if (data[ins] == insumos[ix].nombre) {
+                                            data[ins] = insumos[ix].idInsumo;
+                                        }
+                                    }
+                                    //End capturar id insumo
+
+
+                                    await new Promise((resolve, reject) => {
+                                        conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
+                                            [
+                                                idDetalleReparacion,
+                                                data[ins],
+                                                data[cant]
+                                            ],
+                                            (err) => {
+                                                if (err) {
+                                                    reject(err);
+                                                } else {
+                                                    //console.log("Insumo Registrado");
+                                                    resolve();
+                                                }
+                                            }
+                                        );
+                                    });
+
+                                    console.log('Insumo actualizado');
+                                }
+                                /////END Modificar los detalles d elos detalles///////////
+
+                            }
+                        }
+                        ////FIN ACTUALIZAR
                     }
-
-
-
-
                 }
 
             } else {
                 // Un detalle
-                const RegistroDetalleReparacion = {
-                    articulo: data.articulo_1_a,
-                    descripcion: data.descripcion_1,
-                    observacion: data.observacion_1,
-                    estado: data.estado_1
-                }
-
-                await new Promise((resolve, reject) => {
-                    conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
-                        [
-                            RegistroDetalleReparacion,
-                            idReparacion,
-                            data.idDetalleReparacion_1,
-                        ],
-                        (err, detalle) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                console.log("Detalle Actualizado");
-                                resolve();
-                            }
-                        }
-                    );
-                });
 
                 // Capturar idDetalleReparación
                 const idDetalleReparacion = data.idDetalleReparacion_1;
                 const ins = data.articulo_1 + '_idInsumo';
                 const cant = data.articulo_1 + '_cantidad';
 
-
-                // Eliminar detalles de los detalle
-                await new Promise((resolve, reject) => {
-                    conn.query("DELETE FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [idDetalleReparacion], (err, result) => {
+                //Capturar detalle
+                const detalleR = await new Promise((resolve, reject) => {
+                    conn.query("SELECT * FROM tbl_reparaciones_detalles WHERE idDetalleReparacion = ?", [idDetalleReparacion], (err, detalle) => {
                         if (err) {
                             reject(err);
                         } else {
-                            //console.log("Insumos Eliminados");
-                            resolve();
+                            resolve(detalle);
                         }
                     });
                 });
-                // End Eliminar detalles de los detalle
 
+                for (d in detalleR) {
+                    ////START ACTUALIZAR
+                    if (data.estado_1 == "Terminado" && detalleR[d].estado != "Terminado") {
 
-                if (data[ins][0].length > 1) {
-                    // Más de un insumo
-
-                    //Capturar ids insumos
-                    for (let index in data[ins]) {
-                        for (let ix in insumos) {
-                            if (data[ins][index] == insumos[ix].nombre) {
-                                data[ins][index] = insumos[ix].idInsumo;
-                            }
-                        }
-                        //End capturar ids insumos
-
+                        ////START Modificar detalles
+                        // Eliminar detalles de los detalle
                         await new Promise((resolve, reject) => {
-                            conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
-                                [
-                                    idDetalleReparacion,
-                                    data[ins][index],
-                                    data[cant][index]
-                                ],
-                                (err) => {
-                                    if (err) {
-                                        reject(err);
-                                    } else {
-                                        console.log("Insumo Registrado");
-                                        resolve();
-                                    }
-                                }
-                            );
-                        });
-                    }
-
-                } else {
-                    // Un insumo
-
-                    //Capturar id insumo
-                    for (let ix in insumos) {
-                        if (data[ins] == insumos[ix].nombre) {
-                            data[ins] = insumos[ix].idInsumo;
-                        }
-                    }
-                    //End capturar id insumo
-
-
-                    await new Promise((resolve, reject) => {
-                        conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
-                            [
-                                idDetalleReparacion,
-                                data[ins],
-                                data[cant]
-                            ],
-                            (err) => {
+                            conn.query("DELETE FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [idDetalleReparacion], (err, result) => {
                                 if (err) {
                                     reject(err);
                                 } else {
-                                    console.log("Insumo Registrado");
+                                    //console.log("Insumos Eliminados");
                                     resolve();
                                 }
+                            });
+                        });
+                        // End Eliminar detalles de los detalle
+
+                        if (data[ins][0].length > 1) {
+                            // Más de un insumo
+
+                            //Capturar ids insumos
+                            for (let index in data[ins]) {
+                                for (let ix in insumos) {
+                                    if (data[ins][index] == insumos[ix].nombre) {
+                                        data[ins][index] = insumos[ix].idInsumo;
+                                    }
+                                }
+                                //End capturar ids insumos
+
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
+                                        [
+                                            idDetalleReparacion,
+                                            data[ins][index],
+                                            data[cant][index]
+                                        ],
+                                        (err) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                //console.log("Insumo Registrado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
                             }
-                        );
-                    });
+
+                        } else {
+                            // Un insumo
+
+                            //Capturar id insumo
+                            for (let ix in insumos) {
+                                if (data[ins] == insumos[ix].nombre) {
+                                    data[ins] = insumos[ix].idInsumo;
+                                }
+                            }
+                            //End capturar id insumo
+
+
+                            await new Promise((resolve, reject) => {
+                                conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
+                                    [
+                                        idDetalleReparacion,
+                                        data[ins],
+                                        data[cant]
+                                    ],
+                                    (err) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            //console.log("Insumo Registrado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+                        }
+                        ////END Modificar detalles
+
+                        var editar = true;
+
+                        const DetallesDetalles = await new Promise((resolve, reject) => {
+                            conn.query("SELECT * FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [idDetalleReparacion], (err, DetallesDetalles) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    resolve(DetallesDetalles);
+                                }
+                            });
+                        });
+
+                        const insumoss = await new Promise((resolve, reject) => {
+                            conn.query("SELECT * FROM tbl_insumos", (err, insumoss) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    resolve(insumoss);
+                                }
+                            });
+                        });
+
+                        for (i1 in DetallesDetalles) {
+                            for (i2 in insumoss) {
+                                if (DetallesDetalles[i1].idInsumo == insumoss[i2].idInsumo) {
+                                    if (DetallesDetalles[i1].cantidad_n > insumoss[i2].stock) {
+                                        editar = false;
+                                    }
+                                }
+                            }
+                        }
+
+
+                        if (editar == true) {
+
+                            const RegistroDetalleReparacion = {
+                                articulo: data.articulo_1_a,
+                                descripcion: data.descripcion_1,
+                                observacion: data.observacion_1,
+                                estado: data.estado_1
+                            }
+
+                            await new Promise((resolve, reject) => {
+                                conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
+                                    [
+                                        RegistroDetalleReparacion,
+                                        idReparacion,
+                                        data.idDetalleReparacion_1,
+                                    ],
+                                    (err, detalle) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            console.log("Detalle Actualizado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+
+                            for (i1 in DetallesDetalles) {
+                                for (i2 in insumoss) {
+                                    if (DetallesDetalles[i1].idInsumo == insumoss[i2].idInsumo) {
+                                        await new Promise((resolve, reject) => {
+                                            conn.query(`UPDATE tbl_insumos SET stock = stock - ? WHERE idInsumo = ?`,
+                                                [
+                                                    DetallesDetalles[i1].cantidad_n,
+                                                    insumoss[i2].idInsumo
+                                                ],
+                                                (err, ins_cant) => {
+                                                    if (err) {
+                                                        reject(err);
+                                                    } else {
+                                                        console.log("Insumo Actualizado");
+                                                        resolve();
+                                                    }
+                                                }
+                                            );
+                                        });
+                                    }
+                                }
+                            }
+
+                        } else {
+                            const RegistroDetalleReparacion = {
+                                articulo: data.articulo_1_a,
+                                descripcion: data.descripcion_1,
+                                observacion: data.observacion_1
+                            }
+
+                            await new Promise((resolve, reject) => {
+                                conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
+                                    [
+                                        RegistroDetalleReparacion,
+                                        idReparacion,
+                                        data.idDetalleReparacion_1,
+                                    ],
+                                    (err, detalle) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            console.log("Detalle Actualizado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+
+                            console.log("No hay insumos suficientes para actualizar el estado");
+                        }
+
+
+                    } else {
+                        if (data.estado_1 != "Terminado") {
+                            const RegistroDetalleReparacion = {
+                                articulo: data.articulo_1_a,
+                                descripcion: data.descripcion_1,
+                                observacion: data.observacion_1,
+                                estado: data.estado_1
+                            }
+
+                            await new Promise((resolve, reject) => {
+                                conn.query(`UPDATE tbl_reparaciones_detalles SET ? WHERE idReparacion = ? AND idDetalleReparacion = ?`,
+                                    [
+                                        RegistroDetalleReparacion,
+                                        idReparacion,
+                                        data.idDetalleReparacion_1,
+                                    ],
+                                    (err, detalle) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            console.log("Detalle Actualizado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+
+                            ////START Modificar detalles
+                            // Eliminar detalles de los detalle
+                            await new Promise((resolve, reject) => {
+                                conn.query("DELETE FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [idDetalleReparacion], (err, result) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        //console.log("Insumos Eliminados");
+                                        resolve();
+                                    }
+                                });
+                            });
+                            // End Eliminar detalles de los detalle
+
+
+                            if (data[ins][0].length > 1) {
+                                // Más de un insumo
+
+                                //Capturar ids insumos
+                                for (let index in data[ins]) {
+                                    for (let ix in insumos) {
+                                        if (data[ins][index] == insumos[ix].nombre) {
+                                            data[ins][index] = insumos[ix].idInsumo;
+                                        }
+                                    }
+                                    //End capturar ids insumos
+
+                                    await new Promise((resolve, reject) => {
+                                        conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
+                                            [
+                                                idDetalleReparacion,
+                                                data[ins][index],
+                                                data[cant][index]
+                                            ],
+                                            (err) => {
+                                                if (err) {
+                                                    reject(err);
+                                                } else {
+                                                    console.log("Insumo Registrado");
+                                                    resolve();
+                                                }
+                                            }
+                                        );
+                                    });
+                                }
+
+                            } else {
+                                // Un insumo
+
+                                //Capturar id insumo
+                                for (let ix in insumos) {
+                                    if (data[ins] == insumos[ix].nombre) {
+                                        data[ins] = insumos[ix].idInsumo;
+                                    }
+                                }
+                                //End capturar id insumo
+
+
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`INSERT INTO tbl_reparaciones_detalles_detalles(idDetalleReparacion, idInsumo, cantidad_n) VALUES (?, ?, ?)`,
+                                        [
+                                            idDetalleReparacion,
+                                            data[ins],
+                                            data[cant]
+                                        ],
+                                        (err) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                console.log("Insumo Registrado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+                            }
+                            ////END Modificar detalles
+                        }
+
+                    }
+                    ////FIN ACTUALIZAR
                 }
 
             }
             // End Editar Detalles
-
 
         } else {
             //Eliminar todos los detalles registrados si fueron eliminados del form
@@ -1385,7 +1801,7 @@ async function reparaciones_modificar(req, res) {
         //End Registrar Detalles
 
         // Redireccionar
-        console.log("Registro de reparación exitoso");
+        console.log("Modificación exitosa");
         res.redirect("/reparaciones");
     } catch (err) {
         res.status(500).json(err);
@@ -1395,53 +1811,93 @@ async function reparaciones_modificar(req, res) {
 
 
 //Eliminar Reparacion
-function reparaciones_eliminar(req, res) {
-    const idReparacion = req.body.idReparacion;
-    req.getConnection((err, conn) => {
-        conn.query('SELECT * FROM tbl_reparaciones WHERE idReparacion = ?', [idReparacion], (err, reparacion) => {
-            if (err) {
-                return res.status(500).json(err);
-            } else {
-                for (i in reparacion) {
-                    conn.query(`Update users_info set numReparaciones=numReparaciones- 1 where idInfo= ?`, [reparacion[i].idInfoUser1],
-                        (err) => {
-                            if (err) {
-                                return res.status(500).json(err);
-                            } else {
-                                console.log("Registrador Actualizado -1Reparación");
-                                conn.query(`Update users_info set numReparaciones=numReparaciones- 1 where idInfo= ?`, [reparacion[i].idInfo],
-                                    (err) => {
-                                        if (err) {
-                                            return res.status(500).json(err);
-                                        } else {
-                                            console.log("Cliente Actualizado -1Reparación");
+async function reparaciones_eliminar(req, res) {
+    try {
+        const idReparacion = req.body.idReparacion;
 
-                                            conn.query("DELETE FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, detalles) => {
-                                                if (err) {
-                                                    return res.status(500).json(err);
-                                                } else {
-                                                    console.log("Detalles Eliminados");
-
-                                                    conn.query("DELETE FROM tbl_reparaciones WHERE idReparacion = ?", [idReparacion], (err, reparacion) => {
-                                                        if (err) {
-                                                            return res.status(500).json(err);
-                                                        } else {
-                                                            console.log("Reparación Eliminada");
-                                                        }
-                                                    });
-                                                }
-                                                res.redirect("/reparaciones");
-                                            });
-                                        }
-                                    }
-                                );
-                            }
-                        }
-                    );
+        const conn = await new Promise((resolve, reject) => {
+            req.getConnection((err, conn) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(conn);
                 }
-            }
+            });
         });
-    });
+
+        const reparacion = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_reparaciones WHERE idReparacion = ?", [idReparacion], (err, reparacion) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(reparacion);
+                }
+            });
+        });
+
+        for (i in reparacion) {
+            await new Promise((resolve, reject) => {
+                conn.query("UPDATE users_info SET numReparaciones=numReparaciones- 1 WHERE idInfo= ?", [reparacion[i].idInfo], (err, reparacion) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        console.log("[Usuario] -1 reparación");
+                        resolve();
+                    }
+                });
+            });
+        }
+
+        const d_reparacion = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, d_reparacion) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(d_reparacion);
+                }
+            });
+        });
+
+        for(i in d_reparacion){ 
+            await new Promise((resolve, reject) => {
+                conn.query("DELETE FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [d_reparacion[i].idDetalleReparacion], (err, d_d_reparacion) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+        }
+        console.log("Insumos Eliminados");
+
+        await new Promise((resolve, reject) => {
+            conn.query("DELETE FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, e_reparacion) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+        console.log("Artículos Eliminados");
+
+
+        await new Promise((resolve, reject) => {
+            conn.query("DELETE FROM tbl_reparaciones WHERE idReparacion = ?", [idReparacion], (err, reparacion_e) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+        console.log("Reparación eliminada exitosamente");
+
+        res.redirect("/reparaciones");
+    } catch (err) {
+        res.status(500).json(err);
+    }
 }
 //End Eliminar Reparacion
 
