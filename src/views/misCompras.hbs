@@ -133,6 +133,7 @@
 <script>
         $(document).ready(function () {
             $('#tabla-ventas').DataTable({ //se debe seleccionar el id de la tabla $('#id..
+                responsive:true,
                 language: { //Como el original esta en inglés, aqui se traducen los textos
                     processing: "Tratamiento en curso...",
                     search: "Buscar&nbsp;:",
@@ -144,6 +145,7 @@
                     loadingRecords: "Cargando...",
                     zeroRecords: "No se encontraron datos con tu busqueda",
                     emptyTable: "No hay datos disponibles en la tabla.",
+                    
                     paginate: {
                         first: "Primero",
                         previous: "Anterior",
@@ -154,11 +156,13 @@
                         sortAscending: ": active para ordenar la columna en orden ascendente",
                         sortDescending: ": active para ordenar la columna en orden descendente"
                     }
+                    
                 },
                 lengthMenu: [[4], [4]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
                 searching: false, //Ocultar buscador
                 lengthChange: false,//Ocultar filtro de cantidad de filas
                 ordering: false //Ocultar filtro de ordenación por columnas
+                
             });
   });
 </script>
