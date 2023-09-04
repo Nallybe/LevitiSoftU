@@ -173,6 +173,127 @@ app.get('/dashboard', checkSession, (req, res) => {
     });
 });
 
+
+
+app.post('/actualizar_grafico_producto', sesion, async (req, res) => {
+    try {
+        const data = req.body;
+        // console.log(data);
+
+        const conn = await new Promise((resolve, reject) => {
+            req.getConnection((err, conn) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(conn);
+                }
+            });
+        });
+
+        const ventas = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_ventas WHERE LEFT(fecha, 7) = ?", [data.graf_pro], (err, ventas) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(ventas);
+                }
+            });
+        });
+
+
+
+        let productos = []
+        for (i in ventas) {
+            const d_ventas = await new Promise((resolve, reject) => {
+                conn.query("SELECT * FROM tbl_detalleventas WHERE idVentas = ?", [ventas[i].idVentas], (err, d_ventas) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(d_ventas);
+                    }
+                });
+            });
+
+            for (ix in d_ventas) {
+                let producto = {
+                    idProducto: d_ventas[ix].idProducto,
+                    cantidad: d_ventas[ix].Unidad
+                }
+
+                let agregar = true;
+
+                if (productos) {
+                    for (ic in productos) {
+                        if (productos[ic].idProducto == producto.idProducto) {
+                            productos[ic].cantidad += producto.cantidad;
+                            agregar = false;
+                        }
+                    }
+                }
+
+                if (agregar == true) {
+                    productos.push(producto);
+                }
+
+            }
+
+        }
+
+
+        const prod = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_productos", (err, pro) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(pro);
+                }
+            });
+        });
+
+        let totalP = 0;
+        for (i in productos) {
+            for (ix in prod) {
+                if (productos[i].idProducto == prod[ix].idProducto) {
+                    productos[i].nombre = prod[ix].nombre;
+                }
+            }
+            totalP += productos[i].cantidad;
+        }
+
+        //console.log(productos)
+
+
+        // Ordena el array en orden descendente según la cantidad
+        productos.sort((a, b) => b.cantidad - a.cantidad);
+
+        // Toma los primeros 5 elementos del array ordenado
+        const top5Productos = productos.slice(0, 5);
+
+        //console.log(top5Productos)
+
+        let nombres = [];
+        let datos = [];
+
+        for (i in top5Productos) {
+            nombres.push(top5Productos[i].nombre);
+            datos.push(top5Productos[i].cantidad);
+        }
+        //console.log(nombres);
+        //console.log(datos);
+
+        let valor = data.graf_pro;
+        let labels = data.label_p;
+        let ventasData = data.ventas_p;
+        let comprasData = data.compras_p;
+
+        res.render('dashboard', {nombres, datos, valor, labels, ventasData, comprasData})
+
+    } catch (err) {
+        res.status(500).json(err);
+    }
+})
+
+
 app.get('/home', (req, res) => {
     const loggedIn = req.session.loggedin || false;
     const name = req.session.name
@@ -292,7 +413,7 @@ app.get('/misCompras', sesion, (req, res) => {
         })
     })
 })
-app.get('/misComprasProductos/:idVentas', sesion, (req, res) =>{
+app.get('/misComprasProductos/:idVentas', sesion, (req, res) => {
     const idVentas = req.params.idVentas;
     const loggedIn = req.session.loggedin || false;
     const name = req.session.name
@@ -612,7 +733,7 @@ app.get('/misReparaDetalle/:idReparacion', sesion, async (req, res) => {
         // Redireccionar
 
         //console.log("total Insumos");
-       // console.log(totalInsumos);
+        // console.log(totalInsumos);
         //res.render("reparaciones/detallar", { detallesreparacion, reparacion, totalInsumos });
         res.render('misReparaDetalle', {
             nombre: 'Mis reparaciones', sesion: loggedIn, name, detallesreparacion, reparacion, totalInsumos
