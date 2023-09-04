@@ -257,7 +257,7 @@ function registrar(req, res) {
                     telefono: data.telefono,
                     estado: 'A'
                   };
-                  req.session.name= data.nombre
+                  req.session.name = data.nombre
                   conn.query(
                     'INSERT INTO users_info SET ?',
                     registroUsuarioInfo, (error, result) => {
@@ -278,34 +278,34 @@ function registrar(req, res) {
                           }
                           //console.log(req.session.roles)
                           req.session.roles = roleResults[0].nombreRoles;
-                          
-                          if(req.session.roles === "Cliente"){
+
+                          if (req.session.roles === "Cliente") {
                             res.redirect("/home")
-                          }else{
+                          } else {
                             conn.query(
-                            'SELECT DISTINCT p.nombrePermisos FROM tbl_roles AS r JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos;'
-                            ,
-                            (error, permissionResults) => {
-                              if (error) {
-                                console.log(error);
-                                return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+                              'SELECT DISTINCT p.nombrePermisos FROM tbl_roles AS r JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos;'
+                              ,
+                              (error, permissionResults) => {
+                                if (error) {
+                                  console.log(error);
+                                  return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+                                }
+                                const permisos = permissionResults.map((row) => row.nombrePermisos);
+                                //console.log('Permisos: ', permisos)
+                                req.session.asignacion = permisos;
+                                //console.log(req.session.asignacion)
+                                // Redireccionar al primer permiso que coincida
+                                var firstMatchingPermission = permisos.find((permiso) => req.session.roles.includes(permiso));
+                                if (firstMatchingPermission) {
+                                  res.redirect('/' + firstMatchingPermission);
+                                } else {
+                                  // Si no hay permisos coincidentes, redireccionar a una página predeterminada
+                                  res.redirect('/dashboard');
+                                }
                               }
-                              const permisos = permissionResults.map((row) => row.nombrePermisos);
-                              //console.log('Permisos: ', permisos)
-                              req.session.asignacion = permisos;
-                              //console.log(req.session.asignacion)
-                              // Redireccionar al primer permiso que coincida
-                              var firstMatchingPermission = permisos.find((permiso) => req.session.roles.includes(permiso));
-                              if (firstMatchingPermission) {
-                                res.redirect('/' + firstMatchingPermission);
-                              } else {
-                                // Si no hay permisos coincidentes, redireccionar a una página predeterminada
-                                res.redirect('/dashboard');
-                              }
-                            }
-                          );
+                            );
                           }
-                          
+
                         }
                       );
                     }
@@ -565,9 +565,129 @@ function restablecerContraseña(req, res) {
 
 }
 
+
 function dashboard(req, res) {
   res.render("dashboard")
 }
+
+/*
+async function dashboard_pro(req, res) {
+  try {
+    const data = req.body;
+   // console.log(data);
+
+    const conn = await new Promise((resolve, reject) => {
+      req.getConnection((err, conn) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(conn);
+        }
+      });
+    });
+
+    const ventas = await new Promise((resolve, reject) => {
+      conn.query("SELECT * FROM tbl_ventas WHERE LEFT(fecha, 7) = ?", [data.graf_pro], (err, ventas) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(ventas);
+        }
+      });
+    });
+
+
+
+    let productos = []
+    for (i in ventas) {
+      const d_ventas = await new Promise((resolve, reject) => {
+        conn.query("SELECT * FROM tbl_detalleventas WHERE idVentas = ?", [ventas[i].idVentas], (err, d_ventas) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(d_ventas);
+          }
+        });
+      });
+
+      for (ix in d_ventas) {
+        let producto = {
+          idProducto: d_ventas[ix].idProducto,
+          cantidad: d_ventas[ix].Unidad
+        }
+
+        let agregar = true;
+
+        if (productos) {
+          for (ic in productos) {
+            if (productos[ic].idProducto == producto.idProducto) {
+              productos[ic].cantidad += producto.cantidad;
+              agregar = false;
+            }
+          }
+        }
+
+        if (agregar == true) {
+          productos.push(producto);
+        }
+
+      }
+
+    }
+
+
+    const prod = await new Promise((resolve, reject) => {
+      conn.query("SELECT * FROM tbl_productos", (err, pro) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(pro);
+        }
+      });
+    });
+
+    let totalP = 0;
+    for (i in productos) {
+      for (ix in prod) {
+        if (productos[i].idProducto == prod[ix].idProducto) {
+          productos[i].nombre = prod[ix].nombre;
+        }
+      }
+      totalP += productos[i].cantidad;
+    }
+
+    //console.log(productos)
+
+
+    // Ordena el array en orden descendente según la cantidad
+    productos.sort((a, b) => b.cantidad - a.cantidad);
+
+    // Toma los primeros 5 elementos del array ordenado
+    const top5Productos = productos.slice(0, 5);
+
+    //console.log(top5Productos)
+
+    let nombres = [];
+    let datos = [];
+
+    for (i in top5Productos) {
+      nombres.push(top5Productos[i].nombre);
+      datos.push(top5Productos[i].cantidad);
+    }
+    //console.log(nombres);
+    //console.log(datos);
+
+    let valor = data.graf_pro;
+
+    // Redireccionar
+    //res.redirect("/dashboard");
+    res.render("dashboard", { nombres, datos, valor });
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+}
+*/
 
 module.exports = {
   login,
@@ -580,5 +700,6 @@ module.exports = {
   restablecer,
   restablecerContraseña,
   dashboard,
+ // dashboard_pro
   //authAPI
 };

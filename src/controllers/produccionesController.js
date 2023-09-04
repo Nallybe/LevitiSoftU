@@ -1036,7 +1036,7 @@ async function producciones_modificar(req, res) {
         };
 
 
-        // Actualizar Reparación
+        // Actualizar Orden
         await new Promise((resolve, reject) => {
             conn.query("UPDATE tbl_ordenes_produccion SET ? WHERE idOrdenProduccion = ?", [RegistroOrden, idOrdenProduccion], (err, result) => {
                 if (err) {
@@ -1047,7 +1047,7 @@ async function producciones_modificar(req, res) {
                 }
             });
         });
-        // End Actualizar Reparación
+        // End Actualizar Orden
 
 
 
@@ -1069,14 +1069,817 @@ async function producciones_modificar(req, res) {
             if (data.titulo_1[0].length > 1) {
                 // Más de un detalle
 
+                let editar_s = true;
+
                 for (let index_d in data.titulo_1) {
+                    if (data.titulo_2 || data.estado_1[index_d] != "Terminado") {
+                        editar_s = false;
+                    }
+                }
+
+                if (editar_s == true) {
+
+                    const orden = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_ordenes_produccion WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, orden) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(orden);
+                            }
+                        });
+                    });
+
+                    const d_producto = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_productos_detalles WHERE idProducto = ?", [data.idProducto], (err, d_producto) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(d_producto);
+                            }
+                        });
+                    });
+
+                    const insumos = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(insumos);
+                            }
+                        });
+                    });
+
+                    let editar_d = true;
+
+                    for (let o in orden) {
+                        for (let p in d_producto) {
+                            for (let ins in insumos) {
+                                if (d_producto[p].idInsumo == insumos[ins].idInsumo) {
+
+                                    if ((parseInt(orden[o].cantidad) * parseInt(d_producto[p].cantidad_n)) > parseInt(insumos[ins].stock)) {
+                                        editar_d = false;
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    if (editar_d == true) {
+
+                        for (let index_d in data.titulo_1) {
+
+                            const RegistroDetalleOrden = {
+                                titulo: data.titulo_1_a[index_d],
+                                descripcion: data.descripcion_1[index_d],
+                                observacion: data.observacion_1[index_d],
+                                fechaInicio: data.fechaInicio_detalle_1[index_d],
+                                fechaFin: data.fechaFin_detalle_1[index_d],
+                                estado: data.estado_1[index_d]
+                            }
+
+                            await new Promise((resolve, reject) => {
+                                conn.query(`UPDATE tbl_ordenes_produccion_detalles SET ? WHERE idOrdenProduccion = ? AND idDetalleOrdenProduccion = ?`,
+                                    [
+                                        RegistroDetalleOrden,
+                                        idOrdenProduccion,
+                                        data.idDetalleOrdenProduccion_1[index_d],
+                                    ],
+                                    (err, detalle) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            console.log("Detalle Actualizado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+
+                            // Capturar idDetalleReparación
+                            const idDetalleOrdenProduccion = data.idDetalleOrdenProduccion_1[index_d];
+                            const part = data.titulo_1[index_d] + '_idParticipante';
+
+                            // Eliminar detalles de los detalle
+                            await new Promise((resolve, reject) => {
+                                conn.query("DELETE FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [idDetalleOrdenProduccion], (err, result) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        //console.log("Parts Eliminados");
+                                        resolve();
+                                    }
+                                });
+                            });
+                            // End Eliminar detalles de los detalle
+
+                            //Registrar Participantes
+                            if (data[part][0].length > 1) {
+                                // Más de un participante
+
+                                for (let index in data[part]) {
+
+                                    //Capturar idParticipante
+                                    for (let ix in usersA) {
+                                        for (let i in usersI) {
+                                            if (data[part][index] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
+                                                data[part][index] = usersI[i].idInfo;
+                                                //console.log("Participante encontrado");
+                                            }
+                                        }
+                                    }
+                                    //End Capturar idParticipante
+
+                                    await new Promise((resolve, reject) => {
+                                        conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
+                                            [
+                                                idDetalleOrdenProduccion,
+                                                data[part][index]
+                                            ],
+                                            (err) => {
+                                                if (err) {
+                                                    reject(err);
+                                                } else {
+                                                    //console.log("Participante Registrado");
+                                                    resolve();
+                                                }
+                                            }
+                                        );
+                                    });
+                                }
+
+                            } else {
+                                // Un Partícipe
+
+                                //Capturar idParticipante
+                                for (let index in usersA) {
+                                    for (let i in usersI) {
+                                        if (data[part] == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
+                                            data[part] = usersI[i].idInfo;
+                                            //console.log("Participante encontrado");
+                                        }
+                                    }
+                                }
+                                //End Capturar idParticipante
+
+
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
+                                        [
+                                            idDetalleOrdenProduccion,
+                                            data[part],
+                                        ],
+                                        (err) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                //console.log("Participante Registrado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+                            }
+                            //End Registrar Participantes
+
+                        }
+
+
+                        ////RESTAR INSUMOS Y SUMAR PRODUCTOS 
+
+                        for (let o in orden) {
+                            for (let p in d_producto) {
+                                for (let ins in insumos) {
+                                    if (d_producto[p].idInsumo == insumos[ins].idInsumo) {
+                                        let cantidadRestar = parseInt(orden[o].cantidad) * parseInt(d_producto[p].cantidad_n);
+
+                                        await new Promise((resolve, reject) => {
+                                            conn.query(`UPDATE tbl_insumos SET stock = stock - ? WHERE idInsumo = ?`,
+                                                [
+                                                    cantidadRestar,
+                                                    insumos[ins].idInsumo
+                                                ],
+                                                (err, insumo) => {
+                                                    if (err) {
+                                                        reject(err);
+                                                    } else {
+                                                        console.log("Insumo Actualizado");
+                                                        resolve();
+                                                    }
+                                                }
+                                            );
+                                        });
+                                    }
+                                }
+                            }
+
+                            await new Promise((resolve, reject) => {
+                                conn.query(`UPDATE tbl_productos SET stock = stock + ? WHERE idProducto = ?`,
+                                    [
+                                        orden[o].cantidad,
+                                        orden[o].idProducto
+                                    ],
+                                    (err, producto) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            console.log("Producto Actualizado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+                        }
+
+
+                        ////END RESTAR INSUMOS Y SUMAR PRODUCTOS  
+
+                    } else {
+                        for (let index_d in data.titulo_1) {
+
+                            const RegistroDetalleOrden = {
+                                titulo: data.titulo_1_a[index_d],
+                                descripcion: data.descripcion_1[index_d],
+                                observacion: data.observacion_1[index_d],
+                                fechaInicio: data.fechaInicio_detalle_1[index_d],
+                                fechaFin: data.fechaFin_detalle_1[index_d]
+                            }
+
+                            await new Promise((resolve, reject) => {
+                                conn.query(`UPDATE tbl_ordenes_produccion_detalles SET ? WHERE idOrdenProduccion = ? AND idDetalleOrdenProduccion = ?`,
+                                    [
+                                        RegistroDetalleOrden,
+                                        idOrdenProduccion,
+                                        data.idDetalleOrdenProduccion_1[index_d],
+                                    ],
+                                    (err, detalle) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            console.log("Detalle Actualizado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+
+                            // Capturar idDetalleReparación
+                            const idDetalleOrdenProduccion = data.idDetalleOrdenProduccion_1[index_d];
+                            const part = data.titulo_1[index_d] + '_idParticipante';
+
+                            // Eliminar detalles de los detalle
+                            await new Promise((resolve, reject) => {
+                                conn.query("DELETE FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [idDetalleOrdenProduccion], (err, result) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        //console.log("Parts Eliminados");
+                                        resolve();
+                                    }
+                                });
+                            });
+                            // End Eliminar detalles de los detalle
+
+                            //Registrar Participantes
+                            if (data[part][0].length > 1) {
+                                // Más de un participante
+
+                                for (let index in data[part]) {
+
+                                    //Capturar idParticipante
+                                    for (let ix in usersA) {
+                                        for (let i in usersI) {
+                                            if (data[part][index] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
+                                                data[part][index] = usersI[i].idInfo;
+                                                //console.log("Participante encontrado");
+                                            }
+                                        }
+                                    }
+                                    //End Capturar idParticipante
+
+                                    await new Promise((resolve, reject) => {
+                                        conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
+                                            [
+                                                idDetalleOrdenProduccion,
+                                                data[part][index]
+                                            ],
+                                            (err) => {
+                                                if (err) {
+                                                    reject(err);
+                                                } else {
+                                                    //console.log("Participante Registrado");
+                                                    resolve();
+                                                }
+                                            }
+                                        );
+                                    });
+                                }
+
+                            } else {
+                                // Un Partícipe
+
+                                //Capturar idParticipante
+                                for (let index in usersA) {
+                                    for (let i in usersI) {
+                                        if (data[part] == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
+                                            data[part] = usersI[i].idInfo;
+                                            //console.log("Participante encontrado");
+                                        }
+                                    }
+                                }
+                                //End Capturar idParticipante
+
+
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
+                                        [
+                                            idDetalleOrdenProduccion,
+                                            data[part],
+                                        ],
+                                        (err) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                //console.log("Participante Registrado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+                            }
+                            //End Registrar Participantes
+
+                            console.log("No se pudo actualizar el estado ya que no hay insumos suficientes");
+
+                        }
+                    }
+
+                } else {
+                    for (let index_d in data.titulo_1) {
+
+                        const RegistroDetalleOrden = {
+                            titulo: data.titulo_1_a[index_d],
+                            descripcion: data.descripcion_1[index_d],
+                            observacion: data.observacion_1[index_d],
+                            fechaInicio: data.fechaInicio_detalle_1[index_d],
+                            fechaFin: data.fechaFin_detalle_1[index_d],
+                            estado: data.estado_1[index_d]
+                        }
+
+                        await new Promise((resolve, reject) => {
+                            conn.query(`UPDATE tbl_ordenes_produccion_detalles SET ? WHERE idOrdenProduccion = ? AND idDetalleOrdenProduccion = ?`,
+                                [
+                                    RegistroDetalleOrden,
+                                    idOrdenProduccion,
+                                    data.idDetalleOrdenProduccion_1[index_d],
+                                ],
+                                (err, detalle) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        console.log("Detalle Actualizado");
+                                        resolve();
+                                    }
+                                }
+                            );
+                        });
+
+                        // Capturar idDetalleReparación
+                        const idDetalleOrdenProduccion = data.idDetalleOrdenProduccion_1[index_d];
+                        const part = data.titulo_1[index_d] + '_idParticipante';
+
+                        // Eliminar detalles de los detalle
+                        await new Promise((resolve, reject) => {
+                            conn.query("DELETE FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [idDetalleOrdenProduccion], (err, result) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    //console.log("Parts Eliminados");
+                                    resolve();
+                                }
+                            });
+                        });
+                        // End Eliminar detalles de los detalle
+
+                        //Registrar Participantes
+                        if (data[part][0].length > 1) {
+                            // Más de un participante
+
+                            for (let index in data[part]) {
+
+                                //Capturar idParticipante
+                                for (let ix in usersA) {
+                                    for (let i in usersI) {
+                                        if (data[part][index] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
+                                            data[part][index] = usersI[i].idInfo;
+                                            //console.log("Participante encontrado");
+                                        }
+                                    }
+                                }
+                                //End Capturar idParticipante
+
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
+                                        [
+                                            idDetalleOrdenProduccion,
+                                            data[part][index]
+                                        ],
+                                        (err) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                //console.log("Participante Registrado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+                            }
+
+                        } else {
+                            // Un Partícipe
+
+                            //Capturar idParticipante
+                            for (let index in usersA) {
+                                for (let i in usersI) {
+                                    if (data[part] == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
+                                        data[part] = usersI[i].idInfo;
+                                        //console.log("Participante encontrado");
+                                    }
+                                }
+                            }
+                            //End Capturar idParticipante
+
+
+                            await new Promise((resolve, reject) => {
+                                conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
+                                    [
+                                        idDetalleOrdenProduccion,
+                                        data[part],
+                                    ],
+                                    (err) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            //console.log("Participante Registrado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+                        }
+                        //End Registrar Participantes
+
+
+
+                    }
+                }
+
+            } else {
+                // Un detalle
+
+                if (!data.titulo_2 && data.estado_1 == "Terminado") {
+
+                    const orden = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_ordenes_produccion WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, orden) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(orden);
+                            }
+                        });
+                    });
+
+                    const d_producto = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_productos_detalles WHERE idProducto = ?", [data.idProducto], (err, d_producto) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(d_producto);
+                            }
+                        });
+                    });
+
+                    const insumos = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(insumos);
+                            }
+                        });
+                    });
+
+                    let editar = true;
+
+                    for (let o in orden) {
+                        for (let p in d_producto) {
+                            for (ins in insumos) {
+                                if (d_producto[p].idInsumo == insumos[ins].idInsumo) {
+
+                                    if ((parseInt(orden[o].cantidad) * parseInt(d_producto[p].cantidad_n)) > parseInt(insumos[ins].stock)) {
+                                        editar = false;
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    if (editar == true) {
+
+                        const RegistroDetalleOrden = {
+                            titulo: data.titulo_1_a,
+                            descripcion: data.descripcion_1,
+                            observacion: data.observacion_1,
+                            fechaInicio: data.fechaInicio_detalle_1,
+                            fechaFin: data.fechaFin_detalle_1,
+                            estado: data.estado_1
+                        }
+    
+                        await new Promise((resolve, reject) => {
+                            conn.query(`UPDATE tbl_ordenes_produccion_detalles SET ? WHERE idOrdenProduccion = ? AND idDetalleOrdenProduccion = ?`,
+                                [
+                                    RegistroDetalleOrden,
+                                    idOrdenProduccion,
+                                    data.idDetalleOrdenProduccion_1,
+                                ],
+                                (err, detalle) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        console.log("Detalle Actualizado");
+                                        resolve();
+                                    }
+                                }
+                            );
+                        });
+    
+                        // Capturar idDetalleReparación
+                        const idDetalleOrdenProduccion = data.idDetalleOrdenProduccion_1;
+                        const part = data.titulo_1 + '_idParticipante';
+    
+                        // Eliminar detalles de los detalle
+                        await new Promise((resolve, reject) => {
+                            conn.query("DELETE FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [idDetalleOrdenProduccion], (err, result) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    //console.log("Insumos Eliminados");
+                                    resolve();
+                                }
+                            });
+                        });
+                        // End Eliminar detalles de los detalle
+    
+                        //Registrar Participantes
+                        if (data[part][0].length > 1) {
+                            // Más de un participante
+    
+                            for (let index in data[part]) {
+    
+                                //Capturar idParticipante
+                                for (let ix in usersA) {
+                                    for (let i in usersI) {
+                                        if (data[part][index] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
+                                            data[part][index] = usersI[i].idInfo;
+                                            //console.log("Participante encontrado");
+                                        }
+                                    }
+                                }
+                                //End Capturar idParticipante
+    
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
+                                        [
+                                            idDetalleOrdenProduccion,
+                                            data[part][index]
+                                        ],
+                                        (err) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                //console.log("Participante Registrado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+                            }
+    
+                        } else {
+                            // Un Partícipe
+    
+                            //Capturar idParticipante
+                            for (let index in usersA) {
+                                for (let i in usersI) {
+                                    if (data[part] == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
+                                        data[part] = usersI[i].idInfo;
+                                        //console.log("Participante encontrado");
+                                    }
+                                }
+                            }
+                            //End Capturar idParticipante
+    
+    
+                            await new Promise((resolve, reject) => {
+                                conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
+                                    [
+                                        idDetalleOrdenProduccion,
+                                        data[part],
+                                    ],
+                                    (err) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            //console.log("Participante Registrado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+                        }
+                        //End Registrar Participantes
+
+
+                        ////RESTAR INSUMOS Y SUMAR PRODUCTOS 
+                        for (let o in orden) {
+                            for (let p in d_producto) {
+                                for (let ins in insumos) {
+                                    if (d_producto[p].idInsumo == insumos[ins].idInsumo) {
+                                        let cantidadRestar = parseInt(orden[o].cantidad) * parseInt(d_producto[p].cantidad_n);
+
+                                        await new Promise((resolve, reject) => {
+                                            conn.query(`UPDATE tbl_insumos SET stock = stock - ? WHERE idInsumo = ?`,
+                                                [
+                                                    cantidadRestar,
+                                                    insumos[ins].idInsumo
+                                                ],
+                                                (err, insumo) => {
+                                                    if (err) {
+                                                        reject(err);
+                                                    } else {
+                                                        console.log("Insumo Actualizado");
+                                                        resolve();
+                                                    }
+                                                }
+                                            );
+                                        });
+                                    }
+                                }
+                            }
+
+                            await new Promise((resolve, reject) => {
+                                conn.query(`UPDATE tbl_productos SET stock = stock + ? WHERE idProducto = ?`,
+                                    [
+                                        orden[o].cantidad,
+                                        orden[o].idProducto
+                                    ],
+                                    (err, producto) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            console.log("Producto Actualizado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+                        }
+                        ////END RESTAR INSUMOS Y SUMAR PRODUCTOS  
+
+                    } else {
+
+                        const RegistroDetalleOrden = {
+                            titulo: data.titulo_1_a,
+                            descripcion: data.descripcion_1,
+                            observacion: data.observacion_1,
+                            fechaInicio: data.fechaInicio_detalle_1,
+                            fechaFin: data.fechaFin_detalle_1
+                        }
+
+                        await new Promise((resolve, reject) => {
+                            conn.query(`UPDATE tbl_ordenes_produccion_detalles SET ? WHERE idOrdenProduccion = ? AND idDetalleOrdenProduccion = ?`,
+                                [
+                                    RegistroDetalleOrden,
+                                    idOrdenProduccion,
+                                    data.idDetalleOrdenProduccion_1,
+                                ],
+                                (err, detalle) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        console.log("Detalle Actualizado");
+                                        resolve();
+                                    }
+                                }
+                            );
+                        });
+
+                        // Capturar idDetalleReparación
+                        const idDetalleOrdenProduccion = data.idDetalleOrdenProduccion_1;
+                        const part = data.titulo_1 + '_idParticipante';
+
+                        // Eliminar detalles de los detalle
+                        await new Promise((resolve, reject) => {
+                            conn.query("DELETE FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [idDetalleOrdenProduccion], (err, result) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    //console.log("Insumos Eliminados");
+                                    resolve();
+                                }
+                            });
+                        });
+                        // End Eliminar detalles de los detalle
+
+                        //Registrar Participantes
+                        if (data[part][0].length > 1) {
+                            // Más de un participante
+
+                            for (let index in data[part]) {
+
+                                //Capturar idParticipante
+                                for (let ix in usersA) {
+                                    for (let i in usersI) {
+                                        if (data[part][index] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
+                                            data[part][index] = usersI[i].idInfo;
+                                            //console.log("Participante encontrado");
+                                        }
+                                    }
+                                }
+                                //End Capturar idParticipante
+
+                                await new Promise((resolve, reject) => {
+                                    conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
+                                        [
+                                            idDetalleOrdenProduccion,
+                                            data[part][index]
+                                        ],
+                                        (err) => {
+                                            if (err) {
+                                                reject(err);
+                                            } else {
+                                                //console.log("Participante Registrado");
+                                                resolve();
+                                            }
+                                        }
+                                    );
+                                });
+                            }
+
+                        } else {
+                            // Un Partícipe
+
+                            //Capturar idParticipante
+                            for (let index in usersA) {
+                                for (let i in usersI) {
+                                    if (data[part] == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
+                                        data[part] = usersI[i].idInfo;
+                                        //console.log("Participante encontrado");
+                                    }
+                                }
+                            }
+                            //End Capturar idParticipante
+
+
+                            await new Promise((resolve, reject) => {
+                                conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
+                                    [
+                                        idDetalleOrdenProduccion,
+                                        data[part],
+                                    ],
+                                    (err) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            //console.log("Participante Registrado");
+                                            resolve();
+                                        }
+                                    }
+                                );
+                            });
+                        }
+                        //End Registrar Participantes
+
+                        console.log("No se pudo actualizar el estado ya que no hay insumos suficientes")
+
+                    }
+                } else {
+
                     const RegistroDetalleOrden = {
-                        titulo: data.titulo_1_a[index_d],
-                        descripcion: data.descripcion_1[index_d],
-                        observacion: data.observacion_1[index_d],
-                        fechaInicio: data.fechaInicio_detalle_1[index_d],
-                        fechaFin: data.fechaFin_detalle_1[index_d],
-                        estado: data.estado_1[index_d]
+                        titulo: data.titulo_1_a,
+                        descripcion: data.descripcion_1,
+                        observacion: data.observacion_1,
+                        fechaInicio: data.fechaInicio_detalle_1,
+                        fechaFin: data.fechaFin_detalle_1,
+                        estado: data.estado_1
                     }
 
                     await new Promise((resolve, reject) => {
@@ -1084,7 +1887,7 @@ async function producciones_modificar(req, res) {
                             [
                                 RegistroDetalleOrden,
                                 idOrdenProduccion,
-                                data.idDetalleOrdenProduccion_1[index_d],
+                                data.idDetalleOrdenProduccion_1,
                             ],
                             (err, detalle) => {
                                 if (err) {
@@ -1098,8 +1901,8 @@ async function producciones_modificar(req, res) {
                     });
 
                     // Capturar idDetalleReparación
-                    const idDetalleOrdenProduccion = data.idDetalleOrdenProduccion_1[index_d];
-                    const part = data.titulo_1[index_d] + '_idParticipante';
+                    const idDetalleOrdenProduccion = data.idDetalleOrdenProduccion_1;
+                    const part = data.titulo_1 + '_idParticipante';
 
                     // Eliminar detalles de los detalle
                     await new Promise((resolve, reject) => {
@@ -1107,7 +1910,7 @@ async function producciones_modificar(req, res) {
                             if (err) {
                                 reject(err);
                             } else {
-                                //console.log("Parts Eliminados");
+                                //console.log("Insumos Eliminados");
                                 resolve();
                             }
                         });
@@ -1184,122 +1987,6 @@ async function producciones_modificar(req, res) {
                     //End Registrar Participantes
 
                 }
-
-            } else {
-                // Un detalle
-                const RegistroDetalleOrden = {
-                    titulo: data.titulo_1_a,
-                    descripcion: data.descripcion_1,
-                    observacion: data.observacion_1,
-                    fechaInicio: data.fechaInicio_detalle_1,
-                    fechaFin: data.fechaFin_detalle_1,
-                    estado: data.estado_1
-                }
-
-                await new Promise((resolve, reject) => {
-                    conn.query(`UPDATE tbl_ordenes_produccion_detalles SET ? WHERE idOrdenProduccion = ? AND idDetalleOrdenProduccion = ?`,
-                        [
-                            RegistroDetalleOrden,
-                            idOrdenProduccion,
-                            data.idDetalleOrdenProduccion_1,
-                        ],
-                        (err, detalle) => {
-                            if (err) {
-                                reject(err);
-                            } else {
-                                console.log("Detalle Actualizado");
-                                resolve();
-                            }
-                        }
-                    );
-                });
-
-                // Capturar idDetalleReparación
-                const idDetalleOrdenProduccion = data.idDetalleOrdenProduccion_1;
-                const part = data.titulo_1 + '_idParticipante';
-
-                // Eliminar detalles de los detalle
-                await new Promise((resolve, reject) => {
-                    conn.query("DELETE FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [idDetalleOrdenProduccion], (err, result) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            //console.log("Insumos Eliminados");
-                            resolve();
-                        }
-                    });
-                });
-                // End Eliminar detalles de los detalle
-
-                //Registrar Participantes
-                if (data[part][0].length > 1) {
-                    // Más de un participante
-
-                    for (let index in data[part]) {
-
-                        //Capturar idParticipante
-                        for (let ix in usersA) {
-                            for (let i in usersI) {
-                                if (data[part][index] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
-                                    data[part][index] = usersI[i].idInfo;
-                                    //console.log("Participante encontrado");
-                                }
-                            }
-                        }
-                        //End Capturar idParticipante
-
-                        await new Promise((resolve, reject) => {
-                            conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
-                                [
-                                    idDetalleOrdenProduccion,
-                                    data[part][index]
-                                ],
-                                (err) => {
-                                    if (err) {
-                                        reject(err);
-                                    } else {
-                                        //console.log("Participante Registrado");
-                                        resolve();
-                                    }
-                                }
-                            );
-                        });
-                    }
-
-                } else {
-                    // Un Partícipe
-
-                    //Capturar idParticipante
-                    for (let index in usersA) {
-                        for (let i in usersI) {
-                            if (data[part] == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
-                                data[part] = usersI[i].idInfo;
-                                //console.log("Participante encontrado");
-                            }
-                        }
-                    }
-                    //End Capturar idParticipante
-
-
-                    await new Promise((resolve, reject) => {
-                        conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
-                            [
-                                idDetalleOrdenProduccion,
-                                data[part],
-                            ],
-                            (err) => {
-                                if (err) {
-                                    reject(err);
-                                } else {
-                                    //console.log("Participante Registrado");
-                                    resolve();
-                                }
-                            }
-                        );
-                    });
-                }
-                //End Registrar Participantes
-
             }
             // End Editar Detalles
 
@@ -1348,7 +2035,7 @@ async function producciones_modificar(req, res) {
                 // End Eliminar Detalles
             }
         }
-        console.log('termina la edicion de los ya existentes')
+        //console.log('termina la edicion de los ya existentes')
 
 
         //Registrar Detalles
@@ -1554,8 +2241,6 @@ async function producciones_modificar(req, res) {
             }
             //End Registrar Detalles
         }
-        console.log("Pasa de largo");
-
 
         // Redireccionar
         console.log("Orden de producción modificada correctamente");
@@ -1567,11 +2252,82 @@ async function producciones_modificar(req, res) {
 //End Modificar
 
 
+//Eliminar Reparacion
+async function producciones_eliminar(req, res) {
+    try {
+        const idOrdenProduccion = req.body.idOrdenProduccion;
+
+        const conn = await new Promise((resolve, reject) => {
+            req.getConnection((err, conn) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(conn);
+                }
+            });
+        });
+
+        const d_orden = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_ordenes_produccion_detalles WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, d_orden) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(d_orden);
+                }
+            });
+        });
+
+        for (i in d_orden) {
+            await new Promise((resolve, reject) => {
+                conn.query("DELETE FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [d_orden[i].idDetalleOrdenProduccion], (err, d_d_orden) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            });
+        }
+        console.log("Participaciones Eliminadas");
+
+        await new Promise((resolve, reject) => {
+            conn.query("DELETE FROM tbl_ordenes_produccion_detalles WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, e_orden) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+        console.log("Tareas Eliminadas");
+
+
+        await new Promise((resolve, reject) => {
+            conn.query("DELETE FROM tbl_ordenes_produccion WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, orden_e) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
+        });
+        console.log("Orden de produccion eliminada exitosamente");
+
+        res.redirect("/produccion");
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+//End Eliminar Reparacion
+
+
+
 module.exports = {
     producciones_listar: producciones_listar,
     producciones_detallar: producciones_detallar,
     producciones_crear: producciones_crear,
     producciones_registrar: producciones_registrar,
     producciones_editar: producciones_editar,
-    producciones_modificar: producciones_modificar
+    producciones_modificar: producciones_modificar,
+    producciones_eliminar: producciones_eliminar
 }
