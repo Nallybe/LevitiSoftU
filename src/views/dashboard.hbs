@@ -36,37 +36,74 @@
           </div>
         </div>
       </div>
-        
-      
-        <div class="col-6">
-          <div class="row container-fluid col-md-12">
-            <div class="card card-success">
-              <div class="card-header">
-                <h5 class="card-title">Informe Productos</h5>
+
+
+      <div class="col-6">
+        <div class="row container-fluid col-md-12">
+          <div class="card card-success">
+            <div class="card-header">
+              <h5 class="card-title">Informe Productos</h5>
+            </div>
+            <div class="card-body">
+              <div class="chart">
+                <canvas id="pieChart"
+                  style="min-height: 330px; height: 330px; max-height: 550px; max-width: 100%;"></canvas>
               </div>
-              <div class="card-body">
-                <div class="chart">
-                  <canvas id="pieChart"
-                    style="min-height: 330px; height: 330px; max-height: 550px; max-width: 100%;"></canvas>
+            </div>
+            <div class="row mb-2">
+              <div class="col-sm-12">
+                <div class="d-grid gap-2 d-md-block" style="margin-left: 10px;">
+
+                  <!--<input type="month" name="fecha" id="fecha">-->
+                  <form id="formAP" action="/actualizar_grafico_producto" method="post">
+                    <input type="hidden" value="{{labels}}" name="label_p">
+                    <input type="hidden" value="{{ventasData}}" name="ventas_p">
+                    <input type="hidden" value="{{comprasData}}" name="compras_p">
+                    <input type="month" id="pro_start" name="graf_pro" {{#if valor}} value="{{valor}}" {{else}} {{/if}}>
+                    <button class="btn btn-primary" type="button">Descargar</button>
+                  </form>
+
+
+                  <script>
+                    // Obtén la fecha actual
+
+
+                    const fechaActual = new Date();
+
+                    // Obtén el año y el mes en formato YYYY-MM (para establecer el valor del input)
+                    const year = fechaActual.getFullYear();
+                    const month = String(fechaActual.getMonth() + 1).padStart(2, '0'); // +1 porque los meses comienzan desde 0
+
+                    // Formatea la fecha actual como "YYYY-MM"
+                    const fechaActualFormateada = `${year}-${month}`;
+
+                    // Establece el valor del input
+                    if (document.getElementById('pro_start').value == "" || document.getElementById('pro_start').value == null) {
+                      document.getElementById('pro_start').value = fechaActualFormateada;
+                    }
+
+
+                    // Obtén el input y el formulario
+                    const inputMes = document.getElementById('pro_start');
+                    const formulario = document.getElementById('formAP');
+
+                    // Agrega un evento 'change' al input
+                    inputMes.addEventListener('change', function () {
+                      // Envía el formulario cuando cambia el valor
+                      formulario.submit();
+                    });
+                  </script>
                 </div>
               </div>
-              <div class="row mb-2">
-                <div class="col-sm-12">
-                  <div class="d-grid gap-2 d-md-block" style="margin-left: 10px;">
-                    <input type="month" name="fecha" id="fecha" class="form-control">
-                    <input type="date" id="start" name="trip-start">
-                    <button class="btn btn-primary" type="button">Descargar</button>
-                  </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
 
-  <!--Fin cuerpo-->
-  <input hidden type="text" id="labels" value="{{labels}}">
-  <input hidden type="text" id="ventas" value="{{ventasData}}">
-  <input hidden type="text" id="compras" value="{{comprasData}}">
+      <!--Fin cuerpo-->
+      <input hidden type="text" id="labels" value="{{labels}}">
+      <input hidden type="text" id="ventas" value="{{ventasData}}">
+      <input hidden type="text" id="compras" value="{{comprasData}}">
 </body>
 <!--   Core JS Files   -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -135,11 +172,15 @@
   // Obtén una referencia al elemento canvas
   const pieChart = document.getElementById('pieChart').getContext('2d');
 
+  // Obtener el JSON de eventosList.eventos utilizando toJson helper
+  var nombresJSON = {{{ toJson nombres }}};
+  var datosJSON = {{{ toJson datos }}};
+
   // Datos del gráfico de torta
   const data = {
-    labels: ['Bolsos', 'Zapatos', 'Correas', 'Accesorios', 'Chaquetas'], // Etiquetas de las secciones
+    labels: nombresJSON, // Etiquetas de las secciones
     datasets: [{
-      data: [10, 20, 50, 25, 35], // Valores de las secciones
+      data: datosJSON, // Valores de las secciones
       backgroundColor: ['#ff6384', '#36a2eb', '#F52E2E', '#EEEE2F', '#EE7B01'] // Colores de las secciones
     }]
   };
