@@ -34,9 +34,11 @@ router.post('/registerApi', loginController.registrar);
 
 
 router.post('/login', loginController.auth);
-//router.post('/loginApi', loginController.authAPI);
+router.post('/loginApi', loginController.authAPI);
 
 router.get('/logout', loginController.logout);
+router.get('/logoutApi', loginController.logoutApi);
+
 
 
 router.get('/olvidar_contrase', loginController.olvido);

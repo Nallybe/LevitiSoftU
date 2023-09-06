@@ -854,6 +854,10 @@ button:not(:disabled),
   }
 }
 
+.dataTables_length {
+  display: none; /* Oculta el "Show X entries" */
+}
+
 /* Sobre nosotros */
 /*Mis compras*/
 /*

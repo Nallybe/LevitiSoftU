@@ -135,47 +135,48 @@ function auth(req, res) {
 }
 ////////////////////////////
 
-// function authAPI(req, res) {
-//   const data = req.body;
-//   console.log(data)
-//   req.getConnection((err, conn) => {
-//     if (err) {
-//       console.log(err);
-//       return res.status(500).json({ error: 'Error en la conexión a la base de datos' });
-//     }
+function authAPI(req, res) {
+  const data = req.body;
+  console.log(data)
+  req.getConnection((err, conn) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ error: 'Error en la conexión a la base de datos' });
+    }
 
-//     conn.query(
-//       'SELECT * FROM users_access WHERE correo = ?',
-//       [data.correo],
-//       (error, results) => {
-//         if (error) {
-//           console.log(error);
-//           return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
-//         }
-//         //console.log("resultados: ", results)
-//         if (results.length > 0) {
-//           const user = results[0];
-//           //console.log("User: ", user, " Password: ", user.passsword)
-//           bcrypt.compare(data.passsword.toString(), user.passsword, (err, isMatch) => {
-//             if (err) {
-//               console.log(err);
-//               return res.status(500).json({ error: 'Error al comparar contraseñas' });
-//             }
+    conn.query(
+      'SELECT users_access.*, users_info.nombre AS nombre FROM users_access INNER JOIN users_info ON users_access.idAccess = users_info.idAccess WHERE users_access.correo = ?;',
+      [data.correo],
+      (error, results) => {
+        if (error) {
+          console.log(error);
+          return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
+        }
+        console.log("resultados: ", results)
+        if (results.length > 0) {
+          const user = results[0];
+          console.log("User: ", user, " Password: ", user.passsword)
+          bcrypt.compare(data.passsword.toString(), user.passsword, (err, isMatch) => {
+            if (err) {
+              console.log(err);
+              return res.status(500).json({ error: 'Error al comparar contraseñas' });
+            }
 
-//             if (isMatch) {
-//               res.status(200).json({ Exito: 'Éxito' });
-//             } else {
-//               res.status(401).json({ error: 'Error, contraseña incorrecta' });
-//             }
-//           });
+            if (isMatch) {
+              req.session.loggedin = true;
+              res.status(200).json({ Exito: 'Éxito', nombre:user.nombre });
+            } else {
+              res.status(401).json({ error: 'Error, contraseña incorrecta' });
+            }
+          });
 
-//         } else {
-//           res.status(404).json({ error: 'Error, el correo no existe' });
-//         }
-//       }
-//     );
-//   });
-// }
+        } else {
+          res.status(404).json({ error: 'Error, el correo no existe' });
+        }
+      }
+    );
+  });
+}
 
 
 
@@ -330,6 +331,21 @@ function logout(req, res) {
   }
   res.redirect('/home');
 }
+
+function logoutApi(req, res) {
+  if (req.session.loggedin === true) {
+    req.session.destroy(function (err) {
+      if (err) {
+        res.status(500).json({ success: false, message: 'Error al cerrar sesión' });
+      } else {
+        res.status(200).json({ success: true, message: 'Sesión cerrada exitosamente' });
+      }
+    });
+  } else {
+    res.status(401).json({ success: false, message: 'No hay una sesión activa' });
+  }
+}
+
 
 function olvido(req, res) {
   res.render('olvidar_contrase')
@@ -695,11 +711,12 @@ module.exports = {
   registrar,
   auth,
   logout,
+  logoutApi,
   olvido,
   recuperar,
   restablecer,
   restablecerContraseña,
   dashboard,
  // dashboard_pro
-  //authAPI
+  authAPI
 };

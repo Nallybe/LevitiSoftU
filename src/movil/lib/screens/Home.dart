@@ -23,15 +23,15 @@ class HomeScreen extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding:
-                      const EdgeInsets.only(right: 15.0, left: 15, bottom: 10),
+                      const EdgeInsets.only(right: 15.0, left: 15, bottom: 1),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    
                     children: [
                       const ScreenTitle(title: 'Bienvenido!'),
                       
                       const SizedBox(
-                        height: 15,
+                        height: 25,
                       ),
                       Hero(
                         tag: 'login_btn',
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       Hero(
                         tag: 'signup_btn',

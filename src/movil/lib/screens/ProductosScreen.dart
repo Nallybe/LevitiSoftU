@@ -20,9 +20,12 @@ class Producto {
       required this.precio});
 }
 
+
 class ProductosScreen extends StatefulWidget {
-  const ProductosScreen({super.key});
+  const ProductosScreen({super.key, required this.nombreUsuario});
   static String id = 'ProductosScreen';
+  final String nombreUsuario;
+  
   @override
   _ProductosScreenState createState() => _ProductosScreenState();
 }
@@ -30,6 +33,8 @@ class ProductosScreen extends StatefulWidget {
 class _ProductosScreenState extends State<ProductosScreen> {
   List<Producto> productos = [];
   List<Producto> productosFiltrados = [];
+  
+  
 
   TextEditingController _searchController = TextEditingController();
 
@@ -80,11 +85,69 @@ class _ProductosScreenState extends State<ProductosScreen> {
     });
   }
 
+  Future<void> _showExitConfirmationDialog(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('¿Desea salir?'),
+          content: Text('¿Está seguro de que desea salir?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(false); // Cancelar
+              },
+              child: Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true); // Aceptar
+              },
+              child: Text('Aceptar'),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed == true) {
+      Navigator.pop(context); // Cierra la pantalla actual
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Productos'),
+          automaticallyImplyLeading: false,
+          backgroundColor: Color(0xFFDCB14A), // Color de la AppBar
+          title: Text(
+            "Productos",
+            style: TextStyle(
+              color: Colors.white, // Color del texto
+              fontSize: 20, // Tamaño de fuente del texto
+            ),
+          ),
+          actions: [
+            Row(
+              children: [
+                
+                Text(
+                  '${widget.nombreUsuario}', // Reemplaza esto con el nombre real del usuario
+                  style: TextStyle(
+                    color: Colors.white, // Color del texto
+                    fontSize: 16, // Tamaño de fuente del texto
+                  ),
+                ),
+                IconButton(
+                  icon: Icon(Icons.exit_to_app),
+                  onPressed: () {
+                    _showExitConfirmationDialog(context);
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
         backgroundColor: Color.fromARGB(255, 236, 236, 236),
         body: Column(
