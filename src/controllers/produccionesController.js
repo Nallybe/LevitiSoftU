@@ -331,6 +331,7 @@ async function producciones_detallar(req, res) {
         eventosList = {
             eventos
         }
+
         //console.log(eventosList)
 
         res.render("produccion/detallar", { producciones, d_produccion, d_producto, eventosList });
@@ -960,7 +961,9 @@ function producciones_editar(req, res) {
 
                         }
 
-                        res.render('produccion/editar', { produccion, d_produccion, productos, usersA });
+                        var contDetalle = d_produccion.length;
+
+                        res.render('produccion/editar', { produccion, d_produccion, productos, usersA, contDetalle });
                     }
                 });
             }

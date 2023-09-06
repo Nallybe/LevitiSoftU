@@ -830,20 +830,15 @@ function reparaciones_editar(req, res) {
 
                         }
 
-
-
-
-
-
-
                         //console.log(reparacion);
                         //console.log(detallesreparacion);
+                        var cont = detallesreparacion.length;
 
                         conn.query("SELECT * FROM tbl_insumos WHERE estado ='A'", (err, insumos) => {
                             if (err) {
                                 return res.status(500).json(err);
                             } else {
-                                res.render('reparaciones/editar', { reparacion, detallesreparacion, insumos });
+                                res.render('reparaciones/editar', { reparacion, detallesreparacion, insumos, cont });
                             }
                         });
 
