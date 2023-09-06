@@ -271,7 +271,7 @@
                       {{#each detallesreparacion}}
 
                       <tr class="clickable-row" id="{{cont}}">
-                        <td class="text-center">{{cont}}</td>
+                        <td class="text-center">{{contMas}}</td>
                         <td class="text-center">
                           <input type="hidden" name="idDetalleReparacion_1" value="{{idDetalleReparacion}}">
                           <input type="hidden" name="articulo_1" id="articulo_1_{{cont}}" value="{{articulo}}">
@@ -504,7 +504,7 @@
                     <th>Funciones</th>
                   </tr>
                 </thead>
-                <tbody class="TablaInsumos" id="listaInsumos_{{cont}}" style="text-align: center;">
+                <tbody class="TablaInsumos" contador="{{contMas}}" id="listaInsumos_{{cont}}" style="text-align: center;">
                   {{#each this.insumos_r}}
                   <tr id="insumo_{{../cont}}_{{cont_i}}">
                     <td class="p-3 text-center">{{cont_c}}</td>
@@ -573,7 +573,7 @@
 
 
   <script>
-    function tablaIndice() {
+   /* function tablaIndice() {
       // Obtener la referencia de la tabla
       const tabla = document.getElementById("ListaArticulos");
 
@@ -583,8 +583,8 @@
         let celdaNumero = filas[i].getElementsByTagName("td")[0];
         celdaNumero.textContent = i + 1;
       }
-    }
-    tablaIndice()
+    }*/
+    //tablaIndice()
   </script>
 
 
@@ -673,7 +673,7 @@
 
   <!--Agregar y eliminar insumo-->
   <script>
-    var cont = 0;
+    var cont = {{{ toJson cont }}};
     var contGeneral = 0;
     function agregarArticulo() {
       const articulo = {
@@ -688,7 +688,7 @@
         document.getElementById('ListaArticulos').innerHTML += `
 
         <tr class="clickable-row" id="${cont}" style="text-align: center; background-color: whitesmoke;">
-          <td class="text-center"></td>
+          <td class="text-center">${cont}</td>
           <td class="text-center">
             <input type="hidden" name="articulo_2" id="articulo_2_${cont}" value="${articulo.articulo}">
 
@@ -763,7 +763,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                      <h4 class="modal-title" id="exampleModalLabel">Insumos requeridos artículo #...</h4>
+                      <h4 class="modal-title" id="exampleModalLabel">Insumos requeridos artículo # ${cont}</h4>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
@@ -826,7 +826,7 @@
                             <th>Funciones</th>
                           </tr>
                         </thead>
-                        <tbody class="TablaInsumos" id="listaInsumos_${cont}" style="text-align: center;">
+                        <tbody class="TablaInsumos" contador="${cont}" id="listaInsumos_${cont}" style="text-align: center;">
                         </tbody>
                       </table>
 
@@ -845,7 +845,7 @@
           timer: 1000
         });
 
-        tablaIndice();
+        //tablaIndice();
 
 
         // Ajustar la página actual si es necesario
@@ -1230,9 +1230,12 @@
       for (var i = 0; i < insumos.length; i++) {
         var art = insumos[i];
         if (art.childElementCount === 0) {
-          var id = art.id;
-          var match = id.match(/listaInsumos_(\d+)/);
-          var mensaje = match ? "No hay insumos requeridos en el artículo #..." /*+ match[1] */ : "No hay insumos requeridos en el artículo #...";
+          //var id = art.contador; //art.id;
+           var contador = art.getAttribute("contador"); // Obtener el valor del atributo "contador"
+          //alert(contador)
+          var match = contador;//id.match(/listaInsumos_(\d+)/);
+          //alert(match)
+          var mensaje = match ? "No hay insumos requeridos en el artículo # " + match  : "No hay insumos requeridos en el artículo #...";
 
           Swal.fire({
             position: 'top-end',

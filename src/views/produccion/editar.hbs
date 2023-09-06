@@ -546,7 +546,7 @@
                     <th>Funciones</th>
                   </tr>
                 </thead>
-                <tbody class="TablaParticipantes" id="listaParticipantes_{{cont}}" style="text-align: center;">
+                <tbody class="TablaParticipantes" contador="{{contMas}}" id="listaParticipantes_{{cont}}" style="text-align: center;">
                   {{#each this.participes}}
                   <tr id="participante_{{../cont}}_{{cont_i}}">
                     <td class="p-3 text-center">{{cont_c}}</td>
@@ -778,7 +778,7 @@
   <!--Agregar, Eliminar Tareas y Partícipes-->
   <script>
     //Contadores
-    var cont = 0;
+    var cont = {{{ toJson contDetalle }}};
     var contGeneral = 0;
     var contPar = 0;
 
@@ -920,7 +920,7 @@
                             <th>Funciones</th>
                           </tr>
                         </thead>
-                        <tbody class="TablaParticipantes" id="listaParticipantes_${cont}" style="text-align: center;">
+                        <tbody class="TablaParticipantes" contador="${cont}" id="listaParticipantes_${cont}" style="text-align: center;">
                         </tbody>
                       </table>
 
@@ -941,7 +941,7 @@
           timer: 1000
         });
 
-        tablaIndice();
+        //tablaIndice();
 
         const totalVisibleRows = document.querySelectorAll('.clickable-row[data-visible="true"]').length;
         const totalPages = Math.ceil(totalVisibleRows / itemsPerPage);
@@ -1205,7 +1205,7 @@
       }
     }
 
-    function tablaIndice() {
+   /* function tablaIndice() {
       // Obtener la referencia de la tabla
       const tabla = document.getElementById("ListaTareas");
 
@@ -1216,7 +1216,7 @@
         celdaNumero.textContent = i + 1;
       }
     }
-    tablaIndice()
+    tablaIndice()*/
   </script>
   <!--End ContTr & ExpandButtons-->
 
@@ -1298,9 +1298,9 @@
       for (var i = 0; i < participantes.length; i++) {
         var tarea = participantes[i];
         if (tarea.childElementCount === 0) {
-          var id = tarea.id;
-          var match = id.match(/listaParticipantes_(\d+)/);
-          var mensaje = match ? "No hay participantes en la tarea #..." /*+ match[1]*/: "No hay participantes en la tarea #...";
+          //var id = tarea.id;
+          var match = tarea.getAttribute("contador"); //id.match(/listaParticipantes_(\d+)/);
+          var mensaje = match ? "No hay participantes en la tarea #" + match: "No hay participantes en la tarea #...";
 
           Swal.fire({
             position: 'top-end',
