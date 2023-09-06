@@ -854,18 +854,81 @@ button:not(:disabled),
   }
 }
 
+.dataTables_length {
+  display: none; /* Oculta el "Show X entries" */
+}
+
 /* Sobre nosotros */
 /*Mis compras*/
-.producCliente {
-  width: 28%;
-  height: 10rem;
+/*
+#tabla-ventas{
+  text-align: center;
+  border-collapse: collapse;
+  width: 100%;
+  margin-top: 20px;
+}
+@media (max-width: 991px) {
+  /* #tabla-ventas {
+    font-size: 12px; 
+    overflow-x: auto; 
+    display: block; 
+  }
 
+  #tabla-ventas thead {
+    display: none;
+  }
+
+  #tabla-ventas tbody tr {
+    display: block;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+  }
+
+  #tabla-ventas tbody td {
+    display: flex;
+    justify-content: space-between;
+  } 
+}*/
+/*Mis Compras Productos*/
+.producCliente {
+  width: 20rem;
+  height: 11rem;
 }
 
 .producCliente p {
-  /*border: 2px solid blue;*/
-  padding: 0;
+  text-align: center;
+
 }
+.producCliente img {
+  width: 10rem;
+  height: 8rem;
+}
+.TextProd{
+  display: flex; /* Utiliza flexbox */
+  justify-content: center; /* Centra horizontalmente el contenido */
+  align-items: center;
+}
+
+@media screen and (max-width: 767px) {
+  .producCliente {
+    width: 15rem; /* Hacer que los elementos ocupen el ancho completo */
+    height: auto; /* Permitir que la altura se ajuste automáticamente */
+    margin-bottom: 20px; /* Agregar un espacio entre las tarjetas */
+  }
+  .producCliente img {
+    width: 10rem;
+    height: auto;
+    margin-bottom: 2px;
+  }
+  
+  .ContenerProdu{
+    border: 2px solid blue;
+    text-align: center;
+    align-items: center;
+  }
+
+}
+/*Mis Compras Productos*/
 
 /*Mis compras*/
 
@@ -1936,7 +1999,7 @@ button:active {
 /* Estilos para las imágenes de productos */
 .productosI img {
   width: 150px;
-  /* Cambia este valor al tamaño deseado */
+  /* Cambia este valor al tamaño deseadoc */
   height: 150px;
   /* Cambia este valor al tamaño deseado */
   object-fit: cover;
@@ -2039,7 +2102,7 @@ button:active {
 }
 
 .redes .btn-color {
-  border: 2px solid #000000;
+  border: 1px solid #000000;
 }
 
 .redes #btn-facebook:hover {
@@ -2065,10 +2128,11 @@ button:active {
 
 @media (max-width: 991px) {
   .redes iframe {
-    width: 24rem;
+    width: 22rem;
     height: 20rem;
     padding-bottom: 1rem;
   }
+  
 }
 
 /*

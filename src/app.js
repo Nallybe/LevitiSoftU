@@ -175,7 +175,7 @@ app.get('/dashboard', checkSession, (req, res) => {
 
 
 
-app.post('/actualizar_grafico_producto', sesion, async (req, res) => {
+app.post('/actualizar_grafico_producto', checkSession, async (req, res) => {
     try {
         const data = req.body;
         // console.log(data);

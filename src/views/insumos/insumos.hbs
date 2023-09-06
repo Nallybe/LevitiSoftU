@@ -69,6 +69,8 @@
     .hidden-form {
         display: none;
     }
+
+    
 </style>
 
 <!--Barra de navegación-->
@@ -132,7 +134,8 @@
                                                 <label for="floatingInput"
                                                     style="float: left; padding-right: 10px;">Stock</label>
                                                 <input type="number" class="form-control" id="stockInsumo"
-                                                    style="border-radius: 0;" name="stockInsumo" placeholder="Stock" onkeypress="return solonumeros(event)">
+                                                    style="border-radius: 0;" name="stockInsumo" placeholder="Stock"
+                                                    onkeypress="return solonumeros(event)">
                                                 <div id="mensajeErrorStock"></div>
                                             </div>
                                         </div>
@@ -165,8 +168,9 @@
                 {{!-- Modal --}}
             </div>
         </div>
-        <table class="table" style="text-align:center;" id="tabla-insumos">
-            <thead style="background-color: #282d32; color:white;">
+        
+        <table class="table table-hover table-bordered nowrap" style="text-align:center;" id="tabla-insumos">
+            <thead style="background-color: #495159; color:white;">
                 <tr>
                     <th>#</th>
                     <th>Insumo</th>
@@ -307,13 +311,13 @@
         });
     });
 
-   /*Eliminar campos al cancelar la modal*/
-   function limpiarCampos() {
+    /*Eliminar campos al cancelar la modal*/
+    function limpiarCampos() {
         document.getElementById("nombreInsumo").value = ""; // Limpiar el campo "nombreInsumo"
         document.getElementById("stockInsumo").value = "";  // Limpiar el campo "stockInsumo"
         ocultarError(mensajeErrorStock);
         ocultarError(mensajeErrorNombre);
-        
+
         // También puedes agregar código similar para limpiar otros campos si es necesario.
     }
     /*-----------------------*/
@@ -325,7 +329,7 @@
         let nombre = nombreInput.value;
         let stock = stockInput.value;
         let validacionesExitosas = true;
-        
+
         if (nombre.trim() === "") {
             mostrarError(mensajeErrorNombre, 'Campo Obligatorio');
             validacionesExitosas = false;
@@ -336,7 +340,7 @@
         if (stock.trim() === "") {
             mostrarError(mensajeErrorStock, 'Campo Obligatorio');
             validacionesExitosas = false;
-        }else {
+        } else {
             ocultarError(mensajeErrorStock);
         }
 
@@ -372,46 +376,46 @@
 <script src="assets/js/plugins/bootstrap-notify.js"></script>
 <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
 <script src="assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script>
+
 <!--Paginacion-->
-<!-- JQUERY -->
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous">
-    </script>
-<!-- DATATABLES -->
-<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js">
-</script>
-<!-- BOOTSTRAP -->
-<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js">
-</script>
+    crossorigin="anonymous"></script>
+
+<!-- DataTables CSS -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.bootstrap4.min.css">
+
+<!-- DataTables JavaScript -->
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/dataTables.responsive.min.js"></script>
+<script src="https://cdn.datatables.net/responsive/2.5.0/js/responsive.bootstrap4.min.js"></script>
+
+<!-- DataTables Language File (Spanish) -->
+<script src="https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json"></script>
 <script>
     $(document).ready(function () {
         $('#tabla-insumos').DataTable({ //se debe seleccionar el id de la tabla $('#id..
-            language: { //Como el original esta en inglés, aqui se traducen los textos
-                processing: "Tratamiento en curso...",
-                search: "Buscar&nbsp;:",
-                lengthMenu: "Agrupar de _MENU_",
-                info: "_START_ al _END_ de _TOTAL_",
-                infoEmpty: "No existen datos.",
-                infoFiltered: "(filtrado de _MAX_ elementos en total)",
-                infoPostFix: "",
-                loadingRecords: "Cargando...",
-                zeroRecords: "No se encontraron datos con tu busqueda",
-                emptyTable: "No hay datos disponibles en la tabla.",
+            paging: true,
+            ordering: true,
+            searching: true,
+            lengthMenu: [5],
+            responsive: true,
+            language: {
+                url: 'https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json',
+                search: "Buscar:",
+                lengthMenu: "Mostrar _MENU_ registros por página",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
+                infoEmpty: "Mostrando 0 a 0 de 0 entradas",
+                infoFiltered: "(filtrado de _MAX_ entradas totales)",
                 paginate: {
                     first: "Primero",
                     previous: "Anterior",
                     next: "Siguiente",
-                    last: "Ultimo"
-                },
-                aria: {
-                    sortAscending: ": active para ordenar la columna en orden ascendente",
-                    sortDescending: ": active para ordenar la columna en orden descendente"
+                    last: "Último"
                 }
-            },
-            lengthMenu: [[5], [5]], //filas mostradas (se pueden ingresar mas valores para el filtro de cantidad de filas)
-            searching: false, //Ocultar buscador
-            lengthChange: false,//Ocultar filtro de cantidad de filas
-            ordering: false //Ocultar filtro de ordenación por columnas
+            }
+
         });
     });
 </script>

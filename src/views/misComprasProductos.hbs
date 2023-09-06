@@ -7,18 +7,18 @@
     </div>
 
     <body style="font-size: 15px;">
-        <div class="container py-3">
+        <div class="container py-3 ContenerProdu">
             <div class="row align-content-center align-items-center justify-content-betwen">
 
                 {{#each productos}}
-                <div class="card container w-50">
+                <div class="card container producCliente">
                     <h4>{{nombre}}</h4>
                     <div class="row">
                         <div class="col-md-6">
-                            <img src="/assets/img/Productos/{{imagen}}" alt="" class="w-100">
+                            <img src="/assets/img/Productos/{{imagen}}" alt="" >
                         </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-6 TextProd">
                             <p>Precio: {{precio}}
                                 <br>Unidades: {{Unidad}}
                             </p>
@@ -35,6 +35,7 @@
             <br>
         </div>
     </body>
+    <br><br><br><br><br><br>
 </div>
 {{> footerId}}
 
