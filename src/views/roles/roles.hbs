@@ -38,20 +38,8 @@
         <div class="container-fluid">
             <!--Start Botones sobre la tabla-->
             <div class="row">
-                <div class="col-md-3">
-                    <div class="input-group">
-                        <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
-                            placeholder="Buscar rol" aria-label="Search" oninput="filtrarTabla()">
-                        <button type="submit" class="btn"
-                            style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
-                            <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <!--Espacio entre botón buscar y registrar-->
-                </div>
-                <div class="col-md-3">
+                
+                <div class="d-flex justify-content-end botonAgre w-100">
                     <!--Start Botón registrar-->
                     <a href="AgregarRol" class="btn btn-success" style="border-radius: 2;"><i
                             class="fa-solid fa-circle-plus"></i> Registrar rol</a>
@@ -142,12 +130,10 @@
             paging: true,
             ordering: true,
             searching: true,
-            lengthMenu: [5],
             responsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json',
                 search: "Buscar:",
-                lengthMenu: "Mostrar _MENU_ registros por página",
                 info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
                 infoEmpty: "Mostrando 0 a 0 de 0 entradas",
                 infoFiltered: "(filtrado de _MAX_ entradas totales)",
@@ -157,7 +143,8 @@
                     next: "Siguiente",
                     last: "Último"
                 }
-            }
+            },
+            dom: '<"toolbar">frtip',
 
         });
     });
@@ -182,28 +169,6 @@
     });
 </script>
 {{/if}}
-
-<script>
-    function filtrarTabla() {
-        var input = document.getElementById("buscar-input");
-        var filtro = input.value.toUpperCase();
-        var tabla = document.getElementById("tabla-roles");
-        var filas = tabla.getElementsByTagName("tr");
-
-        for (var i = 0; i < filas.length; i++) {
-            var celdaRol = filas[i].getElementsByTagName("td")[1];
-
-            if (celdaRol) {
-                var textoRol = celdaRol.textContent || celdaRol.innerText;
-                if (textoRol.toUpperCase().indexOf(filtro) > -1) {
-                    filas[i].style.display = "";
-                } else {
-                    filas[i].style.display = "none";
-                }
-            }
-        }
-    }
-</script>
 
 <!-- Sweet Alert 2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
