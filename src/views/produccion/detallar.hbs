@@ -371,16 +371,16 @@
                 </div>
                 <!--End Table-->
                 <div class="row">
-                  <div class="col-md-5"></div>
-                  <div class="col-md-2">
-                    <div class="pagination">
-                      <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i
-                          class="fa-solid fa-arrow-left"></i></button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i
-                          class="fa-solid fa-arrow-right"></i></button>
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2">
+                        <div class="pagination">
+                            <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i
+                                    class="fa-solid fa-arrow-left"></i></button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i
+                                    class="fa-solid fa-arrow-right"></i></button>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-md-5"></div>
+                    <div class="col-md-5"></div>
                 </div>
             </div>
         </div>
@@ -443,9 +443,9 @@
 <br>
 
 <center>
-    <div class="card mb-3" style="max-width: 70%; border-radius: 0;">
+    <div class="card mb-3" style="max-width: 80%; border-radius: 0;">
         <div class="card-body">
-            <div id='calendar' style="max-height: 500px;"></div>
+            <div id='calendar' style="max-height: 600px;"></div>
         </div>
     </div>
 </center>
@@ -462,6 +462,30 @@
 </center>
 
 <br>
+
+
+<!-- Modal de Bootstrap -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="eventModalLabel">Detalles de la tarea</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- Aquí puedes mostrar los detalles del evento -->
+                <p id="eventDetails"></p>
+            </div>
+            <!--<div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+            </div>-->
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -538,6 +562,13 @@
 
 
 <script>
+    // Cierra el modal cuando se hace clic en el botón de cierre (x) o el botón "Cerrar"
+$('.modal .close, .modal button[data-dismiss="modal"]').on('click', function () {
+    $('#eventModal').modal('hide');
+});
+
+
+
     const itemsPerPage = 5; // Define el número de registros por página
     let currentPage = 1;
 
@@ -632,7 +663,41 @@
         buttonText: {
             today: 'Hoy' // Cambiamos el texto del botón "Today" a "Hoy"
         },
-        events: eventosJSON // Asignar la cadena JSON al atributo events
+        events: eventosJSON, // Asignar la cadena JSON al atributo events
+        /* eventClick: function (info) {
+             // Cuando se hace clic en un evento, mostrar la modal con los detalles del evento
+             $('#eventModal').modal('show');
+             // Puedes agregar el contenido del evento a la modal aquí
+             // Por ejemplo, si tus eventos tienen un título, puedes hacer algo como:
+             document.getElementById('eventDetails').textContent = info.event.title;
+         }*/
+        eventClick: function (info) {
+            // Obtén el evento actual
+            var evento = info.event;
+
+            // Accede a los datos adicionales desde event.extendedProps
+            var titulo = evento.extendedProps.titulo;
+            var descripcion = evento.extendedProps.descripcion;
+            var observacion = evento.extendedProps.observacion;
+            var fechaInicio = evento.extendedProps.fechaInicio;
+            var fechaFin = evento.extendedProps.fechaFin;
+            var estado = evento.extendedProps.estado;
+
+            // Construye el contenido completo para la modal
+            var modalContent = `
+                <p><b>Título:</b> ${titulo}</p>
+                <p><b>Descripción:</b> ${descripcion}</p>
+                <p><b>Observación:</b> ${observacion}</p>
+                <p><b>Fecha Inicio:</b> ${fechaInicio}</p>
+                <p><b>Fecha Fin:</b> ${fechaFin}</p>
+                <p><b>Estado:</b> ${estado}</p>
+            `;
+
+            // Establece el contenido de la modal y muestra la modal
+            $('#eventModal .modal-body').html(modalContent);
+            $('#eventModal').modal('show');
+        }
+
     });
 
     var calendar2 = new FullCalendar.Calendar(calendarEl2, {
@@ -644,7 +709,33 @@
             today: 'Hoy' // Cambiamos el texto del botón "Today" a "Hoy"
         },
         //initialDate: '2023-09-01',  Establecemos la fecha inicial 
-        events: eventosJSON
+        events: eventosJSON,
+        eventClick: function (info) {
+            // Obtén el evento actual
+            var evento = info.event;
+
+            // Accede a los datos adicionales desde event.extendedProps
+            var titulo = evento.extendedProps.titulo;
+            var descripcion = evento.extendedProps.descripcion;
+            var observacion = evento.extendedProps.observacion;
+            var fechaInicio = evento.extendedProps.fechaInicio;
+            var fechaFin = evento.extendedProps.fechaFin;
+            var estado = evento.extendedProps.estado;
+
+            // Construye el contenido completo para la modal
+            var modalContent = `
+                <p><b>Título:</b> ${titulo}</p>
+                <p><b>Descripción:</b> ${descripcion}</p>
+                <p><b>Observación:</b> ${observacion}</p>
+                <p><b>Fecha Inicio:</b> ${fechaInicio}</p>
+                <p><b>Fecha Fin:</b> ${fechaFin}</p>
+                <p><b>Estado:</b> ${estado}</p>
+            `;
+
+            // Establece el contenido de la modal y muestra la modal
+            $('#eventModal .modal-body').html(modalContent);
+            $('#eventModal').modal('show');
+        }
     });
 
     calendar.render();

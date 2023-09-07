@@ -129,8 +129,8 @@
 
 
                 <!-- Modal -->
-                <div class="modal fade" id="id{{idCompra}}" tabindex="-1"
-                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal fade" id="id{{idCompra}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog">
                         <form id="FormAnularCompra{{idCompra}}" action="/compras_anular" method="POST" class="mx-2">
                             <div class="modal-content">
@@ -145,8 +145,7 @@
 
                                     {{/if}}
 
-                                    <button type="button" class="close" data-dismiss="id{{idCompra}}"
-                                        aria-label="Close">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
@@ -183,7 +182,7 @@
                                 {{#if anulado}}
                                 {{else}}
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="id{{idCompra}}">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">
                                         Cancelar
                                     </button>
                                     <button type="button" class="btn btn-primary" onclick="Anular({{idCompra}})">
@@ -214,6 +213,9 @@
 </body>
 
 <script>
+
+
+
     function Anular(id) {
         Swal.fire({
             title: '¿Estás seguro de esto?',
@@ -271,10 +273,10 @@
         return new bootstrap.Popover(popoverTriggerEl);
     });
 
-  /*  // Mostrar el toast
-    var toastEl = document.getElementById('myToast');
-    var toast = new bootstrap.Toast(toastEl);
-    toast.show();*/
+    /*  // Mostrar el toast
+      var toastEl = document.getElementById('myToast');
+      var toast = new bootstrap.Toast(toastEl);
+      toast.show();*/
 </script>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
