@@ -322,7 +322,13 @@ async function producciones_detallar(req, res) {
                 title: 'Tarea #' + d_produccion[i].cont + ' ' + d_produccion[i].titulo,
                 start: d_produccion[i].fechaInicio,
                 end: d_produccion[i].fechaFin,
-                color: color
+                color: color,
+                titulo: d_produccion[i].titulo,
+                descripcion: d_produccion[i].descripcion,
+                observacion: d_produccion[i].observacion,
+                fechaInicio: d_produccion[i].fechaInicio,
+                fechaFin: d_produccion[i].fechaFin,
+                estado: d_produccion[i].estado
             }
             eventos.push(evento);
         }
@@ -1605,7 +1611,7 @@ async function producciones_modificar(req, res) {
                             fechaFin: data.fechaFin_detalle_1,
                             estado: data.estado_1
                         }
-    
+
                         await new Promise((resolve, reject) => {
                             conn.query(`UPDATE tbl_ordenes_produccion_detalles SET ? WHERE idOrdenProduccion = ? AND idDetalleOrdenProduccion = ?`,
                                 [
@@ -1623,11 +1629,11 @@ async function producciones_modificar(req, res) {
                                 }
                             );
                         });
-    
+
                         // Capturar idDetalleReparación
                         const idDetalleOrdenProduccion = data.idDetalleOrdenProduccion_1;
                         const part = data.titulo_1 + '_idParticipante';
-    
+
                         // Eliminar detalles de los detalle
                         await new Promise((resolve, reject) => {
                             conn.query("DELETE FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [idDetalleOrdenProduccion], (err, result) => {
@@ -1640,13 +1646,13 @@ async function producciones_modificar(req, res) {
                             });
                         });
                         // End Eliminar detalles de los detalle
-    
+
                         //Registrar Participantes
                         if (data[part][0].length > 1) {
                             // Más de un participante
-    
+
                             for (let index in data[part]) {
-    
+
                                 //Capturar idParticipante
                                 for (let ix in usersA) {
                                     for (let i in usersI) {
@@ -1657,7 +1663,7 @@ async function producciones_modificar(req, res) {
                                     }
                                 }
                                 //End Capturar idParticipante
-    
+
                                 await new Promise((resolve, reject) => {
                                     conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
                                         [
@@ -1675,10 +1681,10 @@ async function producciones_modificar(req, res) {
                                     );
                                 });
                             }
-    
+
                         } else {
                             // Un Partícipe
-    
+
                             //Capturar idParticipante
                             for (let index in usersA) {
                                 for (let i in usersI) {
@@ -1689,8 +1695,8 @@ async function producciones_modificar(req, res) {
                                 }
                             }
                             //End Capturar idParticipante
-    
-    
+
+
                             await new Promise((resolve, reject) => {
                                 conn.query(`INSERT INTO tbl_ordenes_produccion_detalles_participes(idDetalleOrdenProduccion, idInfo) VALUES (?, ?)`,
                                     [
