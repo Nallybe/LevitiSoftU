@@ -1870,10 +1870,28 @@ button:active {
 * ==========================================
 *
 */
+div.dataTables_wrapper div.dataTables_filter {
+  margin-left: 0.5em;
+  display: inline-block;
+  display: flex;
+  left: 20px;
+  margin-top: 5PX;
+}
+div.dataTables_wrapper div.dataTables_filter label{
+  margin-left: 0.5em;
+  display: inline-block;
+  display: flex;
+  left: 20px;
+  margin-top: 5PX;
+}
 
+.categoria{
+  margin-bottom: 4px;
+  height: 100vh;
+}
 .categorias {
   margin-left: 80px;
-  ;
+  
 }
 
 .categorias a {

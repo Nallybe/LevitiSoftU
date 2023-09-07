@@ -20,27 +20,12 @@
   <center>
     <div class="container-fluid">
       <div class="row">
-        <div class="col-md-3">
-          <div class="input-group">
-            <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
-              placeholder="Buscar venta" aria-label="Search" oninput="filtrarTabla()">
-            <button type="submit" class="btn"
-              style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
-              <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
-            </button>
-          </div>
-        </div>
-        <div class="col-md-6"></div>
-        <div class="col-md-3">
-          {{#if (equals rol "Cliente")}}
-          <!-- No renderizar el botón si el rol es "cliente" -->
-          {{else}}
+        <div class="d-flex justify-content-end botonAgre w-100">
+          
           <a href="AgregarVenta" class="btn btn-success" style="border-radius: 2;">
             <i class="fa-solid fa-circle-plus"></i>
             Agregar Venta
           </a>
-          {{/if}}
-
         </div>
       </div>
       <table class="table table-hover table-bordered nowrap" style="text-align:center;" id="tabla-ventas">
@@ -119,27 +104,7 @@
 </script>
 {{/if}}
 
-<script>
-  function filtrarTabla() {
-    var input = document.getElementById("buscar-input");
-    var filtro = input.value.toUpperCase();
-    var tabla = document.getElementById("tabla-ventas");
-    var filas = tabla.getElementsByTagName("tr");
 
-    for (var i = 0; i < filas.length; i++) {
-      var celdaNombre = filas[i].getElementsByTagName("td")[1];
-
-      if (celdaNombre) {
-        var textoNombre = celdaNombre.textContent || celdaNombre.innerText;
-        if (textoNombre.toUpperCase().indexOf(filtro) > -1) {
-          filas[i].style.display = "";
-        } else {
-          filas[i].style.display = "none";
-        }
-      }
-    }
-  }
-</script>
 {{!-- Alerta exito de registro de venta --}}
 <script>
   // Verificar si hay un mensaje de éxito en el query parameter
@@ -199,12 +164,10 @@
             paging: true,
             ordering: true,
             searching: true,
-            lengthMenu: [5],
             responsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json',
                 search: "Buscar:",
-                lengthMenu: "Mostrar _MENU_ registros por página",
                 info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
                 infoEmpty: "Mostrando 0 a 0 de 0 entradas",
                 infoFiltered: "(filtrado de _MAX_ entradas totales)",
@@ -214,7 +177,8 @@
                     next: "Siguiente",
                     last: "Último"
                 }
-            }
+            },
+            dom: '<"toolbar">frtip',
 
         });
     });

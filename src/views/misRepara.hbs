@@ -9,19 +9,6 @@
   <body>
     <center>
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-3">
-          <div class="input-group">
-            <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
-              placeholder="Buscar reparación" aria-label="Search" oninput="filtrarTabla()">
-            <button type="submit" class="btn"
-              style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
-              <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
-            </button>
-          </div>
-        </div>
-      </div>
-      <br>
       <table class="table table-hover" style="text-align:center;" id="tabla-reparaciones">
         <thead style="background-color: #282d32; color:white;">
           <tr>
@@ -217,9 +204,12 @@
 
 
 
+<!-- DATATABLES -->
 <!--Paginacion-->
+<!-- jQuery -->
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
     crossorigin="anonymous"></script>
+
 
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
@@ -239,12 +229,10 @@
             paging: true,
             ordering: true,
             searching: true,
-            lengthMenu: [5],
             responsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json',
                 search: "Buscar:",
-                lengthMenu: "Mostrar _MENU_ registros por página",
                 info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
                 infoEmpty: "Mostrando 0 a 0 de 0 entradas",
                 infoFiltered: "(filtrado de _MAX_ entradas totales)",
@@ -254,7 +242,8 @@
                     next: "Siguiente",
                     last: "Último"
                 }
-            }
+            },
+            dom: '<"toolbar">frtip',
 
         });
     });
