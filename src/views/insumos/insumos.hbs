@@ -69,8 +69,6 @@
     .hidden-form {
         display: none;
     }
-
-    
 </style>
 
 <!--Barra de navegación-->
@@ -79,25 +77,8 @@
 <br><br><br>
 <center>
     <div class="container-fluid ">
-
-
         <div class="row">
-            <div class="col-md-3">
-                <div class="input-group">
-                    <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
-                        placeholder="Buscar insumo" aria-label="Search" oninput="filtrarTabla()">
-                    <button type="submit" class="btn"
-                        style="border-radius: 0; position: absolute; right: 0; top: 0; bottom: 0; background-color: transparent; border: none; ">
-                        <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
-                    </button>
-                </div>
-            </div>
-            <div class="col-md-6"></div>
-            <div class="col-md-3">
-                {{!-- <a href="AgregarInsumo" class="btn btn-success" style="border-radius: 2;"><i
-                        class="fa-solid fa-circle-plus"></i>
-                    Agregar Insumo</a> --}}
-
+            <div class="botonAgre">
                 {{!-- Modal --}}
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target="#exampleModal"><i
@@ -168,7 +149,6 @@
                 {{!-- Modal --}}
             </div>
         </div>
-        
         <table class="table table-hover table-bordered nowrap" style="text-align:center;" id="tabla-insumos">
             <thead style="background-color: #495159; color:white;">
                 <tr>
@@ -204,7 +184,6 @@
                 <script>
                     // Seleccionamos todos los botones de clase 'estado-boton'
                     var botonesEstado = document.querySelectorAll(".estado-boton");
-                    var FormularioEliminar = document.querySelectorAll(".boton-eliminar");
 
                     // Iteramos a través de cada botón y cambiamos la clase según el valor del atributo de datos 'data-estado'
                     botonesEstado.forEach(function (boton) {
@@ -263,28 +242,6 @@
             }
         });
     });
-</script>
-{{!-- Funcion buscar insumo --}}
-<script>
-    function filtrarTabla() {
-        var input = document.getElementById("buscar-input");
-        var filtro = input.value.toUpperCase();
-        var tabla = document.getElementById("tabla-insumos");
-        var filas = tabla.getElementsByTagName("tr");
-
-        for (var i = 0; i < filas.length; i++) {
-            var celdaInsumo = filas[i].getElementsByTagName("td")[1];
-
-            if (celdaInsumo) {
-                var textoInsumo = celdaInsumo.textContent || celdaInsumo.innerText;
-                if (textoInsumo.toUpperCase().indexOf(filtro) > -1) {
-                    filas[i].style.display = "";
-                } else {
-                    filas[i].style.display = "none";
-                }
-            }
-        }
-    }
 </script>
 
 
@@ -395,16 +352,14 @@
 <script src="https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json"></script>
 <script>
     $(document).ready(function () {
-        $('#tabla-insumos').DataTable({ //se debe seleccionar el id de la tabla $('#id..
+        $('#tabla-insumos').DataTable({
             paging: true,
             ordering: true,
             searching: true,
-            lengthMenu: [5],
             responsive: true,
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json',
                 search: "Buscar:",
-                lengthMenu: "Mostrar _MENU_ registros por página",
                 info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
                 infoEmpty: "Mostrando 0 a 0 de 0 entradas",
                 infoFiltered: "(filtrado de _MAX_ entradas totales)",
@@ -414,8 +369,12 @@
                     next: "Siguiente",
                     last: "Último"
                 }
-            }
+            },
+            dom: '<"toolbar">frtip',
 
         });
+
+
+
     });
 </script>
