@@ -99,6 +99,17 @@
               </div>
               <div class="col-5">
                 <div class="form-group">
+                  <label for="floatingInput" style="float: left; padding-right: 10px;">Apellido</label>
+                  <input onkeypress="return sololetras(event)" type="text" class="form-control" id="apellido" style="border-radius: 0;" value="{{apellido}}"
+                    name="apellido">
+                  <div id="mensajeErrorApellido"></div>
+                </div>
+              </div>
+              
+            </div>
+            <div class="row justify-content-center">
+              <div class="col-5">
+                <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Documento</label>
                   <input onkeypress="return solonumeros(event)" type="number" class="form-control" id="documento" style="border-radius: 0;"
                     value="{{documento}}" name="documento">
@@ -106,8 +117,6 @@
 
                 </div>
               </div>
-            </div>
-            <div class="row justify-content-center">
               <div class="col-5">
                 <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Telefono</label>
@@ -116,7 +125,8 @@
                   <div id="mensajeErrorTelefono"></div>
                 </div>
               </div>
-              <div class="col-5">
+              <div class="row">
+                <div class="col-12">
                 <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Estado</label>
                   <select class="form-control" id="estado" style="border-radius: 0;" name="estado">
@@ -124,6 +134,7 @@
                     <option value="Inactivo">Inactivo</option>
                   </select>
                 </div>
+              </div>
               </div>
 
             </div>

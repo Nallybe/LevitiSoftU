@@ -36,6 +36,7 @@ function usuarios_listar(req, res) {
                 for (index in usuarios) {
                   usuarios[index].documento;
                   usuarios[index].nombre;
+                  usuarios[index].apellido;
                   usuarios[index].telefono;
                   usuarios[index].idInfo;
 
@@ -43,6 +44,7 @@ function usuarios_listar(req, res) {
                     if (usuarios[index].idAccess == info[i].idAccess) {
                       usuarios[index].documento = info[i].documento;
                       usuarios[index].nombre = info[i].nombre;
+                      usuarios[index].apellido = info[i].apellido;
                       usuarios[index].telefono = info[i].telefono;
                       usuarios[index].idInfo = info[i].idInfo;
                     }
