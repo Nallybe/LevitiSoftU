@@ -57,8 +57,14 @@
         </header>
         <div class="container p-0 ">
             <div class="row">
+<<<<<<< HEAD
+
+                <div class="col-md-3">
+                    <!--TEXTO ADICONAL-->
+=======
                 <!-- TEXTO ADICIONAL -->
                 <div class="col-lg-3 col-md-4 col-sm-12 bg-light categoria">
+>>>>>>> dba4ee37cc71d3712205de2b86c39719cb5d3c89
                     <h5 class="text-uppercase mb-4">Categorías</h5>
                     <ul class="list-unstyled small ps-lg-4 font-weight-normal">
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="todos">Todos</a></li>
@@ -69,43 +75,63 @@
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Bolsos">Bolsos</a></li>
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="Morrales">Morrales</a></li>
                     </ul>
-
                 </div>
 
-                <!-- PRODUCTOS -->
-                {{#each productos}}
-                <div class="col-lg-3 col-md-4 col-sm-6">
-                    <div class="product productosI text-center">
-                        <div class="">
-                            <div class="badge text-white"></div>
-                            <a class="d-block" href="#">
-                                <img class="" width="200" height="200" src="assets/img/Productos/{{imagen}}" alt="...">
-                            </a>
+                <div class="col-md-9">
+                    <div class="row">
+                        <!-- PRODUCTOS -->
+                        {{#each productos}}
+                        <div class="col-lg-3 col-md-4 col-sm-6 mb-2">
+                            <div class="product productosI text-center">
+                                <div class="">
+                                    <div class="badge text-white"></div>
+                                    <a class="d-block" href="#">
+                                        <img class="" width="200" height="200" src="assets/img/Productos/{{imagen}}"
+                                            alt="...">
+                                    </a>
+                                </div>
+                                <h6>{{nombre}}</h6>
+                                <p class="small text-muted">
+                                    <strong>Precio:</strong> {{precio}}<br>
+                                    <strong>Disponibilidad:</strong> {{stock}}
+                                    <strong data-nombre_categoria="{{nombre_categoria}}"
+                                        hidden>{{nombre_categoria}}</strong>
+                                </p>
+                            </div>
                         </div>
-                        <h6>{{nombre}}</h6>
-                        <p class="small text-muted">
-                            <strong>Precio:</strong> {{precio}}<br>
-                            <strong>Disponibilidad:</strong> {{stock}}
-                            <strong data-nombre_categoria="{{nombre_categoria}}" hidden>{{nombre_categoria}}</strong>
-                        </p>
+                        {{/each}}
+                        <!--END PRODUCTOS-->
                     </div>
-                </div>
-                {{/each}}
-                <!-- PAGINACIÓN -->
-                <div class="pagination Paginacion-product">
-                    {{#each (range 1 totalPages)}}
-                    {{#if (equals this ../currentPage)}}
-                    <a class="page-link active" href="?page={{this}}">{{this}}</a>
-                    {{else}}
-                    <a class="page-link" href="?page={{this}}">{{this}}</a>
-                    {{/if}}
-                    {{/each}}
+
+                    <!-- PAGINACIÓN -->
+                    <div style="text-align:center;">
+                        <div class="pagination Paginacion-product">
+                            {{#each (range 1 totalPages)}}
+                            {{#if (equals this ../currentPage)}}
+                            <a class="page-link active" href="?page={{this}}">{{this}}</a>
+                            {{else}}
+                            <a class="page-link" href="?page={{this}}">{{this}}</a>
+                            {{/if}}
+                            {{/each}}
+                        </div>
+                    </div>
+
+
                 </div>
 
+
+                <!-- TEXTO ADICIONAL 
+                <div class="col-lg-3 col-md-4 col-sm-12 categoria">
+
+
+
+                </div>-->
 
             </div>
         </div>
     </section>
+
+
 
     <div class="whatsapp-container">
         <a href="https://wa.me/5211234567890?text=Me%20gustaría%20saber%20el%20precio%20del%20coche" class="whatsapp"
