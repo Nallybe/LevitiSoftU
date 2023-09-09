@@ -4,7 +4,6 @@ function listar(req, res) {
       if (err) {
         res.json(err);
       }
-
        // Reemplazar los valores 'A' por 'Activo' y 'I' por 'Inactivo' en los resultados
        insumos.forEach(insumo => {
         insumo.estado = insumo.estado === 'A' ? 'Activo' : 'Inactivo';

@@ -29,7 +29,7 @@ function auth(req, res) {
     }
 
     conn.query(
-      'SELECT * FROM users_access WHERE correo = ?',
+      `SELECT * FROM users_access WHERE correo = ? AND estado = 'A'`,
       [data.correol],
       (error, results) => {
         if (error) {
@@ -51,16 +51,18 @@ function auth(req, res) {
 
               // Obtener el nombre correspondiente al correo electrónico en users_info
               conn.query(
-                'SELECT nombre FROM users_info WHERE idAccess = ?',
+                'SELECT nombre, apellido FROM users_info WHERE idAccess = ?',
                 [user.idAccess],
                 (error, infoResults) => {
                   if (error) {
                     console.log(error);
                     return res.status(500).json({ error: 'Error en la consulta a la base de datos' });
                   }
-
                   if (infoResults.length > 0) {
-                    req.session.name = infoResults[0].nombre;
+                    const nombre = infoResults[0].nombre;
+                    const apellido = infoResults[0].apellido;
+                    req.session.name = `${nombre} ${apellido}`;
+                    
 
                     // Obtener los roles correspondientes al correo electrónico en users_access
                     conn.query(
@@ -127,7 +129,7 @@ function auth(req, res) {
           });
         } else {
           sesion = false
-          res.render('login', { errorl: 'Error, el correo no existe' });
+          res.render('login', { errorl: 'Error, el correo no existe, o el usuario esta deshabilitado' });
         }
       }
     );
@@ -164,7 +166,7 @@ function authAPI(req, res) {
 
             if (isMatch) {
               req.session.loggedin = true;
-              res.status(200).json({ Exito: 'Éxito', nombre:user.nombre });
+              res.status(200).json({ Exito: 'Éxito', nombre: user.nombre });
             } else {
               res.status(401).json({ error: 'Error, contraseña incorrecta' });
             }
@@ -717,6 +719,6 @@ module.exports = {
   restablecer,
   restablecerContraseña,
   dashboard,
- // dashboard_pro
+  // dashboard_pro
   authAPI
 };

@@ -2,7 +2,6 @@
 <html lang="es">
 
 {{>header}}
-<link rel="stylesheet" href="assets/css/login.css">
 
 <!-- navbar-->
 <div class="barranav">
@@ -22,7 +21,7 @@
                     <form action="" method="post">
                         <div class="group">
                             <label for="correo" class="label">Correo</label>
-                            <input id="correo" type="email" class="input" name="correo" required>
+                            <input autocomplete="off" id="correo" type="email" class="input" name="correo" required>
                         </div>
                         {{#if error}}
                         <div class="alert alert-danger" role="alert">
@@ -39,7 +38,7 @@
                             </div>
                             <div class="col-md-6" >
                                 <div class="group">
-                                    <input type="submit" class="button" value="Enviar" >
+                                    <input type="submit" class="button buttonE" value="Enviar" >
                                 </div>
                             </div>
                         </div>

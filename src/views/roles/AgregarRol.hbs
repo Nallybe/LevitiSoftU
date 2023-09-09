@@ -56,7 +56,7 @@
                   <div class="col-8">
                     <div class="form-group">
                       <label for="nombreRol" style="float: left; padding-right: 10px;">Nombre</label>
-                      <input type="text" class="form-control" id="nombreRol" style="border-radius: 0;" name="nombreRol"
+                      <input autocomplete="off" type="text" class="form-control" id="nombreRol" style="border-radius: 0;" name="nombreRol"
                         onclick="validar()" placeholder="Nombre">
                       <div id="mensajeError"></div>
                     </div>
@@ -97,7 +97,7 @@
                 <tr>
                   <td class="p-3 text-center" name="nombrePermisos">{{nombrePermisos}}</td>
                   <td>
-                    <input onchange="obtener(this, {{idPermisos}})" type="checkbox" id="Permiso">
+                    <input autocomplete="off" onchange="obtener(this, {{idPermisos}})" type="checkbox" id="Permiso">
                   </td>
                   {{!-- <button onclick="Datos()">check</button> --}}
                   {{/each}}
@@ -105,7 +105,7 @@
                 </tr>
               </tbody>
             </table>
-            <input type="" name="idSeleccionado" id="idSeleccionado" value="">
+            <input autocomplete="off" type="" name="idSeleccionado" id="idSeleccionado" value="">
 
           </form>
         </div>
