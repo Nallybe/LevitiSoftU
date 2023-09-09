@@ -1039,8 +1039,8 @@ button:not(:disabled),
 
 .list {
   list-style: none;
-  padding-left: 0;
-  padding-right: 0;
+  padding-left: 1px;
+  padding-right: 0.5rem;
 }
 
 .nav-link.active {
@@ -1063,7 +1063,9 @@ button:not(:disabled),
 }
 
 .nav-link:hover,
-.nav-link:focus {
+.nav-link:focus,
+.list:hover,
+.list:focus {
   color: #b68b23;
 }
 
@@ -1106,6 +1108,7 @@ button:not(:disabled),
   list-style: none;
 
 }
+
 
 .navbar-nav .nav-link {
   padding-right: 0;
@@ -1889,23 +1892,25 @@ div.dataTables_wrapper div.dataTables_filter label{
   margin-bottom: 4px;
   height: 100vh;
 }
-.categorias {
-  margin-left: 80px;
-  
+/* Estilo para centrar la sección */
+.center-section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
+
 
 .categorias a {
   color: #dcb14a;
-
+  
 }
 
 .category-item {
-  display: block;
   position: relative;
   color: #343a40;
   transition: all 0.3s;
   width: 68%;
-
 }
 
 .category-item img {
@@ -1925,6 +1930,7 @@ div.dataTables_wrapper div.dataTables_filter label{
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.07);
   font-size: 0.8rem;
   border-radius: 10px;
+  text-align: center;
 }
 
 .category-item:hover img {
@@ -1932,16 +1938,38 @@ div.dataTables_wrapper div.dataTables_filter label{
 }
 
 @media (max-width: 991px) {
-  
-  /*Productos Home*/
   .categorias {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     gap: 20px; /* Ajusta este valor según la separación deseada */
+    flex-direction: column; /* Cambiamos la dirección de la fila a columna */
   }
-  /*Productos Home*/
+  .center-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px; /* Ajusta este valor según la separación deseada */
+  }
+  /* Ajustamos el ancho de los elementos .category-item al 100% para ocupar toda la columna */
+  .categorias .category-item {
+    width: 100%;
+    text-align: center; /* Centramos el contenido dentro de .category-item */
+  }
+  /* Centramos vertical y horizontalmente el contenido dentro de .category-item */
+  .categorias .category-item-title {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    left: 8rem;
+  }
+  
+  
 }
+
+
+
 
 /*
 *
@@ -2002,16 +2030,20 @@ div.dataTables_wrapper div.dataTables_filter label{
   transform: rotateY(180deg);
 }
 @media (max-width: 991px) {
-  
-  /*Productos Home*/
+  /* Centrar los elementos en la clase .card-container */
   .card-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: 20px; /* Ajusta este valor según la separación deseada */
   }
-  /*Productos Home*/
+
+  /* Ajustar el ancho de los elementos internos si es necesario */
+  .flip-card {
+    flex: 0 0 calc(50% - 20px); /* Esto hace que cada tarjeta ocupe el 50% del ancho disponible con un espacio de 20px de separación */
+    max-width: calc(50% - 20px); /* Ajusta el ancho máximo de las tarjetas según sea necesario */
+  }
 }
+
 
 /*Página ProdusctosH*/
 /* Estilos para las imágenes de productos */
@@ -2054,9 +2086,7 @@ div.dataTables_wrapper div.dataTables_filter label{
     padding-right: 4rem;
   }
 
-  .Paginacion-product {
-    padding-left: 12rem;
-  }
+  
 
 
   /* Ajustes para el buscador */
@@ -2112,6 +2142,9 @@ div.dataTables_wrapper div.dataTables_filter label{
   justify-content: flex-end;
   bottom: 0;
   right: 0;
+}
+.pagination{
+  justify-content: end;
 }
 
 .redes iframe {

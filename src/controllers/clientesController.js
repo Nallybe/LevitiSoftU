@@ -7,6 +7,7 @@ function listar(req, res) {
         ua.correo,
         ui.documento,
         ui.nombre,
+        ui.apellido,
         ui.telefono,
         ui.estado,
         COALESCE(ventas.numero_ventas, 0) AS numero_ventas,
@@ -87,6 +88,7 @@ function registrar(req, res) {
     const RegistroUser = {
         documento: data.documento,
         nombre: data.nombre,
+        apellido: data.apellido,
         telefono: data.telefono,
         estado: data.estado,
     };
@@ -117,6 +119,7 @@ function editar(req, res) {
             if (err) {
                 res.json(err);
             }
+            console.log("User: ", info)
             conn.query(`SELECT documento FROM users_info WHERE idInfo = ?`, [idInfo], (err, documentos) => {
                 if (err) {
                     res.json(err);

@@ -57,14 +57,8 @@
         </header>
         <div class="container p-0 ">
             <div class="row">
-<<<<<<< HEAD
-
-                <div class="col-md-3">
-                    <!--TEXTO ADICONAL-->
-=======
                 <!-- TEXTO ADICIONAL -->
                 <div class="col-lg-3 col-md-4 col-sm-12 bg-light categoria">
->>>>>>> dba4ee37cc71d3712205de2b86c39719cb5d3c89
                     <h5 class="text-uppercase mb-4">Categorías</h5>
                     <ul class="list-unstyled small ps-lg-4 font-weight-normal">
                         <li class="mb-2"><a class="reset-anchor" data-nombre_categoria="todos">Todos</a></li>
@@ -104,7 +98,7 @@
                     </div>
 
                     <!-- PAGINACIÓN -->
-                    <div style="text-align:center;">
+                    <div class="pagination">
                         <div class="pagination Paginacion-product">
                             {{#each (range 1 totalPages)}}
                             {{#if (equals this ../currentPage)}}
