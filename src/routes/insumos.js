@@ -28,9 +28,16 @@ const tienePermisos = (session) => {
 };
 
 router.get('/insumos', checkSession, insumosController.listar);
+router.get('/insumosAPI', checkSession, insumosController.listarAPI);
+router.get('/EditarInsumo/:idInsumo', checkSession, insumosController.editar);
+router.get('/EditarInsumoAPI/:idInsumo', checkSession, insumosController.editarAPI);
+
 // router.get('/AgregarInsumo', checkSession, insumosController.crear);
 router.post('/insumos', checkSession, insumosController.registrar);
-router.get('/EditarInsumo/:idInsumo', checkSession, insumosController.editar);
+router.post('/insumosAPI', checkSession, insumosController.registrarAPI);
+
 router.post('/EditarInsumo/:idInsumo', checkSession, insumosController.actualizar);
+router.post('/EditarInsumoAPI/:idInsumo', checkSession, insumosController.actualizarAPI);
+
 
 module.exports = router;

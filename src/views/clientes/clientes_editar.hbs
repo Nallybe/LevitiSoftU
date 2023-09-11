@@ -92,31 +92,41 @@
               <div class="col-5">
                 <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Nombre</label>
-                  <input onkeypress="return sololetras(event)" type="text" class="form-control" id="nombre" style="border-radius: 0;" value="{{nombre}}"
+                  <input autocomplete="off" onkeypress="return sololetras(event)" type="text" class="form-control" id="nombre" style="border-radius: 0;" value="{{nombre}}"
                     name="nombre">
                   <div id="mensajeErrorNombre"></div>
                 </div>
               </div>
               <div class="col-5">
                 <div class="form-group">
+                  <label for="floatingInput" style="float: left; padding-right: 10px;">Apellido</label>
+                  <input autocomplete="off" onkeypress="return sololetras(event)" type="text" class="form-control" id="apellido" style="border-radius: 0;" value="{{apellido}}"
+                    name="apellido">
+                  <div id="mensajeErrorApellido"></div>
+                </div>
+              </div>
+              
+            </div>
+            <div class="row justify-content-center">
+              <div class="col-5">
+                <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Documento</label>
-                  <input onkeypress="return solonumeros(event)" type="number" class="form-control" id="documento" style="border-radius: 0;"
+                  <input autocomplete="off" onkeypress="return solonumeros(event)" type="number" class="form-control" id="documento" style="border-radius: 0;"
                     value="{{documento}}" name="documento">
                   <div id="mensajeErrorDocumento"></div>
 
                 </div>
               </div>
-            </div>
-            <div class="row justify-content-center">
               <div class="col-5">
                 <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Telefono</label>
-                  <input type="number" class="form-control" id="telefono" style="border-radius: 0;" value="{{telefono}}"
+                  <input autocomplete="off" type="number" class="form-control" id="telefono" style="border-radius: 0;" value="{{telefono}}"
                     name="telefono" onkeypress="return solonumeros(event)">
                   <div id="mensajeErrorTelefono"></div>
                 </div>
               </div>
-              <div class="col-5">
+              <div class="row">
+                <div class="col-12">
                 <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Estado</label>
                   <select class="form-control" id="estado" style="border-radius: 0;" name="estado">
@@ -124,6 +134,7 @@
                     <option value="Inactivo">Inactivo</option>
                   </select>
                 </div>
+              </div>
               </div>
 
             </div>

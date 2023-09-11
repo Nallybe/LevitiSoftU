@@ -43,7 +43,7 @@ router.get('/logoutApi', loginController.logoutApi);
 
 router.get('/olvidar_contrase', loginController.olvido);
 router.post('/olvidar_contrase', loginController.recuperar);
-router.post('/olvidar_contraseapi', loginController.recuperar);
+router.post('/olvidar_contraseapi', loginController.recuperarAPI);
 
 
 router.get('/restaurar_contrase', loginController.restablecer);
