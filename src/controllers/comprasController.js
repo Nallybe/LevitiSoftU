@@ -357,8 +357,9 @@ function compras_anular(req, res) {
           if (err) {
             return res.status(500).json(err);
           } else {
+            
             if (!insumos) {
-              console.log('Detalles no encontrados');
+              console.log('Insumos no encontrados');
               res.redirect("/compras");
             }
 
