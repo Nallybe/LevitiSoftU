@@ -48,6 +48,102 @@ class CustomButton extends StatelessWidget {
   }
 }
 
+class CustomButtonCancelar extends StatelessWidget {
+  const CustomButtonCancelar(
+      {super.key,
+      required this.buttonText,
+      this.isOutlined = false,
+      required this.onPressed,
+      this.textColor,
+      this.width = 135});
+
+  final String buttonText;
+  final bool isOutlined;
+  final Function onPressed;
+  final double width;
+  final Color? textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        onPressed();
+      },
+      child: Material(
+        borderRadius: BorderRadius.circular(30),
+        elevation: 4,
+        child: Container(
+          width: width,
+          padding: const EdgeInsets.all(13),
+          decoration: BoxDecoration(
+            color: isOutlined ? Colors.red: kTextColor,
+            
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Center(
+            child: Text(
+              buttonText,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: textColor??(isOutlined ? kTextColor : Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomButtonEnviar extends StatelessWidget {
+  const CustomButtonEnviar(
+      {super.key,
+      required this.buttonText,
+      this.isOutlined = false,
+      required this.onPressed,
+      this.textColor,
+      this.width = 135});
+
+  final String buttonText;
+  final bool isOutlined;
+  final Function onPressed;
+  final double width;
+  final Color? textColor;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        onPressed();
+      },
+      child: Material(
+        borderRadius: BorderRadius.circular(30),
+        elevation: 4,
+        child: Container(
+          width: width,
+          padding: const EdgeInsets.all(13),
+          decoration: BoxDecoration(
+            color: isOutlined ? Colors.green: kTextColor,
+            
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Center(
+            child: Text(
+              buttonText,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+                color: textColor??(isOutlined ? kTextColor : Colors.white),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class TopScreenImage extends StatelessWidget {
   const TopScreenImage({super.key, required this.screenImageName});
   final String screenImageName;
@@ -66,6 +162,27 @@ class TopScreenImage extends StatelessWidget {
     );
   }
 }
+class Imager extends StatelessWidget {
+  const Imager({Key? key, required this.screenImageName, this.imagen});
+  final String screenImageName;
+  final Image? imagen;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Container(
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/images/$screenImageName'),
+            
+          ),
+        ),
+        width: 250,
+      ),
+    );
+  }
+}
+
 
 class ScreenTitle extends StatelessWidget {
   const ScreenTitle({super.key, required this.title});
@@ -78,6 +195,23 @@ class ScreenTitle extends StatelessWidget {
       style: const TextStyle(
         fontSize: 40,
         fontWeight: FontWeight.bold,
+      ),
+    );
+  }
+}
+
+class STitle extends StatelessWidget {
+  const STitle({super.key, required this.title});
+  final String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      title,
+      style: const TextStyle(
+        fontSize: 25,
+        fontWeight: FontWeight.bold,
+        
       ),
     );
   }

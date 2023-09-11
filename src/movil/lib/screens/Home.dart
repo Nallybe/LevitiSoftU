@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:movil/components/components.dart';
 import 'package:movil/screens/login_screen.dart';
-import 'package:movil/screens/restablecerContra.dart';
-import 'package:movil/screens/signup_screen.dart';
+
 
 
 class HomeScreen extends StatelessWidget {
@@ -36,7 +35,7 @@ class HomeScreen extends StatelessWidget {
                       Hero(
                         tag: 'login_btn',
                         child: CustomButton(
-                          buttonText: 'Login',
+                          buttonText: 'Iniciar sesión',
                           onPressed: () {
                             Navigator.pushNamed(context, LoginPage.id);
                           },
@@ -45,21 +44,10 @@ class HomeScreen extends StatelessWidget {
                       const SizedBox(
                         height: 20,
                       ),
-                      Hero(
-                        tag: 'signup_btn',
-                        child: CustomButton(
-                          buttonText: 'Sign Up',
-                          isOutlined: true,
-                          onPressed: () {
-                            Navigator.pushNamed(context, SignUpScreen.id);
-                          },
-                        ),
-                      ),
+                      
                       const SizedBox(
                         height: 25,
                       ),
-                      
-                      
                     ],
                   ),
                 ),
