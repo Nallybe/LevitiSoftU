@@ -62,7 +62,7 @@ function auth(req, res) {
                     const nombre = infoResults[0].nombre;
                     const apellido = infoResults[0].apellido;
                     req.session.name = `${nombre} ${apellido}`;
-                    
+
 
                     // Obtener los roles correspondientes al correo electrónico en users_access
                     conn.query(
@@ -129,7 +129,7 @@ function auth(req, res) {
           });
         } else {
           sesion = false
-          res.render('login', { errorl: 'Error, el correo no existe, o el usuario esta deshabilitado' });
+          res.render('login', { errorl: 'Error, el correo no existe, o el usuario está deshabilitado' });
         }
       }
     );
@@ -147,7 +147,7 @@ function authAPI(req, res) {
     }
 
     conn.query(
-      'SELECT users_access.*, users_info.nombre AS nombre FROM users_access INNER JOIN users_info ON users_access.idAccess = users_info.idAccess WHERE users_access.correo = ?;',
+      `SELECT users_access.*, users_info.nombre AS nombre, users_info.apellido AS apellido FROM users_access INNER JOIN users_info ON users_access.idAccess = users_info.idAccess INNER JOIN tbl_roles ON users_access.idRoles = tbl_roles.idRoles WHERE users_access.correo = ? AND tbl_roles.nombreRoles NOT IN ('cliente', 'contador');`,
       [data.correo],
       (error, results) => {
         if (error) {
@@ -157,7 +157,7 @@ function authAPI(req, res) {
         console.log("resultados: ", results)
         if (results.length > 0) {
           const user = results[0];
-          console.log("User: ", user, " Password: ", user.passsword)
+          console.log(user)
           bcrypt.compare(data.passsword.toString(), user.passsword, (err, isMatch) => {
             if (err) {
               console.log(err);
@@ -165,15 +165,18 @@ function authAPI(req, res) {
             }
 
             if (isMatch) {
+              const nombre = results[0].nombre;
+              const apellido = results[0].apellido;
+              nombreCompleto = `${nombre} ${apellido}`;
               req.session.loggedin = true;
-              res.status(200).json({ Exito: 'Éxito', nombre: user.nombre });
+              res.status(200).json({ Exito: 'Éxito', nombre: nombreCompleto });
             } else {
               res.status(401).json({ error: 'Error, contraseña incorrecta' });
             }
           });
 
         } else {
-          res.status(404).json({ error: 'Error, el correo no existe' });
+          res.status(404).json({ error: 'Error, el correo no existe, o no tienes permisos para acceder' });
         }
       }
     );
@@ -497,6 +500,51 @@ function recuperar(req, res) {
     });
   })
 }
+
+function recuperarAPI(req, res) {
+  const correo = req.body.correo;
+  req.getConnection((err, conn) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ success: false, message: 'Error en el servidor' });
+    }
+
+    conn.query('SELECT * FROM users_access WHERE correo = ?', [correo], async (error, results) => {
+      if (error) {
+        console.error(error);
+        return res.status(500).json({ success: false, message: 'Error en el servidor' });
+      }
+      if (results.length > 0) {
+        const userId = results[0].idAccess;
+        const token = jwt.sign({ userId: userId }, 'secretKey', { expiresIn: '10m' });
+        const transporter = nodemailer.createTransport({
+          host: "smtp.gmail.com",
+          port: 465,
+          secure: true,
+          auth: {
+            user: 'levitisoft2021@gmail.com',
+            pass: 'omqseuasqhquwqbp'
+          },
+        });
+
+        const resetPasswordLink = `http://localhost:8181/restaurar-contrasena?token=${token}`;
+
+        let info = await transporter.sendMail({
+          from: '"Restauracion de contraseña" <levitisoft2021@gmail.com>',
+          to: correo,
+          subject: "Recuperación de Contraseña",
+          text: `Solicitud de recuperación de contraseña para ${correo}`,
+          html: `<p>Hola, solicitaste un cambio de contraseña.</p><p>Haz clic en el siguiente enlace para restablecer tu contraseña:</p><a href="${resetPasswordLink}">${resetPasswordLink}</a>`,
+        });
+
+        return res.status(200).json({ success: true, message: 'Correo enviado correctamente' });
+      } else {
+        return res.status(404).json({ success: false, message: 'El correo no existe, te invitamos a crear una cuenta nueva' });
+      }
+    });
+  });
+}
+
 function restablecer(req, res) {
   res.render('restaurar_contrase')
 }
@@ -583,129 +631,45 @@ function restablecerContraseña(req, res) {
 
 }
 
+function restablecerContraseñaAPI(req, res) {
+  const token = req.query.token;
+  if (!token) {
+    return res.status(400).json({ error: 'Token no proporcionado' });
+  }
+  try {
+    // Verificar y decodificar el token
+    const decodedToken = jwt.verify(token, 'secretKey');
+    const { userId } = decodedToken;
+
+    // Hash de la nueva contraseña
+    bcrypt.hash(req.body.password.toString(), salt, async (err, hash) => {
+      if (err) return res.status(500).json({ error: "Error al hashear la contraseña" });
+
+      // Actualizar la contraseña en la base de datos
+      try {
+        const conn = await req.getConnection();
+        const result = await conn.query("UPDATE users_access SET password = ? WHERE idAccess = ?", [hash, userId]);
+
+        if (result.affectedRows === 0) {
+          return res.status(404).json({ error: "El usuario no existe" });
+        }
+
+        // Respuesta exitosa en formato JSON
+        res.json({ success: true, message: "Se restableció la contraseña correctamente" });
+      } catch (error) {
+        return res.status(500).json({ error: "Error al actualizar la contraseña en la base de datos" });
+      }
+    });
+  } catch (error) {
+    return res.status(401).json({ error: error });
+  }
+}
 
 function dashboard(req, res) {
   res.render("dashboard")
 }
 
-/*
-async function dashboard_pro(req, res) {
-  try {
-    const data = req.body;
-   // console.log(data);
 
-    const conn = await new Promise((resolve, reject) => {
-      req.getConnection((err, conn) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(conn);
-        }
-      });
-    });
-
-    const ventas = await new Promise((resolve, reject) => {
-      conn.query("SELECT * FROM tbl_ventas WHERE LEFT(fecha, 7) = ?", [data.graf_pro], (err, ventas) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(ventas);
-        }
-      });
-    });
-
-
-
-    let productos = []
-    for (i in ventas) {
-      const d_ventas = await new Promise((resolve, reject) => {
-        conn.query("SELECT * FROM tbl_detalleventas WHERE idVentas = ?", [ventas[i].idVentas], (err, d_ventas) => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve(d_ventas);
-          }
-        });
-      });
-
-      for (ix in d_ventas) {
-        let producto = {
-          idProducto: d_ventas[ix].idProducto,
-          cantidad: d_ventas[ix].Unidad
-        }
-
-        let agregar = true;
-
-        if (productos) {
-          for (ic in productos) {
-            if (productos[ic].idProducto == producto.idProducto) {
-              productos[ic].cantidad += producto.cantidad;
-              agregar = false;
-            }
-          }
-        }
-
-        if (agregar == true) {
-          productos.push(producto);
-        }
-
-      }
-
-    }
-
-
-    const prod = await new Promise((resolve, reject) => {
-      conn.query("SELECT * FROM tbl_productos", (err, pro) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(pro);
-        }
-      });
-    });
-
-    let totalP = 0;
-    for (i in productos) {
-      for (ix in prod) {
-        if (productos[i].idProducto == prod[ix].idProducto) {
-          productos[i].nombre = prod[ix].nombre;
-        }
-      }
-      totalP += productos[i].cantidad;
-    }
-
-    //console.log(productos)
-
-
-    // Ordena el array en orden descendente según la cantidad
-    productos.sort((a, b) => b.cantidad - a.cantidad);
-
-    // Toma los primeros 5 elementos del array ordenado
-    const top5Productos = productos.slice(0, 5);
-
-    //console.log(top5Productos)
-
-    let nombres = [];
-    let datos = [];
-
-    for (i in top5Productos) {
-      nombres.push(top5Productos[i].nombre);
-      datos.push(top5Productos[i].cantidad);
-    }
-    //console.log(nombres);
-    //console.log(datos);
-
-    let valor = data.graf_pro;
-
-    // Redireccionar
-    //res.redirect("/dashboard");
-    res.render("dashboard", { nombres, datos, valor });
-
-  } catch (err) {
-    res.status(500).json(err);
-  }
-}
-*/
 
 module.exports = {
   login,
@@ -716,8 +680,10 @@ module.exports = {
   logoutApi,
   olvido,
   recuperar,
+  recuperarAPI,
   restablecer,
   restablecerContraseña,
+  restablecerContraseñaAPI,
   dashboard,
   // dashboard_pro
   authAPI

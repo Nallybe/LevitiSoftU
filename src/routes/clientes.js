@@ -29,10 +29,18 @@ const tienePermisos = (session) => {
 };
 
 router.get('/clientes', checkSession, clientesController.listar);
+router.get('/clientesAPI', checkSession, clientesController.listarAPI);
+
 router.get('/clientes_agregar', checkSession, clientesController.crear);
-router.post('/clientes_agregar', checkSession, clientesController.registrar);
+router.get('/clientes_agregarAPI', checkSession, clientesController.crearAPI);
+
 router.get('/clientes_editar/:idInfo', checkSession, clientesController.editar);
+router.get('/clientes_editarAPI/:idInfo', checkSession, clientesController.editarAPI);
+
+
+// router.post('/clientes_agregar', checkSession, clientesController.registrar);
 router.post('/clientes_editar/:idInfo', checkSession, clientesController.actualizar);
+router.post('/clientes_editarAPI/:idInfo', checkSession, clientesController.actualizarAPI);
 
 
 module.exports = router;

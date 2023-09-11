@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:movil/screens/ProductosScreen.dart';
-import 'package:movil/screens/restablecerContra.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:movil/components/components.dart';
 import 'package:movil/constants.dart';
@@ -151,19 +150,7 @@ class _LoginPageState extends State<LoginPage> {
                           SizedBox(
                             height: 20,
                           ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.pushNamed(context, Restablecimiento.id);
-                            },
-                            child: Text(
-                              '¿Olvidaste tu contraseña?',
-                              style: TextStyle(
-                                color: Colors
-                                    .blue, // Cambia el color según tu diseño
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
-                          ),
+                          
                         ],
                       )
                     ],

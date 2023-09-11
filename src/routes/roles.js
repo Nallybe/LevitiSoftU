@@ -28,13 +28,24 @@ const tienePermisos = (session) => {
 };
 
 router.get('/roles', checkSession, rolesController.listar);
-router.get('/api/roles', checkSession, rolesController.listarApi);
+router.get('/rolesAPI', checkSession, rolesController.listarApi);
 router.get('/AgregarRol', checkSession, rolesController.crear);
+router.get('/AgregarRolAPI', checkSession, rolesController.crearAPI);
+
 router.get('/Permisos/:idRoles', checkSession, rolesController.permisos);
+router.get('/PermisosAPI/:idRoles', checkSession, rolesController.permisosAPI);
+
 router.get('/EditarRol/:idRoles', checkSession, rolesController.editar);
+router.get('/EditarRolAPI/:idRoles', checkSession, rolesController.editarAPI);
+
 
 router.post('/AgregarRol/', checkSession, rolesController.registrar);
+router.post('/AgregarRolAPI/', checkSession, rolesController.registrarApi);
 router.post('/EditarRol/:idRoles', checkSession, rolesController.actualizar);
+router.post('/EditarRolAPI/:idRoles', checkSession, rolesController.actualizarAPI);
+
 //router.post('/EliminarRol', checkSession, rolesController.eliminar);
 router.post('/EliminarAsignacion/:idRoles', checkSession, rolesController.eliminarAsignacion);
+router.post('/EliminarAsignacionAPI/:idRoles', checkSession, rolesController.eliminarAsignacionAPI);
+
 module.exports = router;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-// import 'package:movil/screens/AgregarProductoScreen.dart';
+import 'package:movil/screens/AgregarProductoScreen.dart';
 
 class Producto {
   final String imagen;
@@ -225,7 +225,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
         floatingActionButton: FloatingActionButton(
           onPressed: () {
             Navigator.pushNamed(
-                context, '/agregar_producto'); // Reemplaza con la ruta correcta
+                context, AgregarProductoPage.id); // Reemplaza con la ruta correcta
           },
           backgroundColor: Colors.green,
           child: Icon(Icons.add),

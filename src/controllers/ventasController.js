@@ -6,7 +6,6 @@ const path = require('path');
 
 
 function listar(req, res) {
-    usuarioRoles = req.session.roles;
     req.getConnection((err, conn) => {
         conn.query(`
                 SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont
@@ -38,6 +37,46 @@ function listar(req, res) {
     });
 }
 
+function listarAPI(req, res) {
+
+    req.getConnection((err, conn) => {
+        if (err) {
+            console.error('Error de conexión: ', err);
+            return res.status(500).json({ error: 'Error de conexión' });
+        }
+
+        conn.query(`
+            SELECT tbl_ventas.*, users_info.nombre
+            FROM tbl_ventas
+            JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo;
+        `, (err, ventas) => {
+            if (err) {
+                console.error('Error al obtener las ventas: ', err);
+                return res.status(500).json({ error: 'Error al obtener las ventas' });
+            }
+
+            const ventasFormateadas = ventas.map(venta => {
+                const fecha = new Date(venta.fecha);
+                const dia = fecha.getDate();
+                const mes = fecha.toLocaleString('default', { month: 'long' });
+                const anio = fecha.getFullYear();
+                const fechaFormateada = `${dia} de ${mes} de ${anio}`;
+                return {
+                    idVentas: venta.idVentas,
+                    nombre: venta.nombre,
+                    total: venta.total,
+                    fecha: fechaFormateada,
+                    descripcion: venta.descripcion,
+                    estado: venta.estado
+                };
+            });
+
+            res.status(200).json({ ventas: ventasFormateadas });
+        });
+    });
+
+}
+
 function crear(req, res) {
     req.getConnection((err, conn) => {
         conn.query("SELECT * FROM tbl_ventas", (err, ventas) => {
@@ -58,6 +97,25 @@ function crear(req, res) {
     });
 }
 
+function crearAPI(req, res) {
+    req.getConnection((err, conn) => {
+        conn.query("SELECT * FROM tbl_ventas", (err, ventas) => {
+            if (err) {
+                res.json(err);
+            } conn.query(`SELECT ui.nombre FROM users_info ui JOIN users_access ua ON ui.idAccess = ua.idAccess JOIN tbl_roles tr ON ua.idRoles = tr.idRoles WHERE tr.nombreRoles = 'cliente' AND tr.estado = 'A';
+            `, (err, nombre) => {
+                if (err) {
+                    res.json(err);
+                } conn.query(`SELECT idProducto, imagen, nombre, precio, stock FROM tbl_productos`, (err, productos) => {
+                    if (err) {
+                        res.json(err);
+                    } res.json({ ventas, nombre, productos });
+                })
+
+            })
+        })
+    });
+}
 
 function registrar(req, res) {
     const data = req.body;
@@ -195,6 +253,145 @@ function registrar(req, res) {
     }
 }
 
+function registrarAPI(req, res) {
+    const data = req.body;
+    // console.log(data);
+    const valoresNoVacios = [];
+
+    for (const valor of data.cantidadProducto) {
+        if (valor !== '') {
+            valoresNoVacios.push(valor);
+        }
+    }
+
+    if (valoresNoVacios.length > 0) {
+        const valorUnico = valoresNoVacios.join(', '); // Unir los valores en una cadena
+        // console.log("Valores no vacíos:", valorUnico);
+
+        let idProducto = data.idProducto;
+        let unidadesArray = valorUnico;
+        // console.log("Unidades: ", unidadesArray)
+        // Verificar si idProducto es una cadena y convertirlo en un array si es necesario
+        if (typeof idProducto === 'string') {
+            idProducto = idProducto.split(',');
+        } else if (!Array.isArray(idProducto)) {
+            idProducto = [idProducto];
+        }
+
+        // Verificar si unidadesArray es una cadena y convertirlo en un array si es necesario
+        if (typeof unidadesArray === 'string') {
+            unidadesArray = unidadesArray.split(',');
+        } else if (!Array.isArray(unidadesArray)) {
+            unidadesArray = [unidadesArray];
+        }
+        // console.log("Data: ", data)
+        req.getConnection((err, conn) => {
+            if (err) {
+                console.error('Error al obtener la conexión:', err);
+                res.status(500).json({ error: 'Error al obtener la conexión' });
+                return;
+            }
+
+            conn.query('SELECT ui.idInfo, ua.correo FROM users_info ui JOIN users_access ua ON ui.idAccess = ua.idAccess WHERE ui.nombre = ? ', [data.nombre], (error, results) => {
+                if (error) {
+                    console.error('Error al obtener el idInfo:', error);
+                    res.status(500).json({ error: 'Error al obtener el idInfo' });
+                } else if (results.length === 0) {
+                    console.error('No se encontró el nombre en la tabla users_info');
+                    res.status(404).json({ error: 'No se encontró el nombre en la tabla users_info' });
+                } else {
+                    const idInfo = results[0].idInfo;
+                    const correo = results[0].correo;
+                    const RegistroVenta = {
+                        idInfo: idInfo,
+                        total: data.total,
+                        fecha: data.fecha,
+                        descripcion: data.descripcion,
+                        estado: data.estado,
+                    };
+                    // console.log("Ventas: ", RegistroVenta)
+                    nombre = data.nombre;
+                    conn.query('INSERT INTO tbl_ventas SET ?', [RegistroVenta], (error, result) => {
+                        if (error) {
+                            console.error('Error al insertar los datos en tbl_ventas:', error);
+                            res.status(500).json({ error: 'Error al insertar los datos en tbl_ventas' });
+                        } else {
+                            const idVentas = result.insertId;
+                            // Actualizar número de ventas en la tabla "users_access"
+                            conn.query(`UPDATE users_info SET idVentas = idVentas + 1 WHERE idAccess IN (SELECT ua.idAccess FROM users_access ua JOIN tbl_roles tr ON ua.idRoles = tr.idRoles WHERE tr.nombreRoles = 'Cliente') AND nombre = ?;
+                            `, [data.nombre], (error) => {
+                                if (error) {
+                                    console.error('Error al actualizar el número de ventas:', error);
+                                } else {
+                                    console.log('Número de ventas actualizadas ');
+                                }
+                            });
+                            for (let i = 0; i < idProducto.length; i++) {
+                                const RegistroDetVent = {
+                                    idVentas: idVentas,
+                                    idProducto: idProducto[i],
+                                    Unidad: unidadesArray[i]
+                                };
+                                // console.log("Registro de venta: ", RegistroDetVent)
+                                conn.query(
+                                    "INSERT INTO tbl_detalleventas SET ?",
+                                    [RegistroDetVent],
+                                    (error, result) => {
+                                        if (error) {
+                                            console.error('Error al insertar los datos en tbl_detalleventas:', error);
+                                        } else {
+                                            console.log("Detalle venta guardada");
+                                        }
+                                    }
+                                );
+                                // Obtener las unidades disponibles del producto
+                                conn.query('SELECT stock FROM tbl_productos WHERE idProducto = ?', [idProducto[i]], (error, productoResult) => {
+                                    if (error) {
+                                        console.error('Error al obtener las unidades del producto:', error);
+                                    } else {
+                                        const unidadesDisponibles = productoResult[0].stock;
+                                        const unidadesVendidas = unidadesArray[i];
+
+                                        // Restar las unidades vendidas de las unidades disponibles
+                                        const nuevasUnidadesDisponibles = unidadesDisponibles - unidadesVendidas;
+
+                                        // Actualizar las unidades disponibles en la tabla "tbl_productos"
+                                        conn.query('UPDATE tbl_productos SET stock = ? WHERE idProducto = ?', [nuevasUnidadesDisponibles, idProducto[i]], (error) => {
+                                            if (error) {
+                                                console.error('Error al actualizar las unidades del producto:', error);
+                                            } else {
+                                                console.log('Unidades actualizadas en tbl_productos');
+                                            }
+                                        });
+
+                                    }
+                                });
+
+                            }
+                            // Obtener la información de los productos
+                            conn.query('SELECT idProducto, nombre, descripcion FROM tbl_productos WHERE idProducto IN (?)', [idProducto], (error, productoResults) => {
+                                if (error) {
+                                    console.error('Error al obtener la información de los productos:', error);
+                                    res.status(500).json({ error: 'Error al obtener la información de los productos' });
+                                } else {
+
+                                    crearFacturaPDF(RegistroVenta, productoResults, unidadesArray, nombre, correo, (facturaPath, nombreUsuario, correo) => {
+                                        enviarFacturaPorCorreo(correo, facturaPath, nombreUsuario);
+                                        res.status(200).json({ message: 'Venta registrada con éxito' });
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    } else {
+        res.status(400).json({ error: 'No se proporcionaron cantidades válidas para los productos' });
+    }
+}
+
+
 // Función para crear la factura PDF
 function crearFacturaPDF(venta, productos, unidades, nombre, correo, callback) {
     const doc = new PDFDocument();
@@ -322,8 +519,20 @@ function agregarProducto(req, res) {
             res.render('ventas/AgregarProduc', { productos });
         })
     })
-
 }
+
+function agregarProductoAPI(req, res) {
+    req.getConnection((err, conn) => {
+        conn.query('SELECT * FROM tbl_productos', (err, productos) => {
+            if (err) {
+                res.json(err);
+            }
+
+            res.json({ productos });
+        })
+    })
+}
+
 function listarProducto(req, res) {
     const idVentas = req.params.idVentas;
     //console.log("IdVentas: ", idVentas)
@@ -339,10 +548,30 @@ function listarProducto(req, res) {
     })
 }
 
+function listarProductoAPI(req, res) {
+    const idVentas = req.params.idVentas;
+    //console.log("IdVentas: ", idVentas)
+    const baseUrl = 'http://localhost:8181'
+    req.getConnection((err, conn) => {
+        conn.query('SELECT p.imagen, p.nombre, p.precio, dv.Unidad FROM tbl_productos p INNER JOIN tbl_detalleventas dv ON p.idProducto = dv.idProducto WHERE dv.idVentas = ?', [idVentas], (err, productos) => {
+            if (err) {
+                res.json(err);
+            }
+            //console.log(productos)
+            res.json({ productos, baseUrl });
+        })
+    })
+}
+
 module.exports = {
     listar: listar,
+    listarAPI: listarAPI,
     crear: crear,
+    crearAPI: crearAPI,
     registrar: registrar,
+    registrarAPI:registrarAPI,
     agregarProducto: agregarProducto,
-    listarProducto: listarProducto
+    agregarProductoAPI:agregarProductoAPI,
+    listarProducto: listarProducto,
+    listarProductoAPI:listarProductoAPI
 }

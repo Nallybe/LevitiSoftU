@@ -411,8 +411,7 @@ function productos_registrar(req, res) {
 //End Registrar Producto
 
 /*Registrar Api */
-//Registrar Producto
-function productos_registrar(req, res) {
+function productos_registrarAPI(req, res) {
 
     var data = req.body;
     var imagen = req.file// Aquí obtienes el archivo de imagen
@@ -470,7 +469,6 @@ function productos_registrar(req, res) {
         });
     });
 }
-//End Registrar Producto
 /*Registrar Api */
 //Editar
 function productos_editar(req, res) {
