@@ -46,6 +46,7 @@ function compras_listar(req, res) {
                       compras[index].total += total;
                     }
                   }
+
                   compras[index].monto = "$ " + compras[index].monto.toLocaleString('es-CO');
                   compras[index].iva = "$ " + compras[index].iva.toLocaleString('es-CO');
                   compras[index].total = "$ " + compras[index].total.toLocaleString('es-CO');
@@ -53,6 +54,90 @@ function compras_listar(req, res) {
 
                 res.status(200).render("compras/listar", { compras });
 
+              }
+            })
+          }
+        });
+      }
+    });
+  });
+}
+
+function compras_listar_api(req, res) {
+  req.getConnection((err, conn) => {
+    conn.query("SELECT * FROM tbl_compras ORDER BY fechaRegistro DESC", (err, compras) => {
+      if (err) {
+        return res.status(500).json(err);
+      } else {
+        conn.query("SELECT * FROM tbl_compras_detalles", (err, detallescompra) => {
+          if (err) {
+            return res.status(500).json(err);
+          } else {
+            conn.query("SELECT * FROM tbl_compras_anulaciones", (err, anulaciones) => {
+              if (err) {
+                return res.status(500).json(err);
+              } else {
+
+                let cos = [];
+                for (index in compras) {
+                  compras[index].fechaRecibo = compras[index].fechaRecibo.toLocaleDateString();
+                  compras[index].fechaRegistro = compras[index].fechaRegistro.toLocaleString();
+                  compras[index].total = 0;
+                  compras[index].monto = 0;
+                  compras[index].iva = 0;
+
+                  for (i in detallescompra) {
+                    if (detallescompra[i].idCompra == compras[index].idCompra) {
+                      var monto = detallescompra[i].precio * detallescompra[i].cantidad;
+                      var iva = (monto * detallescompra[i].porcentajeIva) / 100;
+                      var total = iva + monto;
+                      compras[index].monto += monto;
+                      compras[index].iva += iva;
+                      compras[index].total += total;
+                    }
+                  }
+
+                  /*compras[index].monto = compras[index].monto.toLocaleString('es-CO');
+                  compras[index].iva = compras[index].iva.toLocaleString('es-CO');
+                  compras[index].total =  compras[index].total.toLocaleString('es-CO');*/
+                  var formatoNumero = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+
+                  compras[index].monto = parseFloat(compras[index].monto).toLocaleString('es-CO', formatoNumero);
+                  compras[index].iva = parseFloat(compras[index].iva).toLocaleString('es-CO', formatoNumero);
+                  compras[index].total = parseFloat(compras[index].total).toLocaleString('es-CO', formatoNumero);
+
+                  if (compras[index].estado == "I") {
+                    for (ix in anulaciones) {
+                      if (anulaciones[ix].idCompra == compras[index].idCompra) {
+                        compras[index].fechaAnulacion = anulaciones[ix].fechaAnulacion.toLocaleString();
+
+                        cos.push({
+                          idCompra: compras[index].idCompra,
+                          recibo: compras[index].recibo,
+                          fechaRecibo: compras[index].fechaRecibo,
+                          fechaRegistro: compras[index].fechaRegistro,
+                          subtotal: compras[index].monto,
+                          iva: compras[index].iva,
+                          total: compras[index].total,
+                          anulacion: true,
+                          motivoAnulacion: anulaciones[ix].motivoAnulacion,
+                          fechaAnulacion: compras[index].fechaAnulacion
+                        });
+                      }
+                    }
+                  } else {
+                    cos.push({
+                      idCompra: compras[index].idCompra,
+                      recibo: compras[index].recibo,
+                      fechaRecibo: compras[index].fechaRecibo,
+                      fechaRegistro: compras[index].fechaRegistro,
+                      subtotal: compras[index].monto,
+                      iva: compras[index].iva,
+                      total: compras[index].total
+                    });
+                  }
+                }
+                res.status(200).json({ compras: cos });
               }
             })
           }
@@ -164,6 +249,111 @@ function compras_detallar(req, res) {
                 res.render("compras/detallar", { detallescompra, compra, numDC });
               }
             });
+          }
+        });
+      }
+    });
+  });
+}
+
+function compras_detallar_api(req, res) {
+  const idCompra = req.params.idCompra;
+  req.getConnection((err, conn) => {
+    conn.query("SELECT * FROM tbl_compras WHERE idCompra = ?", [idCompra], (err, compras) => {
+      if (err) {
+        return res.status(500).json(err);
+      } else {
+        conn.query("SELECT * FROM tbl_compras_detalles WHERE idCompra = ?", [idCompra], (err, detallescompra) => {
+          if (err) {
+            return res.status(500).json(err);
+          } else {
+            conn.query("SELECT * FROM tbl_compras_anulaciones", (err, anulaciones) => {
+              if (err) {
+                return res.status(500).json(err);
+              } else {
+
+                let cos = [];
+                let ins = [];
+                for (index in compras) {
+                  var formatoNumero = { minimumFractionDigits: 2, maximumFractionDigits: 2 };
+
+                  compras[index].fechaRecibo = compras[index].fechaRecibo.toLocaleDateString();
+                  compras[index].fechaRegistro = compras[index].fechaRegistro.toLocaleString();
+                  compras[index].total = 0;
+                  compras[index].monto = 0;
+                  compras[index].iva = 0;
+
+                  for (i in detallescompra) {
+                    var monto = detallescompra[i].precio * detallescompra[i].cantidad;
+                    detallescompra[i].monto = monto;
+                    
+                    var iva = (monto * detallescompra[i].porcentajeIva) / 100;
+                    var total = iva + monto;
+
+                    detallescompra[i].total = parseFloat(total).toLocaleString('es-CO', formatoNumero);
+                    detallescompra[i].monto = parseFloat(monto).toLocaleString('es-CO', formatoNumero);
+                    detallescompra[i].iva = parseFloat(iva).toLocaleString('es-CO', formatoNumero);
+                    detallescompra[i].precio = parseFloat(detallescompra[i].precio).toLocaleString('es-CO', formatoNumero);
+                    detallescompra[i].porcentajeIva = parseFloat(detallescompra[i].porcentajeIva).toLocaleString('es-CO') + "%";
+
+                    ins.push({
+                      idDetalleCompra : detallescompra[i].idDetalleCompra,
+                      idInsumo : detallescompra[i].idInsumo,
+                      precio : detallescompra[i].precio,
+                      cantidad : parseFloat(detallescompra[i].cantidad).toLocaleString('es-CO'),
+                      subtotal : detallescompra[i].monto,
+                      porcentajeIva : detallescompra[i].porcentajeIva,
+                      iva : detallescompra[i].iva,
+                      total : detallescompra[i].total
+                    });
+
+                    compras[index].monto += monto;
+                    compras[index].iva += iva;
+                    compras[index].total += total;
+                  }
+
+                  /*compras[index].monto = compras[index].monto.toLocaleString('es-CO');
+                  compras[index].iva = compras[index].iva.toLocaleString('es-CO');
+                  compras[index].total =  compras[index].total.toLocaleString('es-CO');*/
+     
+                  compras[index].monto = parseFloat(compras[index].monto).toLocaleString('es-CO', formatoNumero);
+                  compras[index].iva = parseFloat(compras[index].iva).toLocaleString('es-CO', formatoNumero);
+                  compras[index].total = parseFloat(compras[index].total).toLocaleString('es-CO', formatoNumero);
+
+                  if (compras[index].estado == "I") {
+                    for (ix in anulaciones) {
+                      if (anulaciones[ix].idCompra == compras[index].idCompra) {
+                        compras[index].fechaAnulacion = anulaciones[ix].fechaAnulacion.toLocaleString();
+
+                        cos.push({
+                          idCompra: compras[index].idCompra,
+                          recibo: compras[index].recibo,
+                          fechaRecibo: compras[index].fechaRecibo,
+                          fechaRegistro: compras[index].fechaRegistro,
+                          subtotal: compras[index].monto,
+                          iva: compras[index].iva,
+                          total: compras[index].total,
+                          anulacion: true,
+                          motivoAnulacion: anulaciones[ix].motivoAnulacion,
+                          fechaAnulacion: compras[index].fechaAnulacion
+                        });
+                      }
+                    }
+                  } else {
+                    cos.push({
+                      idCompra: compras[index].idCompra,
+                      recibo: compras[index].recibo,
+                      fechaRecibo: compras[index].fechaRecibo,
+                      fechaRegistro: compras[index].fechaRegistro,
+                      subtotal: compras[index].monto,
+                      iva: compras[index].iva,
+                      total: compras[index].total
+                    });
+                  }
+                }
+                res.status(200).json({ compra: cos, detalles: ins });
+              }
+            })
           }
         });
       }
@@ -357,8 +547,9 @@ function compras_anular(req, res) {
           if (err) {
             return res.status(500).json(err);
           } else {
+
             if (!insumos) {
-              console.log('Detalles no encontrados');
+              console.log('Insumos no encontrados');
               res.redirect("/compras");
             }
 
@@ -434,7 +625,9 @@ function compras_anular(req, res) {
 
 module.exports = {
   compras_listar: compras_listar,
+  compras_listar_api: compras_listar_api,
   compras_detallar: compras_detallar,
+  compras_detallar_api: compras_detallar_api,
   compras_listar_anulaciones: compras_listar_anulaciones,
   compras_crear: compras_crear,
   compras_registrar: compras_registrar,

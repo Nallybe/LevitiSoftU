@@ -79,7 +79,7 @@
 <center>
     <div class="container-fluid mb-5">
         <div class="row">
-            <div class="col-md-3">
+            <!--<div class="col-md-3">
                 <div class="input-group">
                     <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
                         placeholder="Buscar reparación" aria-label="Search" oninput="filtrarTabla()">
@@ -88,11 +88,13 @@
                         <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
                     </button>
                 </div>
-            </div>
-            <div class="col-md-6"></div>
-            <div class="col-md-3">
-                <a href="/reparaciones_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
-                    Registrar reparación</a>
+            </div>-->
+            <div class="col-md-12">
+                <div style="text-align: right;">
+                    <a href="/reparaciones_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
+                        Registrar reparación</a>
+                </div>
+
             </div>
         </div>
         <table class="table table-hover table-bordered nowrap" style="text-align:center;" id="tabla-reparaciones">
@@ -114,8 +116,9 @@
                 <tr>
                     <td class="py-3 px-6 text-center">{{cont}}</td>
                     <td class="p-3 text-center">
-                        <button type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="hover" 
-                            data-bs-custom-class="custom-popover" title="<b>Cliente Reparación {{cont}}</b>" data-bs-content="
+                        <button type="button" data-bs-toggle="popover" data-bs-html="true" data-bs-trigger="hover"
+                            data-bs-custom-class="custom-popover" title="<b>Cliente Reparación {{cont}}</b>"
+                            data-bs-content="
                             <div class='row'>
                                 <div class='col-md-3'>
                                     <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User.png' width='100' />
@@ -126,7 +129,8 @@
                                     <b>Correo:</b> {{userEmail}}<br>
                                 </div>
                             </div>
-                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user" style="color:black"></i></span>
+                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user"
+                                    style="color:black"></i></span>
                         </button>
                     </td>
                     <td class="p-3 text-center">{{numPR}}</td>
@@ -182,7 +186,8 @@
                         </button>-->
 
                         <!-- Button trigger modal -->
-                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#exampleModal_{{idReparacion}}">
+                        <button type="button" class="btn btn-secondary btn-sm" data-toggle="modal"
+                            data-target="#exampleModal_{{idReparacion}}">
                             Terminado <i class="fas fa-pen pen-2"></i>
                         </button>
 
@@ -222,7 +227,8 @@
     {{#if estado3}}
 
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal_{{idReparacion}}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModal_{{idReparacion}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog">
             <form action="/reparaciones_estadoTyE" method="POST" class="mx-2">
                 <input type="hidden" name="idReparacion" value="{{idReparacion}}">
@@ -237,10 +243,10 @@
                         <div class="row">
                             <div class="col-md-1"></div>
                             <div class="col-md-10">
-                               <p style="text-align: center;">
-                                ¡Cámbia el estado de la reparación a<br> "Terminado y
+                                <p style="text-align: center;">
+                                    ¡Cámbia el estado de la reparación a<br> "Terminado y
                                     Entregado"!</p>
-                                
+
                             </div>
                             <div class="col md-1"></div>
                         </div>
@@ -443,17 +449,18 @@
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json',
                 search: "Buscar:",
-                lengthMenu: "Mostrar _MENU_ registros por página",
-                info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-                infoEmpty: "Mostrando 0 a 0 de 0 entradas",
-                infoFiltered: "(filtrado de _MAX_ entradas totales)",
+                //lengthMenu: "Mostrar _MENU_ registros por página",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                infoEmpty: "Mostrando 0 a 0 de 0 registros",
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
                 paginate: {
                     first: "Primero",
                     previous: "Anterior",
                     next: "Siguiente",
                     last: "Último"
                 }
-            }
+            },
+            dom: '<"toolbar">frtip',
 
         });
     });
