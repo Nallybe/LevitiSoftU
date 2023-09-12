@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:movil/screens/AgregarProductoScreen.dart';
+import 'package:intl/intl.dart';
 
 class Producto {
   final String imagen;
@@ -9,7 +9,7 @@ class Producto {
   final String descripcion;
   final String idCategoria;
   final int stock;
-  final double precio;
+  final String precio;
 
   Producto(
       {required this.imagen,
@@ -52,18 +52,15 @@ class _ProductosScreenState extends State<ProductosScreen> {
       List<Producto> fetchedProductos = [];
       for (var item in jsonData['productos']) {
         final precioStr =
-            item['precio'] ?? ''; // Obtener el valor de precio como cadena
-        final cleanedPrecioStr = precioStr.replaceAll(
-            RegExp(r'[^0-9.]'), ''); // Eliminar caracteres no numéricos
-        final precio = double.tryParse(cleanedPrecioStr) ??
-            0.0; // Intentar convertir a double, si no es válido usar 0.0
+            item['precio']; // Obtener el valor de precio como cadena
+        
         fetchedProductos.add(Producto(
           imagen: item['imagen'],
           nombre: item['nombre'],
           descripcion: item['descripcion'],
           idCategoria: item['idCategoria'],
           stock: item['stock'],
-          precio: precio,
+          precio: precioStr,
         ));
       }
       setState(() {
@@ -179,7 +176,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
                               SizedBox(height: 8),
                               Text('Stock: ${producto.stock} unidades'),
                               SizedBox(height: 8),
-                              Text('\$${producto.precio.toStringAsFixed(2)}',
+                              Text('${producto.precio}',
                                   style: TextStyle(
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold)),
