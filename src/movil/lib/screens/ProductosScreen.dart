@@ -77,13 +77,15 @@ class _ProductosScreenState extends State<ProductosScreen> {
   }
 
   void _filterProductos(String query) {
-    setState(() {
-      productosFiltrados = productos
-          .where((producto) =>
-              producto.nombre.toLowerCase().contains(query.toLowerCase()))
-          .toList();
-    });
-  }
+  setState(() {
+    productosFiltrados = productos
+        .where((producto) =>
+            producto.nombre.toLowerCase().contains(query.toLowerCase()) ||
+            producto.precio.toString().contains(query))
+        .toList();
+  });
+}
+
 
   Future<void> _showExitConfirmationDialog(BuildContext context) async {
     final confirmed = await showDialog<bool>(
@@ -118,37 +120,7 @@ class _ProductosScreenState extends State<ProductosScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-          backgroundColor: Color(0xFFDCB14A), // Color de la AppBar
-          title: Text(
-            "Productos",
-            style: TextStyle(
-              color: Colors.white, // Color del texto
-              fontSize: 20, // Tamaño de fuente del texto
-            ),
-          ),
-          actions: [
-            Row(
-              children: [
-                
-                Text(
-                  '${widget.nombreUsuario}', // Reemplaza esto con el nombre real del usuario
-                  style: TextStyle(
-                    color: Colors.white, // Color del texto
-                    fontSize: 16, // Tamaño de fuente del texto
-                  ),
-                ),
-                IconButton(
-                  icon: Icon(Icons.exit_to_app),
-                  onPressed: () {
-                    _showExitConfirmationDialog(context);
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+        
         backgroundColor: Color.fromARGB(255, 236, 236, 236),
         body: Column(
           children: [
@@ -222,13 +194,15 @@ class _ProductosScreenState extends State<ProductosScreen> {
             ),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Navigator.pushNamed(
-                context, AgregarProductoPage.id); // Reemplaza con la ruta correcta
-          },
-          backgroundColor: Colors.green,
-          child: Icon(Icons.add),
-        ));
+        // floatingActionButton: FloatingActionButton(
+        //   onPressed: () {
+        //     Navigator.pushNamed(
+        //         context, AgregarProductoPage.id); // Reemplaza con la ruta correcta
+        //   },
+        //   backgroundColor: Colors.green,
+        //   child: Icon(Icons.add),
+        
+        // )
+        );
   }
 }
