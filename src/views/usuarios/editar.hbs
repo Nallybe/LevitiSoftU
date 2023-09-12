@@ -17,6 +17,7 @@
     #mensajeErrorCorreo,
     #mensajeErrorPassword,
     #mensajeErrorNombre,
+    #mensajeErrorApellido,
     #mensajeErrorDocumento,
     #mensajeErrorTelefono {
       display: none;
@@ -28,6 +29,7 @@
     #mensajeErrorCorreo .icono,
     #mensajeErrorPassword .icono,
     #mensajeErrorNombre .icono,
+    #mensajeErrorApellido .icono,
     #mensajeErrorDocumento .icono,
     #mensajeErrorTelefono .icono {
       display: inline-block;
@@ -135,6 +137,13 @@
               <div id="mensajeErrorNombre"></div>
               <!--End Input Nombre-->
 
+              <!--Input Apellido-->
+              <label class="form-label mt-2" for="apellido">Apellido</label>
+              <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="apellido"
+                name="apellido" oninput="val_apellido()" autocomplete="off" value="{{apellido}}">
+              <div id="mensajeErrorApellido"></div>
+              <!--End Input Apellido-->
+
               <!--Input Telefono-->
               <label class="form-label mt-2" for="telefono">Teléfono</label>
               <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="telefono"
@@ -208,6 +217,7 @@
       var correo = document.getElementById("correo");
       var password = document.getElementById("password");
       var nombre = document.getElementById("nombre");
+      var apellido = document.getElementById("apellido");
       var documento = document.getElementById("documento");
       var telefono = document.getElementById("telefono");
 
@@ -219,6 +229,7 @@
 
         password.disabled = true;
         nombre.disabled = true;
+        apellido.disabled = true;
         telefono.disabled = true;
         documento.disabled = true;
         mensajeErrorCorreo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>Ya existe un usuario registrado con este correo';
@@ -227,6 +238,7 @@
       } else {
         password.disabled = false;
         nombre.disabled = false;
+        apellido.disabled = false;
         telefono.disabled = false;
         documento.disabled = false;
         mensajeErrorCorreo.innerHTML = '';
@@ -239,6 +251,7 @@
       var documento = document.getElementById("documento");
       var password = document.getElementById("password");
       var nombre = document.getElementById("nombre");
+      var apellido = document.getElementById("apellido");
       var correo = document.getElementById("correo");
       var telefono = document.getElementById("telefono");
 
@@ -250,6 +263,7 @@
 
         password.disabled = true;
         nombre.disabled = true;
+        apellido.disabled = true;
         telefono.disabled = true;
         correo.disabled = true;
         mensajeErrorDocumento.innerHTML = '<span class="icono fa fa-circle-xmark"></span>Ya existe un usuario registrado con este documento';
@@ -258,6 +272,7 @@
       } else {
         password.disabled = false;
         nombre.disabled = false;
+        apellido.disabled = false;
         telefono.disabled = false;
         correo.disabled = false;
         mensajeErrorDocumento.innerHTML = '';
@@ -270,6 +285,7 @@
       var telefono = document.getElementById("telefono");
       var password = document.getElementById("password");
       var nombre = document.getElementById("nombre");
+      var apellido = document.getElementById("apellido");
       var documento = document.getElementById("documento");
       var correo = document.getElementById("correo");
 
@@ -281,6 +297,7 @@
 
         password.disabled = true;
         nombre.disabled = true;
+        apellido.disabled = true;
         correo.disabled = true;
         documento.disabled = true;
         mensajeErrorTelefono.innerHTML = '<span class="icono fa fa-circle-xmark"></span>Ya existe un usuario registrado con este telefono';
@@ -289,6 +306,7 @@
       } else {
         password.disabled = false;
         nombre.disabled = false;
+        apellido.disabled = false;
         correo.disabled = false;
         documento.disabled = false;
         mensajeErrorTelefono.innerHTML = '';
@@ -309,8 +327,17 @@
       var nombre = document.getElementById("nombre");
 
       if (nombre.value != "") {
-        mensajeErrornombre.innerHTML = '';
-        mensajeErrornombre.style.display = 'none';
+        mensajeErrorNombre.innerHTML = '';
+        mensajeErrorNombre.style.display = 'none';
+      }
+    }
+
+    function val_apellido() {
+      var apellido = document.getElementById("apellido");
+
+      if (apellido.value != "") {
+        mensajeErrorApellido.innerHTML = '';
+        mensajeErrorApellido.style.display = 'none';
       }
     }
   </script>
@@ -322,6 +349,7 @@
       var password = document.getElementById("password");
       var telefono = document.getElementById("telefono");
       var nombre = document.getElementById("nombre");
+      var apellido = document.getElementById("apellido");
       var documento = document.getElementById("documento");
 
       if (correo.value == "") {
@@ -344,6 +372,11 @@
         mensajeErrorNombre.style.display = 'block';
       }
 
+      if (apellido.value == "") {
+        mensajeErrorApellido.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El apellido es un campo obligatorio';
+        mensajeErrorApellido.style.display = 'block';
+      }
+
       if (telefono.value == "") {
         mensajeErrorTelefono.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El teléfono es un campo obligatorio';
         mensajeErrorTelefono.style.display = 'block';
@@ -357,9 +390,10 @@
       var rol = document.getElementById("idRol");
       var telefono = document.getElementById("telefono");
       var nombre = document.getElementById("nombre");
+      var apellido = document.getElementById("apellido");
       var documento = document.getElementById("documento");
 
-      if (correo.value == ""/* || password.value == "" */ || rol.value == "" || nombre.value == "" || documento.value == "" || telefono.value == "") {
+      if (correo.value == ""/* || password.value == "" */ || rol.value == "" || nombre.value == "" || apellido.value == "" || documento.value == "" || telefono.value == "") {
 
         //alert('campos obligatorios');
         Swal.fire({

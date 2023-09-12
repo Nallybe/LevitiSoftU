@@ -55,12 +55,28 @@ function productos_listar(req, res) {
                         });
                     });
 
+                    const d_ventas = await new Promise((resolve, reject) => {
+                        conn.query("SELECT * FROM tbl_detalleventas", (err, result) => {
+                            if (err) {
+                                reject(err);
+                            } else {
+                                resolve(result);
+                            }
+                        });
+                    });
+
 
                     for (index in productos) {
                         var eliminar = true;
 
                         for (i in ordenes) {
                             if (productos[index].idProducto == ordenes[i].idProducto) {
+                                eliminar = false;
+                            }
+                        }
+
+                        for (iv in d_ventas) {
+                            if (productos[index].idProducto == d_ventas[iv].idProducto) {
                                 eliminar = false;
                             }
                         }
@@ -72,6 +88,41 @@ function productos_listar(req, res) {
 
 
                     res.render('productos/listar', { productos });
+                }
+            });
+        }
+    });
+}
+
+function productos_listar_api(req, res) {
+    // Obtener la conexión a la base de datos
+    req.getConnection((err, conn) => {
+        if (err) {
+            // Si hay un error al obtener la conexión, enviar una respuesta con el error
+            return res.status(500).json(err);
+        } else {
+            // Consultar los productos en la base de datos
+            conn.query('SELECT * FROM tbl_productos', async (err, productos) => {
+                if (err) {
+                    // Si hay un error al consultar las productos, enviar una respuesta con el error
+                    return res.status(500).json(err);
+                } else {
+                    let pros = [];
+                    for (let index in productos) {
+                        pros.push({
+                            idProducto: productos[index].idProducto,
+                            idCategoria: productos[index].idCategoria,
+                            imagen: productos[index].imagen,
+                            nombre: productos[index].nombre,
+                            descripcion: productos[index].descripcion,
+                            precio: productos[index].precio,
+                            stock: productos[index].stock,
+                            estado: productos[index].estado
+                        });
+
+                        // Parsear precio -> productos[index].precio = "$" + productos[index].precio.toLocaleString('es-CO');
+                    }
+                    res.status(200).json({ productos: pros });
                 }
             });
         }
@@ -226,6 +277,45 @@ function productos_detallar(req, res) {
                                 res.render("productos/detallar", { detallesproducto, producto, numDP });
                             }
                         });
+                    }
+                });
+            }
+        });
+    });
+}
+
+function productos_detallar_api(req, res) {
+    const idProducto = req.params.idProducto;
+    req.getConnection((err, conn) => {
+        conn.query("SELECT * FROM tbl_productos WHERE idProducto = ?", [idProducto], (err, producto) => {
+            if (err) {
+                return res.status(500).json(err);
+            } else {
+                let pro = [];
+                for (index in producto) {
+                    pro.push({
+                        idProducto: producto[index].idProducto,
+                        idCategoria: producto[index].idCategoria,
+                        imagen: producto[index].imagen,
+                        nombre: producto[index].nombre,
+                        descripcion: producto[index].descripcion,
+                        precio: producto[index].precio,
+                        stock: producto[index].stock,
+                        estado: producto[index].estado
+                    });
+                }
+                conn.query("SELECT * FROM tbl_productos_detalles WHERE idProducto = ?", [idProducto], (err, detallesproducto) => {
+                    if (err) {
+                        return res.status(500).json(err);
+                    } else {
+                        let ins = [];
+                        for (index in detallesproducto) {
+                            ins.push({
+                                idInsumo: detallesproducto[index].idInsumo,
+                                cantidadRequerida: detallesproducto[index].cantidad_n
+                            });
+                        }
+                        res.status(200).json({ producto: pro, insumos_requeridos: ins });
                     }
                 });
             }
@@ -460,7 +550,7 @@ function productos_registrarAPI(req, res) {
                         console.log("Imagen guardada");
                         //End Registrar Producto 
 
-                        
+
                         //Redireccionar
                         res.redirect("/productos");
                     }
@@ -813,8 +903,10 @@ function productos_eliminar(req, res) {
 //Cambiar Estado Producto
 module.exports = {
     productos_listar: productos_listar,
+    productos_listar_api: productos_listar_api,
     productos_listarApi,
     productos_detallar: productos_detallar,
+    productos_detallar_api: productos_detallar_api,
     productos_eliminar: productos_eliminar,
     productos_crear: productos_crear,
     productos_crearApi,

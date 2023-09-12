@@ -75,7 +75,7 @@
 <center>
     <div class="container-fluid mb-5">
         <div class="row">
-            <div class="col-md-3">
+            <!--<div class="col-md-3">
                 <div class="input-group">
                     <input id="buscar-input" style="border-radius: 0; width:1px;" class="form-control" type="search"
                         placeholder="Buscar producción" aria-label="Search" oninput="filtrarTabla()">
@@ -84,8 +84,8 @@
                         <i class="fa-sharp fa-solid fa-search" style="font-size: 17px; color:green;"></i>
                     </button>
                 </div>
-            </div>
-            <div class="col-md-9">
+            </div>-->
+            <div class="col-md-12">
                 <div style="text-align: right;">
                     <a href="/produccion_registrar" class="btn btn-success"><i class="fa-solid fa-circle-plus"></i>
                         Registrar orden de producción</a>
@@ -329,17 +329,18 @@
             language: {
                 url: 'https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json',
                 search: "Buscar:",
-                lengthMenu: "Mostrar _MENU_ registros por página",
-                info: "Mostrando _START_ a _END_ de _TOTAL_ entradas",
-                infoEmpty: "Mostrando 0 a 0 de 0 entradas",
-                infoFiltered: "(filtrado de _MAX_ entradas totales)",
+                //lengthMenu: "Mostrar _MENU_ registros por página",
+                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+                infoEmpty: "Mostrando 0 a 0 de 0 registros",
+                infoFiltered: "(filtrado de _MAX_ registros totales)",
                 paginate: {
                     first: "Primero",
                     previous: "Anterior",
                     next: "Siguiente",
                     last: "Último"
                 }
-            }
+            },
+            dom: '<"toolbar">frtip',
 
         });
     });

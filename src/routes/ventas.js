@@ -29,7 +29,7 @@ const tienePermisos = (session) => {
 };
 
 router.get('/ventas', checkSession, ventasController.listar);
-router.get('/ventasAPI', checkSession, ventasController.listarAPI);
+router.get('/ventasAPI', checkSession,ventasController.listarAPI);
 
 router.get('/AgregarVenta', checkSession, ventasController.crear);
 router.get('/AgregarVentaAPI', checkSession, ventasController.crearAPI);

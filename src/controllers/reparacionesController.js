@@ -179,6 +179,33 @@ function reparaciones_listar(req, res) {
 
 
 }
+
+function reparaciones_listar_api(req, res) {
+    // Obtener la conexión a la base de datos
+    req.getConnection(async (err, conn) => {
+        if (err) {
+            // Si hay un error al obtener la conexión, enviar una respuesta con el error
+            return res.status(500).json(err);
+        }
+
+        // Consultar las reparaciones en la base de datos   CASE WHEN estado = "Entregado" THEN 1 ELSE 0 END, estado ASC;
+        conn.query('SELECT * FROM tbl_reparaciones ORDER BY fechaRegistro DESC;', (err, reparaciones) => {
+            if (err) {
+                // Si hay un error al consultar las reparaciones, enviar una respuesta con el error
+                return res.status(500).json(err);
+            }
+
+            // Consultar los detalles de las reparaciones para cada reparación
+            for (let index in reparaciones) {
+                reparaciones[index].fechaEntrega = reparaciones[index].fechaEntrega.toLocaleDateString();
+                reparaciones[index].fechaRegistro = reparaciones[index].fechaRegistro.toLocaleString();
+                //reparaciones[index].total = "$ " + reparaciones[index].total.toLocaleString('es-CO');
+            }
+
+            res.status(200).json({ reparaciones: reparaciones });
+        });
+    });
+}
 //End Listar
 
 
@@ -337,21 +364,11 @@ async function reparaciones_detallar(req, res) {
             });
         });
 
-        const R_Detalles = await new Promise((resolve, reject) => {
-            conn.query("SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, DetallesDetalles) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(DetallesDetalles);
-                }
-            });
-        });
-
         const totalInsumos = [];
         let contDD = 1;
 
         for (const dd of DetallesDetalles) {
-            for (const d of R_Detalles) {
+            for (const d of detallesreparacion) {
                 if (d.idDetalleReparacion === dd.idDetalleReparacion) {
                     const matchingInsumo = insumos.find(ins => ins.idInsumo === dd.idInsumo);
 
@@ -379,9 +396,121 @@ async function reparaciones_detallar(req, res) {
 
         // Redireccionar
 
-        console.log("total Insumos");
-        console.log(totalInsumos);
+       // console.log("total Insumos");
+        /*console.log(reparacion)
+        console.log(detallesreparacion)
+
+        console.log(totalInsumos);*/
         res.render("reparaciones/detallar", { detallesreparacion, reparacion, totalInsumos });
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+
+async function reparaciones_detallar_api(req, res) {
+    try {
+        const idReparacion = req.params.idReparacion;
+        const conn = await new Promise((resolve, reject) => {
+            req.getConnection((err, conn) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(conn);
+                }
+            });
+        });
+
+        const reparacion = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_reparaciones WHERE idReparacion = ?", [idReparacion], (err, reparacion) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    for (let index in reparacion) {
+                        reparacion[index].fechaEntrega = reparacion[index].fechaEntrega.toLocaleDateString();
+                        reparacion[index].fechaRegistro = reparacion[index].fechaRegistro.toLocaleString();
+                        //reparacion[index].total = "$ " + reparacion[index].total.toLocaleString('es-CO');
+                    }
+                    resolve(reparacion);
+                }
+            });
+        });
+
+        const detallesreparacion = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_reparaciones_detalles WHERE idReparacion = ?", [idReparacion], (err, detallesreparacion) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    let detalles = [];
+                    for (let index in detallesreparacion) {
+                        detallesreparacion[index].fechaEstado = detallesreparacion[index].fechaEstado.toLocaleString();
+
+                        let detalle = {
+                            idDetalleReparacion: detallesreparacion[index].idDetalleReparacion,
+                            idReparacion: detallesreparacion[index].idReparacion,
+                            articulo: detallesreparacion[index].articulo,
+                            descripcion: detallesreparacion[index].descripcion,
+                            observacion: detallesreparacion[index].observacion,
+                            estado: detallesreparacion[index].estado,
+                            ultimaActualizacion: detallesreparacion[index].fechaEstado
+                        }
+
+                        detalles.push(detalle)
+                    }
+                    resolve(detalles);
+                }
+            });
+        });
+
+        for (let ix in detallesreparacion) {
+            const detalles = await new Promise((resolve, reject) => {
+                conn.query("SELECT * FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [detallesreparacion[ix].idDetalleReparacion], (err, detalles) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        let d_detalles = [];
+                        for (let i in detalles) {
+                            let d_detalle = {
+                                idInsumo: detalles[i].idInsumo,
+                                cantidadRequerida: detalles[i].cantidad_n
+                            }
+                            d_detalles.push(d_detalle);
+                        }
+                        resolve(d_detalles);
+                    }
+                });
+            });
+            detallesreparacion[ix].insumos_requeridos = detalles;
+        }
+
+        const DetallesDetalles = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_reparaciones_detalles_detalles", (err, DetallesDetalles) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(DetallesDetalles);
+                }
+            });
+        });
+       
+        const totalInsumos = [];
+        for (const dd of DetallesDetalles) {
+            for (const d of detallesreparacion) {
+                if (d.idDetalleReparacion === dd.idDetalleReparacion) {
+                    const existingInsumo = totalInsumos.find(ti => ti.idInsumo === dd.idInsumo);
+
+                    if (existingInsumo) {
+                        existingInsumo.cantidadRequerida += dd.cantidad_n;
+                    } else {
+                        totalInsumos.push({
+                            idInsumo: dd.idInsumo,
+                            cantidadRequerida: dd.cantidad_n
+                        });
+                    }
+                }
+            }
+        }
+
+        res.status(200).json({ reparacion: reparacion, articulos: detallesreparacion, total_insumos_requeridos: totalInsumos });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -1853,7 +1982,7 @@ async function reparaciones_eliminar(req, res) {
             });
         });
 
-        for(i in d_reparacion){ 
+        for (i in d_reparacion) {
             await new Promise((resolve, reject) => {
                 conn.query("DELETE FROM tbl_reparaciones_detalles_detalles WHERE idDetalleReparacion = ?", [d_reparacion[i].idDetalleReparacion], (err, d_d_reparacion) => {
                     if (err) {
@@ -1921,7 +2050,9 @@ function reparaciones_estadoTyE(req, res) {
 
 module.exports = {
     reparaciones_listar: reparaciones_listar,
+    reparaciones_listar_api: reparaciones_listar_api,
     reparaciones_detallar: reparaciones_detallar,
+    reparaciones_detallar_api: reparaciones_detallar_api,
     reparaciones_crear: reparaciones_crear,
     reparaciones_registrar: reparaciones_registrar,
     reparaciones_editar: reparaciones_editar,
