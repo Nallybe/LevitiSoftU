@@ -26,13 +26,13 @@ function listarAPI(req, res) {
         console.error('Error al obtener los insumos: ', err);
         return res.status(500).json({ error: 'Error al obtener los insumos' });
       }
-
+      //console.log("Insumos: ",insumos)
       // Reemplazar los valores 'A' por 'Activo' y 'I' por 'Inactivo' en los resultados
       insumos.forEach(insumo => {
         insumo.estado = insumo.estado === 'A' ? 'Activo' : 'Inactivo';
       });
 
-      res.status(200).json({ insumos });
+      res.json({ insumos });
     });
   });
 }
@@ -135,13 +135,15 @@ function editar(req, res) {
 
 function editarAPI(req, res) {
   const idInsumo = req.params.idInsumo;
-
+  console.log("Entra")
+  console.log("Esto: ", idInsumo)
   req.getConnection((err, conn) => {
     conn.query('SELECT * FROM tbl_insumos WHERE idInsumo = ?', [idInsumo], (err, insumos) => {
       if (err) {
         res.json(err);
       }
-      res.json({ insumos });
+      console.log("Insumos respuesta: ", insumos)
+      res.status(200).json({ insumos });
     });
   });
 }
@@ -175,7 +177,7 @@ function actualizar(req, res) {
 function actualizarAPI(req, res) {
   const idInsumo = req.params.idInsumo;
   const data = req.body;
-
+  console.log("data: ", data)
   req.getConnection((err, conn) => {
     if (err) {
       console.error('Error de conexión: ', err);

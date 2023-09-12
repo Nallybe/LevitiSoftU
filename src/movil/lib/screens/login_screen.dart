@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:movil/screens/ProductosScreen.dart';
+import 'package:movil/screens/inicio_screen.dart';
 import 'package:loading_overlay/loading_overlay.dart';
 import 'package:movil/components/components.dart';
 import 'package:movil/constants.dart';
@@ -68,6 +68,7 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: kTextInputDecoration.copyWith(
                             hintText: 'Correo Electrónico',
                           ),
+                          keyboardType: TextInputType.emailAddress,
                         ),
                       ),
                       SizedBox(
@@ -119,7 +120,7 @@ class _LoginPageState extends State<LoginPage> {
                                   Navigator.pushReplacement(
                                     currentContext,
                                     MaterialPageRoute(
-                                      builder: (context) => ProductosScreen(
+                                      builder: (context) => InicioScreen(
                                           nombreUsuario: nombreUsuario),
                                     ),
                                   );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movil/screens/Home.dart';
+import 'package:movil/screens/InsumosScreen.dart';
 import 'package:movil/screens/login_screen.dart'; 
 import 'package:movil/screens/AgregarProductoScreen.dart';
 
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       routes: {
     LoginPage.id: (context) => LoginPage(),
     AgregarProductoPage.id: (context) => AgregarProductoPage(),
+
     // Otras rutas si las tienes
   }, // Usa la página de inicio de sesión como página principal
     );
