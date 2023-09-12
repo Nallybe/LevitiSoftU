@@ -149,7 +149,7 @@ function productos_listarApi(req, res) {
                             productos[index].eliminar = true;
                         }
                     }
-
+                    console.log("Productos: ", productos)
                     // Enviar la respuesta como JSON
                     res.json({ productos });
                 }
