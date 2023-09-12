@@ -55,6 +55,7 @@ function producciones_listar(req, res) {
                                     for (iI in usersI) {
                                         if (usersI[iI].idInfo == producciones[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
                                             producciones[index].userName = usersI[iI].nombre;
+                                            producciones[index].userLastName = usersI[iI].apellido;
                                             producciones[index].userTell = usersI[iI].telefono;
                                             producciones[index].userEmail = usersA[iA].correo;
                                         }

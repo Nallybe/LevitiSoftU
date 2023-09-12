@@ -8,6 +8,12 @@ function listar(req, res) {
       insumos.forEach(insumo => {
         insumo.estado = insumo.estado === 'A' ? 'Activo' : 'Inactivo';
       });
+
+     /* var ins;
+      if(req.params.ins){
+        ins = req.params.ins;
+      }*/
+
       res.render('insumos/insumos', { insumos });
     });
 

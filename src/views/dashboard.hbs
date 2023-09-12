@@ -55,10 +55,10 @@
                 <div class="d-grid gap-2 d-md-block" style="margin-left: 10px;">
 
                   <!--<input type="month" name="fecha" id="fecha">-->
-                  <form id="formAP" action="/actualizar_grafico_producto" method="post">
-                    <input type="hidden" value="{{labels}}" name="label_p">
+                  <form id="formAP" action="/dashboard" method="post">
+                    <!--<input type="hidden" value="{{labels}}" name="label_p">
                     <input type="hidden" value="{{ventasData}}" name="ventas_p">
-                    <input type="hidden" value="{{comprasData}}" name="compras_p">
+                    <input type="hidden" value="{{comprasData}}" name="compras_p">-->
                     <input type="month" id="pro_start" name="graf_pro" {{#if valor}} value="{{valor}}" {{else}} {{/if}}>
                     <button class="btn btn-primary" type="button">Descargar</button>
                   </form>
