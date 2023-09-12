@@ -146,7 +146,7 @@ app.get('/dashboard', checkSession, (req, res) => {
                     GROUP BY MONTH(fechaRegistro)
                     ORDER BY mes;
                     
-                    `, (err, compras) => {
+                    `, async (err, compras) => {
                         if (err) {
                             return res.status(500).json(err);
                         } else {
@@ -164,7 +164,113 @@ app.get('/dashboard', checkSession, (req, res) => {
                                 return compraMes ? compraMes.cantidad_registros : 0;
                             });
 
-                            res.render('dashboard', { labels: months.slice(0, currentMonth + 1), ventasData, comprasData });
+
+                            //Productos
+                            let valor;
+
+
+                            const fechaActual = new Date();
+
+                            // Obtén el año y el mes en formato YYYY-MM (para establecer el valor del input)
+                            const year = fechaActual.getFullYear();
+                            const month = String(fechaActual.getMonth() + 1).padStart(2, '0'); // +1 porque los meses comienzan desde 0
+
+                            // Formatea la fecha actual como "YYYY-MM"
+                            const fechaActualFormateada = `${year}-${month}`;
+
+                            valor = fechaActualFormateada;
+
+
+                            const ventasF = await new Promise((resolve, reject) => {
+                                conn.query("SELECT * FROM tbl_ventas WHERE LEFT(fecha, 7) = ?", [valor], (err, ventas) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        resolve(ventas);
+                                    }
+                                });
+                            });
+
+                            let productos = []
+                            for (i in ventasF) {
+                                const d_ventas = await new Promise((resolve, reject) => {
+                                    conn.query("SELECT * FROM tbl_detalleventas WHERE idVentas = ?", [ventasF[i].idVentas], (err, d_ventas) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            resolve(d_ventas);
+                                        }
+                                    });
+                                });
+
+                                for (ix in d_ventas) {
+                                    let producto = {
+                                        idProducto: d_ventas[ix].idProducto,
+                                        cantidad: d_ventas[ix].Unidad
+                                    }
+
+                                    let agregar = true;
+
+                                    if (productos) {
+                                        for (ic in productos) {
+                                            if (productos[ic].idProducto == producto.idProducto) {
+                                                productos[ic].cantidad += producto.cantidad;
+                                                agregar = false;
+                                            }
+                                        }
+                                    }
+
+                                    if (agregar == true) {
+                                        productos.push(producto);
+                                    }
+
+                                }
+
+                            }
+
+                            const prod = await new Promise((resolve, reject) => {
+                                conn.query("SELECT * FROM tbl_productos", (err, pro) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        resolve(pro);
+                                    }
+                                });
+                            });
+
+                            let totalP = 0;
+                            for (i in productos) {
+                                for (ix in prod) {
+                                    if (productos[i].idProducto == prod[ix].idProducto) {
+                                        productos[i].nombre = prod[ix].nombre;
+                                    }
+                                }
+                                totalP += productos[i].cantidad;
+                            }
+
+                            //console.log(productos)
+
+
+                            // Ordena el array en orden descendente según la cantidad
+                            productos.sort((a, b) => b.cantidad - a.cantidad);
+
+                            // Toma los primeros 5 elementos del array ordenado
+                            const top5Productos = productos.slice(0, 5);
+
+                            //console.log(top5Productos)
+
+                            let nombres = [];
+                            let datos = [];
+
+                            for (i in top5Productos) {
+                                nombres.push(top5Productos[i].nombre);
+                                datos.push(top5Productos[i].cantidad);
+                            }
+
+
+                            //productos
+
+                            res.render('dashboard', { labels: months.slice(0, currentMonth + 1), ventasData, comprasData, nombres, datos, valor });
                         }
                     });
                 }
@@ -173,125 +279,161 @@ app.get('/dashboard', checkSession, (req, res) => {
     });
 });
 
-
-
-app.post('/actualizar_grafico_producto', checkSession, async (req, res) => {
-    try {
-        const data = req.body;
-        // console.log(data);
-
-        const conn = await new Promise((resolve, reject) => {
-            req.getConnection((err, conn) => {
+app.post('/dashboard', checkSession, (req, res) => {
+    req.getConnection((err, conn) => {
+        if (err) {
+            return res.status(500).json(err);
+        } else {
+            // Obtener datos de ventas
+            conn.query(`SELECT MONTH(fecha) AS mes, COUNT(*) AS cantidad_registros
+                        FROM tbl_ventas
+                        GROUP BY MONTH(fecha)
+                        ORDER BY mes;
+            `, (err, ventas) => {
                 if (err) {
-                    reject(err);
+                    return res.status(500).json(err);
                 } else {
-                    resolve(conn);
-                }
-            });
-        });
+                    // Obtener datos de compras
+                    conn.query(`SELECT MONTH(fechaRegistro) AS mes, COUNT(*) AS cantidad_registros
+                    FROM tbl_compras
+                    WHERE estado = 'A'
+                    GROUP BY MONTH(fechaRegistro)
+                    ORDER BY mes;
+                    
+                    `, async (err, compras) => {
+                        if (err) {
+                            return res.status(500).json(err);
+                        } else {
+                            const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                            const currentDate = new Date();
+                            const currentMonth = currentDate.getMonth();
 
-        const ventas = await new Promise((resolve, reject) => {
-            conn.query("SELECT * FROM tbl_ventas WHERE LEFT(fecha, 7) = ?", [data.graf_pro], (err, ventas) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(ventas);
-                }
-            });
-        });
+                            const ventasData = Array.from({ length: currentMonth + 1 }, (_, i) => {
+                                const ventaMes = ventas.find(venta => venta.mes === (i + 1));
+                                return ventaMes ? ventaMes.cantidad_registros : 0;
+                            });
+
+                            const comprasData = Array.from({ length: currentMonth + 1 }, (_, i) => {
+                                const compraMes = compras.find(compra => compra.mes === (i + 1));
+                                return compraMes ? compraMes.cantidad_registros : 0;
+                            });
 
 
+                            //Productos
+                            let valor;
 
-        let productos = []
-        for (i in ventas) {
-            const d_ventas = await new Promise((resolve, reject) => {
-                conn.query("SELECT * FROM tbl_detalleventas WHERE idVentas = ?", [ventas[i].idVentas], (err, d_ventas) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve(d_ventas);
-                    }
-                });
-            });
+                            if (req.body.graf_pro) {
+                                valor = req.body.graf_pro;
+                            } else {
+                                const fechaActual = new Date();
 
-            for (ix in d_ventas) {
-                let producto = {
-                    idProducto: d_ventas[ix].idProducto,
-                    cantidad: d_ventas[ix].Unidad
-                }
+                                // Obtén el año y el mes en formato YYYY-MM (para establecer el valor del input)
+                                const year = fechaActual.getFullYear();
+                                const month = String(fechaActual.getMonth() + 1).padStart(2, '0'); // +1 porque los meses comienzan desde 0
 
-                let agregar = true;
+                                // Formatea la fecha actual como "YYYY-MM"
+                                const fechaActualFormateada = `${year}-${month}`;
 
-                if (productos) {
-                    for (ic in productos) {
-                        if (productos[ic].idProducto == producto.idProducto) {
-                            productos[ic].cantidad += producto.cantidad;
-                            agregar = false;
+                                valor = fechaActualFormateada;
+                            }
+
+                            const ventasF = await new Promise((resolve, reject) => {
+                                conn.query("SELECT * FROM tbl_ventas WHERE LEFT(fecha, 7) = ?", [valor], (err, ventas) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        resolve(ventas);
+                                    }
+                                });
+                            });
+
+                            let productos = []
+                            for (i in ventasF) {
+                                const d_ventas = await new Promise((resolve, reject) => {
+                                    conn.query("SELECT * FROM tbl_detalleventas WHERE idVentas = ?", [ventasF[i].idVentas], (err, d_ventas) => {
+                                        if (err) {
+                                            reject(err);
+                                        } else {
+                                            resolve(d_ventas);
+                                        }
+                                    });
+                                });
+
+                                for (ix in d_ventas) {
+                                    let producto = {
+                                        idProducto: d_ventas[ix].idProducto,
+                                        cantidad: d_ventas[ix].Unidad
+                                    }
+
+                                    let agregar = true;
+
+                                    if (productos) {
+                                        for (ic in productos) {
+                                            if (productos[ic].idProducto == producto.idProducto) {
+                                                productos[ic].cantidad += producto.cantidad;
+                                                agregar = false;
+                                            }
+                                        }
+                                    }
+
+                                    if (agregar == true) {
+                                        productos.push(producto);
+                                    }
+
+                                }
+
+                            }
+
+                            const prod = await new Promise((resolve, reject) => {
+                                conn.query("SELECT * FROM tbl_productos", (err, pro) => {
+                                    if (err) {
+                                        reject(err);
+                                    } else {
+                                        resolve(pro);
+                                    }
+                                });
+                            });
+
+                            let totalP = 0;
+                            for (i in productos) {
+                                for (ix in prod) {
+                                    if (productos[i].idProducto == prod[ix].idProducto) {
+                                        productos[i].nombre = prod[ix].nombre;
+                                    }
+                                }
+                                totalP += productos[i].cantidad;
+                            }
+
+                            //console.log(productos)
+
+
+                            // Ordena el array en orden descendente según la cantidad
+                            productos.sort((a, b) => b.cantidad - a.cantidad);
+
+                            // Toma los primeros 5 elementos del array ordenado
+                            const top5Productos = productos.slice(0, 5);
+
+                            //console.log(top5Productos)
+
+                            let nombres = [];
+                            let datos = [];
+
+                            for (i in top5Productos) {
+                                nombres.push(top5Productos[i].nombre);
+                                datos.push(top5Productos[i].cantidad);
+                            }
+
+
+                            //productos
+
+                            res.render('dashboard', { labels: months.slice(0, currentMonth + 1), ventasData, comprasData, nombres, datos, valor });
                         }
-                    }
-                }
-
-                if (agregar == true) {
-                    productos.push(producto);
-                }
-
-            }
-
-        }
-
-
-        const prod = await new Promise((resolve, reject) => {
-            conn.query("SELECT * FROM tbl_productos", (err, pro) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(pro);
+                    });
                 }
             });
-        });
-
-        let totalP = 0;
-        for (i in productos) {
-            for (ix in prod) {
-                if (productos[i].idProducto == prod[ix].idProducto) {
-                    productos[i].nombre = prod[ix].nombre;
-                }
-            }
-            totalP += productos[i].cantidad;
         }
-
-        //console.log(productos)
-
-
-        // Ordena el array en orden descendente según la cantidad
-        productos.sort((a, b) => b.cantidad - a.cantidad);
-
-        // Toma los primeros 5 elementos del array ordenado
-        const top5Productos = productos.slice(0, 5);
-
-        //console.log(top5Productos)
-
-        let nombres = [];
-        let datos = [];
-
-        for (i in top5Productos) {
-            nombres.push(top5Productos[i].nombre);
-            datos.push(top5Productos[i].cantidad);
-        }
-        //console.log(nombres);
-        //console.log(datos);
-
-        let valor = data.graf_pro;
-        let labels = data.label_p;
-        let ventasData = data.ventas_p;
-        let comprasData = data.compras_p;
-
-        res.render('dashboard', {nombres, datos, valor, labels, ventasData, comprasData})
-
-    } catch (err) {
-        res.status(500).json(err);
-    }
-})
+    });
+});
 
 
 app.get('/home', (req, res) => {

@@ -56,9 +56,9 @@
           <h4 class="card-title" style="margin-bottom: 2%;">Editar usuario</h4>
 
           <div class="row">
-            <div class="col-6">
+            <div class="col-12">
               <!--Input Rol-->
-              <label class="form-label" for="idRol">Rol</label>
+              <p class="mb-2">Rol</p>
               <select class="form-control form-control-sm" style="border-radius: 0;" id="idRol" name="idRol">
                 {{#each roles}}
                 {{#if seleccionado}}
@@ -70,6 +70,48 @@
               </select>
               <div id="mensajeErrorRol"></div>
               <!--End Input Rol-->
+
+              <hr width="100%">
+              <p style="text-align: left;"  class="mb-2">Información del usuario</p>
+            </div>
+
+
+            <div class="col-6">
+
+              {{#each info}}
+
+              <!--Input Documento-->
+              <label class="form-label" for="documento">Documento</label>
+              <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="documento"
+                name="documento" oninput="val_documento()" autocomplete="off" value="{{documento}}">
+              <div id="mensajeErrorDocumento"></div>
+              <!--End Input Documento-->
+
+              <!--Input Nombre-->
+              <label class="form-label mt-2" for="nombre">Nombre</label>
+              <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="nombre"
+                name="nombre" oninput="val_nombre()" autocomplete="off" value="{{nombre}}">
+              <div id="mensajeErrorNombre"></div>
+              <!--End Input Nombre-->
+
+              <!--Input Apellido-->
+              <label class="form-label mt-2" for="apellido">Apellido</label>
+              <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="apellido"
+                name="apellido" oninput="val_apellido()" autocomplete="off" value="{{apellido}}">
+              <div id="mensajeErrorApellido"></div>
+              <!--End Input Apellido-->
+
+            </div>
+
+            <div class="col-6">
+
+              <!--Input Telefono-->
+              <label class="form-label" for="telefono">Teléfono</label>
+              <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="telefono"
+                name="telefono" oninput="val_telefono()" autocomplete="off" value="{{telefono}}">
+              <div id="mensajeErrorTelefono"></div>
+              <!--End Input Telefono-->
+              {{/each}}
 
               {{#each usuario}}
 
@@ -119,49 +161,16 @@
               {{/each}}
 
             </div>
-            <div class="col-6">
-
-              {{#each info}}
-
-              <!--Input Documento-->
-              <label class="form-label" for="documento">Documento</label>
-              <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="documento"
-                name="documento" oninput="val_documento()" autocomplete="off" value="{{documento}}">
-              <div id="mensajeErrorDocumento"></div>
-              <!--End Input Documento-->
-
-              <!--Input Nombre-->
-              <label class="form-label mt-2" for="nombre">Nombre</label>
-              <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="nombre"
-                name="nombre" oninput="val_nombre()" autocomplete="off" value="{{nombre}}">
-              <div id="mensajeErrorNombre"></div>
-              <!--End Input Nombre-->
-
-              <!--Input Apellido-->
-              <label class="form-label mt-2" for="apellido">Apellido</label>
-              <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="apellido"
-                name="apellido" oninput="val_apellido()" autocomplete="off" value="{{apellido}}">
-              <div id="mensajeErrorApellido"></div>
-              <!--End Input Apellido-->
-
-              <!--Input Telefono-->
-              <label class="form-label mt-2" for="telefono">Teléfono</label>
-              <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="telefono"
-                name="telefono" oninput="val_telefono()" autocomplete="off" value="{{telefono}}">
-              <div id="mensajeErrorTelefono"></div>
-              <!--End Input Telefono-->
-            </div>
-
 
           </div>
 
-          <div class="alert alert-info alert-dismissible fade show mt-2" role="alert">
+          <div class="alert alert-info alert-dismissible fade show mt-4" role="alert">
             Si quieres <strong>cambiar la contraseña</strong> debes recuperarla en el <strong>inicio de sesión</strong>
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          {{/each}}
+
 
 
           <!--Start Btn R&C-->
