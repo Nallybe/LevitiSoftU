@@ -27,7 +27,7 @@ const tienePermisos = (session) => {
     return false;
 };
 
-router.get('/insumos', checkSession, insumosController.listar);
+router.get('/insumos', checkSession, insumosController.listar); //router.get('/insumos/:ins?', checkSession, insumosController.listar);
 router.get('/insumosAPI', insumosController.listarAPI);
 router.get('/EditarInsumo/:idInsumo', checkSession, insumosController.editar);
 router.get('/EditarInsumoAPI/:idInsumo', insumosController.editarAPI);
