@@ -93,6 +93,44 @@ function producciones_listar(req, res) {
         });
     });
 }
+
+function producciones_listar_api(req, res) {
+    // Obtener la conexión a la base de datos
+    req.getConnection((err, conn) => {
+        if (err) {
+            // Si hay un error al obtener la conexión, enviar una respuesta con el error
+            return res.status(500).json(err);
+        }
+        // Consultar las producciones en la base de datos
+        conn.query('SELECT * FROM tbl_ordenes_produccion ORDER BY fechaRegistro DESC;', (err, producciones) => {
+            if (err) {
+                // Si hay un error al consultar las producciones, enviar una respuesta con el error
+                return res.status(500).json(err);
+            }
+
+            let prods = [];
+            // Consultar los detalles de las producciones para cada Producción
+            for (let index in producciones) {
+                producciones[index].fechaInicio = producciones[index].fechaInicio.toLocaleDateString();
+                producciones[index].fechaFin = producciones[index].fechaFin.toLocaleDateString();
+                producciones[index].fechaRegistro = producciones[index].fechaRegistro.toLocaleString();
+
+                prods.push({
+                    idOrdenProduccion: producciones[index].idOrdenProduccion,
+                    idInfo: producciones[index].idInfo,
+                    idProducto: producciones[index].idProducto,
+                    cantidad: producciones[index].cantidad,
+                    fechaInicio: producciones[index].fechaInicio,
+                    fechaFin: producciones[index].fechaFin,
+                    estado: producciones[index].estado,
+                    fechaRegistro: producciones[index].fechaRegistro
+                });
+            }
+            // Renderizar la plantilla 'producciones/listar' y enviar los datos a la vista
+            res.status(200).json({ ordenes_produccion: prods });
+        });
+    });
+}
 //End Listar
 
 
@@ -341,6 +379,131 @@ async function producciones_detallar(req, res) {
         //console.log(eventosList)
 
         res.render("produccion/detallar", { producciones, d_produccion, d_producto, eventosList });
+    } catch (err) {
+        res.status(500).json(err);
+    }
+}
+
+async function producciones_detallar_api(req, res) {
+    try {
+        const idOrdenProduccion = req.params.idOrdenProduccion;
+        const conn = await new Promise((resolve, reject) => {
+            req.getConnection((err, conn) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(conn);
+                }
+            });
+        });
+
+        const producciones = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_ordenes_produccion WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, producciones) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    let prods = [];
+                    for (let index in producciones) {
+                        producciones[index].fechaInicio = producciones[index].fechaInicio.toLocaleDateString();
+                        producciones[index].fechaFin = producciones[index].fechaFin.toLocaleDateString();
+                        producciones[index].fechaRegistro = producciones[index].fechaRegistro.toLocaleString();
+
+                        prods.push({
+                            idOrdenProduccion: producciones[index].idOrdenProduccion,
+                            idInfo: producciones[index].idInfo,
+                            idProducto: producciones[index].idProducto,
+                            cantidad: producciones[index].cantidad,
+                            fechaInicio: producciones[index].fechaInicio,
+                            fechaFin: producciones[index].fechaFin,
+                            estado: producciones[index].estado,
+                            fechaRegistro: producciones[index].fechaRegistro
+                        });
+                    }
+                    resolve(prods);
+                }
+            });
+        });
+
+        const d_produccion = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_ordenes_produccion_detalles WHERE idOrdenProduccion = ?", [idOrdenProduccion], (err, d_produccion) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    let d_prod = [];
+                    for (let index in d_produccion) {
+                        d_produccion[index].fechaInicio = d_produccion[index].fechaInicio.toLocaleDateString();
+                        d_produccion[index].fechaFin = d_produccion[index].fechaFin.toLocaleDateString();
+                        d_produccion[index].fechaEstado = d_produccion[index].fechaEstado.toLocaleString();
+
+                        d_prod.push({
+                            idDetalleOrdenProduccion: d_produccion[index].idDetalleOrdenProduccion,
+                            titulo: d_produccion[index].titulo,
+                            descripcion: d_produccion[index].descripcion,
+                            observacion: d_produccion[index].observacion,
+                            fechaInicio: d_produccion[index].fechaInicio,
+                            fechaFin: d_produccion[index].fechaFin,
+                            estado: d_produccion[index].estado,
+                            ultimaActualizacion: d_produccion[index].fechaEstado
+                        });
+                    }
+                    resolve(d_prod);
+                }
+            });
+        });
+
+        for (let index in d_produccion) {
+            const participes = await new Promise((resolve, reject) => {
+                conn.query("SELECT * FROM tbl_ordenes_produccion_detalles_participes WHERE idDetalleOrdenProduccion = ?", [d_produccion[index].idDetalleOrdenProduccion], (err, participes) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        let parts = [];
+                        for (let ip in participes) {
+                            parts.push({
+                                idInfo: participes[ip].idInfo
+                            });
+                        }
+                        resolve(parts);
+                    }
+                });
+            });
+
+            d_produccion[index].participantes = participes;
+        }
+
+        const d_producto = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_productos_detalles WHERE idProducto = ?", [producciones[0].idProducto], (err, d_producto) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(d_producto);
+                }
+            });
+        });
+
+        const insumos = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(insumos);
+                }
+            });
+        });
+
+        let ins = []
+        for (index in d_producto) {
+            for (i in insumos) {
+                if (insumos[i].idInsumo == d_producto[index].idInsumo) {
+                    ins.push({
+                        idInsumo: d_producto[index].idInsumo,
+                        cantidadRequerida: d_producto[index].cantidad_n * producciones[0].cantidad
+                    });
+                }
+            }
+        }
+
+        res.status(200).json({ orden_produccion: producciones, tareas: d_produccion, insumos_requeridos: ins });
     } catch (err) {
         res.status(500).json(err);
     }
@@ -2333,7 +2496,9 @@ async function producciones_eliminar(req, res) {
 
 module.exports = {
     producciones_listar: producciones_listar,
+    producciones_listar_api: producciones_listar_api,
     producciones_detallar: producciones_detallar,
+    producciones_detallar_api: producciones_detallar_api,
     producciones_crear: producciones_crear,
     producciones_registrar: producciones_registrar,
     producciones_editar: producciones_editar,

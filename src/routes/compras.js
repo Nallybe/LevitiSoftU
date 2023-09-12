@@ -28,12 +28,16 @@ const tienePermisos = (session) => {
 };
 
 router.get('/compras',checkSession,ComprasController.compras_listar);
+router.get('/API_compras',ComprasController.compras_listar_api);
+
 router.get('/compras/:idCompra',checkSession,ComprasController.compras_detallar);
-router.get('/compras_anulaciones',checkSession,ComprasController.compras_listar_anulaciones);
+router.get('/API_compras/:idCompra',ComprasController.compras_detallar_api);
 
 router.get('/compras_registrar',checkSession,ComprasController.compras_crear);
 router.post('/compras_registrar',checkSession,ComprasController.compras_registrar);
+//router.post('/API_compras_registrar',checkSession,ComprasController.compras_registrar_api);
 
 router.post('/compras_anular',checkSession,ComprasController.compras_anular);
+//router.post('/API_compras_anular',checkSession,ComprasController.compras_anular_api);
 
 module.exports = router;

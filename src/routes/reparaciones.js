@@ -27,15 +27,21 @@ const tienePermisos = (session) => {
 const router = express.Router();
 
 router.get('/reparaciones',checkSession,ReparacionesController.reparaciones_listar);
+router.get('/API_reparaciones', ReparacionesController.reparaciones_listar_api);
+
 router.get('/reparaciones/:idReparacion',checkSession,ReparacionesController.reparaciones_detallar);
+router.get('/API_reparaciones/:idReparacion', ReparacionesController.reparaciones_detallar_api);
 
 router.get('/reparaciones_registrar',checkSession,ReparacionesController.reparaciones_crear);
 router.post('/reparaciones_registrar',checkSession,ReparacionesController.reparaciones_registrar);
+//router.post('/API_reparaciones_registrar',checkSession,ReparacionesController.reparaciones_registrar_api);
 
 router.get('/reparaciones_editar/:idReparacion',checkSession,ReparacionesController.reparaciones_editar);
 router.post('/reparaciones_editar/:idReparacion',checkSession,ReparacionesController.reparaciones_modificar);
+//router.put('/API_reparaciones_editar_api/:idReparacion',checkSession,ReparacionesController.reparaciones_modificar_api);
 
 router.post('/reparaciones_eliminar',checkSession,ReparacionesController.reparaciones_eliminar);
+//router.delete('/API_reparaciones_eliminar',checkSession,ReparacionesController.reparaciones_eliminar_api);
 
 router.post('/reparaciones_estadoTyE',checkSession,ReparacionesController.reparaciones_estadoTyE);
 
