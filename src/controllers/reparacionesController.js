@@ -589,7 +589,7 @@ async function reparaciones_registrar(req, res) {
 
         // Actualizar datos del cliente
         await new Promise((resolve, reject) => {
-            conn.query(`UPDATE users_info SET numReparaciones = numReparaciones + 1 WHERE idInfo = ?`, [data.idCliente], (err) => {
+            conn.query(`UPDATE users_info SET idReparaciones = idReparaciones + 1 WHERE idInfo = ?`, [data.idCliente], (err) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -1961,7 +1961,7 @@ async function reparaciones_eliminar(req, res) {
 
         for (i in reparacion) {
             await new Promise((resolve, reject) => {
-                conn.query("UPDATE users_info SET numReparaciones=numReparaciones- 1 WHERE idInfo= ?", [reparacion[i].idInfo], (err, reparacion) => {
+                conn.query("UPDATE users_info SET idReparaciones=idReparaciones- 1 WHERE idInfo= ?", [reparacion[i].idInfo], (err, reparacion) => {
                     if (err) {
                         reject(err);
                     } else {
