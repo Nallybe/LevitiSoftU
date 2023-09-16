@@ -85,9 +85,9 @@
         <h4 class="card-title" style="margin-bottom: 1%;">Registrar compra</h4>
 
         <div class="row">
-          <div class="col-3">
+          <div class="col-xl-3 col-md-12">
             <!--Start Card #1-->
-            <div class="card" style="border-radius: 0; width: 100%; margin-bottom: 1%;">
+            <div class="card" style="border-radius: 0; width: 100%; margin-bottom: 3%;">
               <div class="card-body">
                 <h5 class="card-title" style="margin-bottom: 2%;">Compra</h5>
 
@@ -124,18 +124,18 @@
             <!--End Card #1-->
 
           </div>
-          <div class="col-9">
+          <div class="col-xl-9 col-md-12">
 
             <!--Start Card #2-->
 
             <div class="card" style="border-radius: 0; width: 100%;">
               <div class="card-body">
                 <div class="row">
-                  <div class="col-md-11">
+                  <div class="col-xl-12 col-md-12">
                     <h5 class="card-title">Agregar insumo</h5>
 
                     <div class="row">
-                      <div class="col-md-4">
+                      <div class="col-xl-3 col-md-6">
                         <!--Input Insumo-->
                         <label class="form-label" for="idInsumo_R">Insumo</label>
                         <input type="text" class="form-control form-control-sm" list="list_insumos"
@@ -150,7 +150,7 @@
                         <div id="mensajeErrorInsumo"></div>
                         <!--End Input Insumo-->
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-xl-3 col-md-6">
                         <!--Input Precio-->
                         <label class="form-label" for="precio_R">Precio</label>
 
@@ -162,7 +162,7 @@
                         <div id="mensajeErrorPrecio"></div>
                         <!--End Input Precio-->
                       </div>
-                      <div class="col-md-3">
+                      <div class="col-xl-3 col-md-6">
                         <!--Input Cantidad-->
                         <label class="form-label" for="cantidad_R">Cantidad</label>
 
@@ -174,7 +174,7 @@
                         <div id="mensajeErrorCantidad"></div>
                         <!--End Input Cantidad-->
                       </div>
-                      <div class="col-md-2">
+                      <div class="col-xl-2 col-md-6">
 
                         <!-- Input Porcentaje Iva -->
                         <label class="form-label" for="porcentajeIva_R">Porcentaje_IVA</label>
@@ -184,15 +184,17 @@
                         <div id="mensajeErrorPorcentajeIva"></div>
                         <!-- End Input Porcentaje Iva -->
                       </div>
+
+                      <div class="col-xl-1 col-md-12">
+                        <!--Start Btn Agregar-->
+                        <i class="fa-solid fa-circle-plus fa-2x" type="button"
+                          id="btnAgregarInsumo" onclick="agregarInsumo()"></i>
+                        <!--End Btn Agregar-->
+                      </div>
                     </div>
 
                   </div>
-                  <div class="col-md-1">
-                    <!--Start Btn Agregar-->
-                    <i class="fa-solid fa-circle-plus fa-2x" style="margin-top: 60%;" type="button"
-                      id="btnAgregarInsumo" onclick="agregarInsumo()"></i>
-                    <!--End Btn Agregar-->
-                  </div>
+
                 </div>
               </div>
             </div>

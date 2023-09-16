@@ -47,10 +47,6 @@ function producciones_listar(req, res) {
                             return res.status(500).json(err);
                         } else {
                             for (index in producciones) {
-                                producciones[index].userName;
-                                producciones[index].userTell;
-                                producciones[index].userNumC;
-                                producciones[index].userEmail;
                                 for (iA in usersA) {
                                     for (iI in usersI) {
                                         if (usersI[iI].idInfo == producciones[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
