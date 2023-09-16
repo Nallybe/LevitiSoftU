@@ -626,7 +626,7 @@ app.get('/misRepara', sesion, checkTokenExpiration, (req, res) => {
                 IDInfo_user = usersI[iI].idInfo;
             }
         }
-
+        console.log(IDInfo_user)
         conn.query('SELECT * FROM tbl_reparaciones WHERE idInfo = ? ORDER BY fechaRegistro DESC;', [IDInfo_user], (err, reparaciones) => {
             if (err) {
                 // Si hay un error al consultar las reparaciones, enviar una respuesta con el error
@@ -692,6 +692,7 @@ app.get('/misRepara', sesion, checkTokenExpiration, (req, res) => {
                                     }
                                 }
                             }
+                            console.log("Reparaciones: ", reparaciones)
                             //res.status(200).render("reparaciones/listar", { reparaciones });
                             res.render('misRepara', {
                                 nombre: 'Mis reparaciones', sesion: loggedIn, name, reparaciones

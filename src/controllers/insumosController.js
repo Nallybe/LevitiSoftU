@@ -75,7 +75,7 @@ function listarAPI(req, res) {
 
 function registrar(req, res) {
   const data = req.body;
-  console.log(data)
+  //console.log(data)
   const RegistroInsumo = {
     nombre: data.nombreInsumo,
     medida: data.medidaInsumo,
@@ -141,8 +141,7 @@ function editar(req, res) {
 
 function editarAPI(req, res) {
   const idInsumo = req.params.idInsumo;
-  console.log("Entra")
-  console.log("Esto: ", idInsumo)
+  
   req.getConnection((err, conn) => {
     conn.query('SELECT * FROM tbl_insumos WHERE idInsumo = ?', [idInsumo], (err, insumos) => {
       if (err) {
@@ -158,7 +157,7 @@ function actualizar(req, res) {
   const idInsumo = req.params.idInsumo;
   const data = req.body;
 
-  console.log(data);
+  //console.log(data);
 
   req.getConnection((err, conn) => {
     if (err) {
@@ -183,7 +182,7 @@ function actualizar(req, res) {
 function actualizarAPI(req, res) {
   const idInsumo = req.params.idInsumo;
   const data = req.body;
-  console.log("data: ", data)
+  //console.log("data: ", data)
   req.getConnection((err, conn) => {
     if (err) {
       console.error('Error de conexión: ', err);
