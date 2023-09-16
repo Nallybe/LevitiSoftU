@@ -92,7 +92,8 @@
   {{>barId}}
   <!--Barra de navegación-->
   {{#each producto}}
-  <form action="/productos_editar/{{idProducto}}" method="post" onsubmit="return validarEnvio()" id="FormEditarProducto">
+  <form action="/productos_editar/{{idProducto}}" method="post" onsubmit="return validarEnvio()"
+    id="FormEditarProducto">
 
     <div class="container-fluid" style="margin-top: 60px;  margin-bottom: 10px;">
 
@@ -181,7 +182,8 @@
                     <img id="imagenMostrada" src="/assets/img/Productos/{{imagen}}" alt="Imagen del producto">
 
                     <!-- Agregar un botón para permitir seleccionar una nueva imagen -->
-                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning btn-sm">Seleccionar nueva
+                    <button type="button" onclick="seleccionarNuevaImagen()" class="btn btn-warning btn-sm">Seleccionar
+                      nueva
                       imagen</button>
 
                   </center>
@@ -230,10 +232,35 @@
 
                           <!--Input Cantidad-->
                           <label for="cantidad_R">Cantidad</label>
-                          <input type="number" class="form-control form-control-sm" style="border-radius: 0;"
-                            id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()">
+                          <input type="text" class="form-control form-control-sm" style="border-radius: 0;"
+                            id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()" onkeypress="return solonumeros(event)" maxlength="10">
                           <div id="mensajeErrorCantidad"></div>
                           <!--End Input Cantidad-->
+
+                          <script>
+                            function solonumeros(e) {
+                              key = e.keyCode || e.which;
+
+                              teclado = String.fromCharCode(key);
+
+                              letras = "1234567890";
+
+                              especiales = "8-37-38-46";
+
+                              teclado_especial = false;
+
+                              for (var i in especiales) {
+                                if (key == especiales[i]) {
+                                  teclado_especial = true; break
+                                }
+                              }
+
+                              if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+                                return false;
+                              }
+
+                            }
+                          </script>
 
                         </div>
                       </div>
@@ -274,12 +301,12 @@
                           <td class="text-center">
                             <input type="hidden" name="idDetalleProducto_1" value="{{idDetalleProducto}}">
                             <input id="Id_{{idDetalleProducto}}" name="idInsumo_1" value="{{idInsumo}}"
-                              style="text-align: center; width: 100px;  border: none;" readonly>
+                              style="text-align: center; width: auto;  border: none;" readonly>
                           </td>
 
                           <td class="text-center">
-                            <input style="text-align: center; width: 100px;  border: 1 black;"
-                              id="cant_{{idInsumo}}" name="cantidad_n_1" value="{{cantidad_n}}" oninput="updateValueInput(this)">
+                            <input style="text-align: center; width: 100px;  border: 1 black;" id="cant_{{idInsumo}}"
+                              name="cantidad_n_1" value="{{cantidad_n}}" oninput="updateValueInput(this)">
                           </td>
                           <td class="text-center">
                             <a href="#" onclick="eliminarInsumo({{idDetalleProducto}})" style="color: #292b2c;">
@@ -311,17 +338,15 @@
               <!--End Card #3-->
 
               <div style="text-align: right;">
-                    <!--Start Btn Cancelar-->
-                    <a class="btn btn-danger btn-sm" href="/productos"
-                      type="button">Cancelar</a>
-                    <!--End Btn Cancelar-->
+                <!--Start Btn Cancelar-->
+                <a class="btn btn-danger btn-sm" href="/productos" type="button">Cancelar</a>
+                <!--End Btn Cancelar-->
 
-                    <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-                    <button type="submit" class="btn btn-success btn-sm"
-                      id="btnEditar">
-                      Guardar cambios</button>
-                    <!--End Btn Regiastrar-->
-                </div>
+                <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
+                <button type="submit" class="btn btn-success btn-sm" id="btnEditar">
+                  Guardar cambios</button>
+                <!--End Btn Regiastrar-->
+              </div>
 
             </div>
           </div>
@@ -522,7 +547,7 @@
         <tr id="${cont}" class="insumo_tr" style="text-align: center; background-color: whitesmoke;">
             <td class="text-center"></td>
             <td class="text-center">
-                <input id="Id_${insumo.idInsumo}" name="idInsumo_2" value="${insumo.idInsumo}" style="text-align: center; width: 100px;  border: none; background-color: whitesmoke;" readonly>
+                <input id="Id_${insumo.idInsumo}" name="idInsumo_2" value="${insumo.idInsumo}" style="text-align: center; width: auto;  border: none; background-color: whitesmoke;" readonly>
             </td>
             <td class="text-center">
                 <input style="text-align: center; width: 100px;  border: 1px grey solid; background-color: whitesmoke;" id="cant_${insumo.idInsumo}" name="cantidad_n_2" value="${insumo.cantidad}" oninput="updateValueInput(this)">
@@ -543,10 +568,10 @@
           });
 
         }
-        
+
         tablaIndex();
 
-         const totalVisibleRows = document.querySelectorAll('.insumo_tr[data-visible="true"]').length;
+        const totalVisibleRows = document.querySelectorAll('.insumo_tr[data-visible="true"]').length;
 
         const totalPages = Math.ceil(totalVisibleRows / itemsPerPage);
         currentPage = totalPages;
@@ -824,7 +849,7 @@
   </script>
 
 
-    <!--Actualizar Valores-->
+  <!--Actualizar Valores-->
   <script>
     function updateValueInput(input) {
       input.setAttribute("value", input.value);

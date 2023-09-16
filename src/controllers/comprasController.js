@@ -186,7 +186,7 @@ function compras_detallar(req, res) {
       } else {
         for (index in compra) {
           compra[index].fechaRecibo = compra[index].fechaRecibo.toLocaleDateString();
-          compra[index].fechaRegistro = compra[index].fechaRegistro.toLocaleString();
+          compra[index].fechaRegistro = compra[index].fechaRegistro.toLocaleDateString();
         }
 
         conn.query("SELECT * FROM tbl_compras_detalles WHERE idCompra = ?", [idCompra], (err, detallescompra) => {
@@ -230,6 +230,7 @@ function compras_detallar(req, res) {
                     detallescompra[i].monto = "$ " + monto.toLocaleString('es-CO');
                     detallescompra[i].iva = "$ " + iva.toLocaleString('es-CO');
                     detallescompra[i].precio = "$ " + detallescompra[i].precio.toLocaleString('es-CO');
+                    detallescompra[i].cantidad = detallescompra[i].cantidad.toLocaleString('es-CO');
                     detallescompra[i].porcentajeIva = detallescompra[i].porcentajeIva + "%";
 
                     detallescompra[i].cont = cont;

@@ -168,9 +168,10 @@
 
 
                                         <label for="motivoAnulacion" class="form-label">Motivo de anulación</label>
-                                        <textarea class="form-control" name="motivoAnulacion" id="motivoAnulacion"
+                                        <textarea class="form-control" name="motivoAnulacion"
+                                            id="motivoAnulacion_{{idCompra}}"
                                             style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: auto;"
-                                            required> </textarea>
+                                            required></textarea>
 
 
                                         {{/if}}
@@ -217,20 +218,32 @@
 
 
     function Anular(id) {
-        Swal.fire({
-            title: '¿Estás seguro de esto?',
-            text: "¡Se anulará la compra y disminuirá el stock de los insumos relacionados con la compra!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            cancelButtonText: 'Cancelar',
-            confirmButtonText: 'Sí, anular compra!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                document.getElementById("FormAnularCompra" + id).submit();
-            }
-        });
+        var m = "motivoAnulacion_" + id;
+
+        if (document.getElementById(m).value != "") {
+            Swal.fire({
+                title: '¿Estás seguro de esto?',
+                text: "¡Se anulará la compra y disminuirá el stock de los insumos relacionados con la compra!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Cancelar',
+                confirmButtonText: 'Sí, anular compra!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById("FormAnularCompra" + id).submit();
+                }
+            });
+        } else {
+            Swal.fire({
+                position: 'top-end',
+                icon: 'warning',
+                title: "El motivo es un campo obligatorio",
+                showConfirmButton: false,
+                timer: 3000
+            });
+        }
     }
 
     function filtrarTabla() {
