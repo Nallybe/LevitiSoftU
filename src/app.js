@@ -620,10 +620,38 @@ app.get('/misRepara', sesion, checkTokenExpiration, (req, res) => {
             });
         });
 
+        const usersA = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM users_access", (err, usersA) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(usersA);
+                }
+            });
+        });
+
+        const roles = await new Promise((resolve, reject) => {
+            conn.query("SELECT * FROM tbl_roles WHERE nombreRoles = 'Cliente'", (err, rol) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(rol);
+                }
+            });
+        });
+
+        var rol;
+        for(i in roles){
+            rol = roles[i].idRoles;
+        }
+
+
         var IDInfo_user;
         for (let iI in usersI) {
-            if ((usersI[iI].nombre +" "+usersI[iI].apellido ) == name) {
-                IDInfo_user = usersI[iI].idInfo;
+            for(let iA in usersA){
+                if ((usersI[iI].nombre +" "+usersI[iI].apellido ) == name && usersA[iA].idRoles == rol) {
+                    IDInfo_user = usersI[iI].idInfo;
+                }
             }
         }
         console.log(IDInfo_user)

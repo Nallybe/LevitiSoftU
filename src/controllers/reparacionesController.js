@@ -82,13 +82,11 @@ function reparaciones_listar(req, res) {
                                 return res.status(500).json(err);
                             } else {
                                 for (index in reparaciones) {
-                                    reparaciones[index].userName;
-                                    reparaciones[index].userTell;
-                                    reparaciones[index].userEmail;
                                     for (iA in usersA) {
                                         for (iI in usersI) {
                                             if (usersI[iI].idInfo == reparaciones[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
                                                 reparaciones[index].userName = usersI[iI].nombre;
+                                                reparaciones[index].userLastName = usersI[iI].apellido;
                                                 reparaciones[index].userTell = usersI[iI].telefono;
                                                 reparaciones[index].userEmail = usersA[iA].correo;
                                             }
@@ -154,13 +152,11 @@ function reparaciones_listar(req, res) {
                                 return res.status(500).json(err);
                             } else {
                                 for (index in reparaciones) {
-                                    reparaciones[index].userName;
-                                    reparaciones[index].userTell;
-                                    reparaciones[index].userEmail;
                                     for (iA in usersA) {
                                         for (iI in usersI) {
                                             if (usersI[iI].idInfo == reparaciones[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
                                                 reparaciones[index].userName = usersI[iI].nombre;
+                                                reparaciones[index].userLastName = usersI[iI].apellido;
                                                 reparaciones[index].userTell = usersI[iI].telefono;
                                                 reparaciones[index].userEmail = usersA[iA].correo;
                                             }
