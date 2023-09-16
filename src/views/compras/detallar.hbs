@@ -89,12 +89,14 @@
 <br>
 <a href="/compras" style="color:black; text-decoration:none; margin-left: 1%"><i class="fa fa-arrow-left fa-2x"></i></a>
 
+<center>
+    <div style="width: 99%;">
+        <div class="row">
 
-<div class="row">
-    <div class="col-md-4">
-        {{#each compra}}
-        <div class="card mb-3" style="max-width: 100%; border-radius: 0; margin-left: 1%">
-            <div class="card-body">
+        <div class="col-xl-4 col-md-12">
+            {{#each compra}}
+            <!--<div class="card" style="width: 96%; border-radius: 0;">
+            <div class="card-body" style="text-align: left;">
                 <h5 class="card-title">Compra</h5>
                 <p class="card-text"><b>Proveedor: </b>{{proveedor}}</p>
                 <p class="card-text"><b>Recibo: </b>{{recibo}}</p>
@@ -102,37 +104,75 @@
                 <p class="card-text"><b>Fecha registro: </b>{{fechaRegistro}}</p>
                 </p>
             </div>
-        </div>
-        {{/each}}
-    </div>
+        </div>-->
+            <div class="card" style="width: 100%; border-radius: 0;">
+                <div class="card-body" style="text-align: left;">
+                    <h5 class="card-title">Compra</h5>
+                    <p class="card-text">
+                        <small>
+                            <b style="width: 40%; display: inline-block; text-align: left;">Proveedor:</b>
+                            <span
+                                style="width: 50%; display: inline-block; text-align: left; margin-left: 10px;">{{proveedor}}</span>
+                        </small>
+                    </p>
+                    <p class="card-text">
+                        <small>
+                            <b style="width: 40%; display: inline-block; text-align: left;">Recibo:</b>
+                            <span
+                                style="width: 50%; display: inline-block; text-align: left; margin-left: 10px;">{{recibo}}</span>
+                        </small>
+                    </p>
+                    <p class="card-text">
+                        <small>
 
-    <div class="col-md-8">
-        <!--Start Card #3-->
-        <div class="card" style="width: 98%; border-radius: 0;">
-            <div class="card-body">
-                <h5 class="card-title">Insumos adquiridos</h5>
-                <!--Start Table-->
-                <div class="table-container">
-                    <table class="table table-sm">
-                        <thead class="table" style="background-color: #282d32; color:white;">
-                            <tr style="text-align: center;">
-                                <th> #</th>
-                                <th>Insumo</th>
-                                <th>Precio</th>
-                                <th>Cantidad</th>
-                                <th>SubTotal</th>
-                                <th>%Iva</th>
-                                <th>Iva</th>
-                                <th>Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {{#each detallescompra}}
-                            <tr class="table">
-                                <td class="py-2 px-6 text-center">{{cont}}</td>
-                                <td class="p-2 text-center">
-                                    <a href="/insumos?{{nombreI}}" data-bs-toggle="popover" data-bs-trigger="hover"
-                                        data-bs-custom-class="custom-popover" data-bs-title="<b>Insumo {{cont}}</b>" data-bs-html="true" data-bs-content="
+
+                            <b style="width: 40%; display: inline-block; text-align: left;">Fecha recibo:</b>
+                            <span
+                                style="width: 50%; display: inline-block; text-align: left; margin-left: 10px;">{{fechaRecibo}}</span>
+                        </small>
+                    </p>
+                    <p class="card-text">
+                        <small> <b style="width: 40%; display: inline-block; text-align: left;">Fecha registro:</b>
+                            <span
+                                style="width: 50%; display: inline-block; text-align: left; margin-left: 10px;">{{fechaRegistro}}</span>
+                        </small>
+                    </p>
+                </div>
+            </div>
+
+
+
+            {{/each}}
+        </div>
+
+        <div class="col-xl-8 col-md-12">
+            <!--Start Card #3-->
+            <div class="card" style="width: 100%; border-radius: 0;">
+                <div class="card-body" style="text-align: left;">
+                    <h5 class="card-title">Insumos adquiridos</h5>
+                    <!--Start Table-->
+                    <div class="table-container">
+                        <table class="table table-sm">
+                            <thead class="table" style="background-color: #282d32; color:white;">
+                                <tr style="text-align: center;">
+                                    <th> #</th>
+                                    <th>Insumo</th>
+                                    <th>Precio</th>
+                                    <th>Cantidad</th>
+                                    <th>SubTotal</th>
+                                    <th>%Iva</th>
+                                    <th>Iva</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each detallescompra}}
+                                <tr class="table">
+                                    <td class="py-2 px-6 text-center">{{cont}}</td>
+                                    <td class="p-2 text-center">
+                                        <button data-bs-toggle="popover" data-bs-trigger="hover"
+                                            data-bs-custom-class="custom-popover" data-bs-title="<b>Insumo {{cont}}</b>"
+                                            data-bs-html="true" data-bs-content="
                                     <div class='row'>
                                         <div class='col-md-4'>
                                             <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-Box-Open-icon.png' width='100' />
@@ -143,40 +183,45 @@
                                             <b>Stock:</b> {{cantidadI}}<br>
                                         </div>
                                     </div>
-                                ">{{nombreI}} <i class="fas fa-box-open" style="color: black"></i></a>
-                                </td>
-                                <td class="p-3 text-center">{{precio}}</td>
-                                <td class="p-3 text-center">{{cantidad}}</td>
-                                <td class="p-3 text-center">{{monto}}</td>
-                                <td class="p-3 text-center">{{porcentajeIva}}</td>
-                                <td class="p-3 text-center">{{iva}}</td>
-                                <td class="py-2 px-6 text-center">{{total}}</td>
-                            </tr>
-                            {{/each}}
-                            {{#each compra}}
-                            <tr class="table tf">
-                                <td class="py-2 px-6 text-center"><b>Total</b></td>
-                                <td class="p-3 text-center" colspan="3"></td>
-                                <td class="p-3 text-center"><b>{{monto}}</b></td>
-                                <td class="p-3 text-center"></td>
-                                <td class="p-3 text-center"><b>{{iva}}</b></td>
+                                ">{{nombreI}} <i class="fas fa-box-open" style="color: black"></i></button>
+                                    </td>
+                                    <td class="p-3 text-center">{{precio}}</td>
+                                    <td class="p-3 text-center">{{cantidad}}</td>
+                                    <td class="p-3 text-center">{{monto}}</td>
+                                    <td class="p-3 text-center">{{porcentajeIva}}</td>
+                                    <td class="p-3 text-center">{{iva}}</td>
+                                    <td class="py-2 px-6 text-center">{{total}}</td>
+                                </tr>
+                                {{/each}}
+                                {{#each compra}}
+                                <tr class="table tf">
+                                    <td class="py-2 px-6 text-center"><b>Total</b></td>
+                                    <td class="p-3 text-center" colspan="3"></td>
+                                    <td class="p-3 text-center"><b>{{monto}}</b></td>
+                                    <td class="p-3 text-center"></td>
+                                    <td class="p-3 text-center"><b>{{iva}}</b></td>
 
-                                <td class="py-2 px-6 text-center"><b>{{total}}</b></td>
-                            </tr>
-                            {{/each}}
-                        </tbody>
-                    </table>
+                                    <td class="py-2 px-6 text-center"><b>{{total}}</b></td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--End Table-->
                 </div>
-                <!--End Table-->
             </div>
+
+
+            <!--End Card #3-->
         </div>
 
 
-        <!--End Card #3-->
+
     </div>
+    </div>
+    
 
-</div>
-
+</center>
 </body>
 
 <!--Bootstrap-->
@@ -209,11 +254,6 @@
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl);
     });
-
-    // Mostrar el toast
-    var toastEl = document.getElementById('myToast');
-    var toast = new bootstrap.Toast(toastEl);
-    toast.show();
 </script>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

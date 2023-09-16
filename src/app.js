@@ -602,6 +602,7 @@ app.get('/misComprasProductos/:idVentas', sesion, checkTokenExpiration, (req, re
 app.get('/misRepara', sesion, checkTokenExpiration, (req, res) => {
     const loggedIn = req.session.loggedin || false;
     const name = req.session.name
+    console.log(name)
 
     req.getConnection(async (err, conn) => {
         if (err) {
@@ -621,7 +622,7 @@ app.get('/misRepara', sesion, checkTokenExpiration, (req, res) => {
 
         var IDInfo_user;
         for (let iI in usersI) {
-            if (usersI[iI].nombre == req.session.name) {
+            if ((usersI[iI].nombre +" "+usersI[iI].apellido ) == name) {
                 IDInfo_user = usersI[iI].idInfo;
             }
         }
@@ -631,6 +632,8 @@ app.get('/misRepara', sesion, checkTokenExpiration, (req, res) => {
                 // Si hay un error al consultar las reparaciones, enviar una respuesta con el error
                 return res.status(500).json(err);
             }
+            console.log('Se obtiene')
+            console.log(reparaciones)
             var cont = 1;
 
             // Consultar los detalles de las reparaciones para cada reparación
