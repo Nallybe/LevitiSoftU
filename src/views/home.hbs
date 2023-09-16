@@ -191,6 +191,13 @@
 
   </script>
   <script>
+      window.history.pushState(null, '', window.location.href);
+      window.onpopstate = function () {
+        window.history.pushState(null, '', window.location.href);
+      };
+
+  </script>
+  <script>
       // ------------------------------------------------------- //
       //   Inject SVG Sprite - 
       //   see more here 

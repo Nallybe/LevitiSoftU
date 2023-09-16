@@ -97,7 +97,7 @@
                 <tr>
                   <td class="p-3 text-center" name="nombrePermisos">{{nombrePermisos}}</td>
                   <td>
-                    <input autocomplete="off" onchange="obtener(this, {{idPermisos}})" type="checkbox" id="Permiso">
+                    <input onchange="obtener(this, {{idPermisos}})" type="checkbox" id="Permiso">
                   </td>
                   {{!-- <button onclick="Datos()">check</button> --}}
                   {{/each}}
@@ -105,7 +105,7 @@
                 </tr>
               </tbody>
             </table>
-            <input autocomplete="off" type="" name="idSeleccionado" id="idSeleccionado" value="">
+            <input hidden type="" name="idSeleccionado" id="idSeleccionado">
 
           </form>
         </div>
@@ -149,18 +149,15 @@
 <script>
   let formulario = document.querySelector('#formulario');
   let nombreInput = document.querySelector('#nombreRol');
-  let idInput = document.querySelector('#Permiso');
   let mensajeErrorNombre = document.querySelector('#mensajeErrorNombre');
   let nombre = "";
-  let Permiso = "";
+
 
   nombreInput.addEventListener('blur', function () {
     nombre = nombreInput.value;
   });
 
-  idInput.addEventListener('blur', function () {
-    Permiso = idInput.value;
-  });
+ 
 
   formulario.addEventListener('submit', function (event) {
     if (nombre === "") {
@@ -169,18 +166,8 @@
     } else {
       ocultarError(mensajeErrorNombre);
     }
-    if (Permiso === "") {
-      event.preventDefault();
-      Swal.fire(
-        'Asigne al menos un permiso',
-        '',
-        'error'
-      )
-    } else {
-
-    }
+    
   });
-
 
 
   function mostrarError() {
@@ -197,31 +184,29 @@
 </script>
 <!--Fin footer-->
 <script>
-
   let idSeleccionado = [];
 
   function obtener(checkbox, idPermisos) {
     if (checkbox.checked) {
       idSeleccionado.push(idPermisos);
-      //alert('El checkbox está activado');
-      //alert(idSeleccionado);
-
     } else {
-      alert('El checkbox está desactivado');
-      idSeleccionado = [];
-      alert(idSeleccionado);
-
+      // Buscar el índice del idPermisos en el array y eliminarlo
+      const index = idSeleccionado.indexOf(idPermisos);
+      if (index !== -1) {
+        idSeleccionado.splice(index, 1);
+      }
     }
-    document.getElementById('idSeleccionado').value = idSeleccionado; // Asigna el valor de idSeleccionado al input oculto
-
+    document.getElementById('idSeleccionado').value = idSeleccionado.join(', '); // Asigna el valor de idSeleccionado al input oculto
+    //alert("idSeleccionado: "+idSeleccionado)
   }
 </script>
+
 {{!-- Validar campo idSeleccionado --}}
 <script>
   document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("formulario").addEventListener("submit", function (event) {
       var inputValue = document.getElementById("idSeleccionado").value.trim();
-
+      //alert("InputID: "+inputValue)
       if (inputValue === "") {
         event.preventDefault(); // Evita que el formulario se envíe
         Swal.fire(

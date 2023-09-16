@@ -6,8 +6,8 @@
 
 <!-- navbar-->
 <div class="barranav">
-      {{> navbar}}
-    </div>
+    {{> navbar}}
+</div>
 
 <body>
     <br>
@@ -18,12 +18,12 @@
 
             <div class="login-form mt-4">
                 <div class="sign-up-htm">
-                    <form action="" method="post" id="registration-form">
+                    <form action="" method="post" id="passwordForm">
                         <div class="group">
                             <label for="pass" class="label">Contraseña</label>
                             <div class="password-input">
-                                <input autocomplete="off" id="pass" type="password" name="password" class="input" data-type="password"
-                                    required>
+                                <input autocomplete="off" id="pass" type="password" name="password" class="input"
+                                    data-type="password" required>
                                 <span class="toggle-password">
                                     <i class="fas fa-eye"></i>
                                 </span>
@@ -32,7 +32,8 @@
                         <div class="group">
                             <label for="pass2" class="label">Repetir contraseña</label>
                             <div class="password-input">
-                                <input autocomplete="off" id="pass2" type="password" class="input" data-type="password" required>
+                                <input autocomplete="off" id="pass2" type="password" class="input" data-type="password"
+                                    required>
                                 <span class="toggle-password">
                                     <i class="fas fa-eye"></i>
                                 </span>
@@ -41,6 +42,7 @@
                                 Las contraseñas no coinciden.
                             </div>
                         </div>
+                        <p id="message"></p>
                         <div class="group">
                             <input type="submit" class="button" value="Enviar">
                         </div>
@@ -70,13 +72,33 @@
                     if (passwordField.value !== confirmPasswordField.value) {
                         event.preventDefault(); // Prevent the form from submitting
                         errorMessage.style.display = 'block';
-                        
+
                     }
                 });
             </script>
 
         </div>
     </div>
+     <script>
+        const passwordForm = document.getElementById("passwordForm");
+        const passwordInput = document.getElementById("pass");
+        const message = document.getElementById("message");
+
+        passwordForm.addEventListener("submit", (e) => {
+            const password = passwordInput.value;
+
+            // Verificar si la contraseña cumple con los requisitos
+            const isPasswordValid = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password);
+
+            if (!isPasswordValid) {
+                e.preventDefault(); // Evitar que el formulario se envíe
+                message.textContent = "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula y un número.";
+                message.style.color = "red";
+            }
+        });
+    </script>
+
+
     <script>
         $(document).ready(function () {
             $('.toggle-password').click(function () {

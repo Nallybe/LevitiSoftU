@@ -8,7 +8,7 @@ const path = require('path');
 function listar(req, res) {
     req.getConnection((err, conn) => {
         conn.query(`
-                SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont
+                SELECT tbl_ventas.*, users_info.nombre, users_info.apellido, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont
                 FROM tbl_ventas
                 JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo;
             `, (err, ventas) => {
@@ -24,6 +24,7 @@ function listar(req, res) {
                 return {
                     idVentas: venta.idVentas,
                     nombre: venta.nombre,
+                    apellido: venta.apellido,
                     total: venta.total,
                     fecha: fechaFormateada,
                     descripcion: venta.descripcion,
@@ -46,7 +47,7 @@ function listarAPI(req, res) {
         }
 
         conn.query(`
-            SELECT tbl_ventas.*, users_info.nombre
+            SELECT tbl_ventas.*, users_info.nombre, users_info.apellido,
             FROM tbl_ventas
             JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo;
         `, (err, ventas) => {
@@ -54,7 +55,7 @@ function listarAPI(req, res) {
                 console.error('Error al obtener las ventas: ', err);
                 return res.status(500).json({ error: 'Error al obtener las ventas' });
             }
-
+            
             const ventasFormateadas = ventas.map(venta => {
                 const fecha = new Date(venta.fecha);
                 const dia = fecha.getDate();
@@ -64,6 +65,7 @@ function listarAPI(req, res) {
                 return {
                     idVentas: venta.idVentas,
                     nombre: venta.nombre,
+                    apellido: venta.apellido,
                     total: venta.total,
                     fecha: fechaFormateada,
                     descripcion: venta.descripcion,

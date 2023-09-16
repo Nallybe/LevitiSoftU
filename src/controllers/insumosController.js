@@ -43,39 +43,39 @@ function listarAPI(req, res) {
   });
 }
 
-function crear(req, res) {
-  req.getConnection((err, conn) => {
-    conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
-      if (err) {
-        res.json(err);
-      } else {
-        res.render("insumos/AgregarInsumo", { insumos });
-      }
-    })
-  });
-}
+// function crear(req, res) {
+//   req.getConnection((err, conn) => {
+//     conn.query("SELECT * FROM tbl_insumos", (err, insumos) => {
+//       if (err) {
+//         res.json(err);
+//       } else {
+//         res.render("insumos/AgregarInsumo", { insumos });
+//       }
+//     })
+//   });
+// }
 
-function crearAPI(req, res) {
-  req.getConnection((err, conn) => {
-    if (err) {
-      console.error('Error de conexión: ', err);
-      return res.status(500).json({ error: 'Error de conexión' });
-    }
+// function crearAPI(req, res) {
+//   req.getConnection((err, conn) => {
+//     if (err) {
+//       console.error('Error de conexión: ', err);
+//       return res.status(500).json({ error: 'Error de conexión' });
+//     }
 
-    conn.query('SELECT * FROM tbl_insumos', (err, insumos) => {
-      if (err) {
-        console.error('Error al obtener los insumos: ', err);
-        return res.status(500).json({ error: 'Error al obtener los insumos' });
-      }
+//     conn.query('SELECT * FROM tbl_insumos', (err, insumos) => {
+//       if (err) {
+//         console.error('Error al obtener los insumos: ', err);
+//         return res.status(500).json({ error: 'Error al obtener los insumos' });
+//       }
 
-      res.status(200).json({ insumos });
-    });
-  });
-}
+//       res.status(200).json({ insumos });
+//     });
+//   });
+// }
 
 function registrar(req, res) {
   const data = req.body;
-  //console.log(data)
+  console.log(data)
   const RegistroInsumo = {
     nombre: data.nombreInsumo,
     medida: data.medidaInsumo,
@@ -207,8 +207,8 @@ function actualizarAPI(req, res) {
 module.exports = {
   listar: listar,
   listarAPI:listarAPI,
-  crear: crear,
-  crearAPI:crearAPI,
+  // crear: crear,
+  // crearAPI:crearAPI,
   registrar: registrar,
   registrarAPI:registrarAPI,
   editar: editar,
