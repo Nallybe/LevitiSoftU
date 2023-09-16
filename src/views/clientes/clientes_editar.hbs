@@ -63,6 +63,19 @@
       width: 15px;
       height: 15px;
     }
+    #mensajeErrorApellido {
+      display: none;
+      color: red;
+      margin-top: 5px;
+    }
+
+    #mensajeErrorApellido .icono {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 5px;
+      width: 15px;
+      height: 15px;
+    }
   </style>
   <!--End Estilos-->
 
@@ -112,7 +125,7 @@
                 <div class="form-group">
                   <label for="floatingInput" style="float: left; padding-right: 10px;">Documento</label>
                   <input autocomplete="off" onkeypress="return solonumeros(event)" type="number" class="form-control" id="documento" style="border-radius: 0;"
-                    value="{{documento}}" name="documento">
+                    value="{{documento}}" name="documento" maxlength="10">
                   <div id="mensajeErrorDocumento"></div>
 
                 </div>
@@ -196,9 +209,12 @@
   let documentoInputs = document.querySelectorAll('input[name="documento"]');
   let nombreInputs = document.querySelectorAll('input[name="nombre"]');
   let telefonoInputs = document.querySelectorAll('input[name="telefono"]');
+  let apellidoInputs = document.querySelectorAll('input[name="apellido"]');
   let mensajeErrorNombre = document.querySelector('#mensajeErrorNombre');
   let mensajeErrorDocumento = document.querySelector('#mensajeErrorDocumento');
   let mensajeErrorTelefono = document.querySelector('#mensajeErrorTelefono');
+  let mensajeErrorApellido = document.querySelector('#mensajeErrorApellido');
+
 
   nombreInputs.forEach(function (nombreInput) {
     nombreInput.addEventListener('blur', function () {
@@ -218,13 +234,21 @@
     });
   });
 
+  apellidoInputs.forEach(function (apellidoInput) {
+    apellidoInput.addEventListener('blur', function () {
+      validarTelefono(apellidoInput.value);
+    });
+  });
+
 
   formulario.addEventListener('submit', function (event) {
     let nombreValido = validarNombre(nombreInputs[0].value);
     let documentoValido = validarDocumento(documentoInputs[0].value);
     let telefonoValido = validarTelefono(telefonoInputs[0].value);
+    let apellidoValido = validarApellido(apellidoInputs[0].value);
 
-    if (!nombreValido || !documentoValido || !telefonoValido) {
+
+    if (!nombreValido || !documentoValido || !telefonoValido|| !apellidoValido) {
       event.preventDefault();
     }
   });
@@ -260,6 +284,15 @@
       return false;
     }else {
       ocultarError(mensajeErrorTelefono);
+      return true;
+    }
+  }
+  function validarApellido(apellido) {
+    if (apellido === "") {
+      mostrarError(mensajeErrorApellido, 'Campo Obligatorio');
+      return false;
+    } else {
+      ocultarError(mensajeErrorApellido);
       return true;
     }
   }

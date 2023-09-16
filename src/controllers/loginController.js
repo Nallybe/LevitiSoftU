@@ -48,6 +48,19 @@ function auth(req, res) {
             if (isMatch) {
               req.session.loggedin = true;
               var sesion = true
+              const token = jwt.sign(
+                {
+                  idAccess: user.idAccess,
+                  correo: user.correo,
+                  nombre: user.nombre, // Asegúrate de tener esta propiedad en tu tabla users_access
+                  // Agrega otras propiedades que desees incluir en el token
+                },
+                'secretKey', // Cambia esto por tu propia clave secreta
+                { expiresIn: '24h' } // Puedes ajustar el tiempo de vencimiento según tus necesidades
+              );
+
+              // Almacena el token en una cookie o en el almacenamiento del cliente
+              res.cookie('auth_token', token); // Puedes ajustar esto según tu frontend
 
               // Obtener el nombre correspondiente al correo electrónico en users_info
               conn.query(
@@ -331,11 +344,19 @@ function registrar(req, res) {
 
 
 function logout(req, res) {
+  // Verifica si el usuario está autenticado antes de cerrar la sesión
   if (req.session.loggedin == true) {
+    // Destruye la sesión en el servidor
     req.session.destroy();
+
+    // Elimina la cookie del token en el cliente
+    res.clearCookie('auth_token'); // Asegúrate de usar el mismo nombre de cookie que utilizaste al iniciar sesión
   }
+
+  // Redirecciona a la página de inicio (o a donde desees que vaya después de cerrar sesión)
   res.redirect('/home');
 }
+
 
 function logoutApi(req, res) {
   if (req.session.loggedin === true) {
