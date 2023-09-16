@@ -1,6 +1,7 @@
 const express = require('express');
 const clientesController = require('../controllers/clientesController');
 const session = require('express-session');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -28,19 +29,42 @@ const tienePermisos = (session) => {
     return false;
 };
 
-router.get('/clientes', checkSession, clientesController.listar);
-router.get('/clientesAPI', checkSession, clientesController.listarAPI);
+//Expiración del token
+function checkTokenExpiration(req, res, next) {
+    const token = req.cookies.auth_token; // Asegúrate de usar el mismo nombre de cookie que usaste al iniciar sesión
 
-router.get('/clientes_agregar', checkSession, clientesController.crear);
-router.get('/clientes_agregarAPI', checkSession, clientesController.crearAPI);
+    if (!token) {
+        // No se encontró el token, continua con la siguiente middleware o ruta
+        return next();
+    }
 
-router.get('/clientes_editar/:idInfo', checkSession, clientesController.editar);
-router.get('/clientes_editarAPI/:idInfo', checkSession, clientesController.editarAPI);
+    jwt.verify(token, 'secretKey', (err, decoded) => {
+        if (err) {
+            // El token es inválido o ha caducado
+            // Puedes redireccionar a una página de inicio de sesión o realizar otras acciones aquí
+            res.clearCookie('auth_token'); // Elimina la cookie del token en el cliente
+            req.session.destroy(); // Destruye la sesión en el servidor
+            return res.redirect('/login'); // Redirecciona al inicio de sesión
+        } else {
+            // El token es válido, continúa con la solicitud
+            next();
+        }
+    });
+}
+
+router.get('/clientes', checkSession, checkTokenExpiration, clientesController.listar);
+router.get('/clientesAPI', clientesController.listarAPI);
+
+// router.get('/clientes_agregar', checkSession, clientesController.crear);
+// router.get('/clientes_agregarAPI', clientesController.crearAPI);
+
+router.get('/clientes_editar/:idInfo', checkSession, checkTokenExpiration, clientesController.editar);
+router.get('/clientes_editarAPI/:idInfo', clientesController.editarAPI);
 
 
 // router.post('/clientes_agregar', checkSession, clientesController.registrar);
-router.post('/clientes_editar/:idInfo', checkSession, clientesController.actualizar);
-router.post('/clientes_editarAPI/:idInfo', checkSession, clientesController.actualizarAPI);
+router.post('/clientes_editar/:idInfo', checkSession, checkTokenExpiration, clientesController.actualizar);
+router.post('/clientes_editarAPI/:idInfo', clientesController.actualizarAPI);
 
 
 module.exports = router;

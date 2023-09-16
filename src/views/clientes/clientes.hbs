@@ -42,7 +42,7 @@
       <div class="row">
         <div class="d-flex justify-content-end botonAgre w-100">
           <!--Start Botón registrar-->
-          <a href="clientes_agregar" class="btn btn-success" style="border-radius: 2;"><i
+          <a class="btn btn-success" style="border-radius: 2; color:white;" onclick="redirigirYMostrarAlerta()"><i
               class="fa-solid fa-circle-plus"></i> Registrar Cliente</a>
           <!--End Botón registrar-->
         </div>
@@ -144,10 +144,24 @@
 </script>
 {{/if}}
 
+<script>
+function redirigirYMostrarAlerta() {
+  Swal.fire({
+    title: '¿Quiere agregar un cliente?',
+    text: 'Para agregar un cliente debe agregar un usuario primero',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonText: 'Aceptar',
+    cancelButtonText: 'Cancelar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Si el usuario hace clic en "Aceptar", redirige a /usuarios
+      window.location.href = '/usuarios';
+    }
+  });
+}
 
-
-
-
+</script>
 <!--JS Para el mensajito al pasar el mouse sobre el usuario-->
 <script src="js/bootstrap.bunle.min.js" type="text/javascript"></script>
 <script>

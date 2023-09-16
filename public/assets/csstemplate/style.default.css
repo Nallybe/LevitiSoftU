@@ -890,25 +890,20 @@ button:not(:disabled),
   } 
 }*/
 /*Mis Compras Productos*/
-.producCliente {
-  width: 20rem;
-  height: 11rem;
-}
 
-.producCliente p {
-  text-align: center;
 
-}
+
 .producCliente img {
   width: 10rem;
   height: 8rem;
-}
-.TextProd{
-  display: flex; /* Utiliza flexbox */
-  justify-content: center; /* Centra horizontalmente el contenido */
-  align-items: center;
+  padding-bottom: 0.3rem;
+  
 }
 
+.ContenerProdu .card{
+  border: 2px solid red;
+  width: 23rem;
+}
 @media screen and (max-width: 767px) {
   .producCliente {
     width: 15rem; /* Hacer que los elementos ocupen el ancho completo */
@@ -922,7 +917,6 @@ button:not(:disabled),
   }
   
   .ContenerProdu{
-    border: 2px solid blue;
     text-align: center;
     align-items: center;
   }

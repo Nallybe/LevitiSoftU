@@ -38,8 +38,8 @@
                   <div class="col-6 ">
                     <div class="form-group">
                       <label for="floatingInput" style="float: left; padding-right: 10px;">Nombre</label>
-                      <input autocomplete="off" type="text" class="form-control" id="nombreRol" style="border-radius: 0;"
-                        value="{{nombreRoles}}" name="nombreRol">
+                      <input autocomplete="off" type="text" class="form-control" id="nombreRol"
+                        style="border-radius: 0;" value="{{nombreRoles}}" name="nombreRol">
                       <div id="mensajeError"></div>
                     </div>
                   </div>
@@ -51,7 +51,7 @@
                         <option value="Activo">Activo</option>
                         <option value="Inactivo">Inactivo</option>
                       </select>
-                      
+
                     </div>
                   </div>
                 </div>
@@ -93,18 +93,19 @@
                   <div class="row align-items-center">
                     <div class="col-6 ms-5" style="padding: 0;">
                       <div class="custom-control custom-switch">
-                        <input autocomplete="off" onchange="obtener(this, {{idPermisos}})" type="checkbox" class="custom-control-input"
-                          id="permiso{{this.idPermisos}}" {{#if asignado}}checked disabled{{/if}}>
+                        <input autocomplete="off" onchange="obtener(this, {{idPermisos}})" type="checkbox"
+                          class="custom-control-input" id="permiso{{this.idPermisos}}" {{#if asignado}}checked
+                          disabled{{/if}}>
                         <label class="custom-control-label" for="permiso{{this.idPermisos}}" name="id"></label>
                       </div>
                     </div>
 
-                    <input type="hidden" name="idSeleccionado" id="idSeleccionado" value="">
+                    <input name="idSeleccionado" id="idSeleccionado" value="">
                     <div class="col-6 " style="width: 15%; padding-left: 0;">
                       </form>
                       <form action="/EliminarAsignacion/{{idRoles}}" method="POST">
-                        <input type="hidden" value="{{idRoles}}" name="idRoles">
-                        <input type="hidden" value="{{idPermisos}}" name="idPermisos">
+                        <input value="{{idRoles}}" name="idRoles">
+                        <input value="{{idPermisos}}" name="idPermisos">
                         <button class="btn btn" type="submit"><i class="fa fa-trash"></i></button>
                       </form>
                     </div>
@@ -217,10 +218,14 @@
     if (checkbox.checked) {
       idSeleccionado.push(idPermisos);
     } else {
-      idSeleccionado = [];
+      // Elimina el elemento con el valor idPermisos del arreglo idSeleccionado
+      const index = idSeleccionado.indexOf(idPermisos);
+      if (index !== -1) {
+        idSeleccionado.splice(index, 1);
+      }
     }
     document.getElementById('idSeleccionado').value = idSeleccionado; // Asigna el valor de idSeleccionado al input oculto
-    console.log(idSeleccionado)
+    alert("idSeleccionado: " + idSeleccionado)
   }
 </script>
 <script src="/assets/js/ModalPermiso.js"></script>

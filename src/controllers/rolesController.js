@@ -6,7 +6,7 @@ function listar(req, res) {
         res.json(err);
       }
 
-      console.log(roles)
+      
       // Reemplazar los valores 'A' por 'Activo' y 'I' por 'Inactivo' en los resultados
       roles.forEach(rol => {
         rol.estado = rol.estado === 'A' ? 'Activo' : 'Inactivo';

@@ -1,6 +1,6 @@
 const express = require('express');
 const rolesController = require('../controllers/rolesController');
-
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 // Middleware de verificación de sesión
@@ -27,25 +27,49 @@ const tienePermisos = (session) => {
     return false;
 };
 
-router.get('/roles', checkSession, rolesController.listar);
-router.get('/rolesAPI', checkSession, rolesController.listarApi);
-router.get('/AgregarRol', checkSession, rolesController.crear);
-router.get('/AgregarRolAPI', checkSession, rolesController.crearAPI);
+//Expiración del token
+function checkTokenExpiration(req, res, next) {
+    const token = req.cookies.auth_token; // Asegúrate de usar el mismo nombre de cookie que usaste al iniciar sesión
 
-router.get('/Permisos/:idRoles', checkSession, rolesController.permisos);
-router.get('/PermisosAPI/:idRoles', checkSession, rolesController.permisosAPI);
+    if (!token) {
+        // No se encontró el token, continua con la siguiente middleware o ruta
+        return next();
+    }
 
-router.get('/EditarRol/:idRoles', checkSession, rolesController.editar);
-router.get('/EditarRolAPI/:idRoles', checkSession, rolesController.editarAPI);
+    jwt.verify(token, 'secretKey', (err, decoded) => {
+        if (err) {
+            // El token es inválido o ha caducado
+            // Puedes redireccionar a una página de inicio de sesión o realizar otras acciones aquí
+            res.clearCookie('auth_token'); // Elimina la cookie del token en el cliente
+            req.session.destroy(); // Destruye la sesión en el servidor
+            return res.redirect('/login'); // Redirecciona al inicio de sesión
+        } else {
+            // El token es válido, continúa con la solicitud
+            next();
+        }
+    });
+}
 
 
-router.post('/AgregarRol/', checkSession, rolesController.registrar);
-router.post('/AgregarRolAPI/', checkSession, rolesController.registrarApi);
-router.post('/EditarRol/:idRoles', checkSession, rolesController.actualizar);
-router.post('/EditarRolAPI/:idRoles', checkSession, rolesController.actualizarAPI);
+router.get('/roles', checkSession, checkTokenExpiration, rolesController.listar);
+router.get('/rolesAPI', rolesController.listarApi);
+router.get('/AgregarRol', checkSession, checkTokenExpiration, rolesController.crear);
+router.get('/AgregarRolAPI', rolesController.crearAPI);
+
+router.get('/Permisos/:idRoles', checkSession, checkTokenExpiration, rolesController.permisos);
+router.get('/PermisosAPI/:idRoles', rolesController.permisosAPI);
+
+router.get('/EditarRol/:idRoles', checkSession, checkTokenExpiration, rolesController.editar);
+router.get('/EditarRolAPI/:idRoles', rolesController.editarAPI);
+
+
+router.post('/AgregarRol/', checkSession, checkTokenExpiration, rolesController.registrar);
+router.post('/AgregarRolAPI/', rolesController.registrarApi);
+router.post('/EditarRol/:idRoles', checkSession, checkTokenExpiration, rolesController.actualizar);
+router.post('/EditarRolAPI/:idRoles', rolesController.actualizarAPI);
 
 //router.post('/EliminarRol', checkSession, rolesController.eliminar);
-router.post('/EliminarAsignacion/:idRoles', checkSession, rolesController.eliminarAsignacion);
-router.post('/EliminarAsignacionAPI/:idRoles', checkSession, rolesController.eliminarAsignacionAPI);
+router.post('/EliminarAsignacion/:idRoles', checkSession, checkTokenExpiration, rolesController.eliminarAsignacion);
+router.post('/EliminarAsignacionAPI/:idRoles', rolesController.eliminarAsignacionAPI);
 
 module.exports = router;

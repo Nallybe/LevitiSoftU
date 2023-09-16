@@ -98,7 +98,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form action="" method="post" id="formularioInsumo">
+                                <form action="/insumos" method="post">
                                     <div class="row">
                                         <div class="col-7">
                                             <div class="form-group">
@@ -300,7 +300,7 @@
         } else {
             ocultarError(mensajeErrorStock);
         }
-
+        return validacionesExitosas;
     }
 
     function mostrarError(elemento, mensaje) {

@@ -1,6 +1,7 @@
 const express = require('express')
 const hbs = require('hbs')
 const app = express()
+const jwt = require('jsonwebtoken');
 const { engine } = require('express-handlebars');
 const myconnection = require('express-myconnection');
 const session = require('express-session');
@@ -18,6 +19,9 @@ const produccionesRoutes = require('./routes/producciones');
 const productosRoutes = require('./routes/productos');
 const usuariosRoutes = require('./routes/usuarios');
 const port = process.env.PORT
+const cookieParser = require('cookie-parser');
+app.use(cookieParser());
+
 
 //Especificar el directorio público
 app.use(express.static('public'))
@@ -124,8 +128,30 @@ const tienePermisos = (session) => {
     return false;
 };
 
+//Expiración del token
+function checkTokenExpiration(req, res, next) {
+    const token = req.cookies.auth_token; // Asegúrate de usar el mismo nombre de cookie que usaste al iniciar sesión
 
-app.get('/dashboard', checkSession, (req, res) => {
+    if (!token) {
+        // No se encontró el token, continua con la siguiente middleware o ruta
+        return next();
+    }
+
+    jwt.verify(token, 'secretKey', (err, decoded) => {
+        if (err) {
+            // El token es inválido o ha caducado
+            // Puedes redireccionar a una página de inicio de sesión o realizar otras acciones aquí
+            res.clearCookie('auth_token'); // Elimina la cookie del token en el cliente
+            req.session.destroy(); // Destruye la sesión en el servidor
+            return res.redirect('/login'); // Redirecciona al inicio de sesión
+        } else {
+            // El token es válido, continúa con la solicitud
+            next();
+        }
+    });
+}
+
+app.get('/dashboard', checkSession, checkTokenExpiration, (req, res) => {
     req.getConnection((err, conn) => {
         if (err) {
             return res.status(500).json(err);
@@ -279,7 +305,7 @@ app.get('/dashboard', checkSession, (req, res) => {
     });
 });
 
-app.post('/dashboard', checkSession, (req, res) => {
+app.post('/dashboard', checkSession, checkTokenExpiration, (req, res) => {
     req.getConnection((err, conn) => {
         if (err) {
             return res.status(500).json(err);
@@ -524,11 +550,12 @@ app.get('/recomendaciones', (req, res) => {
     })
 })
 
-app.get('/misCompras', sesion, (req, res) => {
+app.get('/misCompras', sesion, checkTokenExpiration, (req, res) => {
     const loggedIn = req.session.loggedin || false;
     const name = req.session.name
+    const [nombre, apellido] = name.split(' ');
     req.getConnection((err, conn) => {
-        conn.query(`SELECT tbl_ventas.*, users_info.nombre, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont FROM tbl_ventas JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo WHERE users_info.nombre = ?;`, [name], (err, ventas) => {
+        conn.query(`SELECT tbl_ventas.*, users_info.nombre, users_info.apellido, ROW_NUMBER() OVER (ORDER BY (SELECT NULL)) AS cont FROM tbl_ventas JOIN users_info ON tbl_ventas.idInfo = users_info.idInfo WHERE users_info.nombre = ?;`, [nombre], (err, ventas) => {
             if (err) {
                 res.json(err);
             }
@@ -541,6 +568,7 @@ app.get('/misCompras', sesion, (req, res) => {
                 return {
                     idVentas: venta.idVentas,
                     nombre: venta.nombre,
+                    apellido: venta.apellido,
                     total: venta.total,
                     fecha: fechaFormateada,
                     descripcion: venta.descripcion,
@@ -548,14 +576,13 @@ app.get('/misCompras', sesion, (req, res) => {
                     cont: venta.cont
                 };
             });
-
             res.render('misCompras', {
                 nombre: 'Mis compras', sesion: loggedIn, name, ventas: ventasFormateadas
             })
         })
     })
 })
-app.get('/misComprasProductos/:idVentas', sesion, (req, res) => {
+app.get('/misComprasProductos/:idVentas', sesion, checkTokenExpiration, (req, res) => {
     const idVentas = req.params.idVentas;
     const loggedIn = req.session.loggedin || false;
     const name = req.session.name
@@ -572,7 +599,7 @@ app.get('/misComprasProductos/:idVentas', sesion, (req, res) => {
     })
 })
 
-app.get('/misRepara', sesion, (req, res) => {
+app.get('/misRepara', sesion, checkTokenExpiration, (req, res) => {
     const loggedIn = req.session.loggedin || false;
     const name = req.session.name
 
@@ -675,7 +702,7 @@ app.get('/misRepara', sesion, (req, res) => {
 })
 
 
-app.get('/misReparaDetalle/:idReparacion', sesion, async (req, res) => {
+app.get('/misReparaDetalle/:idReparacion', sesion, checkTokenExpiration, async (req, res) => {
     try {
         const loggedIn = req.session.loggedin || false;
         const name = req.session.name
