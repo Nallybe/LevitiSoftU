@@ -79,7 +79,7 @@ function registrar(req, res) {
               idPermisos: idPermisos[i],
               estado: estado
             };
-            console.log(RegistroAsignacion)
+            //console.log(RegistroAsignacion)
             req.getConnection((err, conn) => {
 
               conn.query(
@@ -229,7 +229,7 @@ function editarAPI(req, res) {
 function actualizar(req, res) {
   const idRoles = req.params.idRoles;
   const data = req.body;
-  console.log(data);
+  //console.log(data);
   const roles = {
     nombreRoles: data.nombreRol,
     estado: data.estadoRol,
@@ -245,7 +245,7 @@ function actualizar(req, res) {
         return;
       } else {
         console.log("Se actualizaron los datos de rol")
-        console.log()
+        
         if (data.idSeleccionado) {
 
           const idPermisos = data.idSeleccionado.split(','); // Convierte la cadena de entrada en un array de valores
@@ -287,7 +287,7 @@ function actualizar(req, res) {
 function actualizarAPI(req, res) {
   const idRoles = req.params.idRoles;
   const data = req.body;
-  console.log(data);
+  //console.log(data);
   const roles = {
     nombreRoles: data.nombreRol,
     estado: data.estadoRol,
@@ -369,7 +369,7 @@ function permisosAPI(req, res) {
 function eliminarAsignacion(req, res) {
   const idRoles = req.body.idRoles;
   const idPermisos = req.body.idPermisos;
-  console.log(idRoles)
+  //console.log(idRoles)
 
   req.getConnection((err, conn) => {
     conn.query('DELETE FROM tbl_asignacion WHERE idRoles = ? AND idPermisos = ?', [idRoles, idPermisos], (err, rows) => {

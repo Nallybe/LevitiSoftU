@@ -115,12 +115,13 @@ function auth(req, res) {
                               const permisos = permissionResults.map((row) => row.nombrePermisos);
                               //console.log('Permisos: ', permissionResults)
                               req.session.asignacion = permisos;
-
+                              //console.log(permisos)
                               // Redireccionar al primer permiso que coincida
                               var firstMatchingPermission = permisos.find((permiso) => true);
-
+                              
                               //console.log("Primer " + firstMatchingPermission)
                               if (firstMatchingPermission) {
+                                
                                 res.redirect('/' + firstMatchingPermission);
                               } else {
                                 // Si no hay permisos coincidentes, redireccionar a una página predeterminada
