@@ -17,7 +17,7 @@
         <div class="row container-fluid col-md-12">
           <div class="card card-success">
             <div class="card-header">
-              <h5 class="card-title">Informe compras vs ventas</h5>
+              <h5 class="card-title" id="titulo">Informe compras vs ventas</h5>
             </div>
             <div class="card-body">
               <div class="chart">
@@ -28,7 +28,7 @@
             <div class="row mb-2">
               <div class="col-sm-12">
                 <div class="d-grid gap-2 d-md-block" style="margin-left: 10px;">
-                  <input type="month" id="start" name="trip-start">
+                  
                   <button class="btn btn-primary" type="button" onclick="downloadReport()">Descargar</button>
                 </div>
               </div>
@@ -104,6 +104,20 @@
       <input hidden type="text" id="labels" value="{{labels}}">
       <input hidden type="text" id="ventas" value="{{ventasData}}">
       <input hidden type="text" id="compras" value="{{comprasData}}">
+
+      <script>
+        // Obtener la fecha actual
+        var fecha = new Date();
+        
+        // Obtener el año actual
+        var año = fecha.getFullYear();
+        
+        // Obtener el elemento h5 por su id
+        var titulo = document.getElementById("titulo");
+        
+        // Agregar el año actual al título
+        titulo.innerHTML += " " + año;
+    </script>
 </body>
 <!--   Core JS Files   -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -129,27 +143,24 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
 <script>
   function downloadReport() {
-    var selectedMonth = document.getElementById('start').value;
-
+    var currentYear = new Date().getFullYear();
     var workbook = new ExcelJS.Workbook();
     var worksheet = workbook.addWorksheet('Informe');
 
     // Agregar el título
-    worksheet.addRow(['Informe Compras vs Ventas - ' + selectedMonth]);
+    worksheet.addRow(['Informe Compras vs Ventas - ' + currentYear]);
 
     // Agregar encabezados de columna
     worksheet.addRow(['Mes', 'Ventas', 'Compras']);
 
     // Agregar datos filtrados
     for (var i = 0; i < labelsArray.length; i++) {
-      // Verificar si la fecha en labelsArray[i] contiene el mes seleccionado
-      if (labelsArray[i].includes(selectedMonth)) {
-        worksheet.addRow([labelsArray[i], ventasArray[i], comprasArray[i]]);
-      }
+      // Agregar directamente los datos de labelsArray, ventasArray y comprasArray
+      worksheet.addRow([labelsArray[i], ventasArray[i], comprasArray[i]]);
     }
 
     // Generar el archivo Excel y descargarlo
-    var fileName = 'informe_compras_ventas_' + selectedMonth + '.xlsx';
+    var fileName = 'informe_compras_ventas.xlsx';
     workbook.xlsx.writeBuffer().then(function (buffer) {
       var blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
       var link = document.createElement('a');
@@ -159,6 +170,7 @@
     });
   }
 </script>
+
 <!-- Generar pdf -->
 
 <!-- Chart JS -->
