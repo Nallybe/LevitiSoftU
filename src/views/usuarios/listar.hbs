@@ -80,7 +80,8 @@
         </div>
 
         <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+          data-backdrop="static" data-keyboard="false">
           <div class="modal-dialog">
             <div class="modal-content">
               <div class="modal-header">
@@ -115,7 +116,8 @@
                     <div class="col-6">
 
                       <!--Input Documento-->
-                      <label class="form-label" for="documento"><small style="color: grey;">Documento <small style="color: red;">*</small></small></label>
+                      <label class="form-label" for="documento"><small style="color: grey;">Documento <small
+                            style="color: red;">*</small></small></label>
                       <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="documento"
                         name="documento" onkeypress="return solonumeros(event)" oninput="val_documento();"
                         autocomplete="off" maxlength="10">
@@ -123,23 +125,28 @@
                       <!--End Input Documento-->
 
                       <!--Input Nombre-->
-                      <label class="form-label mt-2" for="nombre"><small style="color: grey;">Nombre <small style="color: red;">*</small></small></label>
+                      <label class="form-label mt-2" for="nombre"><small style="color: grey;">Nombre <small
+                            style="color: red;">*</small></small></label>
                       <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="nombre"
-                        name="nombre" oninput="val_nombre()" autocomplete="off" maxlength="20">
+                        name="nombre" onkeypress="return solonombre(event)" oninput="val_nombre()" autocomplete="off"
+                        maxlength="20">
                       <div id="mensajeErrorNombre"></div>
                       <!--End Input Nombre-->
 
                       <!--Input Apellido-->
-                      <label class="form-label mt-2" for="apellido"><small style="color: grey;">Apellido <small style="color: red;">*</small></small></label>
+                      <label class="form-label mt-2" for="apellido"><small style="color: grey;">Apellido <small
+                            style="color: red;">*</small></small></label>
                       <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="apellido"
-                        name="apellido" oninput="val_apellido()" autocomplete="off" maxlength="50">
+                        name="apellido" onkeypress="return sololetras(event)" oninput="val_apellido()"
+                        autocomplete="off" maxlength="50">
                       <div id="mensajeErrorApellido"></div>
                       <!--End Input Apellido-->
                     </div>
 
                     <div class="col-6">
                       <!--Input Telefono-->
-                      <label class="form-label" for="telefono"><small style="color: grey;">Teléfono <small style="color: red;">*</small></small></label>
+                      <label class="form-label" for="telefono"><small style="color: grey;">Teléfono <small
+                            style="color: red;">*</small></small></label>
                       <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="telefono"
                         name="telefono" onkeypress="return solonumeros(event)" oninput="val_telefono()"
                         autocomplete="off" maxlength="10">
@@ -147,16 +154,48 @@
                       <!--End Input Telefono-->
 
                       <!--Input Correo-->
-                      <label class="form-label mt-2" for="correo"><small style="color: grey;">Correo <small style="color: red;">*</small></small></label>
-                      <input type="email" class="form-control form-control-sm" style="border-radius: 0;" id="correo"
-                        name="correo" oninput="val_correo()" autocomplete="off" maxlength="80">
+                      <label class="form-label mt-2" for="correo"><small style="color: grey;">Correo <small
+                            style="color: red;">*</small></small></label>
+                      <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="correo"
+                        name="correo" onkeypress="return solocorreo(event)" oninput="val_correo()" autocomplete="off"
+                        maxlength="80">
                       <div id="mensajeErrorCorreo"></div>
                       <!--End Input Correo-->
 
                       <!--Input Password-->
-                      <label class="form-label mt-2" for="password"><small style="color: grey;">Contraseña <small style="color: red;">*</small></small></label>
-                      <input type="password" class="form-control form-control-sm" style="border-radius: 0;"
-                        id="password" name="password" oninput="val_password()" autocomplete="off" maxlength="15">
+                      <label class="form-label mt-2" for="password"><small style="color: grey;">Contraseña <small
+                            style="color: red;">*</small></small></label>
+
+                      <!--<input type="password" class="form-control form-control-sm" style="border-radius: 0;"
+                        id="password" name="password" oninput="val_password()" autocomplete="off" maxlength="20">-->
+
+                      <div class="input-group">
+                        <input type="password" class="form-control form-control-sm" style="border-radius: 0;"
+                          id="password" name="password" onkeypress="return sololetrasnumeros(event)"
+                          oninput="val_password()" autocomplete="off">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary btn-sm" type="button" id="togglePassword">
+                            <i class="fa-solid fa-eye"></i>
+                          </button>
+                        </div>
+                      </div>
+                      <script>
+                        // Obtener el campo de contraseña y el botón de alternancia
+                        var passwordField = document.getElementById("password");
+                        var toggleButton = document.getElementById("togglePassword");
+
+                        // Manejar el clic en el botón de alternancia
+                        toggleButton.addEventListener("click", function () {
+                          if (passwordField.type === "password") {
+                            passwordField.type = "text";
+                          } else {
+                            passwordField.type = "password";
+                          }
+                        });
+
+                      </script>
+
+
                       <div id="mensajeErrorPassword"></div>
                       <!--End Input Password-->
                     </div>
@@ -325,6 +364,8 @@
     var correo = document.getElementById("correo");
     var telefono = document.getElementById("telefono");
 
+    password.value = documento.value;
+
     var selectedOptionD = document.querySelector('#data_lis_documentos option[value="' + documento.value + '"]');
     if (selectedOptionD) {
       var documentoValue = selectedOptionD.getAttribute('documento');
@@ -347,6 +388,8 @@
       correo.disabled = false;
       mensajeErrorDocumento.innerHTML = '';
       mensajeErrorDocumento.style.display = 'none';
+      mensajeErrorPassword.innerHTML = '';
+      mensajeErrorPassword.style.display = 'none';
     }
   }
 
@@ -489,6 +532,72 @@
       return false; // Detener el envío del formulario
     }
 
+    // Verificar la longitud mínima
+    if (documento.value.length < 10) {
+      mensajeErrorDocumento.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El documento no es válido';
+      mensajeErrorDocumento.style.display = 'block';
+      return false; // Detener el envío del formulario
+    }
+
+    // Verificar el correo con una expresión regular
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!emailPattern.test(correo.value)) {
+      /* Swal.fire({
+         position: 'top-end',
+         icon: 'error',
+         title: 'Correo no válido',
+         showConfirmButton: false,
+         timer: 1500
+       });*/
+      mensajeErrorCorreo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El correo no es válido';
+      mensajeErrorCorreo.style.display = 'block';
+      return false; // Detener el envío del formulario
+    }
+
+
+    // Verificar la longitud mínima
+    if (telefono.value.length < 10) {
+      mensajeErrorTelefono.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El teléfono no es válido';
+      mensajeErrorTelefono.style.display = 'block';
+      return false; // Detener el envío del formulario
+    }
+
+
+    if (password.value != documento.value) {
+      // Verificar la longitud mínima
+      if (password.value.length < 8) {
+        /*Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: 'La contraseña debe tener al menos 8 caracteres',
+          showConfirmButton: false,
+          timer: 1500
+        });*/
+        mensajeErrorPassword.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La contraseña debe tener al menos 8 caracteres';
+        mensajeErrorPassword.style.display = 'block';
+        return false; // Detener el envío del formulario
+      }
+
+      // Verificar al menos una letra minúscula, una letra mayúscula y un número
+      var hasLowercase = /[a-z]/.test(password.value);
+      var hasUppercase = /[A-Z]/.test(password.value);
+      var hasNumber = /\d/.test(password.value);
+
+      if (!hasLowercase || !hasUppercase || !hasNumber) {
+        /*Swal.fire({
+          position: 'top-end',
+          icon: 'error',
+          title: '',
+          showConfirmButton: false,
+          timer: 1500
+        });*/
+        mensajeErrorPassword.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La contraseña debe incluir al menos una letra mayúscula, una letra minúscula y un número';
+        mensajeErrorPassword.style.display = 'block';
+        return false; // Detener el envío del formulario
+      }
+    }
+
     // Permite el envío del formulario
     return true;
   }
@@ -503,6 +612,98 @@
     teclado = String.fromCharCode(key);
 
     letras = "1234567890";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+  function sololetras(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM áÁéÉíÍóÓúÚ";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+  function sololetrasnumeros(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM0123456789_*#";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+  function solonombre(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM6 áÁéÉíÍóÓúÚ";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+  function solocorreo(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM0123456789@.";
 
     especiales = "8-37-38-46";
 
@@ -548,7 +749,7 @@
 {{/if}}
 
 <script>
-  function Eliminar(id) {
+  /*function Eliminar(id) {
     Swal.fire({
       title: '¿Estás seguro?',
       text: "¡No podrás revertir esto!",
@@ -562,7 +763,7 @@
         document.getElementById("FormEliminarUsario" + id).submit();
       }
     });
-  }
+  }*/
 
   function filtrarTabla() {
     var input = document.getElementById("buscar-input");
@@ -603,11 +804,6 @@
   var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
     return new bootstrap.Popover(popoverTriggerEl);
   });
-
-  // Mostrar el toast
-  var toastEl = document.getElementById('myToast');
-  var toast = new bootstrap.Toast(toastEl);
-  toast.show();
 </script>
 
 

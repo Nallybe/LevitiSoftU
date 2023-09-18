@@ -167,13 +167,11 @@
                                         {{else}}
 
 
-                                        <label for="motivoAnulacion" class="form-label">Motivo de anulación</label>
+                                        <label for="motivoAnulacion" class="form-label">Motivo de anulación<small style="color: red;">*</small></label>
                                         <textarea class="form-control" name="motivoAnulacion"
-                                            id="motivoAnulacion_{{idCompra}}"
+                                            id="motivoAnulacion_{{idCompra}}" onkeypress="return solomotivo(event)" 
                                             style="border-radius: 0; border: 1px rgb(206, 212, 218) solid; line-height: 1.5; max-height: 200px; padding-top: 0; height: auto;"
                                             required></textarea>
-
-
                                         {{/if}}
                                     </div>
 
@@ -214,6 +212,32 @@
 </body>
 
 <script>
+
+    function solomotivo(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM áÁéÉíÍóÓúÚ1234567890$_-()¿?*/+.,;:!¡";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+
+
 
 
 
