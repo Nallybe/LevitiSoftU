@@ -228,7 +228,7 @@ function editar(req, res) {
             if (err) {
                 res.json(err);
             }
-            console.log("User: ", info)
+            //console.log("User: ", info)
             conn.query(`SELECT documento FROM users_info WHERE idInfo = ?`, [idInfo], (err, documentos) => {
                 if (err) {
                     res.json(err);

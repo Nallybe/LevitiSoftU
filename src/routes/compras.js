@@ -20,7 +20,7 @@ const checkSession = (req, res, next) => {
 const tienePermisos = (session) => {
     const asignacion = session.asignacion;
 
-    if (asignacion && asignacion.includes('roles')) {
+    if (asignacion && asignacion.includes('compras')) {
         return true;
     }
 

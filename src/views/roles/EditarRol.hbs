@@ -100,12 +100,12 @@
                       </div>
                     </div>
 
-                    <input name="idSeleccionado" id="idSeleccionado" value="">
+                    <input hidden name="idSeleccionado" id="idSeleccionado" value="">
                     <div class="col-6 " style="width: 15%; padding-left: 0;">
                       </form>
                       <form action="/EliminarAsignacion/{{idRoles}}" method="POST">
-                        <input value="{{idRoles}}" name="idRoles">
-                        <input value="{{idPermisos}}" name="idPermisos">
+                        <input hidden value="{{idRoles}}" name="idRoles">
+                        <input hidden value="{{idPermisos}}" name="idPermisos">
                         <button class="btn btn" type="submit"><i class="fa fa-trash"></i></button>
                       </form>
                     </div>

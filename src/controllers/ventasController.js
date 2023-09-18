@@ -150,7 +150,7 @@ function registrar(req, res) {
         } else if (!Array.isArray(unidadesArray)) {
             unidadesArray = [unidadesArray];
         }
-        console.log("Data: ", data)
+        //console.log("Data: ", data)
         req.getConnection((err, conn) => {
             if (err) {
                 console.error('Error al obtener la conexión:', err);
@@ -175,7 +175,7 @@ function registrar(req, res) {
                         descripcion: data.descripcion,
                         estado: data.estado,
                     };
-                    console.log("Ventas: ", RegistroVenta)
+                    //console.log("Ventas: ", RegistroVenta)
                     nombre = data.nombre;
                     conn.query('INSERT INTO tbl_ventas SET ?', [RegistroVenta], (error, result) => {
                         if (error) {
