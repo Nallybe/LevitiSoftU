@@ -110,9 +110,10 @@
                 <div class="card-body">
                   <h5 class="card-title" style="margin-bottom: 2%;">Producto</h5>
                   <!--Input Nombre-->
-                  <label class="form-label" for="nombre">Nombre</label>
+                  <label class="form-label" for="nombre">Nombre <small style="color: red;">*</small></label>
                   <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="nombre"
-                    name="nombre" oninput="val_nombre()" autocomplete="off" maxlength="100">
+                    name="nombre" oninput="val_nombre()" autocomplete="off" onkeypress="return soloNomIns(event)"
+                    maxlength="100">
                   <div id="mensajeErrorNombre"></div>
                   <!--End Input Nombre-->
 
@@ -120,9 +121,13 @@
                     <div class="col-md-6">
 
                       <!--Input Precio-->
-                      <label class="form-label" for="precio">Precio</label>
-                      <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="precio"
-                        name="precio" oninput="val_precio()" autocomplete="off">
+                      <label class="form-label" for="precio">Precio <small style="color: red;">*</small></label>
+                      <input type="number" name="precio" id="precio" hidden>
+                      <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="precio_p"
+                        oninput="val_precio(); initFormattedInput('precio_p', 'precio');"
+                        onkeypress="return soloNumeros(event)" autocomplete="off" maxlength="10">
+
+
                       <div id="mensajeErrorPrecio"></div>
                       <!--End Input Precio-->
 
@@ -130,9 +135,11 @@
                     <div class="col-md-6">
 
                       <!--Input Stock-->
-                      <label class="form-label" for="stock">Stock</label>
-                      <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="stock"
-                        name="stock" oninput="val_stock()" autocomplete="off">
+                      <label class="form-label" for="stock">Stock <small style="color: red;">*</small></label>
+                      <input type="number" name="stock" id="stock" hidden>
+                      <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="stock_p"
+                        oninput="val_stock(); initFormattedInput('stock_p', 'stock');"
+                        onkeypress="return soloNumeros(event)" autocomplete="off" maxlength="10">
                       <div id="mensajeErrorStock"></div>
                       <!--End Input Stock-->
 
@@ -140,7 +147,7 @@
                   </div>
 
                   <!--Input Categoria-->
-                  <label class="form-label" for="categoria">Categoria</label>
+                  <label class="form-label" for="categoria">Categoria <small style="color: red;">*</small></label>
                   <select class="form-control form-control-sm" style="border-radius: 0;" id="categoria"
                     onchange="val_categoria()" name="categoria">
                     <option value="0"></option>
@@ -155,10 +162,11 @@
                   <!--End Input Categoria-->
 
                   <!--Input Descripción-->
-                  <label class="form-label mt-2" for="descripcion">Descripción</label>
+                  <label class="form-label mt-2" for="descripcion">Descripción <small
+                      style="color: red;">*</small></label>
                   <textarea class="form-control form-control-sm" id="descripcion" name="descripcion" autocomplete="off"
-                     onchange="val_descripcion()"></textarea>
-                    <div id="mensajeErrorDescripcion"></div>
+                    onchange="val_descripcion()" onkeypress="return soloDes(event)"></textarea>
+                  <div id="mensajeErrorDescripcion"></div>
                   <!--End Input Descripción maxlength="250"-->
 
                   <center>
@@ -199,7 +207,8 @@
                           <!--Input Insumo-->
                           <label class="form-label" for="idInsumo_R">Insumo</label>
                           <input type="text" class="form-control form-control-sm" list="list_insumos"
-                            style="border-radius: 0;" id="idInsumo_R" autocomplete="off" oninput="val_ins()">
+                            style="border-radius: 0;" id="idInsumo_R" onkeypress="return soloNomIns(event)"
+                            autocomplete="off" oninput="val_ins()">
                           <datalist id="list_insumos">
                             {{#each insumos}}
                             <option value="{{nombre}}">nombre({{nombre}}) medida({{medida}}) stock({{stock}})</option>
@@ -213,8 +222,11 @@
 
                           <!--Input Cantidad-->
                           <label for="cantidad_R">Cantidad</label>
-                          <input type="number" class="form-control form-control-sm" style="border-radius: 0;"
-                            id="cantidad_R" autocomplete="off" oninput="val_cant()">
+                          <input type="number" id="cantidad_R" hidden>
+                          <input type="text" class="form-control form-control-sm" style="border-radius: 0;"
+                            id="cantidad_R_V" autocomplete="off"
+                            oninput="val_cant(); initFormattedInput('cantidad_R_V', 'cantidad_R');"
+                            onkeypress="return soloNumeros(event)" maxlength="10">
                           <div id="mensajeErrorCantidad"></div>
                           <!--End Input Cantidad-->
 
@@ -278,12 +290,10 @@
 
               <div style="text-align: right;">
                 <!--Start Btn Cancelar-->
-                <a class="btn btn-danger btn-sm" href="/productos"
-                  type="button">Cancelar</a>
+                <a class="btn btn-danger btn-sm" href="/productos" type="button">Cancelar</a>
                 <!--End Btn Cancelar-->
                 <!--Start Btn Registrar--> <!--data-bs-toggle="modal" data-bs-target="#creacion"-->
-                <button type="submit" class="btn btn-success btn-sm"
-                  id="btnRegistrar">
+                <button type="submit" class="btn btn-success btn-sm" id="btnRegistrar">
                   Registrar</button>
                 <!--End Btn Regiastrar-->
               </div>
@@ -333,11 +343,24 @@
   </script>
   {{/if}}
 
+   <script>
+    //Puntuación input visible y valor numerico para el input tipo hidden
+    function initFormattedInput(visibleId, hiddenId) {
+      const visibleInput = document.getElementById(visibleId);
+      const hiddenInput = document.getElementById(hiddenId);
+
+      const inputValue = visibleInput.value.replace(/\./g, ""); // Remover puntos
+      const formattedValue = Number(inputValue).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+      visibleInput.value = formattedValue;
+      hiddenInput.value = inputValue;
+    }
+  </script>
+
   <script>
     var lastValueI = ""; // Variable para almacenar el último valor válido
 
     function val_cant() {
-      var cantidad = document.getElementById("cantidad_R");
+      var cantidad = document.getElementById("cantidad_R_V");
 
       if (cantidad.value != "") {
         mensajeErrorCantidad.innerHTML = '';
@@ -347,7 +370,7 @@
 
     function val_ins() {
       var ins = document.getElementById("idInsumo_R");
-      var cantidad = document.getElementById("cantidad_R");
+      var cantidad = document.getElementById("cantidad_R_V");
       var btn = document.getElementById("btnAgregarInsumo");
 
       var selectedOptionI = document.querySelector('#list_insumos option[value="' + ins.value + '"]');
@@ -422,7 +445,7 @@
     }
 
     function val_precio() {
-      var precio = document.getElementById("precio");
+      var precio = document.getElementById("precio_p");
 
       if (precio.value != "") {
         mensajeErrorPrecio.innerHTML = '';
@@ -431,7 +454,7 @@
     }
 
     function val_stock() {
-      var stock = document.getElementById("stock");
+      var stock = document.getElementById("stock_p");
 
       if (stock.value != "") {
         mensajeErrorStock.innerHTML = '';
@@ -451,7 +474,7 @@
         cantidad: document.getElementById('cantidad_R').value
       };
 
-      if (insumo.idInsumo != "" && insumo.cantidad != "") {
+      if (insumo.idInsumo != "" && insumo.cantidad != "" && insumo.cantidad > 0) {
         const repetido = document.getElementById('cant_' + insumo.idInsumo)
         if (repetido != null) {
           repetido.value = parseInt(repetido.value) + parseInt(insumo.cantidad);
@@ -467,6 +490,7 @@
 
           document.getElementById('idInsumo_R').value = null;
           document.getElementById('cantidad_R').value = null;
+          document.getElementById('cantidad_R_V').value = null;
         } else {
           cont++;
           contGeneral++;
@@ -478,7 +502,7 @@
                   <input id="Id_${insumo.idInsumo}" name="idInsumo" value="${insumo.idInsumo}" style="text-align: center; width: auto;  border: none;" readonly>
               </td>
               <td class="text-center">
-                  <input style="text-align: center; width: 100px;" id="cant_${insumo.idInsumo}" name="cantidad_n" value="${insumo.cantidad}" oninput="updateValueInput(this)">
+                  <input type="text" style="text-align: center; width: 100px;" id="cant_${insumo.idInsumo}" name="cantidad_n" value="${insumo.cantidad}" oninput="updateValueInput(this)" onkeypress="return soloNumeros(event)" maxlength="10">
               </td>
               <td class="text-center">
                   <a href="#" onclick="eliminarInsumo(${cont})" style="color: #292b2c;">
@@ -503,19 +527,20 @@
 
           document.getElementById('idInsumo_R').value = null;
           document.getElementById('cantidad_R').value = null;
+          document.getElementById('cantidad_R_V').value = null;
 
         }
 
         //alert("Insumo Agregado");
       } else {
         //alert("Campos obligatorios");
-       /* Swal.fire({
-          position: 'top-end',
-          icon: 'warning',
-          title: 'Campos Obligatorios',
-          showConfirmButton: false,
-          timer: 1000
-        });*/
+        /* Swal.fire({
+           position: 'top-end',
+           icon: 'warning',
+           title: 'Campos Obligatorios',
+           showConfirmButton: false,
+           timer: 1000
+         });*/
 
         if (insumo.idInsumo == "") {
           mensajeErrorInsumo.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El insumo es un campo requerido';
@@ -525,6 +550,11 @@
         if (insumo.cantidad == "") {
           mensajeErrorCantidad.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La cantidad es un campo requerido';
           mensajeErrorCantidad.style.display = 'block';
+        } else {
+          if (insumo.cantidad == 0) {
+            mensajeErrorCantidad.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La cantidad es no es válida';
+            mensajeErrorCantidad.style.display = 'block';
+          }
         }
 
       }
@@ -619,6 +649,11 @@
       if (precio.value == "") {
         mensajeErrorPrecio.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El precio es un campo obligatorio';
         mensajeErrorPrecio.style.display = 'block';
+      } else {
+        if (precio % 50 != 0) {
+          mensajeErrorPrecio.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El precio no es válido';
+          mensajeErrorPrecio.style.display = 'block';
+        }
       }
 
       if (stock.value == "") {
@@ -637,7 +672,7 @@
       var precio = document.getElementById("precio");
       var stock = document.getElementById("stock");
 
-      if (imagen.value == '' || nombre.value == '' || descripcion.value == '' || precio.value == '' || stock.value == '' || categoria.value == '') {
+      if (imagen.value == '' || nombre.value == '' || descripcion.value == '' || precio.value == '' || stock.value == '' || categoria.value == '' || precio.value % 50 != 0) {
         //alert('campos obligatorios');
         /*Swal.fire({
           position: 'top-end',
@@ -649,6 +684,8 @@
         validarCampos();
         return false; // Detener el envío del formulario
       }
+
+
 
       // Verificar si la lista tiene al menos un elemento
       if (list.childElementCount === 0) {
@@ -670,6 +707,76 @@
   <!--End Validar Envio-->
 
   <!--Inicio footer-->
+
+  <script>
+    function soloNumeros(e) {
+      key = e.keyCode || e.which;
+      teclado = String.fromCharCode(key);
+      letras = "1234567890";
+      especiales = "8-37-38-46";
+      teclado_especial = false;
+
+      for (var i in especiales) {
+        if (key == especiales[i]) {
+          teclado_especial = true; break
+        }
+      }
+
+      if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+        return false;
+      }
+
+    }
+
+    function soloNomIns(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM áÁéÉíÍóÓúÚ1234567890_-";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+    function soloDes(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM áÁéÉíÍóÓúÚ1234567890$_-()¿?*/+.,;:!¡";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+  </script>
+
+
 
   <!--Fin footer-->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

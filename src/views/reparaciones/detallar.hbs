@@ -22,7 +22,7 @@
     /* Estilos para el popover */
     .custom-popover {
         position: relative;
-        max-width: 330px;
+        max-width: 400px;
         border: 3px gray solid;
         /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
         background-color: white;
@@ -120,7 +120,7 @@
         class="fa fa-arrow-left fa-2x"></i></a>
 
 <div class="row ml-2">
-    <div class="col-md-3">
+    <div class="col-md-4">
         {{#each reparacion}}
 
         <div class="card mb-3" style="max-width: 100%; border-radius: 0;">
@@ -136,13 +136,18 @@
                                 </div>
                                 <div class='col-md-9'>
                                     <b>Nombre:</b> {{userName}}<br>
+                                    <b>Apellido:</b> {{userLastName}}<br>
                                     <b>Teléfono:</b> {{userTell}}<br>
                                     <b>Correo:</b> {{userEmail}}<br>
+                                    <b>Estado:</b> {{userStatus}}<br>
                                 </div>
                             </div>
-                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user"
-                                    style="color:black"></i></span>
+                            ">
+                            <small>{{userName}} {{userLastName}}</small>
+                            <span class="badge text-bg-secondary"><i class="fas fa-user" style="color:black"></i></span>
                         </button>
+
+
                         <br>
                     </p>
                     <p><b>FechaRegistro: </b>{{fechaRegistro}}<br></p>
@@ -234,7 +239,7 @@
     </div>
 
 
-    <div class="col-md-9">
+    <div class="col-md-8">
         <!--Start Card #3-->
         <div class="card" style="width: 98%; border-radius: 0;">
             <div class="card-body">
@@ -324,8 +329,8 @@
                                                 </div>
 
                                                 <div class="col-md-4">
-                                                    <label class="form-label mt-4"
-                                                        for="observacion_R">Última Actualización</label>
+                                                    <label class="form-label mt-4" for="observacion_R">Última
+                                                        Actualización</label>
                                                     <input class="form-control form-control-sm"
                                                         style="border-radius: 0;" type="text" value="{{fechaEstado}}"
                                                         readonly>
@@ -340,15 +345,17 @@
                     </table>
                 </div>
                 <!--End Table-->
-                 <div class="row">
-                  <div class="col-md-5"></div>
-                  <div class="col-md-2">
-                    <div class="pagination">
-                      <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i class="fa-solid fa-arrow-left"></i></button>
-                      <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i class="fa-solid fa-arrow-right"></i></button>
+                <div class="row">
+                    <div class="col-md-5"></div>
+                    <div class="col-md-2">
+                        <div class="pagination">
+                            <button type="button" class="btn btn-outline-secondary btn-sm prev-btn mt-1"><i
+                                    class="fa-solid fa-arrow-left"></i></button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm next-btn mt-1 ml-1"><i
+                                    class="fa-solid fa-arrow-right"></i></button>
+                        </div>
                     </div>
-                  </div>
-                  <div class="col-md-5"></div>
+                    <div class="col-md-5"></div>
                 </div>
             </div>
         </div>
@@ -442,11 +449,11 @@
     var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
         return new bootstrap.Popover(popoverTriggerEl);
     });
-
-    // Mostrar el toast
-    var toastEl = document.getElementById('myToast');
-    var toast = new bootstrap.Toast(toastEl);
-    toast.show();
+    /*
+        // Mostrar el toast
+        var toastEl = document.getElementById('myToast');
+        var toast = new bootstrap.Toast(toastEl);
+        toast.show();*/
 </script>
 
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

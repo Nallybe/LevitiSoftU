@@ -42,6 +42,7 @@ function productos_listar(req, res) {
                         }
                         // Parsear precio
                         productos[index].precio = "$" + productos[index].precio.toLocaleString('es-CO');
+                        productos[index].stock = productos[index].stock.toLocaleString('es-CO');
                     }
 
 
@@ -246,6 +247,9 @@ function productos_detallar(req, res) {
                             producto[index].categoria = "Zapatos";
                             break;
                     }
+
+                    producto[index].precio = "$" + producto[index].precio.toLocaleString('es-CO');
+                    producto[index].stock = producto[index].stock.toLocaleString('es-CO');
                 }
                 conn.query("SELECT * FROM tbl_productos_detalles WHERE idProducto = ?", [idProducto], (err, detallesproducto) => {
                     if (err) {

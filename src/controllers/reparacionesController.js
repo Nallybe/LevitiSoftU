@@ -270,15 +270,18 @@ async function reparaciones_detallar(req, res) {
         });
 
         for (let index in reparacion) {
-            reparacion[index].userName;
-            reparacion[index].userTell;
-            reparacion[index].userEmail;
             for (let iA in usersA) {
                 for (let iI in usersI) {
                     if (usersI[iI].idInfo == reparacion[index].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
                         reparacion[index].userName = usersI[iI].nombre;
+                        reparacion[index].userLastName = usersI[iI].apellido;
                         reparacion[index].userTell = usersI[iI].telefono;
                         reparacion[index].userEmail = usersA[iA].correo;
+                        if (usersA[iA].estado == "A") {
+                            reparacion[index].userStatus = "Activo";
+                        } else {
+                            reparacion[index].userStatus = "Inactivo";
+                        }
                     }
                 }
             }
@@ -392,7 +395,7 @@ async function reparaciones_detallar(req, res) {
 
         // Redireccionar
 
-       // console.log("total Insumos");
+        // console.log("total Insumos");
         /*console.log(reparacion)
         console.log(detallesreparacion)
 
@@ -487,7 +490,7 @@ async function reparaciones_detallar_api(req, res) {
                 }
             });
         });
-       
+
         const totalInsumos = [];
         for (const dd of DetallesDetalles) {
             for (const d of detallesreparacion) {
@@ -517,16 +520,34 @@ async function reparaciones_detallar_api(req, res) {
 //Crear (Función para redireccionar al hbs donde se encuentra el formulario)
 function reparaciones_crear(req, res) {
     req.getConnection((err, conn) => {
-        conn.query("SELECT * FROM users_access WHERE estado ='A'", (err, clientes) => {
+        conn.query("SELECT users_access.* FROM users_access INNER JOIN tbl_roles ON users_access.idRoles = tbl_roles.idRoles WHERE tbl_roles.nombreRoles = 'Cliente' AND users_access.estado = 'A'", (err, clientes) => {
+            //SELECT * FROM users_access WHERE estado ='A'
             if (err) {
                 return res.status(500).json(err);
             } else {
-                conn.query("SELECT * FROM tbl_insumos WHERE estado ='A'", (err, insumos) => {
+                conn.query("SELECT * FROM users_info", (err, usuarios2) => {
                     if (err) {
                         return res.status(500).json(err);
                     } else {
-                        res.render("reparaciones/registrar", { clientes, insumos });
 
+                        for (let i in clientes) {
+                            for (let i2 in usuarios2) {
+                                if (clientes[i].idAccess == usuarios2[i2].idAccess) {
+                                    clientes[i].nombre = usuarios2[i2].nombre;
+                                    clientes[i].apellido = usuarios2[i2].apellido;
+                                    clientes[i].telefono = usuarios2[i2].telefono;
+                                }
+                            }
+                        }
+
+                        conn.query("SELECT * FROM tbl_insumos WHERE estado ='A'", (err, insumos) => {
+                            if (err) {
+                                return res.status(500).json(err);
+                            } else {
+                                res.render("reparaciones/registrar", { clientes, insumos });
+
+                            }
+                        });
                     }
                 });
             }
@@ -573,14 +594,14 @@ async function reparaciones_registrar(req, res) {
             });
         });
 
-        for (let index in usersA) {
+        //for (let index in usersA) {
             for (let i in usersI) {
-                if (data.idCliente == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
+                if (data.idCliente == (usersI[i].nombre+" "+usersI[i].apellido)/*usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess*/) {
                     data.idCliente = usersI[i].idInfo;
                     console.log("Cliente encontrado");
                 }
             }
-        }
+        //}
         // End Capturar Cliente
 
         // Actualizar datos del cliente
@@ -887,7 +908,7 @@ function reparaciones_editar(req, res) {
                             return res.status(500).json(err);
                         } else {
                             for (i in user) {
-                                reparacion[i].idInfo = user[i].nombre;
+                                reparacion[i].idInfo = user[i].nombre + " " + user[i].apellido;
                             }
                         }
                     });
@@ -974,7 +995,6 @@ function reparaciones_editar(req, res) {
     });
 }
 //End Editar
-
 
 //Modificar
 async function reparaciones_modificar(req, res) {
