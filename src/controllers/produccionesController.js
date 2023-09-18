@@ -197,8 +197,17 @@ async function producciones_detallar(req, res) {
                 for (let i2 in users2) {
                     if (users[i].idInfo == producciones[index].idInfo && users[i].idAccess == users2[i2].idAccess) {
                         producciones[index].userName = users[i].nombre;
+                        producciones[index].userLastName = users[i].apellido;
                         producciones[index].userTell = users[i].telefono;
                         producciones[index].userEmail = users2[i2].correo;
+                        producciones[index].userStatus;
+
+                        if (users2[i2].estado == 'A') {
+                            producciones[index].userStatus = "Activo";
+                        } else {
+                            producciones[index].userStatus = "Inactivo";
+                        }
+
                     }
                 }
             }
@@ -275,8 +284,16 @@ async function producciones_detallar(req, res) {
                     for (let i2 in users2) {
                         if (users[i].idInfo == d_produccion[index].participes[index1].idInfo && users2[i2].idAccess == users[i].idAccess) {
                             d_produccion[index].participes[index1].userName = users[i].nombre;
+                            d_produccion[index].participes[index1].userLastName = users[i].apellido;
                             d_produccion[index].participes[index1].userTell = users[i].telefono;
                             d_produccion[index].participes[index1].userEmail = users2[i2].correo;
+
+                            d_produccion[index].participes[index1].userStatus;
+                            if (users2[i2].estado == 'A') {
+                                d_produccion[index].participes[index1].userStatus = "Activo";
+                            } else {
+                                d_produccion[index].participes[index1].userStatus = "Inactivo";
+                            }
                         }
                     }
                 }
@@ -524,6 +541,7 @@ function producciones_crear(req, res) {
                             for (let i2 in usuarios2) {
                                 if (usuarios[i].idAccess == usuarios2[i2].idAccess) {
                                     usuarios[i].nombre = usuarios2[i].nombre;
+                                    usuarios[i].apellido = usuarios2[i].apellido;
                                     usuarios[i].telefono = usuarios2[i].telefono;
                                 }
                             }
@@ -555,6 +573,8 @@ function producciones_crear(req, res) {
                                             productos[i].categoria = 'Zapatos';
                                             break;
                                     }
+                                    productos[i].precio = productos[i].precio.toLocaleString('es-CO');
+                                    productos[i].stock = productos[i].stock.toLocaleString('es-CO');
                                 }
                                 res.render("produccion/registrar", { usuarios, productos });
                             }
@@ -605,14 +625,14 @@ async function producciones_registrar(req, res) {
             });
         });
 
-        for (let index in usersA) {
+        //for (let index in usersA) {
             for (let i in usersI) {
-                if (data.idEncargado == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
+                if (data.idEncargado == (usersI[i].nombre+" "+usersI[i].apellido) /*usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess*/) {
                     data.idEncargado = usersI[i].idInfo;
                     console.log("Encargado encontrado");
                 }
             }
-        }
+        //}
         // End Capturar Encargado
 
         //Capturar idProducto
@@ -696,14 +716,14 @@ async function producciones_registrar(req, res) {
                     for (let index in data[part]) {
 
                         //Capturar idParticipante
-                        for (let ix in usersA) {
+                        //for (let ix in usersA) {
                             for (let i in usersI) {
-                                if (data[part][index] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
+                                if (data[part][index] ==(usersI[i].nombre+" "+usersI[i].apellido) /*usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess*/) {
                                     data[part][index] = usersI[i].idInfo;
                                     //console.log("Participante encontrado");
                                 }
                             }
-                        }
+                        //}
                         //End Capturar idParticipante
 
                         await new Promise((resolve, reject) => {
@@ -728,14 +748,14 @@ async function producciones_registrar(req, res) {
                     // Un Partícipe
 
                     //Capturar idParticipante
-                    for (let index in usersA) {
+                    //for (let index in usersA) {
                         for (let i in usersI) {
-                            if (data[part] == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
+                            if (data[part] == (usersI[i].nombre+" "+usersI[i].apellido) /*usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess*/) {
                                 data[part] = usersI[i].idInfo;
                                 //console.log("Participante encontrado");
                             }
                         }
-                    }
+                    //}
                     //End Capturar idParticipante
 
 
@@ -794,14 +814,14 @@ async function producciones_registrar(req, res) {
                 for (let index in data[part]) {
 
                     //Capturar idParticipante
-                    for (let ix in usersA) {
+                    //for (let ix in usersA) {
                         for (let i in usersI) {
-                            if (data[part] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
+                            if (data[part] == (usersI[i].nombre+" "+usersI[i].apellido) /*usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess*/) {
                                 data[part] = usersI[i].idInfo;
                                 //console.log("Participante encontrado");
                             }
                         }
-                    }
+                    //}
                     //End Capturar idParticipante
 
                     await new Promise((resolve, reject) => {
@@ -826,14 +846,14 @@ async function producciones_registrar(req, res) {
                 // Un Partícipe
 
                 //Capturar idParticipante
-                for (let index in usersA) {
+                //for (let index in usersA) {
                     for (let i in usersI) {
-                        if (data[part] == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
+                        if (data[part] == (usersI[i].nombre+" "+usersI[i].apellido)/*usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess*/) {
                             data[part] = usersI[i].idInfo;
                             //console.log("Participante encontrado");
                         }
                     }
-                }
+                //}
                 //End Capturar idParticipante
 
 
@@ -894,8 +914,9 @@ function producciones_editar(req, res) {
                             for (let i in access) {
                                 for (let i2 in usersI) {
                                     if (access[i].idAccess == usersI[i2].idAccess) {
-                                        access[i].nombre = usersI[i].nombre;
-                                        access[i].telefono = usersI[i].telefono;
+                                        access[i].nombre = usersI[i2].nombre;
+                                        access[i].apellido = usersI[i2].apellido;
+                                        access[i].telefono = usersI[i2].telefono;
                                     }
                                 }
                             }
@@ -931,6 +952,8 @@ function producciones_editar(req, res) {
                                         prod[i].categoria = 'Zapatos';
                                         break;
                                 }
+                                prod[i].precio = prod[i].precio.toLocaleString('es-CO');
+                                prod[i].stock = prod[i].stock.toLocaleString('es-CO');
                             }
                             resolve(prod);
                         }
@@ -941,7 +964,7 @@ function producciones_editar(req, res) {
                     for (iI in usersI) {
                         for (iA in usersA) {
                             if (produccion[i].idInfo == usersI[iI].idInfo && usersI[iI].idAccess == usersA[iA].idAccess) {
-                                produccion[i].idInfo = usersI[iI].nombre;
+                                produccion[i].idInfo = usersI[iI].nombre + " " + usersI[iI].apellido;
                             }
                         }
 

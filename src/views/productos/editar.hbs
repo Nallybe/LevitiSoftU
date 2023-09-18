@@ -109,9 +109,10 @@
                 <div class="card-body">
                   <h5 class="card-title" style="margin-bottom: 2%;">Producto</h5>
                   <!--Input Nombre-->
-                  <label class="form-label" for="nombre">Nombre</label>
+                  <label class="form-label" for="nombre">Nombre <small style="color: red;">*</small></label>
                   <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="nombre"
-                    name="nombre" value="{{nombre}}" oninput="val_nombre()" autocomplete="off" maxlength="100">
+                    name="nombre" value="{{nombre}}" oninput="val_nombre()" autocomplete="off"
+                    onkeypress="return soloNomIns(event)" maxlength="100">
                   <div id="mensajeErrorNombre"></div>
                   <!--End Input Nombre-->
 
@@ -119,9 +120,23 @@
                     <div class="col-md-6">
 
                       <!--Input Precio-->
-                      <label class="form-label" for="precio">Precio</label>
-                      <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="precio"
-                        name="precio" value="{{precio}}" oninput="val_precio()" autocomplete="off">
+                      <label class="form-label" for="precio">Precio <small style="color: red;">*</small></label>
+                      
+                      <!--<input type="number" id="precio" name="precio" value="{{precio}}">
+
+                      <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="precio_v"
+                        name="precio_v" value="" oninput="val_precio(); initFormattedInput('precio_v', 'precio');"
+                        onkeypress="return soloNumeros(event)" autocomplete="off">
+
+                      <script>
+                        initFormattedInput('precio_v', 'precio');
+                      </script>-->
+
+                      <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="precio"
+                        name="precio" value="{{precio}}" oninput="val_precio();" maxlength="8"
+                        onkeypress="return soloNumeros(event)" autocomplete="off">
+
+
                       <div id="mensajeErrorPrecio"></div>
                       <!--End Input Precio-->
 
@@ -129,9 +144,19 @@
                     <div class="col-md-6">
 
                       <!--Input Stock-->
-                      <label class="form-label" for="stock">Stock</label>
-                      <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="stock"
-                        name="stock" value="{{stock}}" oninput="val_stock()" autocomplete="off">
+                      <label class="form-label" for="stock">Stock <small style="color: red;">*</small></label>
+                      <!--<input type="number" name="stock" id="stock" value="{{stock}}" hidden>
+                      <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="stock_v"
+                        oninput="val_stock(); initFormattedInput('stock_v', 'stock');" value=""
+                        onkeypress="return soloNumeros(event)" autocomplete="off" maxlength="13">
+
+                      <script>
+                        initFormattedInput('stock_v', 'stock');
+                      </script>-->
+                      <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="stock"
+                        oninput="val_stock();" value="{{stock}}" name="stock"
+                        onkeypress="return soloNumeros(event)" autocomplete="off" maxlength="8">
+
                       <div id="mensajeErrorStock"></div>
                       <!--End Input Stock-->
 
@@ -171,9 +196,10 @@
                     </div>
                   </div>
                   <!--Input Descripción-->
-                  <label class="form-label mt-2" for="descripcion">Descripción</label>
+                  <label class="form-label mt-2" for="descripcion">Descripción <small
+                      style="color: red;">*</small></label>
                   <textarea class="form-control form-control-sm" id="descripcion" name="descripcion" autocomplete="off"
-                    oninput="val_descripcion()">{{descripcion}}</textarea>
+                    oninput="val_descripcion()" onkeypress="return soloDes(event)">{{descripcion}}</textarea>
                   <!--End Input Descripción   maxlength="250" -->
                   <div id="mensajeErrorDescripcion"></div>
                   <center>
@@ -232,35 +258,13 @@
 
                           <!--Input Cantidad-->
                           <label for="cantidad_R">Cantidad</label>
+                          <input type="number" id="cantidad_R" hidden>
                           <input type="text" class="form-control form-control-sm" style="border-radius: 0;"
-                            id="cantidad_R" name="cantidad_R" autocomplete="off" oninput="val_cant()" onkeypress="return solonumeros(event)" maxlength="10">
+                            id="cantidad_R_V" autocomplete="off"
+                            oninput="val_cant(); initFormattedInput('cantidad_R_V', 'cantidad_R');"
+                            onkeypress="return soloNumeros(event)" maxlength="10">
                           <div id="mensajeErrorCantidad"></div>
                           <!--End Input Cantidad-->
-
-                          <script>
-                            function solonumeros(e) {
-                              key = e.keyCode || e.which;
-
-                              teclado = String.fromCharCode(key);
-
-                              letras = "1234567890";
-
-                              especiales = "8-37-38-46";
-
-                              teclado_especial = false;
-
-                              for (var i in especiales) {
-                                if (key == especiales[i]) {
-                                  teclado_especial = true; break
-                                }
-                              }
-
-                              if (letras.indexOf(teclado) == -1 && !teclado_especial) {
-                                return false;
-                              }
-
-                            }
-                          </script>
 
                         </div>
                       </div>
@@ -392,6 +396,21 @@
   </script>
   {{/if}}
 
+
+  <script>
+    //Puntuación input visible y valor numerico para el input tipo hidden
+    function initFormattedInput(visibleId, hiddenId) {
+      const visibleInput = document.getElementById(visibleId);
+      const hiddenInput = document.getElementById(hiddenId);
+
+      const inputValue = visibleInput.value.replace(/\./g, ""); // Remover puntos
+      const formattedValue = Number(inputValue).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+      visibleInput.value = formattedValue;
+      hiddenInput.value = inputValue;
+    }
+  </script>
+
+
   <script>
     function tablaIndex() {
       // Obtener la referencia de la tabla
@@ -412,7 +431,7 @@
     var lastValueI = ""; // Variable para almacenar el último valor válido
 
     function val_cant() {
-      var cantidad = document.getElementById("cantidad_R");
+      var cantidad = document.getElementById("cantidad_R_V");
 
       if (cantidad.value != "") {
         mensajeErrorCantidad.innerHTML = '';
@@ -422,7 +441,7 @@
 
     function val_ins() {
       var ins = document.getElementById("idInsumo_R");
-      var cantidad = document.getElementById("cantidad_R");
+      var cantidad = document.getElementById("cantidad_R_V");
       var btn = document.getElementById("btnAgregarInsumo");
 
       var selectedOptionI = document.querySelector('#list_insumos option[value="' + ins.value + '"]');
@@ -458,9 +477,9 @@
     lastValueP = "";
     function val_nombre() {
       var pro = document.getElementById("nombre");
-      var descripcion = document.getElementById("descripcion");
-      var precio = document.getElementById("precio");
-      var stock = document.getElementById("stock");
+      // var descripcion = document.getElementById("descripcion");
+      //var precio = document.getElementById("precio");
+      //var stock = document.getElementById("stock");
 
       //var btn = document.getElementById("btnEditar");
 
@@ -472,18 +491,18 @@
 
         //dtn.disabled = true;
 
-        descripcion.disabled = true;
-        precio.disabled = true;
-        stock.disabled = true;
+        //descripcion.disabled = true;
+        //precio.disabled = true;
+        //stock.disabled = true;
 
         mensajeErrorNombre.innerHTML = '<span class="icono fa fa-circle-xmark"></span>Ya existe un producto registrado con este nombre';
         mensajeErrorNombre.style.display = 'block';
 
       } else {
         //btn.disabled = false;
-        descripcion.disabled = false;
-        precio.disabled = false;
-        stock.disabled = false;
+        // descripcion.disabled = false;
+        // precio.disabled = false;
+        //stock.disabled = false;
 
         mensajeErrorNombre.innerHTML = '';
         mensajeErrorNombre.style.display = 'none';
@@ -527,7 +546,7 @@
         cantidad: document.getElementById('cantidad_R').value
       };
 
-      if (insumo.idInsumo != "" && insumo.cantidad != "") {
+      if (insumo.idInsumo != "" && insumo.cantidad != "" && insumo.cantidad > 0) {
         const repetido = document.getElementById('cant_' + insumo.idInsumo);
         if (repetido != null) {
           repetido.value = parseInt(repetido.value) + parseInt(insumo.cantidad);
@@ -540,6 +559,10 @@
             showConfirmButton: false,
             timer: 1000
           });
+
+          document.getElementById('idInsumo_R').value = null;
+          document.getElementById('cantidad_R').value = null;
+          document.getElementById('cantidad_R_V').value = null;
         } else {
 
           cont = cont - 1;
@@ -582,6 +605,7 @@
 
         document.getElementById('idInsumo_R').value = null;
         document.getElementById('cantidad_R').value = null;
+        document.getElementById('cantidad_R_V').value = null;
 
         //alert("Insumo Agregado");
       } else {
@@ -602,6 +626,11 @@
         if (insumo.cantidad == "") {
           mensajeErrorCantidad.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La cantidad es un campo requerido';
           mensajeErrorCantidad.style.display = 'block';
+        }else{
+          if (insumo.cantidad == 0) {
+          mensajeErrorCantidad.innerHTML = '<span class="icono fa fa-circle-xmark"></span>La cantidad no es válida';
+          mensajeErrorCantidad.style.display = 'block';
+        }
         }
 
       }
@@ -655,6 +684,11 @@
       if (precio.value == "") {
         mensajeErrorPrecio.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El precio es un campo obligatorio';
         mensajeErrorPrecio.style.display = 'block';
+      } else {
+        if (precio % 50 != 0) {
+          mensajeErrorPrecio.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El precio no es válido';
+          mensajeErrorPrecio.style.display = 'block';
+        }
       }
 
       if (stock.value == "") {
@@ -687,7 +721,7 @@
       }
 
 
-      if (/*imagen.value == "" || */nombre.value == "" || descripcion.value == "" || precio.value == "" || stock.value == "") {
+      if (/*imagen.value == "" || */nombre.value == "" || descripcion.value == "" || precio.value == "" || stock.value == "" || precio.value % 50 != 0) {
 
         //alert('campos obligatorios');
         /*Swal.fire({
@@ -761,6 +795,76 @@
     });
   </script>
   <!--Inicio footer-->
+
+    <script>
+    function soloNumeros(e) {
+      key = e.keyCode || e.which;
+      teclado = String.fromCharCode(key);
+      letras = "1234567890";
+      especiales = "8-37-38-46";
+      teclado_especial = false;
+
+      for (var i in especiales) {
+        if (key == especiales[i]) {
+          teclado_especial = true; break
+        }
+      }
+
+      if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+        return false;
+      }
+
+    }
+
+    function soloNomIns(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM áÁéÉíÍóÓúÚ1234567890_-";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+    function soloDes(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM áÁéÉíÍóÓúÚ1234567890$_-()¿?*/+.,;:!¡";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+  </script>
+
+
 
   <!--Fin footer-->
   <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>

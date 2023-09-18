@@ -94,8 +94,8 @@
                 <!--Input Proveedor-->
                 <label class="form-label" for="proveedor">Proveedor <small style="color: red;">*</small></label>
                 <input type="text" class="form-control form-control-sm" list="Proveedores_Registrados"
-                  style="border-radius: 0;" id="proveedor" name="proveedor" autocomplete="off" maxlength="30"
-                  oninput="val_proveedor()">
+                  style="border-radius: 0;" id="proveedor" name="proveedor" autocomplete="off" maxlength="40"
+                  oninput="val_proveedor()" onkeypress="return soloProIns(event)">
                 <datalist id="Proveedores_Registrados">
                   {{#each proveedores}}
                   <option value="{{this}}">
@@ -107,7 +107,8 @@
                 <!--Input Recibo-->
                 <label class="form-label mt-2" for="recibo">Recibo <small style="color: red;">*</small></label>
                 <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="recibo"
-                  name="recibo" oninput="val_recibo()" autocomplete="off" maxlength="100">
+                  name="recibo" oninput="val_recibo()" autocomplete="off" maxlength="100"
+                  onkeypress="return soloRe(event)">
                 <div id="mensajeErrorRecibo"></div>
                 <!--End Input Recibo-->
 
@@ -139,7 +140,8 @@
                         <!--Input Insumo-->
                         <label class="form-label" for="idInsumo_R">Insumo</label>
                         <input type="text" class="form-control form-control-sm" list="list_insumos"
-                          style="border-radius: 0;" id="idInsumo_R" autocomplete="off" oninput="val_ins()">
+                          style="border-radius: 0;" id="idInsumo_R" autocomplete="off" oninput="val_ins()"
+                          onkeypress="return soloProIns(event)" maxlength="50">
                         <datalist id="list_insumos">
                           {{#each insumos}}
                           <option value="{{nombre}}" medida="{{medida}}" id="{{idInsumo}}">nombre({{nombre}})
@@ -779,6 +781,52 @@
       }
 
     }
+
+    function soloProIns(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM áÁéÉíÍóÓúÚ1234567890_-";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
+
+  function soloRe(e) {
+    key = e.keyCode || e.which;
+
+    teclado = String.fromCharCode(key);
+
+    letras = "qwertyuiopasdfghjklñzxcvbnmQWERTYUIOPASDFGHJKLÑZXCVBNM áÁéÉíÍóÓúÚ1234567890()-_#$+*";
+
+    especiales = "8-37-38-46";
+
+    teclado_especial = false;
+
+    for (var i in especiales) {
+      if (key == especiales[i]) {
+        teclado_especial = true; break
+      }
+    }
+
+    if (letras.indexOf(teclado) == -1 && !teclado_especial) {
+      return false;
+    }
+
+  }
   </script>
   <!--End Solo Numeros-->
 

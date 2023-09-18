@@ -25,7 +25,7 @@
     /* Estilos para el popover */
     .custom-popover {
         position: relative;
-        max-width: 330px;
+        max-width: 400px;
         border: 3px gray solid;
         /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
         background-color: white;
@@ -40,7 +40,7 @@
 
     .custom-popover2 {
         position: relative;
-        max-width: 300px;
+        max-width: 400px;
         border: 3px gray solid;
         /* Reemplaza esto con el color hexadecimal que corresponda a --bd-violet-bg */
         background-color: white;
@@ -123,7 +123,7 @@
         class="fa fa-arrow-left fa-2x"></i></a>
 
 <div class="row ml-1">
-    <div class="col-md-3">
+    <div class="col-md-4">
         {{#each producciones}}
 
         <div class="card mb-3" style="max-width: 100%; border-radius: 0;">
@@ -131,7 +131,7 @@
                 <h5 class="card-title">Producción</h5>
                 <div class="card-text">
                     <p><b>Encargado:</b>
-                        <button type="button" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
+                       <button type="button" data-bs-toggle="popover" data-bs-trigger="hover" data-bs-html="true"
                             data-bs-custom-class="custom-popover" title="<b>Usuario</b>" data-bs-content="
                             <div class='row'>
                                 <div class='col-md-3'>
@@ -139,11 +139,15 @@
                                 </div>
                                 <div class='col-md-9'>
                                     <b>Nombre:</b> {{userName}}<br>
+                                    <b>Apellido:</b> {{userLastName}}<br>
                                     <b>Teléfono:</b> {{userTell}}<br>
                                     <b>Correo:</b> {{userEmail}}<br>
+                                    <b>Estado:</b> {{userStatus}}<br>
                                 </div>
                             </div>
-                            ">{{userName}}<span class="badge text-bg-secondary"><i class="fas fa-user"
+                            "><small>
+                                {{userName}} {{userLastName}}
+                            </small><span class="badge text-bg-secondary"><i class="fas fa-user"
                                     style="color:black"></i></span>
                         </button>
                         <br>
@@ -167,7 +171,7 @@
                                     </div>
                                 </div>
                             </div>
-                            ">{{proName}} <span class="badge text-bg-secondary"><i class="fas fa-gift"
+                            "><small>{{proName}}</small>  <span class="badge text-bg-secondary"><i class="fas fa-gift"
                                     style="color:black"></i></span>
                         </button>
                         <br>
@@ -259,7 +263,7 @@
     </div>
 
 
-    <div class="col-md-9">
+    <div class="col-md-8">
         <!--Start Card #3-->
         <div class="card" style="width: 98%; border-radius: 0;">
             <div class="card-body">
@@ -418,16 +422,18 @@
                                     data-bs-title="<b>Participante {{this.cont}}</b>" data-bs-html="true"
                                     data-bs-content="
                                     <div class='row'>
-                                        <div class='col-md-4'>
+                                        <div class='col-md-3'>
                                             <img src='https://icons.iconarchive.com/icons/fa-team/fontawesome/512/FontAwesome-User-icon.png' width='100' />
                                         </div>
-                                        <div class='col-md-8'>
+                                        <div class='col-md-9'>
                                             <b>Nombre:</b> {{this.userName}}<br>
+                                            <b>Apellido:</b> {{this.userLastName}}<br>
                                             <b>Teléfono:</b> {{this.userTell}}<br>
                                             <b>Correo:</b> {{this.userEmail}}<br>
+                                            <b>Estado:</b> {{this.userStatus}}<br>
                                         </div>
                                     </div>
-                                ">{{this.userName}} <i class="fas fa-user" style="color: black"></i></button>
+                                ">{{this.userName}} {{this.userLastName}} <i class="fas fa-user" style="color: black"></i></button>
                             </td>
                         </tr>
                         {{/each}}
