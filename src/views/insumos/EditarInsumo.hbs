@@ -49,7 +49,7 @@
                         <div class="row justify-content-center">
                             <div class="col-5">
                                 <div class="form-group">
-                                    <label for="floatingInput" style="float: left; padding-right: 10px;">Nombre</label>
+                                    <label for="floatingInput" style="float: left; padding-right: 10px;">Nombre <span class="obligatorio">*</span></label>
                                     <input autocomplete="off" type="text" class="form-control" id=" nombreInsumo" style="border-radius: 0;"
                                         name="nombre" value="{{nombre}}">
                                     <div id="mensajeErrorNombre"></div>
@@ -57,7 +57,7 @@
                             </div>
                             <div class="col-4">
                                 <div class="form-group">
-                                    <label for="floatingInput" style="float: left; padding-right: 10px;">Stock</label>
+                                    <label for="floatingInput" style="float: left; padding-right: 10px;">Stock <span class="obligatorio">*</span></label>
                                     <input autocomplete="off" type="number" class="form-control" id="stockInsumo" style="border-radius: 0;"
                                         name="stock" value="{{stock}}" min="1" onkeypress="return solonumeros(event)">
                                     <div id="mensajeErrorStock"></div>

@@ -236,7 +236,7 @@
 
   apellidoInputs.forEach(function (apellidoInput) {
     apellidoInput.addEventListener('blur', function () {
-      validarTelefono(apellidoInput.value);
+      validarApellido(apellidoInput.value);
     });
   });
 
@@ -268,7 +268,10 @@
       mostrarError(mensajeErrorDocumento, 'Campo Obligatorio');
       return false;
     }if(documento.toString().length > 10){
-      mostrarError(mensajeErrorDocumento, 'El documento ingresado excede la cantidad de dígitos permitidos');
+      mostrarError(mensajeErrorDocumento, 'El documento ingresado no cuenta con la cantidad de dígitos permitidos');
+      return false;
+    } if(documento.toString().length < 8){
+      mostrarError(mensajeErrorDocumento, 'El documento ingresado no cuenta con la cantidad de dígitos permitidos');
       return false;
     } else {
       ocultarError(mensajeErrorDocumento);
@@ -279,8 +282,8 @@
     if (telefono === "") {
       mostrarError(mensajeErrorTelefono, 'Campo Obligatorio');
       return false;
-    }if(telefono.toString().length > 10){
-      mostrarError(mensajeErrorTelefono, 'El teléfono ingresado excede la cantidad de dígitos permitidos');
+    }if(telefono.toString().length > 10 || telefono.toString().length < 10){
+      mostrarError(mensajeErrorTelefono, 'El teléfono ingresado no cuenta con la cantidad de dígitos permitidos');
       return false;
     }else {
       ocultarError(mensajeErrorTelefono);
@@ -324,6 +327,7 @@
 </script>
 
 <!--Core JS Files-->
+<script src="/assets/js/Validaciones.js"></script>
 <script src="/assets/js/core/jquery.min.js"></script>
 <script src="/assets/js/core/popper.min.js"></script>
 <script src="/assets/js/core/bootstrap.min.js"></script>

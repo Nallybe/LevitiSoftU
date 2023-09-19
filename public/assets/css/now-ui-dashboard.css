@@ -684,6 +684,10 @@ Created using IcoMoon - icomoon.io
 
 }
 
+.obligatorio{
+  color: red;
+}
+
 div.dataTables_wrapper div.dataTables_filter {
   margin-left: 0.5em;
   display: inline-block;

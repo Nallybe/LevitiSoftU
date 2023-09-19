@@ -106,24 +106,26 @@
 
 
 {{!-- Alerta exito de registro de venta --}}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
 <script>
   // Verificar si hay un mensaje de éxito en el query parameter
   const urlParams = new URLSearchParams(window.location.search);
   const alertParam = urlParams.get("alert");
 
   // Verificar si la alerta ya se mostró en esta sesión
-  const alertShown = sessionStorage.getItem("alertShown");
+  //const alertShown = sessionStorage.getItem("alertShown");
 
-  if (alertParam === "success" && !alertShown) {
+  if (alertParam === "success") {
     // Mostrar el Sweet Alert
     Swal.fire({
       icon: "success",
       title: "Éxito",
-      text: "La operación se realizó correctamente.",
+      text: "La venta se registró correctamente.",
     });
 
     // Marcar que la alerta ya se mostró en esta sesión
-    sessionStorage.setItem("alertShown", "true");
+    //sessionStorage.setItem("alertShown", "true");
   }
 </script>
 <!--   Core JS Files   -->

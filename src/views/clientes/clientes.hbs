@@ -21,7 +21,6 @@
     .fa-pen:hover {
       color: #0275d8;
     }
-     
   </style>
   <!--End Estilos-->
 
@@ -145,21 +144,21 @@
 {{/if}}
 
 <script>
-function redirigirYMostrarAlerta() {
-  Swal.fire({
-    title: '¿Quiere agregar un cliente?',
-    text: 'Para agregar un cliente debe agregar un usuario primero',
-    icon: 'question',
-    showCancelButton: true,
-    confirmButtonText: 'Aceptar',
-    cancelButtonText: 'Cancelar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // Si el usuario hace clic en "Aceptar", redirige a /usuarios
-      window.location.href = '/usuarios';
-    }
-  });
-}
+  function redirigirYMostrarAlerta() {
+    Swal.fire({
+      title: '¿Quiere agregar un cliente?',
+      text: 'Para agregar un cliente debe agregar un usuario primero',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Si el usuario hace clic en "Aceptar", redirige a /usuarios
+        window.location.href = '/usuarios';
+      }
+    });
+  }
 
 </script>
 <!--JS Para el mensajito al pasar el mouse sobre el usuario-->
@@ -170,7 +169,28 @@ function redirigirYMostrarAlerta() {
     return new bootstrap.Tooltip(tooltipTriggerEl)
   })
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+<script>
+  // Verificar si hay un mensaje de éxito en el query parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const alertParam = urlParams.get("alert");
+  //alert("Url: " + urlParams + "Alert: " + alertParam)
+  /* Verificar si la alerta ya se mostró en esta sesión
+  const alertShown = sessionStorage.getItem("alertShown");*/
+
+  if (alertParam === "success") {
+    // Mostrar el Sweet Alert
+    Swal.fire({
+      icon: "success",
+      title: "Éxito",
+      text: "El cliente se editó correctamente.",
+    });
+
+    /* Marcar que la alerta ya se mostró en esta sesión
+    sessionStorage.setItem("alertShown", "true");*/
+  }
+</script>
 <!--Core JS Files-->
 <script src="assets/js/core/jquery.min.js"></script>
 <script src="assets/js/core/popper.min.js"></script>
@@ -195,7 +215,7 @@ function redirigirYMostrarAlerta() {
 <!--////////////////////-->
 <!--Paginacion-->
 <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
-    crossorigin="anonymous"></script>
+  crossorigin="anonymous"></script>
 }
 <!-- DataTables CSS -->
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
@@ -210,29 +230,29 @@ function redirigirYMostrarAlerta() {
 <!-- DataTables Language File (Spanish) -->
 <script src="https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json"></script>
 <script>
-    $(document).ready(function () {
-        $('#tabla-clientes').DataTable({ //se debe seleccionar el id de la tabla $('#id..
-            paging: true,
-            ordering: true,
-            searching: true,
-            responsive: true,
-            language: {
-                url: 'https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json',
-                search: "Buscar:",
-                info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
-                infoEmpty: "Mostrando 0 a 0 de 0 registros",
-                infoFiltered: "(filtrado de _MAX_ registros totales)",
-                paginate: {
-                    first: "Primero",
-                    previous: "Anterior",
-                    next: "Siguiente",
-                    last: "Último"
-                }
-            },
-            dom: '<"toolbar">frtip',
+  $(document).ready(function () {
+    $('#tabla-clientes').DataTable({ //se debe seleccionar el id de la tabla $('#id..
+      paging: true,
+      ordering: true,
+      searching: true,
+      responsive: true,
+      language: {
+        url: 'https://cdn.datatables.net/plug-ins/1.11.8/i18n/Spanish.json',
+        search: "Buscar:",
+        info: "Mostrando _START_ a _END_ de _TOTAL_ registros",
+        infoEmpty: "Mostrando 0 a 0 de 0 registros",
+        infoFiltered: "(filtrado de _MAX_ registros totales)",
+        paginate: {
+          first: "Primero",
+          previous: "Anterior",
+          next: "Siguiente",
+          last: "Último"
+        }
+      },
+      dom: '<"toolbar">frtip',
 
-        });
     });
+  });
 </script>
 
 </html>

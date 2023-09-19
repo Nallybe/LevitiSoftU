@@ -30,7 +30,7 @@
                                 <div class="row justify-content-center">
                                     <div class="col-6">
                                         <div class="form-group">
-                                            <label style="float: left; padding-right: 10px;">Nombre</label>
+                                            <label style="float: left; padding-right: 10px;">Nombre <span class="obligatorio">*</span></label>
                                             <select class="form-control" id="nombre" style="border-radius: 0;"
                                                 name="nombre" required>
                                                 {{#each nombre}}
@@ -42,9 +42,9 @@
                                     <div class="col-6">
                                         <div class="form-group ">
                                             <label for="floatingInput"
-                                                style="float: left; padding-right: 10px;">Total</label>
+                                                style="float: left; padding-right: 10px;">Total <span class="obligatorio">*</span></label>
                                             <input autocomplete="off" type="text" class="form-control" id="totalInput"
-                                                style="border-radius: 0;" name="total" required>
+                                                style="border-radius: 0;" name="total" required readonly>
                                         </div>
                                     </div>
 
@@ -53,7 +53,7 @@
                                     <div class="col-12">
 
                                         <label class="form-label"
-                                            style="float: left; padding-right: 10px;">Descripción</label>
+                                            style="float: left; padding-right: 10px;">Descripción <span class="obligatorio">*</span></label>
                                         <textarea class="form-control" id="descripcion" style="border: 1px solid #ccc;"
                                             name="descripcion" autocomplete="off" required></textarea>
 
@@ -63,7 +63,7 @@
                                     <div class="col-6">
                                         <div class="form-group">
                                             <label for="floatingInput"
-                                                style="float: left; padding-right: 10px;">Fecha</label>
+                                                style="float: left; padding-right: 10px;">Fecha <span class="obligatorio">*</span></label>
                                             <input autocomplete="off" type="date" class="form-control" id=" fecha"
                                                 style="border-radius: 0;" name="fecha" required>
                                         </div>

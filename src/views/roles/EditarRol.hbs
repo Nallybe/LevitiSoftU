@@ -37,7 +37,7 @@
                 <div class="row">
                   <div class="col-6 ">
                     <div class="form-group">
-                      <label for="floatingInput" style="float: left; padding-right: 10px;">Nombre</label>
+                      <label for="floatingInput" style="float: left; padding-right: 10px;">Nombre <span class="obligatorio">*</span></label>
                       <input autocomplete="off" type="text" class="form-control" id="nombreRol"
                         style="border-radius: 0;" value="{{nombreRoles}}" name="nombreRol">
                       <div id="mensajeError"></div>
@@ -225,7 +225,7 @@
       }
     }
     document.getElementById('idSeleccionado').value = idSeleccionado; // Asigna el valor de idSeleccionado al input oculto
-    alert("idSeleccionado: " + idSeleccionado)
+    //alert("idSeleccionado: " + idSeleccionado)
   }
 </script>
 <script src="/assets/js/ModalPermiso.js"></script>
