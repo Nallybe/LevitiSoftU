@@ -8,6 +8,7 @@
   {{> navbar}}
 </div>
 
+
 <body>
   <br>
   <div class="login-wrap">
@@ -51,33 +52,48 @@
 
         <div class="sign-up-htm">
           <form action="/register" method="post" onsubmit="return validarFormulario();">
-            <div class="group">
-              <label for="documento" class="label">Documento</label>
-              <input autocomplete="off" id="documento" type="number" class="input" name="documento"
-                oninput="validarNumeros(event); autocompletarContrasena();" required>
+            <div class="row">
+              <div class="col">
+                <div class="group">
+                  <label for="documento" class="label">Documento <span class="obligatorio">*</span></label>
+                  <input autocomplete="off" id="documento" type="number" class="input" name="documento"
+                    oninput="validarNumeros(event); autocompletarContrasena();" required>
+                </div>
+              </div>
+              <div class="col">
+                <div class="group">
+                  <label for="nombre" class="label">Nombre <span class="obligatorio">*</span></label>
+                  <input autocomplete="off" id="nombre" type="text" class="input" name="nombre"
+                    onkeypress="return sololetras(event)" required>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <div class="group">
+                  <label for="nombre" class="label">Apellido <span class="obligatorio">*</span></label>
+                  <input autocomplete="off" id="apellido" type="text" class="input" name="apellido"
+                    onkeypress="return sololetras(event)" required>
+                </div>
+              </div>
+              <div class="col">
+                <div class="group">
+                  <label for="telefono" class="label">Teléfono <span class="obligatorio">*</span></label>
+                  <input autocomplete="off" id="telefono" type="number" class="input" name="telefono"
+                    oninput="validarNumeros(event)" required>
+                </div>
+              </div>
+
             </div>
             <div class="group">
-              <label for="nombre" class="label">Nombre</label>
-              <input autocomplete="off" id="nombre" type="text" class="input" name="nombre" onkeypress="return sololetras(event)" required>
-            </div>
-            <div class="group">
-              <label for="nombre" class="label">Apellido</label>
-              <input autocomplete="off" id="apellido" type="text" class="input" name="apellido" onkeypress="return sololetras(event)" required>
-            </div>
-            <div class="group">
-              <label for="telefono" class="label">Teléfono</label>
-              <input autocomplete="off" id="telefono" type="number" class="input" name="telefono"
-                oninput="validarNumeros(event)" required>
-            </div>
-            <div class="group">
-              <label for="pass" class="label">Correo</label>
+              <label for="pass" class="label">Correo <span class="obligatorio">*</span></label>
               <input autocomplete="off" id="correo" type="email" class="input" name="correo" onblur="validateEmail()"
                 required>
               <span id="emailError" style="color: red; display: none;">Correo electrónico inválido. Por favor, ingresa
                 un correo válido.</span>
-            </div>  
+            </div>
             <div class="group">
-              <label for="pass" class="label">Contraseña</label>
+              <label for="pass" class="label">Contraseña <span class="obligatorio">*</span></label>
               <div class="password-input">
                 <input autocomplete="off" id="password" type="password" class="input" data-type="password"
                   name="password" required>

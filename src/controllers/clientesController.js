@@ -275,7 +275,7 @@ function actualizar(req, res) {
             } else
                 console.log("Se actualizaron los datos")
 
-            res.redirect('/clientes');
+            res.redirect('/clientes?alert=success');
         });
     });
 }
