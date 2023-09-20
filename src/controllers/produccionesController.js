@@ -35,6 +35,8 @@ function producciones_listar(req, res) {
                         break;
                 }
 
+                producciones[index].cantidad = producciones[index].cantidad.toLocaleString('es-CO');
+
             }
 
             // Consultar los usuarios
@@ -72,8 +74,8 @@ function producciones_listar(req, res) {
                                         if (productos[i].idProducto == producciones[index].idProducto) {
                                             producciones[index].proName = productos[i].nombre;
                                             producciones[index].proDes = productos[i].descripcion;
-                                            producciones[index].proPrecio = productos[i].precio;
-                                            producciones[index].proStock = productos[i].stock;
+                                            producciones[index].proPrecio = productos[i].precio.toLocaleString('es-CO');;
+                                            producciones[index].proStock = productos[i].stock.toLocaleString('es-CO');;
                                             producciones[index].proImg = productos[i].imagen;
                                             // img
                                         }
@@ -163,6 +165,8 @@ async function producciones_detallar(req, res) {
                                 producciones[index].estado3 = true;
                                 break;
                         }
+                        producciones[index].cantidad = producciones[index].cantidad.toLocaleString('es-CO');
+                        
                     }
                     resolve(producciones);
                 }
@@ -230,8 +234,8 @@ async function producciones_detallar(req, res) {
                 if (productos[i].idProducto == producciones[index].idProducto) {
                     producciones[index].proName = productos[i].nombre;
                     producciones[index].proDes = productos[i].descripcion;
-                    producciones[index].proPrecio = productos[i].precio;
-                    producciones[index].proStock = productos[i].stock;
+                    producciones[index].proPrecio = productos[i].precio.toLocaleString('es-CO');
+                    producciones[index].proStock = productos[i].stock.toLocaleString('es-CO');;
                     producciones[index].proImg = productos[i].imagen;
                 }
             }
@@ -327,13 +331,13 @@ async function producciones_detallar(req, res) {
             d_producto[index].medidaI;
             d_producto[index].cantidadI;
             d_producto[index].estadoI;
-            d_producto[index].totalN = d_producto[index].cantidad_n * cantidadProducir;
+            d_producto[index].totalN = (d_producto[index].cantidad_n * cantidadProducir).toLocaleString('es-CO');
 
             for (i in insumos) {
                 if (insumos[i].idInsumo == d_producto[index].idInsumo) {
                     d_producto[index].nombreI = insumos[i].nombre;
                     d_producto[index].medidaI = insumos[i].medida;
-                    d_producto[index].cantidadI = insumos[i].stock;
+                    d_producto[index].cantidadI = insumos[i].stock.toLocaleString('es-CO');
                     d_producto[index].estadoI = insumos[i].estado;
                 }
             }

@@ -52,8 +52,15 @@ function compras_listar(req, res) {
                   compras[index].total = "$ " + compras[index].total.toLocaleString('es-CO');
                 }
 
-                res.status(200).render("compras/listar", { compras });
-
+                /*var messege;
+                if (req.body.messege) {
+                  messege = req.body.messege;
+                }else{
+                  messege = "null";
+                }
+                , messege 
+                */
+                res.status(200).render("compras/listar", {compras});
               }
             })
           }
@@ -287,7 +294,7 @@ function compras_detallar_api(req, res) {
                   for (i in detallescompra) {
                     var monto = detallescompra[i].precio * detallescompra[i].cantidad;
                     detallescompra[i].monto = monto;
-                    
+
                     var iva = (monto * detallescompra[i].porcentajeIva) / 100;
                     var total = iva + monto;
 
@@ -298,14 +305,14 @@ function compras_detallar_api(req, res) {
                     detallescompra[i].porcentajeIva = parseFloat(detallescompra[i].porcentajeIva).toLocaleString('es-CO') + "%";
 
                     ins.push({
-                      idDetalleCompra : detallescompra[i].idDetalleCompra,
-                      idInsumo : detallescompra[i].idInsumo,
-                      precio : detallescompra[i].precio,
-                      cantidad : parseFloat(detallescompra[i].cantidad).toLocaleString('es-CO'),
-                      subtotal : detallescompra[i].monto,
-                      porcentajeIva : detallescompra[i].porcentajeIva,
-                      iva : detallescompra[i].iva,
-                      total : detallescompra[i].total
+                      idDetalleCompra: detallescompra[i].idDetalleCompra,
+                      idInsumo: detallescompra[i].idInsumo,
+                      precio: detallescompra[i].precio,
+                      cantidad: parseFloat(detallescompra[i].cantidad).toLocaleString('es-CO'),
+                      subtotal: detallescompra[i].monto,
+                      porcentajeIva: detallescompra[i].porcentajeIva,
+                      iva: detallescompra[i].iva,
+                      total: detallescompra[i].total
                     });
 
                     compras[index].monto += monto;
@@ -316,7 +323,7 @@ function compras_detallar_api(req, res) {
                   /*compras[index].monto = compras[index].monto.toLocaleString('es-CO');
                   compras[index].iva = compras[index].iva.toLocaleString('es-CO');
                   compras[index].total =  compras[index].total.toLocaleString('es-CO');*/
-     
+
                   compras[index].monto = parseFloat(compras[index].monto).toLocaleString('es-CO', formatoNumero);
                   compras[index].iva = parseFloat(compras[index].iva).toLocaleString('es-CO', formatoNumero);
                   compras[index].total = parseFloat(compras[index].total).toLocaleString('es-CO', formatoNumero);
@@ -521,7 +528,8 @@ function compras_registrar(req, res) {
             }
           });
         }
-        //Redireccionar
+        //var messege = "registro_exitoso";
+        //Redireccionar {messege}
         res.redirect("/compras");
       }
     });

@@ -82,7 +82,7 @@
 
               <!--Input Documento-->
               <label class="form-label" for="documento"> Documento <small style="color: red;">*</small></label>
-              <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="documento"
+              <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="documento"
                 name="documento" onkeypress="return solonumeros(event)" oninput="val_documento()" autocomplete="off"
                 value="{{documento}}" maxlength="10">
               <div id="mensajeErrorDocumento"></div>
@@ -110,7 +110,7 @@
 
               <!--Input Telefono-->
               <label class="form-label" for="telefono">Teléfono <small style="color: red;">*</small></label>
-              <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="telefono"
+              <input type="text" class="form-control form-control-sm" style="border-radius: 0;" id="telefono"
                 name="telefono" onkeypress="return solonumeros(event)" oninput="val_telefono()" autocomplete="off"
                 value="{{telefono}}" maxlength="10">
               <div id="mensajeErrorTelefono"></div>
@@ -434,7 +434,7 @@
       }
 
       // Verificar la longitud mínima
-      if (documento.value.length < 10) {
+      if (documento.value.length < 8) {
         mensajeErrorDocumento.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El documento no es válido';
         mensajeErrorDocumento.style.display = 'block';
         return false; // Detener el envío del formulario
