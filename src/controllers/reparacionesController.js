@@ -339,7 +339,7 @@ async function reparaciones_detallar(req, res) {
                                 if (insumos[ix].idInsumo == detalles[i].idInsumo) {
                                     detalles[i].idInsumo = insumos[ix].nombre;
                                     detalles[i].medida = insumos[ix].medida;
-                                    detalles[i].stock = insumos[ix].stock;
+                                    detalles[i].stock = insumos[ix].stock.toLocaleString('es-CO');
                                 }
                             }
                             detalles[i].cont = contD;

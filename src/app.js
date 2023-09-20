@@ -19,6 +19,11 @@ const produccionesRoutes = require('./routes/producciones');
 const productosRoutes = require('./routes/productos');
 const usuariosRoutes = require('./routes/usuarios');
 const port = process.env.PORT
+const host = process.env.host
+const user = process.env.user
+const password = process.env.password
+const database = process.env.database
+const portB = process.env.portB
 const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
@@ -60,11 +65,11 @@ app.engine('.hbs', engine({
 app.set('views', __dirname + '/views');
 
 app.use(myconnection(mysql, {
-    host: 'localhost',
-    user: 'root',
-    password: '',
-    port: '', //Aquí se coloca el puerto del MySQL en el panel del xampp, si usas wampserver dejarlo vacio 
-    database: 'crudnodejs'
+    host: host,
+    user: user,
+    password: password,
+    port: portB, //Aquí se coloca el puerto del MySQL en el panel del xampp, si usas wampserver dejarlo vacio 
+    database: database
 }, 'single'));
 
 app.use(session({

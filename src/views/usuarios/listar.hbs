@@ -61,6 +61,41 @@
 <!--Barra de navegación-->
 {{> bar}}
 <!--Barra de navegación-->
+
+
+<script>
+  var messegeStatus = {{{ toJson messege }}}
+
+  if (messegeStatus) {
+    if (messegeStatus == "registro_exitoso") {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: '¡Compra registrada exitosamente!',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+
+    if (messegeStatus == "compra_anulada") {
+      Swal.fire({
+        position: 'top-end',
+        icon: 'success',
+        title: '¡Compra anulada exitosamente!',
+        showConfirmButton: false,
+        timer: 1500
+      });
+    }
+
+  }
+</script>
+
+
+
+
+
+
+
 <br><br><br>
 <center>
   <div class="container-fluid mb-5">
@@ -533,7 +568,7 @@
     }
 
     // Verificar la longitud mínima
-    if (documento.value.length < 10) {
+    if (documento.value.length < 8) {
       mensajeErrorDocumento.innerHTML = '<span class="icono fa fa-circle-xmark"></span>El documento no es válido';
       mensajeErrorDocumento.style.display = 'block';
       return false; // Detener el envío del formulario
