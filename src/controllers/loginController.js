@@ -48,19 +48,7 @@ function auth(req, res) {
             if (isMatch) {
               req.session.loggedin = true;
               var sesion = true
-              const token = jwt.sign(
-                {
-                  idAccess: user.idAccess,
-                  correo: user.correo,
-                  nombre: user.nombre, // Asegúrate de tener esta propiedad en tu tabla users_access
-                  // Agrega otras propiedades que desees incluir en el token
-                },
-                'secretKey', // Cambia esto por tu propia clave secreta
-                { expiresIn: '24h' } // Puedes ajustar el tiempo de vencimiento según tus necesidades
-              );
 
-              // Almacena el token en una cookie o en el almacenamiento del cliente
-              res.cookie('auth_token', token); // Puedes ajustar esto según tu frontend
 
               // Obtener el nombre correspondiente al correo electrónico en users_info
               conn.query(
@@ -75,7 +63,19 @@ function auth(req, res) {
                     const nombre = infoResults[0].nombre;
                     const apellido = infoResults[0].apellido;
                     req.session.name = `${nombre} ${apellido}`;
+                    const token = jwt.sign(
+                      {
+                        idAccess: user.idAccess,
+                        correo: user.correo,
+                        nombre: infoResults[0].nombre, // Asegúrate de tener esta propiedad en tu tabla users_access
+                        // Agrega otras propiedades que desees incluir en el token
+                      },
+                      'secretKey', // Cambia esto por tu propia clave secreta
+                      { expiresIn: '24h' } // Puedes ajustar el tiempo de vencimiento según tus necesidades
+                    );
 
+                    // Almacena el token en una cookie o en el almacenamiento del cliente
+                    res.cookie('auth_token', token); // Puedes ajustar esto según tu frontend
 
                     // Obtener los roles correspondientes al correo electrónico en users_access
                     conn.query(
@@ -104,7 +104,12 @@ function auth(req, res) {
                           JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles 
                           JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos 
                           WHERE r.nombreRoles = ?
-                          ORDER BY p.idPermisos ASC;
+                          ORDER BY
+    CASE
+        WHEN p.nombrePermisos = 'dashboard' THEN 1
+        ELSE 2
+    END,
+    p.nombrePermisos ASC;
                           `, [nombreroles]
                             ,
                             (error, permissionResults) => {
@@ -118,10 +123,10 @@ function auth(req, res) {
                               //console.log(permisos)
                               // Redireccionar al primer permiso que coincida
                               var firstMatchingPermission = permisos.find((permiso) => true);
-                              
+
                               //console.log("Primer " + firstMatchingPermission)
                               if (firstMatchingPermission) {
-                                
+
                                 res.redirect('/' + firstMatchingPermission);
                               } else {
                                 // Si no hay permisos coincidentes, redireccionar a una página predeterminada
@@ -300,10 +305,14 @@ function registrar(req, res) {
                           req.session.roles = roleResults[0].nombreRoles;
 
                           if (req.session.roles === "Cliente") {
-                            res.redirect("/home")
+                            res.redirect("/home?alert=success")
                           } else {
                             conn.query(
-                              'SELECT DISTINCT p.nombrePermisos FROM tbl_roles AS r JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos;'
+                              `SELECT DISTINCT p.nombrePermisos
+                              FROM tbl_roles AS r
+                              JOIN tbl_asignacion AS a ON r.idRoles = a.idRoles
+                              JOIN tbl_permisos AS p ON a.idPermisos = p.idPermisos;
+                              `
                               ,
                               (error, permissionResults) => {
                                 if (error) {

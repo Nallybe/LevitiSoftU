@@ -68,7 +68,7 @@ app.use(myconnection(mysql, {
     host: host,
     user: user,
     password: password,
-    port: portB, //Aquí se coloca el puerto del MySQL en el panel del xampp, si usas wampserver dejarlo vacio 
+    port: portB,
     database: database
 }, 'single'));
 

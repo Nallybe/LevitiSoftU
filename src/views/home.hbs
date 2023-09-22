@@ -138,34 +138,53 @@
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"></script>
   <script>
-    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  // Verificar si hay un mensaje de éxito en el query parameter
+  const urlParams = new URLSearchParams(window.location.search);
+  const alertParam = urlParams.get("alert");
+  alert("Url: " + urlParams + "Alert: " + alertParam)
+  /* Verificar si la alerta ya se mostró en esta sesión
+  const alertShown = sessionStorage.getItem("alertShown");*/
+
+  if (alertParam === "success") {
+    // Mostrar el Sweet Alert
+    Swal.fire({
+      icon: "success",
+      title: "Éxito",
+      text: "El cliente fue registrado correctamente.",
+    });
+
+    /* Marcar que la alerta ya se mostró en esta sesión
+    sessionStorage.setItem("alertShown", "true");*/
+  }
+</script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="vendor/glightbox/js/glightbox.min.js"></script>
   <script src="vendor/nouislider/nouislider.min.js"></script>
   <script src="vendor/swiper/swiper-bundle.min.js"></script>
   <script src="vendor/choices.js/public/assets/scripts/choices.min.js"></script>
   <script src="js/front.js"></script>
   <script>
-      var products = {
-        1: {
+    var products = {
+      1: {
         title: 'Producto 1',
-      image: 'img/product-1.jpg',
-      price: '$100',
-      description: 'Lorem ipsum dolor sit amet...'
+        image: 'img/product-1.jpg',
+        price: '$100',
+        description: 'Lorem ipsum dolor sit amet...'
       },
       2: {
         title: 'Producto 2',
-      image: 'img/product-2.jpg',
-      price: '$200',
-      description: 'Lorem ipsum dolor sit amet...'
+        image: 'img/product-2.jpg',
+        price: '$200',
+        description: 'Lorem ipsum dolor sit amet...'
       },
       3: {
         title: 'Producto 3',
-      image: 'img/product-3.jpg',
-      price: '$300',
-      description: 'Lorem ipsum dolor sit amet...'
+        image: 'img/product-3.jpg',
+        price: '$300',
+        description: 'Lorem ipsum dolor sit amet...'
       }
     };
-      document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', function () {
       var productLinks = document.querySelectorAll('.product-link');
       var modalTitle = document.querySelector('.modal-title');
       var modalImage = document.querySelector('.modal-image');
@@ -191,35 +210,35 @@
 
   </script>
   <script>
+    window.history.pushState(null, '', window.location.href);
+    window.onpopstate = function () {
       window.history.pushState(null, '', window.location.href);
-      window.onpopstate = function () {
-        window.history.pushState(null, '', window.location.href);
-      };
+    };
 
   </script>
   <script>
-      // ------------------------------------------------------- //
-      //   Inject SVG Sprite - 
-      //   see more here 
-      //   https://css-tricks.com/ajaxing-svg-sprite/
-      // ------------------------------------------------------ //
-      function injectSvgSprite(path) {
+    // ------------------------------------------------------- //
+    //   Inject SVG Sprite - 
+    //   see more here 
+    //   https://css-tricks.com/ajaxing-svg-sprite/
+    // ------------------------------------------------------ //
+    function injectSvgSprite(path) {
 
       var ajax = new XMLHttpRequest();
       ajax.open("GET", path, true);
       ajax.send();
       ajax.onload = function (e) {
         var div = document.createElement("div");
-      div.className = 'd-none';
-      div.innerHTML = ajax.responseText;
-      document.body.insertBefore(div, document.body.childNodes[0]);
+        div.className = 'd-none';
+        div.innerHTML = ajax.responseText;
+        document.body.insertBefore(div, document.body.childNodes[0]);
       }
     }
-      // this is set to BootstrapTemple website as you cannot 
-      // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
-      // while using file:// protocol
-      // pls don't forget to change to your domain :)
-      injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
+    // this is set to BootstrapTemple website as you cannot 
+    // inject local SVG sprite (using only 'icons/orion-svg-sprite.svg' path)
+    // while using file:// protocol
+    // pls don't forget to change to your domain :)
+    injectSvgSprite('https://bootstraptemple.com/files/icons/orion-svg-sprite.svg');
 
   </script>
   <!-- FontAwesome CSS - loading as last, so it doesn't block rendering-->
