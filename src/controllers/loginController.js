@@ -5,6 +5,7 @@ const salt = 10
 const bcrypt = require('bcrypt');
 const { use } = require('../routes/login');
 const { ConsoleMessage } = require('puppeteer');
+const port = process.env.PORT
 
 function login(req, res) {
   // Verificar si el usuario ha iniciado sesión
@@ -409,7 +410,7 @@ function recuperar(req, res) {
           },
         });
 
-        const resetPasswordLink = `http://localhost:8181/restaurar_contrase?token=${token}`;
+        const resetPasswordLink = `http://localhost:${port}/restaurar_contrase?token=${token}`;
         const htmlContentSuccess = `
         <!DOCTYPE html>
 <html lang="es">
