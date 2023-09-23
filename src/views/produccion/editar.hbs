@@ -180,7 +180,7 @@
                     style="color: red;">*</small></label>
                 <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="cantidad"
                   name="cantidad" oninput="val_cantidad();" onkeypress="return solonumeros(event)" autocomplete="off"
-                  value="{{cantidad}}" min="50" max="99999999">
+                  value="{{cantidad}}" max="99999999">
                 <div id="mensajeErrorCantidad"></div>
                 <!--End Input Cantidad-->
 
@@ -497,7 +497,7 @@
     <div id="modales">
       <datalist id="lis_Participantes">
         {{#each usersA}}
-        <option value="{{correo}}">Nombre({{nombre}}) Apellido({{Apellido}}) Teléfono({{telefono}}) Correo({{correo}})</option>
+        <option value="{{correo}}">Nombre({{nombre}} {{Apellido}}) Teléfono({{telefono}}) Correo({{correo}})</option>
         {{/each}}
       </datalist>
 

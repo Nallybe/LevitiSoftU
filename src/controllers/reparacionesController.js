@@ -594,14 +594,14 @@ async function reparaciones_registrar(req, res) {
             });
         });
 
-        //for (let index in usersA) {
-            for (let i in usersI) {
-                if (data.idCliente == (usersI[i].nombre+" "+usersI[i].apellido)/*usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess*/) {
+        for (let index in usersA) {
+            for (let i in usersI) {/* (usersI[i].nombre+" "+usersI[i].apellido)*/
+                if (data.idCliente == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
                     data.idCliente = usersI[i].idInfo;
                     console.log("Cliente encontrado");
                 }
             }
-        //}
+        }
         // End Capturar Cliente
 
         // Actualizar datos del cliente
