@@ -863,6 +863,8 @@ function reparaciones_editar(req, res) {
                             break;
                     }
 
+                    reparacion[i].total_p = reparacion[i].total.toLocaleString("es-CO", { maximumFractionDigits: 2 });
+
                     let day = reparacion[i].fechaEntrega.getDate();
                     let month = reparacion[i].fechaEntrega.getMonth() + 1;
                     let year = reparacion[i].fechaEntrega.getFullYear();
