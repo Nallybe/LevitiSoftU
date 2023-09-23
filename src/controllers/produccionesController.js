@@ -629,14 +629,14 @@ async function producciones_registrar(req, res) {
             });
         });
 
-        //for (let index in usersA) {
-            for (let i in usersI) {
-                if (data.idEncargado == (usersI[i].nombre+" "+usersI[i].apellido) /*usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess*/) {
+        for (let index in usersA) {
+            for (let i in usersI) {/*usersI[i].nombre+" "+usersI[i].apellido)*/ 
+                if (data.idEncargado == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
                     data.idEncargado = usersI[i].idInfo;
                     console.log("Encargado encontrado");
                 }
             }
-        //}
+        }
         // End Capturar Encargado
 
         //Capturar idProducto
@@ -720,14 +720,14 @@ async function producciones_registrar(req, res) {
                     for (let index in data[part]) {
 
                         //Capturar idParticipante
-                        //for (let ix in usersA) {
-                            for (let i in usersI) {
-                                if (data[part][index] ==(usersI[i].nombre+" "+usersI[i].apellido) /*usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess*/) {
+                        for (let ix in usersA) {
+                            for (let i in usersI) {/*(usersI[i].nombre+" "+usersI[i].apellido)*/ 
+                                if (data[part][index] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
                                     data[part][index] = usersI[i].idInfo;
                                     //console.log("Participante encontrado");
                                 }
                             }
-                        //}
+                        }
                         //End Capturar idParticipante
 
                         await new Promise((resolve, reject) => {
@@ -752,14 +752,14 @@ async function producciones_registrar(req, res) {
                     // Un Partícipe
 
                     //Capturar idParticipante
-                    //for (let index in usersA) {
-                        for (let i in usersI) {
-                            if (data[part] == (usersI[i].nombre+" "+usersI[i].apellido) /*usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess*/) {
+                    for (let index in usersA) {
+                        for (let i in usersI) {/*(usersI[i].nombre+" "+usersI[i].apellido) */
+                            if (data[part] ==  usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
                                 data[part] = usersI[i].idInfo;
                                 //console.log("Participante encontrado");
                             }
                         }
-                    //}
+                    }
                     //End Capturar idParticipante
 
 
@@ -818,14 +818,14 @@ async function producciones_registrar(req, res) {
                 for (let index in data[part]) {
 
                     //Capturar idParticipante
-                    //for (let ix in usersA) {
-                        for (let i in usersI) {
-                            if (data[part] == (usersI[i].nombre+" "+usersI[i].apellido) /*usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess*/) {
+                    for (let ix in usersA) {
+                        for (let i in usersI) {/*(usersI[i].nombre+" "+usersI[i].apellido) */
+                            if (data[part] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
                                 data[part] = usersI[i].idInfo;
                                 //console.log("Participante encontrado");
                             }
                         }
-                    //}
+                    }
                     //End Capturar idParticipante
 
                     await new Promise((resolve, reject) => {
@@ -850,14 +850,14 @@ async function producciones_registrar(req, res) {
                 // Un Partícipe
 
                 //Capturar idParticipante
-                //for (let index in usersA) {
-                    for (let i in usersI) {
-                        if (data[part] == (usersI[i].nombre+" "+usersI[i].apellido)/*usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess*/) {
+                for (let index in usersA) {
+                    for (let i in usersI) {/*(usersI[i].nombre+" "+usersI[i].apellido) */
+                        if (data[part] == usersA[index].correo && usersA[index].idAccess == usersI[i].idAccess) {
                             data[part] = usersI[i].idInfo;
                             //console.log("Participante encontrado");
                         }
                     }
-                //}
+                }
                 //End Capturar idParticipante
 
 

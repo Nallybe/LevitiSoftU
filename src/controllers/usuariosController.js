@@ -34,12 +34,6 @@ function usuarios_listar(req, res) {
                 return res.status(500).json(err);
               } else {
                 for (index in usuarios1) {
-                  usuarios1[index].documento;
-                  usuarios1[index].nombre;
-                  usuarios1[index].apellido;
-                  usuarios1[index].telefono;
-                  usuarios1[index].idInfo;
-
                   for (i in info) {
                     if (usuarios1[index].idAccess == info[i].idAccess) {
                       usuarios1[index].documento = info[i].documento;
@@ -51,10 +45,8 @@ function usuarios_listar(req, res) {
                   }
                 }
 
-
-
                 //Determinar si el usuario se puede eliminar
-                const ventas = await new Promise((resolve, reject) => {
+                /*const ventas = await new Promise((resolve, reject) => {
                   conn.query("SELECT * FROM tbl_ventas", (err, result) => {
                     if (err) {
                       reject(err);
@@ -93,7 +85,6 @@ function usuarios_listar(req, res) {
                   });
                 });
 
-
                 for (index in usuarios1) {
                   var eliminar = true;
 
@@ -126,6 +117,7 @@ function usuarios_listar(req, res) {
                   }
 
                 }
+                */
 
 
                 //Crear
@@ -143,7 +135,7 @@ function usuarios_listar(req, res) {
                           } else {
                             //Seleccionar cliente
                             for (i in roles) {
-                              if (roles[i].nombreRoles == 'Usuario') {
+                              if (roles[i].nombreRoles == 'Cliente') {
                                 roles[i].seleccionado = true
                               }
                             }
@@ -159,8 +151,6 @@ function usuarios_listar(req, res) {
 
 
                 //console.log(usuarios1)
-
-
                 //res.render('usuarios/listar', { usuarios1 });
               }
             });

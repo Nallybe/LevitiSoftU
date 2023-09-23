@@ -138,7 +138,7 @@
                   id="idEncargado" name="idEncargado" autocomplete="off" oninput="val_encargado()">
                 <datalist id="lis_encargados">
                   {{#each usuarios}}
-                  <option value="{{nombre}} {{apellido}}">Teléfono({{telefono}}) Correo({{correo}})</option>
+                  <option value="{{correo}}">Nombre({{nombre}} {{apellido}}) Teléfono({{telefono}}) Correo({{correo}})</option>
                   {{/each}}
                 </datalist>
                 <div id="mensajeErrorEncargado"></div>
@@ -171,7 +171,7 @@
                 <label class="form-label mt-2" for="cantidad">Cantidad Producir <small style="color: red;">*</small></label>
                 <input type="number" class="form-control form-control-sm" style="border-radius: 0;" id="cantidad"
                   name="cantidad" onkeypress="return solonumeros(event)" oninput="val_cantidad()" autocomplete="off"
-                  min="50" max="99999999">
+                  max="99999999">
                 <div id="mensajeErrorCantidad"></div>
                 <!--End Input Cantidad-->
 
