@@ -184,12 +184,38 @@
                 <div id="mensajeErrorFechaEntrega"></div>
                 <!--End Input Fecha Entrega-->
 
-                <!--Input Total-->
+                <!--Input Total
                 <label class="form-label mt-2" for="total">Total <small style="color: red;">*</small></label>
                 <input type="number" class="form-control form-control-sm  mb-2" style="border-radius: 0;" id="total"
-                  name="total" oninput="val_total()" autocomplete="off" onkeypress="return solonumeros(event)" value="{{total}}" min="50" max="99999999">
-                <div id="mensajeErrorTotal"></div>
+                  name="total" oninput="val_total()" autocomplete="off" onkeypress="return solonumeros(event)" value="{{total}}" max="99999999">
+                <div id="mensajeErrorTotal"></div>-->
                 <!--End Input Total-->
+
+                <!--Input Total-->
+                  <label class="form-label mt-2" for="total">Total <small style="color: red;">*</small></label>
+                  <input type="number"id="total" name="total" value="{{total}}" hidden>
+                  <input type="text" class="form-control form-control-sm  mb-2" style="border-radius: 0;" id="total_V"
+                     oninput="val_total()" autocomplete="off" onkeypress="return solonumeros(event)" maxlength="10" value="{{total_p}}">
+                  <div id="mensajeErrorTotal"></div>
+                  <!--End Input Total-->
+
+                  <script>
+                    const visibleInput = document.getElementById("total_V");
+                    const hiddenInput = document.getElementById("total");
+                    // const showValueButton = document.getElementById("showValueButton");
+
+                    visibleInput.addEventListener("input", () => {
+                      const inputValue = visibleInput.value.replace(/\./g, ""); // Remover puntos
+                      const formattedValue = Number(inputValue).toLocaleString("es-CO", { maximumFractionDigits: 2 });
+                      visibleInput.value = formattedValue;
+                      hiddenInput.value = inputValue;
+                    });
+
+                    /*showValueButton.addEventListener("click", () => {
+                      const hiddenValue = hiddenInput.value;
+                      alert(`Valor Oculto: ${hiddenValue}`);
+                    });*/
+                  </script>
 
               </div>
             </div>
@@ -628,7 +654,7 @@
     }
 
     function val_total() {
-      var total = document.getElementById("total");
+      var total = document.getElementById("total_V");
 
       if (total.value != "") {
         mensajeErrorTotal.innerHTML = '';
@@ -1174,7 +1200,7 @@
 
     function validarCampos() {
       // var cliente = document.getElementById("idCliente");
-      var total = document.getElementById("total");
+      var total = document.getElementById("total_V");
       var fechaEntrega = document.getElementById("fechaEntrega");
 
       /*if (cliente.value == "") {
@@ -1197,7 +1223,7 @@
     function validarEnvio() {
       var list = document.getElementById('ListaArticulos');
       //var cliente = document.getElementById("idCliente");
-      var total = document.getElementById("total");
+      var total = document.getElementById("total_V");
       var fechaEntrega = document.getElementById("fechaEntrega");
       var insumos = document.querySelectorAll('.TablaInsumos'); // Agregar un punto antes de 'TablaParticipantes'
 

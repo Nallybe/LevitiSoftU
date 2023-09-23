@@ -820,8 +820,8 @@ async function producciones_registrar(req, res) {
                     //Capturar idParticipante
                     for (let ix in usersA) {
                         for (let i in usersI) {/*(usersI[i].nombre+" "+usersI[i].apellido) */
-                            if (data[part] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
-                                data[part] = usersI[i].idInfo;
+                            if (data[part][index] == usersA[ix].correo && usersA[ix].idAccess == usersI[i].idAccess) {
+                                data[part][index] = usersI[i].idInfo;
                                 //console.log("Participante encontrado");
                             }
                         }

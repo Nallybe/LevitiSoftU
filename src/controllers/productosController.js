@@ -577,6 +577,9 @@ function productos_editar(req, res) {
                         return res.status(500).json(err);
                     } else {
                         for (i in producto) {
+                            producto[i].precio_p = producto[i].precio.toLocaleString("es-CO", { maximumFractionDigits: 2 });
+                            producto[i].stock_p = producto[i].stock.toLocaleString("es-CO", { maximumFractionDigits: 2 });
+                            
                             // Actualizar el estado del Producto
                             switch (producto[i].estado) {
                                 case 'A':
